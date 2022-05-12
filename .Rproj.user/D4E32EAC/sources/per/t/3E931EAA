@@ -1,0 +1,26 @@
+{
+    "id": "3E931EAA",
+    "path": "~/assessments/2022/bsai-fhs-2022/projection/write_proj.r",
+    "project_path": "projection/write_proj.r",
+    "type": "r_source",
+    "hash": "2670424148",
+    "contents": "",
+    "dirty": false,
+    "created": 1652285633235.0,
+    "source_on_save": false,
+    "relative_order": 15,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "210,53",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1652286318,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1652286318524,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,28 @@
+{
+    "id": "5E0ACB2D",
+    "path": "~/assessments/2022/bsai-fhs-2022/sos/BSAIFHS_RefPts_Frequency.Rmd",
+    "project_path": "sos/BSAIFHS_RefPts_Frequency.Rmd",
+    "type": "r_markdown",
+    "hash": "3568102744",
+    "contents": "",
+    "dirty": false,
+    "created": 1652208378124.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "tempName": "Untitled1",
+        "chunk_output_type": "inline",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "3,7",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1652309361,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1652309361135,
+    "read_only": false,
+    "read_only_alternatives": []
+}
