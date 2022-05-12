@@ -1,3 +1,0 @@
-"0","  "
-"0","  # ggsave(last_plot(), file = paste0(homedir,""/refpts.png""),"
-"0","  #        width =8, height = 6)"

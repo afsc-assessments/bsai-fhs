@@ -34,17 +34,13 @@ require(tidyverse)
 require(dplyr)
 require(ggplot2)
 theme_set(ggsidekick::theme_sleek())
-## these are from 2020_files/projections, but removed the sdir argument
-# source(here('projection','write_proj.r'))
-# source(here('projection','write_proj_spcat.r'))#
-# source(here('projection','setup.r'))
 ```
 
 ```{r, eval = FALSE, include = FALSE, warning = FALSE, message = FALSE}
-source(here('2020_files','projection','write_proj.r'))
-source(here('2020_files','projection','write_proj_spcat.r')) # manually changed line 24 to not invoke data subdir
-source(here('2020_files','projection','setup.r')) ## changed line 19 to turn of FMSY_35 as was done before
-source(here('2020_files','projection','get_proj_res.r'))
+source(here('write_proj.r'))
+source(here('write_proj_spcat.r')) # manually changed line 24 to not invoke data subdir
+source(here('setup.r')) ## changed line 19 to turn of FMSY_35 as was done before
+source(here('get_proj_res.r'))
 ## passed to write_proj function
 NSEX=2						# number of sexes used in assessment model
 Nfishery=1					# number of fisheries(fleets) #This was set equal to 2
@@ -330,8 +326,9 @@ master_table <- bind_rows(read.csv(here('sos','2022-05-11-proj-2y','master_table
              labeller = "label_both", 
              scales = "free")
   
-  # ggsave(last_plot(), file = paste0(homedir,"/refpts.png"),
-  #        width =8, height = 6)
+  ggsave(last_plot(), 
+         file = here('sos','figure1.png'),
+         width =8, height = 6)
 ```
 
 The percent change in ABCs and OFLs between frequencies are presented in the following table. Values are calculated as $\frac{OFL_{y, freq=4}-OFL_{y, freq=2}}{OFL_{y, freq=2}}$. 
