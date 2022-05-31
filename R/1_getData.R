@@ -9,13 +9,7 @@ require(r4ss)
 library(tidyverse)
 
 options(digits=22) #Must have for reading in hauljoin
-## library(mgcv)
-## library(FSA)
-## library(FSAdata)
-## library(NCStats)
 
-## ## devtools::install_github("r4ss/r4ss")
-## library(r4ss)
 ## Setup the network connections
 AFSC <- odbcConnect("AFSC","mkapur","N5w!Pw4mkq",  believeNRows = FALSE)
 AKFIN <- odbcConnect("AKFIN","mkapur","ssmamk22",  believeNRows=FALSE)
