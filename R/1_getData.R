@@ -1,6 +1,8 @@
 ## download the raw data from Oracle and save
 ## based on data.R from 2020 assessment by Cole Monnahan
-## Libraries/options required:
+
+#  SETUP ----
+#* Packages & Oracle ----
 require(RODBC)
 require(dplyr)
 require(here)
@@ -11,7 +13,6 @@ require(rstudioapi) ## enables masking of RODBC name, password
 
 options(digits=22) #Must have for reading in hauljoin
 
-## Setup the network connections
 username_AFSC <- showPrompt(title="Username", message="Enter your AFSC username:", default="")
 password_AFSC <- askForPassword(prompt="Enter your AFSC password:")
 AFSC <- odbcConnect("AFSC",username_AFSC,password_AFSC,  believeNRows = FALSE)
@@ -19,16 +20,8 @@ AFSC <- odbcConnect("AFSC",username_AFSC,password_AFSC,  believeNRows = FALSE)
 username_AKFIN <- showPrompt(title="Username", message="Enter your AKFIN username:", default="")
 password_AKFIN <- askForPassword(prompt="Enter your AKFIN password:")
 AKFIN <- odbcConnect("AKFIN",username_AKFIN,password_AKFIN,  believeNRows = FALSE)
- 
-## newsbss functions
-funcs <- list.files("C:/Users/maia.kapur/Work/assessments/newsbss/functions", 
-                  pattern = '*.R',
-                  full.names = TRUE)
-lapply(grep(funcs, pattern='*.csv', invert=TRUE, value=TRUE),source)
 
-
-### -------------------------
-## Setup options for flathead sole in BSAI
+#* Query spex ----
 final_year <- 2022
 fsh_sp_area <- "'BS','AI'"              # FMP
 fsh_sp_label <- "'FSOL'"                # AKFIN group species label
@@ -40,61 +33,17 @@ max_size <- 40 ##65 = rex ##70 = Dover and Flathead
 min_size <- 6
 bin_width <- 2
 len_bins <- c(seq(min_size,max_size,bin_width),43,46,49,52,55,58)
+lapply(list.files(here('sql'), full.names = T), source) ## load all sql queries
 
-### ----- Catch from AKFIN -----
+# DATA DOWNLOAD ---- 
+#* AKFIN Catches
 message("Querying AKFIN to get catch...")
-## Flathead sole and Being flounder combined. I changed this from
-## the GET_CATCH query, adding some columns that are used in
-## later reports.
-test <-
-  paste("SELECT SUM(COUNCIL.COMPREHENSIVE_BLEND_CA.WEIGHT_POSTED) AS TONS,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.FMP_SUBAREA AS ZONE,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.FMP_GEAR AS GEAR,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.RETAINED_OR_DISCARDED AS TYPE,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.YEAR AS YEAR,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.REPORTING_AREA_CODE AS NMFS_AREA,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.SPECIES_NAME AS SPECIES,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.CDQ_FLAG AS CDQ\n",
-        "FROM COUNCIL.COMPREHENSIVE_BLEND_CA\n ",
-        "WHERE COUNCIL.COMPREHENSIVE_BLEND_CA.FMP_SUBAREA in (",fsh_sp_area,")\n ",
-        "AND COUNCIL.COMPREHENSIVE_BLEND_CA.YEAR <= ",final_year,"\n ",
-        "AND COUNCIL.COMPREHENSIVE_BLEND_CA.SPECIES_GROUP_CODE in (",fsh_sp_label,")\n ",
-        "GROUP BY COUNCIL.COMPREHENSIVE_BLEND_CA.SPECIES_NAME,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.FMP_SUBAREA,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.FMP_GEAR,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.REPORTING_AREA_CODE,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.RETAINED_OR_DISCARDED,\n ",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.CDQ_FLAG,\n",
-        "COUNCIL.COMPREHENSIVE_BLEND_CA.YEAR\n ", sep="")
-catch <- sqlQuery(AKFIN,test) %>% arrange(YEAR, ZONE, GEAR)
+catch <- sqlQuery(AKFIN,qcatch) %>% arrange(YEAR, ZONE, GEAR)
 write.csv(catch, file=here('data',paste0(Sys.Date(),'-catch.csv') ), row.names=FALSE)
 
+#* AFSC observer catches
 message("Querying haul-level catch from observer DB...")
-## Catches by species as reported by observer haul by
-## haul. These are used in the tables in the SAFE.
-afsct <- sqlTables(AFSC)
-
-
-afsct$TABLE_NAME[grep('OBSINT', afsct$TABLE_NAME)]
-
-sqlColumns(AFSC, "OBSINT")
-
-cquery <- paste0("SELECT OBSINT.DEBRIEFED_SPCOMP.SPECIES,\n ",
-                 "OBSINT.DEBRIEFED_SPCOMP.PERCENT_RETAINED,\n ",
-                 "OBSINT.DEBRIEFED_SPCOMP.EXTRAPOLATED_WEIGHT,\n ",
-                 "OBSINT.DEBRIEFED_HAUL.PERMIT,\n ",
-                 "OBSINT.DEBRIEFED_HAUL.CRUISE,\n ",
-                 "OBSINT.DEBRIEFED_HAUL.HAUL,\n ",
-                 "OBSINT.DEBRIEFED_HAUL.NMFS_AREA,\n ",
-                 "OBSINT.DEBRIEFED_SPCOMP.YEAR,\n ",
-                 "OBSINT.DEBRIEFED_HAUL.GEAR_TYPE\n ",
-                 "FROM OBSINT.DEBRIEFED_SPCOMP\n ",
-                 "INNER JOIN OBSINT.DEBRIEFED_HAUL\n ",
-                 "ON OBSINT.DEBRIEFED_HAUL.HAUL_JOIN    = OBSINT.DEBRIEFED_SPCOMP.HAUL_JOIN\n ",
-                 "WHERE OBSINT.DEBRIEFED_SPCOMP.SPECIES in (103, 145)\n ",
-                 "AND OBSINT.DEBRIEFED_HAUL.NMFS_AREA BETWEEN '500' AND '544'\n "
-)
-catches_observer <- sqlQuery(AFSC,cquery)
+catches_observer <- sqlQuery(AFSC,qcatch_obs)
 catches_observer$ID <- paste(catches_observer$CRUISE, catches_observer$PERMIT,catches_observer$HAUL, sep="_")
 catches_observer$SPECIES <- ifelse(catches_observer$SPECIES==103, 'flathead_sole', 'Bering_flounder')
 catches_observer <- select(catches_observer, -CRUISE, -PERMIT, -HAUL) %>%
@@ -104,53 +53,21 @@ saveRDS(catches_observer, file = here('data',paste0(Sys.Date(),'-catches_observe
 write.csv(catches_observer, file=here('data',paste0(Sys.Date(),'-catches_observer.csv') ), row.names=FALSE)
 
 
-### ----- Get survey shelf biomass estimates -----
+#* Survey biomass (EBS Shelf) ----
 message("Querying EBS survey biomass data...")
-### Switched to query written by Rebecca and modified by Cole in
-### 10/2020
-query <- "
-select a.SPECIES_CODE, b.SPECIES_NAME, b.COMMON_NAME,
-a.YEAR, a.STRATUM, round(MEANWGTCPUE,4) meanwgtcpue, round(VARMNWGTCPUE,10) varmnwgtcpue,
-round(BIOMASS,2) biomass, round(VARBIO,4) varbio, round(LOWERB,2) lowerb,
-round(UPPERB,2) upperb, DEGREEFWGT, round(MEANNUMCPUE,4) meannumcpue, round(VARMNNUMCPUE,10) varmnnumcpue,
-round(POPULATION) population, round(VARPOP,4) varpop, round(LOWERP) lowerp, round(UPPERP) upperp,
-DEGREEFNUM,HAULCOUNT,CATCOUNT,NUMCOUNT,LENCOUNT
-from haehnr.biomass_ebs_standard_grouped a, racebase.species b
-where a.species_code=b.species_code and a.species_code = 10129
-and a.stratum=999
-order by a.species_code, a.year,stratum
-"
-test <- sqlQuery(AFSC, query)
+test <- sqlQuery(AFSC, qsurv)
 if(!is.data.frame(test)) stop("Failed to query EBS survey data")
 write.csv(test, file=here('data',paste0(Sys.Date(),'-biomass_survey_ebs.csv') ), row.names=FALSE)
 
-# ## I need the species split for a table so get them here and save
-# ## to report folder. This is not used in the assessment.
-query <- "
-select a.SPECIES_CODE, b.SPECIES_NAME, b.COMMON_NAME,
-a.YEAR, a.STRATUM, round(MEANWGTCPUE,4) meanwgtcpue, round(VARMNWGTCPUE,10) varmnwgtcpue,
-round(BIOMASS,2) biomass, round(VARBIO,4) varbio, round(LOWERB,2) lowerb,
-round(UPPERB,2) upperb, DEGREEFWGT, round(MEANNUMCPUE,4) meannumcpue, round(VARMNNUMCPUE,10) varmnnumcpue,
-round(POPULATION) population, round(VARPOP,4) varpop, round(LOWERP) lowerp, round(UPPERP) upperp,
-DEGREEFNUM,HAULCOUNT,CATCOUNT,NUMCOUNT,LENCOUNT
-from haehnr.biomass_ebs_standard a, racebase.species b
-where a.species_code=b.species_code and a.species_code in (10130,10140)
-and a.stratum=999
-order by a.species_code, a.year,stratum
-"
-test <- sqlQuery(AFSC, query)
+test <- sqlQuery(AFSC, qsurvspp)
 if(!is.data.frame(test)) stop("Failed to query EBS survey data")
 write.csv(test, here('data',paste0(Sys.Date(),'-biomass_survey_ebs_by_species.csv')), row.names=FALSE)
 
 
-### ----- Get AI biomass estimates -----
+#* Survey biomass (AI) ----
 ## This only includes FHS b/c no BF found there
 message("Querying AI survey biomass data...")
-aiq <- "select t.*, s.common_name
-from ai.biomass_total t, racebase.species s
-where t.species_code in (10130,10140) and t.species_code=s.species_code and year>1980
-order by t.species_code,t.year\n"
-ai <- sqlQuery(AFSC, aiq)
+ai <- sqlQuery(AFSC, qsurvAI)
 if(!is.data.frame(ai)) stop("Failed to query AI survey data")
 # write.csv(file='data/biomass_survey_ai.csv', x=ai, row.names=FALSE)
 write.csv(ai, file=here('data',paste0(Sys.Date(),'-biomass_survey_ai.csv') ), row.names=FALSE)
@@ -270,7 +187,7 @@ write.csv(test,file= here('data',paste0(Sys.Date(),'-ages_survey_ebs.csv')), tes
 ### ----- Get fishery length compositions data  -----
 ## Flathead sole only = 103, Rex = 105, Dover = 107, Bering flounder = 145, GT = 102, Deepsea sole = 110
 ## NMFS_AREA between 500 and 544 for BSAI, above 600 for GOA
-species <- 103
+species <- 103 
 low.nmfs.area <- "'500'" #"'600'" #500
 hi.nmfs.area <- "'544'" #"'699'"  #544
 SpeciesCode = "103"
