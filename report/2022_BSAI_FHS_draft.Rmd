@@ -1,0 +1,64 @@
+---
+title: "Assessment of the `r spp[1]`-Bering flounder Stock in the Bering Sea and Aleutian Islands"
+author: "Maia S. Kapur"
+date: "November 2022"
+output: html_notebook
+---
+
+```{r setup, echo = FALSE}
+spp = c('`r spp[1]`', 'Hippoglossoides esassodon', 'Hippoglossoides spp.')
+thisyr = 2022
+lastyr = thisyr-1
+proj_years = (thisyr+1):(thisyr+2)
+proj_range = paste0(range(proj_years), collapse = "-")
+```
+
+
+# Executive Summary
+"`r spp[1]`" as currently managed by the North Pacific Fishery Management Council (NPFMC) in the 
+Bering Sea and Aleutian Islands (BSAI) represents a two-species complex consisting of true `r spp[1]` 
+(*`r spp[2]``) and its morphologically-similar congener Bering flounder (H. robustus). 
+In 2012, the BSAI Groundfish Plan Team moved `r spp[1]` to a biennial stock assessment schedule because it has historically been lightly exploited. A full stock assessment report was produced in `r lastyr` (Monnahan and Haehn, `r lastyr`, available online at https://apps-afsc.fisheries.noaa.gov/refm/docs/`r lastyr`/BSAIflathead.pdf). This year, a partial assessment is presented. In partial assessment years, an executive summary is presented to recommend harvest levels for the next two years, along with trends in catch and biomass. 
+
+`r spp[1]` is assessed using an age-structured model and Tier 3 determination. The single species projection model is run using parameter values from the accepted `r lastyr` assessment model, together with updated catch information for `r lastyr` and estimated catches for `r thisyr` and `r proj_range`, to predict stock status for `r spp[1]` in 2022 and 2023 and make ABC recommendations for those years. 
+
+Summary of Changes in Assessment Inputs This assessment used a single survey index of "total" Hippoglossoides spp. biomass that included the EBS “standard” survey areas and AI survey areas for the years 1982-`r thisyr` (Table 2). As was done in the `r lastyr` assessment, a linear regression is used to estimate a relationship between EBS shelf `r spp[3]` survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year). There was no AI survey conducted in `r thisyr` and AI biomass was estimated with the linear equation. The `r thisyr` total BSAI estimate was 671,580 t, an increase over the 2019 estimate of 604,446 t.
+
+To run the projection model to predict ABC’s for 2022 and 2023, estimates are required for the total catches in `r thisyr`-2023. The final catch for `r thisyr` (9,272 t) was estimated by adding the average catch between October 28 and December 31 over the years 2016-`r lastyr` to the `r thisyr` catch as of 10/28/`r thisyr`. The 2022 and 2023 catches (11,141t) were estimated as the average catch over the previous 5 years (2016-`r lastyr`). 
+
+## Summary of Results
+
+Based on the updated projection model results, the recommended ABC’s for 2022 and 2023 are listed in the table below; the new ABC recommendation and OFL for both 2022 and 2023 are both slightly higher than those projected during the last full assessment (`r lastyr`).
+
+```{r safe, echo = false}
+
+```
+
+\newpage
+
+# Tables
+
+```{r t1, echo = false}
+# Table 1. Catch (in tons) of flathead sole and Bering flounder combined (Hippoglossoides spp.), flathead sole only, and Bering flounder only in the BSAI as of September 22, 2021. Observer data on species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of flathead sole separately from that of Bering flounder.
+```
+
+```{r t2, echo = false}
+# Table 2. Survey biomass in tons and coefficient of variation (CV) of Hippoglossoides spp. combined (flathead sole and Bering flounder) across the entire BSAI; flathead sole only in the Aleutian Islands, Hippoglossoides spp. combined in the Eastern Bering Sea (EBS) shelf survey, flathead sole only in EBS shelf survey, and Bering flounder only in the EBS shelf survey. Slight discrepancies in totals may occur due to rounding. Bolded years are not included in base model.
+```
+
+
+```{r t3, echo = false} 
+# Table 3. Northern Bering Sea survey biomass (t) and coefficient of variation (CV) for flathead sole, Bering flounder, and the two combined (Hippoglossoides spp.). Data accessed via Oracle database query on 05 October, 2021. These data are not included in the base model and are presented here for reference only.
+```
+
+\newpage
+
+# Figures
+
+```{r f1, echo = false} 
+# Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Dotted grey lines represent observed catches for 2020 and projected catches for 2021-2023.
+```
+
+```{r f2, echo = false} 
+# Figure 2. Survey biomass from the EBS shelf  and Aleutian Islands surveys for station depths less than or equal to 200 meters. A linear regression is used to estimate a relationship between EBS shelf Hippoglossoides spp. survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year). Grey shading indicates ± 1 standard error. The blue point was the observed survey biomass in 2021, which is not included in the base assessment model. 
+```
