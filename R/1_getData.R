@@ -36,12 +36,12 @@ len_bins <- c(seq(min_size,max_size,bin_width),43,46,49,52,55,58)
 lapply(list.files(here('sql'), full.names = T), source) ## load all sql queries
 
 # DATA DOWNLOAD ---- 
-#* AKFIN Catches
+#* AKFIN Catches ---- 
 message("Querying AKFIN to get catch...")
 catch <- sqlQuery(AKFIN,qcatch) %>% arrange(YEAR, ZONE, GEAR)
 write.csv(catch, file=here('data',paste0(Sys.Date(),'-catch.csv') ), row.names=FALSE)
 
-#* AFSC observer catches
+#* AFSC observer catches ---- 
 message("Querying haul-level catch from observer DB...")
 catches_observer <- sqlQuery(AFSC,qcatch_obs)
 catches_observer$ID <- paste(catches_observer$CRUISE, catches_observer$PERMIT,catches_observer$HAUL, sep="_")
@@ -69,12 +69,18 @@ write.csv(test, here('data',paste0(Sys.Date(),'-biomass_survey_ebs_by_species.cs
 message("Querying AI survey biomass data...")
 ai <- sqlQuery(AFSC, qsurvAI)
 if(!is.data.frame(ai)) stop("Failed to query AI survey data")
-# write.csv(file='data/biomass_survey_ai.csv', x=ai, row.names=FALSE)
 write.csv(ai, file=here('data',paste0(Sys.Date(),'-biomass_survey_ai.csv') ), row.names=FALSE)
 
+#* Survey biomass (NBS, for illustration only)  ----
+test <- sqlQuery(AFSC, qnbs)
+if(!is.data.frame(test)) stop("Failed to query NBS survey data")
+write.csv(test, here('data',paste0(Sys.Date(),'-biomass_survey_nbs_by_species.csv')), row.names=FALSE)
 
-### Format survey biomass estimates -----
-index_ebs <-  read.csv("data/2021-09-22-biomass_survey_ebs.csv") %>%
+
+# REFORMATTING ----
+ <- "2022-05-31" ## dwnld date
+#* Survey biomass -----
+index_ebs <-  read.csv(paste0("data/",date_use,"-biomass_survey_ebs.csv") %>%
   select(year=YEAR, biomass=BIOMASS,
          variance=VARBIO) %>% cbind(survey='ebs')
 index_ai <- read.csv('data/2021-09-22-biomass_survey_ai.csv') %>%
@@ -106,24 +112,6 @@ index <- rbind(z1,z2) %>% group_by(year) %>%
 SS_index <- data.frame(year=index$year, seas=7, index=2, obs=index$biomass, se_log=index$se_log)
 write.csv(x=SS_index, file= here('data',paste0(Sys.Date(),'-SS_survey_index.csv')) , row.names=FALSE)
 
-## NBS data - for illustration only ----
-biomass_nbs_safe
-
-query <- "
-select a.SPECIES_CODE, b.SPECIES_NAME, b.COMMON_NAME,
-a.YEAR, a.STRATUM, round(MEANWGTCPUE,4) meanwgtcpue, round(VARMNWGTCPUE,10) varmnwgtcpue,
-round(BIOMASS,2) biomass, round(VARBIO,4) varbio, round(LOWERB,2) lowerb,
-round(UPPERB,2) upperb, DEGREEFWGT, round(MEANNUMCPUE,4) meannumcpue, round(VARMNNUMCPUE,10) varmnnumcpue,
-round(POPULATION) population, round(VARPOP,4) varpop, round(LOWERP) lowerp, round(UPPERP) upperp,
-DEGREEFNUM,HAULCOUNT,CATCOUNT,NUMCOUNT,LENCOUNT
-from haehnr.biomass_nbs_safe a, racebase.species b
-where a.species_code=b.species_code and a.species_code in (10130,10140)
-and a.stratum=999
-order by a.species_code, a.year,stratum
-"
-test <- sqlQuery(AFSC, query)
-if(!is.data.frame(test)) stop("Failed to query NBS survey data")
-write.csv(test, here('data',paste0(Sys.Date(),'-biomass_survey_nbs_by_species.csv')), row.names=FALSE)
 
 
 ### ----- survey conditional age at length -----
