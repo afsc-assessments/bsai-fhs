@@ -7,7 +7,9 @@ output: html_notebook
 
 ```{r setup, echo = FALSE}
 spp = c('`r spp[1]`', 'Hippoglossoides esassodon', 'Hippoglossoides spp.')
-thisyr = 2022
+date_use = "2022-05-31" ## for file loading
+date_use_long = paste0(month(date_use, label = T), " ",day(date_use),", ",year(date_use))
+thisyr = lubridate::year(Sys.Date())
 lastyr = thisyr-1
 proj_years = (thisyr+1):(thisyr+2)
 proj_range = paste0(range(proj_years), collapse = "-")
@@ -39,16 +41,27 @@ Based on the updated projection model results, the recommended ABC’s for 2022 
 # Tables
 
 ```{r t1, echo = false}
+
 # Table 1. Catch (in tons) of flathead sole and Bering flounder combined (Hippoglossoides spp.), flathead sole only, and Bering flounder only in the BSAI as of September 22, 2021. Observer data on species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of flathead sole separately from that of Bering flounder.
 ```
 
 ```{r t2, echo = false}
-# Table 2. Survey biomass in tons and coefficient of variation (CV) of Hippoglossoides spp. combined (flathead sole and Bering flounder) across the entire BSAI; flathead sole only in the Aleutian Islands, Hippoglossoides spp. combined in the Eastern Bering Sea (EBS) shelf survey, flathead sole only in EBS shelf survey, and Bering flounder only in the EBS shelf survey. Slight discrepancies in totals may occur due to rounding. Bolded years are not included in base model.
+table2 <- read.csv(here('tables',paste0(date_use,'-survey_by_spp.csv'))) 
+table2 
+table2$year <- as.character(table2$year)
+table2[is.na(table2)] <-""
+kableExtra::kable(table2, format.args = list(big.mark = ','), digits = 2,
+                  caption = paste0("Table 2. Survey biomass in tons and coefficient of variation (CV) of Hippoglossoides spp. combined (flathead sole and Bering flounder) across the entire BSAI; flathead sole only in the Aleutian Islands, Hippoglossoides spp. combined in the Eastern Bering Sea (EBS) shelf survey, flathead sole only in EBS shelf survey, and Bering flounder only in the EBS shelf survey. Slight discrepancies in totals may occur due to rounding. Bolded years are not included in base model.'Data accessed via Oracle database query on ",date_use_long,"."))
+
 ```
 
 
-```{r t3, echo = false} 
-# Table 3. Northern Bering Sea survey biomass (t) and coefficient of variation (CV) for flathead sole, Bering flounder, and the two combined (Hippoglossoides spp.). Data accessed via Oracle database query on 05 October, 2021. These data are not included in the base model and are presented here for reference only.
+
+```{r t3, echo = false}
+table3 <- read.csv(here('tables',paste0(date_use,'-NBS_survey_by_spp.csv'))) 
+  kableExtra::kable(table3, format.args = list(big.mark = ','), 
+  caption = paste0("Table 3. Northern Bering Sea survey biomass (t) and coefficient of variation (CV) for flathead sole, Bering flounder, and the two combined (Hippoglossoides spp.).  These data are not included in the base model and are presented here for reference only. Data accessed via Oracle database query on ",date_use_long,"."))
+
 ```
 
 \newpage
