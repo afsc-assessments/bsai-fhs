@@ -84,11 +84,10 @@ if(!is.data.frame(test)) stop("Failed to query NBS survey data")
 write.csv(test, here('data',paste0(Sys.Date(),'-biomass_survey_nbs_by_species.csv')), row.names=FALSE)
 
 
-# REFORMATTING ----
+#** reformat surveys ----
 date_use <- "2022-05-31" ## dwnld date
 data_folder = here('data','/')
 
-#* Survey biomass -----
 index_ebs <-  read.csv(paste0(data_folder,date_use,"-biomass_survey_ebs.csv")) %>%
   select(year=YEAR, biomass=BIOMASS,
          variance=VARBIO) %>% cbind(survey='ebs')
