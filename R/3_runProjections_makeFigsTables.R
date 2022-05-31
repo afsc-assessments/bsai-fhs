@@ -3,9 +3,67 @@ require(dplyr)
 require(tidyr)
 require(ggplot2)
 require(here)
+this_year = lubridate::year(Sys.Date())
+last_yr = this_year-1
+
+lapply(list.files("C:/Users/maia.kapur/Work/assessments/proj_functions/", full.names = T), 
+       source)
+file.copy('C:/Users/maia.kapur/Work/assessments/proj_functions/main.exe', here('projection'), overwrite = TRUE)
+file.copy('C:/Users/maia.kapur/Work/assessments/proj_functions/tacpar.dat', here('projection'), overwrite = TRUE)
+
+# Write proj files ----
+mod_2020_dir <-here('2020_files','model_runs','Run06_francis_tuning')
+mod_2020<- SS_output(mod_2020_dir, verbose = F)
+## passed to write_proj function
+NSEX=2						# number of sexes used in assessment model
+Nfishery=1					# number of fisheries(fleets) #This was set equal to 2
+fleets=1					# fleet index number (associated with commercial fishery)
+rec_age=3					# assumed age at recruitment
+max_age=21					# maximum age in model
+NAGE=length(rec_age:max_age)			# number of ages
+FY=1964 					# first year used to subset SSB
+rec_FY=1964					# first year used to subset recruitment
+rec_LY_decrement=0				# value subtracted from assessment final year to subset recruitment vector
+spawn_month=1					# spawning month
+Fratios=1            				# Proportion F per fishery
+#passed to write_proj_spcat
+ct_yrs=3			#Number of future catch years given to projection model
+## passed to setup function
+nsims=1000			# number of projection model simulations
+nproj=14			# number of projection years ALSO USED BY get_proj_res
+## passed to get_proj_res
+spp="BSAI_flathead"
+
+file.copy(from = here('projection','2021_projections','model_proj.dat'),
+          to = here('projection'), overwrite = T)
+# write_proj(dir=here('projection'),  
+#            # sdir =x,
+#            data_file="Model_Proj.dat", 
+#            data= mod_2020,
+#            NSEX=NSEX, NAGE=NAGE, Nfishery=Nfishery,
+#            fleets=fleets, rec_age=rec_age, max_age=max_age, FY=FY,
+#            rec_FY=rec_FY, rec_LY_decrement=rec_LY_decrement,
+#            spawn_month=spawn_month, Fratios=Fratios)
+## write spcat with year-specific catch info
+write_proj_spcat(dir = here('projection'),
+                 # sdir = here('projection'),
+                 data_file = 'spp_catch.dat', ## name of new file - must match what is in spp_catch.dat
+                 data =  mod_2020, ## model basis
+                 ct_yrs = 5, ## eg for 2009 takes proj catch 2008-2012
+                 catch_vector_use= catchvec ## matrix made at bottom of 2_makeCatches
+)
+# ## write setup 
+setup(dir =  here('projection'),
+      # sdir =  here('projection'),
+      data_file = 'setup.dat', ## name of new file
+      data = mod_2020 , ## model basis
+      nproj = 5
+)
+
+
 ## Execute proj module ----
 ## once spp_catch is set up you can run the projection module
-setwd(here('projection','Projections')) 
+setwd(here('projection')) 
 shell('main')
 
 
@@ -13,7 +71,7 @@ shell('main')
 ### The projection model results
 ## ## Use R to process output into easy file to create the harvest
 ## ## table in report.xlsx.
-this_year = 2021
+
 rec_table1 <-
   read.table('percentdb.out') %>%
   as.data.frame(stringsAsFactors=FALSE) %>%
@@ -35,30 +93,45 @@ rec_table2[,2:3] <- 1000*rec_table2[,2:3]
 rec_table <- bind_rows(rec_table1, rec_table2)
 
 ## change order to match SAFE format & magnitudes
-rec_table <- rec_table[c(11,6,3,5,4,2,1,1,9,8,8),] 
+rec_table <-rec_table[c(11,6,3,5,4,2,1,1,9,8,8),] 
 
+# rec_table[c(1:5,9:11),2:3] <-formatC(rec_table[c(1:5,9:11),2:3] , format="d", big.mark=",") 
 write.csv(rec_table, 'rec_table.csv', row.names=FALSE)
 
+## load last year's values and make full safe
+previous_rec_table <- read.csv("C:/Users/maia.kapur/Work/assessments/2021/BSAI-flathead/projection/Projections/REC_TABLE.CSV")
 
 
 
+safe0 <- rbind(c(rep(0.2,3)),
+      c(rep('3a',3)),
+      cbind(previous_rec_table[,2:3], 
+            rec_table[,2:3])) 
+rownames(safe0) <-c('M', 
+                    'Tier',
+                    "Projected total (3+) biomass (t)",
+                    "Projected Female spawning biomass (t)",
+                    "B100%",
+                    "B40%",
+                    "B35%",
+                    "FOFL",
+                    "maxFABC",
+                    "FABC",
+                    "OFL (t)",
+                    "maxABC (t)",
+                    "ABC (t)"
+)
+xtable(prettyNum(c(rec_table[,3]),big.mark=","))
 
-### --------------------------------------------------
-### Area apportionment
-## Run the RE model for each area-specific survey to get this
-## year's estimates and use that to get proportions. I didn't
-## actually run this in 2020 because there was no survey. For
-## 2021 need to rework this chunk. CCM -10/2020
+status = matrix(NA, nrow = 3, ncol = 4)
+# colnames(status) <- c(2020,2021,2021,2022)
+rownames(status) <- c('Overfishing','Overfished','Approaching Overfished')
+status[1,c(1,4)] <- status[2,c(2,4)] <- status[3,c(2,4)] <- 'no'
 
-## MSK WAITING FOR SURVEY DATA AS OF 09-21-2021
-index_by_area <- read.csv('data/index_by_area.csv') %>%
-  mutate(CV=sqrt(POPVAR)/POP)
+noquote(rbind(as.matrix(safe0),status))
+# Figures ----
 
-
-
-## plots ----
-
-## Projection plots ----
+#* Projection plots ----
 ## notes from CMM
 ## ### Jim says to use the means from the bigfile. But I don't
 ## think this works it's missing a bunch of stuff.
@@ -76,48 +149,38 @@ pdt <- data.frame(read.table("bigfile.out", header=TRUE))
 pdt.long <- pivot_longer(pdt, cols=c(-Alternative, -Spp, -Yr), names_to='metric') %>%
   mutate(Alternative=factor(Alternative)) %>% group_by(Yr, Alternative, metric) %>%
   summarize(med=median(value), lwr=quantile(value, .1), upr=quantile(value, .9), .groups='drop')
-g <- ggplot(pdt.long, aes(Yr,  med, ymin=lwr, ymax=upr, fill=Alternative, color=Alternative)) +
-  facet_wrap('metric', scales='free_y') + ylim(0,NA) +
-  geom_ribbon(alpha=.4) + theme_bw() +
-  labs(x='Year', y='Estimated 80% CI')
+# g <- ggplot(pdt.long, aes(Yr,  med, ymin=lwr, ymax=upr, fill=Alternative, color=Alternative)) +
+#   facet_wrap('metric', scales='free_y') + ylim(0,NA) +
+#   geom_ribbon(alpha=0.4) + 
+#   labs(x='Year', y='Estimated 80% CI')
 
 
 ## load previous BASE model
-remotes::install_github("r4ss/r4ss", ref = 'e588b878c06f3a60fe661e5d6e0a6d096d19d57a' )
+# remotes::install_github("r4ss/r4ss", ref = 'e588b878c06f3a60fe661e5d6e0a6d096d19d57a' )
 ## getting morph error otherwise
-base20mod <- r4ss::SS_output(here('2020_files','model_runs','Run06_francis_tuning'))
-# SSplotComparisons(SSsummarize(list(base17,base20mod) ) )
+# mod_2020 <- r4ss::SS_output(here('2020_files','model_runs','Run06_francis_tuning'))
+# SSplotComparisons(SSsummarize(list(base17,mod_2020) ) )
 
 #* Fig 1 catch/totbio plot ----
 ## per report.xlsx/Fig1, looks like biomass is from the assessment thru 2016 then values from proj
 ## the figure caption indicates these are for 3+ but the model was run using age 0 as the summary biomass
 ## had to rerun with the summary age updated
-fig1a <- base20mod$timeseries %>% select(Yr, Bio_smry) %>%
-  merge(.,base20mod$catch %>% select(Yr, Obs), by = 'Yr') %>%
+fig1a <- mod_2020$timeseries %>% select(Yr, Bio_smry) %>%
+  merge(.,mod_2020$catch %>% select(Yr, Obs), by = 'Yr') %>%
   filter(Yr != 2020) %>%
   mutate(catch_over_biomass  = Obs/Bio_smry)
 
-## projection catch values in spp_catch, use Tot_biom from pdt
-
-## summarise values in pdt
-
-sppcatch <- read.table(here('projection','projections','spp_catch.dat'),
-                       skip = 24) %>%
-  data.frame() %>% select(Yr = V1, catch = V2)
-
-
-fig1b <- data.frame(Yr = seq(2020,2023,1),
-                    Bio_smry = pdt %>% filter(Yr < 2024) %>% group_by(Yr) %>%
-                      summarise(Bio_smry = 1000*round(mean(Tot_biom),2)) %>% select(Bio_smry) ,
-                    Obs = sppcatch$catch) %>%
+fig1b <- data.frame(Yr = catchvec[,1],
+                    Bio_smry = pdt %>% filter(Yr < max(catchvec[,1])+1) %>% group_by(Yr) %>%
+                      summarise(Bio_smry = round(mean(Tot_biom),2)) %>% select(Bio_smry) ,
+                    Obs = catchvec[,2]) %>%
   mutate(catch_over_biomass  = Obs/Bio_smry)
-
-
 fig1 <- rbind(fig1a, fig1b)
 
 
 ## plot with diff colors for extrapolated and forecasted catches
-ggplot(subset(fig1, Yr < 2021), aes(x = Yr, y = catch_over_biomass)) +
+ggplot(subset(fig1, Yr < this_year), 
+       aes(x = Yr, y = catch_over_biomass)) +
   geom_line(lwd = 1, col = 'dodgerblue2') +
   # geom_point(data = subset(fig1, Yr==2020),
   #           size = 3, col = 'grey44') +
@@ -128,30 +191,25 @@ ggplot(subset(fig1, Yr < 2021), aes(x = Yr, y = catch_over_biomass)) +
   scale_y_continuous(limits = c(0,0.08),
                      breaks = seq(0,0.08,0.01), 
                      labels = seq(0,0.08,0.01))+
-  labs(x = 'Year', y = 'Catch/Summary Biomass (age 3+)')+
-  ggsidekick::theme_sleek()
+  labs(x = 'Year', y = 'Catch/Summary Biomass (age 3+)')
 
 ggsave(last_plot(), height = 5, width = 8, dpi = 520,
        file = here('figs',paste0(Sys.Date(),'-Fig1_catchvsbio.png')))
 
 #* index plot ----
 # index <- read.csv(here('data','2021-09-15-index.csv'))
-index <- read.csv(here('data','2021-09-22-ss_survey_index.csv')) %>%
+index <- read.csv(here('data',paste0(date_use,'-ss_survey_index.csv'))) %>%
   mutate(lci = obs-se_log*obs, uci = se_log*obs+obs)
 # index %>% filter(  YEAR != 2019) %>% summarise(mb=mean(BIOM), sdb = sd(BIOM)) %>% mutate(mb+sdb)
 ggplot(index, aes(x = year, y = obs/1000)) +
   geom_line(lwd = 1, col = 'grey77') +
   # geom_point() +
   geom_point(data = subset(index, year == 2021), color = 'blue') +
-  scale_x_continuous(labels = seq(1983,2021,2),
-                     breaks = seq(1983,2021,2))+
-  # scale_x_continuous(labels = seq(1980,2025,5), 
-  #                    breaks = seq(1980,2025,5))+
+  scale_x_continuous(labels = seq(1980,2025,5),
+                     breaks = seq(1980,2025,5))+
   scale_y_continuous(limits = c(0,1000) ) +
   labs(x = 'Year', y = 'Survey Biomass (1000 mt)')+
-  geom_ribbon(aes(ymin =lci/1000, ymax = uci/1000 ),alpha = 0.2)+
-
-  ggsidekick::theme_sleek()
+  geom_ribbon(aes(ymin =lci/1000, ymax = uci/1000 ),alpha = 0.2)
 
 ggsave(last_plot(), height = 6, width = 10, dpi = 520,
        file = here('figs',paste0(Sys.Date(),'-index_wCVs.png')))
@@ -162,7 +220,7 @@ ggsave(last_plot(), height = 6, width = 10, dpi = 520,
 ## NOTE: there seemed to be some input errors with TACs in years 2016 and 2019
 ## based on the data downloadable on AKFIN under "BSAI groundfish specifications".
 ## This came to my attention because the catches used in the base 2020 model were above the TACs for those years.
-## instead
+
 
 cbpal <- c("#999999", "#E69F00", "#56B4E9", "#009E73" ,"#F0E442", "#0072B2", "#D55E00" )
 cbpal <- c("#E69F00", "#56B4E9", "#009E73" ,'black','grey66' )
@@ -178,13 +236,13 @@ mgmt<- mgmt1%>%
   mutate(Yr = X1) %>%
   select(Yr, TAC, ABC, OFL)
 
-base20mod$catch %>%filter(Yr == 2019)
+mod_2020$catch %>%filter(Yr == 2019)
 
 ## extrapolated catches
 xtrayrs <- data.frame(Yr = sppcatch$Yr,
                       Catch = sppcatch$catch)
 
-merge(mgmt, base20mod$catch %>% 
+merge(mgmt, mod_2020$catch %>% 
         select(Yr, Catch = Obs),
       by ='Yr', all.x = TRUE)  %>%
   merge(., xtrayrs, by = 'Yr',all = T) %>%
@@ -199,8 +257,7 @@ merge(mgmt, base20mod$catch %>%
   ggplot(., aes(x = Yr,y = value, color = variable, group = variable)) +
   geom_line(lwd = 1.1) +
   ggsidekick::theme_sleek() +
-  theme(legend.text = element_text(size = 14), legend.position = 'bottom',
-        axis.text = element_text(size = 14),axis.title  = element_text(size = 14)) +
+
   scale_x_continuous(limits = c(1995,2025),
                      breaks =  seq(1995,2025,5),
                      labels = seq(1995,2025,5)) +
@@ -225,7 +282,7 @@ ggsave(last_plot(), file = here("figs","harvest_spex_vs_catch.png"),
 ## 2020 ssb plot with current b40 ----
 
 png(here("figs","SSB_2020_vsB40_2022.png"), width = 7, height = 5, unit = 'in', res = 520)
-SSplotTimeseries(base20mod, subplot = 7)
+SSplotTimeseries(mod_2020, subplot = 7)
 abline(h = 81463, lty = 'dashed')
 text(x = 2015, y = 86000, label = expression('B'[40]*'=81,463 mt'))
 dev.off()
@@ -247,13 +304,13 @@ dev.off()
 ## MSK: Not sure where CCM got the values for < 1992. I copied in his table from
 ## the last BSAI assessment and only updated the last few years here.
 
-totals <- read.csv(here('data','2021-10-29-catch.csv')) %>%
+totals <- read.csv(here('data',paste0(date_use,'-catch.csv'))) %>%
   group_by(year=YEAR) %>%
   summarize(catch=sum(TONS), .groups='drop')
 
 ## manually add the projected catch
 
-catch_proportions <- readRDS(here('data','2021-10-29-catches_observer.RDS')) %>%
+catch_proportions <- readRDS(here('data',paste0(date_use,'-catches_observer.RDS'))) %>%
   group_by(year, species) %>%
   summarize(weight=sum(weight)/1000, .groups='drop') %>%
   pivot_wider(names_from=species, values_from=weight,values_fill=0) %>%
@@ -268,7 +325,7 @@ catch_proportions <- readRDS(here('data','2021-10-29-catches_observer.RDS')) %>%
   
   select(year, total, FHS, BF)
 
-write.csv(catch_proportions, file = here('report',paste0(Sys.Date(),'-catch_proportions.csv')), row.names=FALSE)
+write.csv(catch_proportions, file = here('tables',paste0(Sys.Date(),'-catch_proportions.csv')), row.names=FALSE)
 
 
 #* Table 2 ----
@@ -276,17 +333,17 @@ write.csv(catch_proportions, file = here('report',paste0(Sys.Date(),'-catch_prop
 ## total (all regions, both spp), AI (both spp), EBS combo ("hippo spp"), EBS flathead, EBS flounder, w CVs
 ## note that for this table in 2020 cole did NOT show any imputed AI values; the "totals" are as used in assessment
 
-index_ai <- read.csv('data/2021-09-22-biomass_survey_ai.csv') %>%
+index_ai <- read.csv(here('data',paste0(date_use,'-biomass_survey_ai.csv'))) %>%
   mutate(species=gsub(" ", "_",COMMON_NAME), survey = 'AI', cv = BIOMASS_VAR /TOTAL_BIOMASS) %>%
   select(year=YEAR, species, biomass=TOTAL_BIOMASS,
          variance = BIOMASS_VAR, survey) %>% mutate(cv = round(sqrt(log(1+variance/biomass^2)),5))
 
-index_ebs_spp <- read.csv('data/2021-09-28-biomass_survey_ebs_by_species.csv')%>%
+index_ebs_spp <- read.csv(here('data',paste0(date_use,'-biomass_survey_ebs_by_species.csv')))%>%
   mutate(species=gsub(" ", "_",COMMON_NAME), survey = 'ebs') %>%
   select(year=YEAR,species, biomass=BIOMASS,
          variance = VARBIO, survey) %>%mutate(cv = round(sqrt(log(1+variance/biomass^2)),5))
 
-index_ebs <-  read.csv("data/2021-09-22-biomass_survey_ebs.csv") %>%
+index_ebs <-  read.csv(here('data',paste0(date_use,"-biomass_survey_ebs.csv"))) %>%
   select(year=YEAR, biomass=BIOMASS,
          variance=VARBIO) %>% cbind(survey='ebs') %>% mutate(cv = round(sqrt(log(1+variance/biomass^2)),5)) %>%
   select(year, ebs_total = biomass, ebs_total_cv = cv)
@@ -304,14 +361,12 @@ index_ai %>%
   select(year, total = obs, cv_total = se_log, biomass_AI, cv_AI) %>%
   merge(., index_ebs) %>%
   merge(., ebs2) %>%
-
-  write.csv(., file = here('report',paste0(Sys.Date(),'-survey_by_spp.csv')), row.names=FALSE)
+  write.csv(., file = here('tables',paste0(Sys.Date(),'-survey_by_spp.csv')), row.names=FALSE)
 
 
 
 #* Table 3 NBS ----
-
-index_nbs <- read.csv('data/2021-10-05-biomass_survey_NBS_by_species.csv') %>%
+index_nbs <- read.csv(here('data',paste0(date_use,"-biomass_survey_NBS_by_species.csv"))) %>%
   mutate(species=gsub(" ", "_",COMMON_NAME), survey = 'NBS', cv = VARBIO /BIOMASS) %>%
   select(year=YEAR, species, biomass=BIOMASS,
          variance = VARBIO, survey) %>% mutate(cv = round(sqrt(log(1+variance/biomass^2)),5))
@@ -323,14 +378,18 @@ nbs2 <- index_nbs %>%
   summarise(totbio = sum(biomass),
             var2 = sum(variance),
             cv=round(sqrt(log(1+var2/totbio^2)),5)) %>%
-  select(year, nbs_total = totbio, nbs_total_cv = cv)
-
-
+  select(year, 
+         nbs_total = totbio, 
+         nbs_total_cv = cv)
 
 index_nbs %>% select(year, species, biomass, cv) %>%
   pivot_wider(names_from=species, values_from=c(biomass, cv)) %>%
   merge(., nbs2, by = 'year') %>%
   select(year, nbs_total, nbs_total_cv, biomass_flathead_sole, cv_flathead_sole, biomass_Bering_flounder, cv_Bering_flounder) %>%
-  
-  write.csv(., file = here('report',paste0(Sys.Date(),'-NBS_survey_by_spp.csv')), row.names=FALSE)
 
+  write.csv(., file = here('tables',paste0(Sys.Date(),'-NBS_survey_by_spp.csv')), row.names=FALSE)
+
+# https://rdrr.io/github/drmjc/mjcbase/man/prettyNum.html
+mjcbase::prettyNum(index_nbs[,c(3,4)], big.mark = ',')
+
+apply(nbs2,2,mjcbase::prettyNum, big.mark = ',')
