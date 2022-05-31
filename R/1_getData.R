@@ -7,18 +7,21 @@ require(here)
 require(ggplot2)
 require(r4ss)
 library(tidyverse)
+require(rstudioapi) ## enables masking of RODBC name, password
 
 options(digits=22) #Must have for reading in hauljoin
 
 ## Setup the network connections
-AFSC <- odbcConnect("AFSC","mkapur","N5w!Pw4mkq",  believeNRows = FALSE)
-AKFIN <- odbcConnect("AKFIN","mkapur","ssmamk22",  believeNRows=FALSE)
+username_AFSC <- showPrompt(title="Username", message="Enter your AFSC username:", default="")
+password_AFSC <- askForPassword(prompt="Enter your AFSC password:")
+AFSC <- odbcConnect("AFSC",username_AFSC,password_AFSC,  believeNRows = FALSE)
 
-
-### Newsbss contains a set of functions updated by Cole from Carey originally
-### from Steve that do data processing.
-source("C:/Users/maia.kapur/Work/flathead_2021/newsbss/functionfunctions.R")
-funcs <- list.files("C:/Users/maia.kapur/Work/flathead_2021/newsbss/functions", 
+username_AKFIN <- showPrompt(title="Username", message="Enter your AKFIN username:", default="")
+password_AKFIN <- askForPassword(prompt="Enter your AKFIN password:")
+AKFIN <- odbcConnect("AKFIN",username_AKFIN,password_AKFIN,  believeNRows = FALSE)
+ 
+## newsbss functions
+funcs <- list.files("C:/Users/maia.kapur/Work/assessments/newsbss/functions", 
                   pattern = '*.R',
                   full.names = TRUE)
 lapply(grep(funcs, pattern='*.csv', invert=TRUE, value=TRUE),source)
@@ -26,7 +29,7 @@ lapply(grep(funcs, pattern='*.csv', invert=TRUE, value=TRUE),source)
 
 ### -------------------------
 ## Setup options for flathead sole in BSAI
-final_year <- 2021
+final_year <- 2022
 fsh_sp_area <- "'BS','AI'"              # FMP
 fsh_sp_label <- "'FSOL'"                # AKFIN group species label
 fsh_sp_str <- "103"                     # AKFIN species code
