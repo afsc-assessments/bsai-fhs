@@ -91,7 +91,7 @@ catch_this_year <- weekly_catches %>% filter(year==this_year) %>%
 catch_to_add <- weekly_catches %>% filter(year>=this_year-5 & week > week(today())) %>%
   group_by(year) %>% summarize(catch=sum(catch), .groups='drop') %>%
   pull(catch) %>% mean
-message("Precited ", this_year, " catch= ", round(catch_this_year + catch_to_add,0)) ##9272
+message("Predicted ", this_year, " catch= ", round(catch_this_year + catch_to_add,0)) ##9272
 
 #* catches for projection years ----
 ##  use last 5 years' real data average
@@ -108,4 +108,4 @@ catchvec = matrix(c((last_yr-1),
          projc,
          projc), ncol = 2)
 
-save(catchvec,file = here('data', paste0(Sys.Date(),"-catches_for_proj.rds")))
+save(catchvec,file = here('data', paste0(Sys.Date(),"-catches_for_proj.rdata")))
