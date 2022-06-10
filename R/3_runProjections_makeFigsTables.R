@@ -81,7 +81,7 @@ rec_table1 <-
            metric %in% c('SSBMean','SSBFofl', 'SSBFabc', 'SSBF100', 'Fofl', 'Fabc')) %>%
   arrange(year, metric) %>%
   pivot_wider(names_from=year, values_from=value)
-rec_table1[3:6,3:4] <- 1000*rec_table1[3:6,3:4]
+rec_table1[3:6,3:4] <- rec_table1[3:6,3:4]
 
 rec_table2 <-
   read.table('alt2_proj.out', header=TRUE) %>%
@@ -89,7 +89,7 @@ rec_table2 <-
   pivot_longer(cols=c(-Stock, -Year), names_to='metric', values_to='value') %>%
   pivot_wider(names_from=Year, values_from=value)
 rec_table1$scenario <- rec_table2$Stock <- NULL
-rec_table2[,2:3] <- 1000*rec_table2[,2:3]
+rec_table2[,2:3] <- rec_table2[,2:3]
 rec_table <- bind_rows(rec_table1, rec_table2)
 
 ## change order to match SAFE format & magnitudes
@@ -101,12 +101,18 @@ write.csv(rec_table, 'rec_table.csv', row.names=FALSE)
 ## load last year's values and make full safe
 previous_rec_table <- read.csv("C:/Users/maia.kapur/Work/assessments/2021/BSAI-flathead/projection/Projections/REC_TABLE.CSV")
 
+previous_rec_table[,c('X2022','X2023')] <- apply(previous_rec_table[,c('X2022','X2023')],2,
+                                                FUN = function(x) as.numeric(gsub(",","",x)))
 
 
+rec_table[c(1:5,9:11),2:3] <- round(rec_table[c(1:5,9:11),2:3])
+rec_table[c(6:8),2:3] <- round(rec_table[c(6:8),2:3],digits = 2)
 safe0 <- rbind(c(rep(0.2,3)),
       c(rep('3a',3)),
       cbind(previous_rec_table[,2:3], 
             rec_table[,2:3])) 
+
+
 rownames(safe0) <-c('M', 
                     'Tier',
                     "Projected total (3+) biomass (t)",
@@ -121,14 +127,20 @@ rownames(safe0) <-c('M',
                     "maxABC (t)",
                     "ABC (t)"
 )
-xtable(prettyNum(c(rec_table[,3]),big.mark=","))
+# xtable(prettyNum(c(rec_table[,3]),big.mark=","))
 
 status = matrix(NA, nrow = 3, ncol = 4)
 # colnames(status) <- c(2020,2021,2021,2022)
 rownames(status) <- c('Overfishing','Overfished','Approaching Overfished')
 status[1,c(1,4)] <- status[2,c(2,4)] <- status[3,c(2,4)] <- 'no'
+status = data.frame(status)
+names(status) = names(safe0)
+safe0 = rbind(safe0,status) 
+safe = noquote(apply(safe0, 2, function(x) prettyNum(x, big.mark = ",")))
+# safe[safe > 10e6] <- safe[safe>10e6]/1000
+write.csv(safe, file = here('tables','safe_table.csv'), row.names=TRUE)
 
-noquote(rbind(as.matrix(safe0),status))
+
 # Figures ----
 
 #* Projection plots ----
