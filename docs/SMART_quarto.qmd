@@ -52,27 +52,46 @@ spp = 'GOA Flathead sole'
 
 ------------------------------------------------------------------------
 
-<ul>
-
-<li>**Rstudio** (soon to be **posit**) includes several ways to render documents into PDF/Office \[PowerPoint, Word\] and HTML files</li>
-
-<ul>
+## The Bottleneck
 
 ::: fragment
-<li>**Limited** by your familiarity with Markdown, $\LaTeX$, & patience for wrangling dev environment up-front</li>
+<li>Static Word documents hosted and maintained by 1 PoC</li>
 :::
 
 ::: fragment
-<li>**Benefits** include instant value updating, quick porting of new presentations, high possibility for templates (especially for partials). No more `_final_finalFinal.docx`</li>
+<li>Lots of redundant effort to present same information</li>
+:::
+
+## The proposal
+::: fragment
+<li>Deploy documents from github so author has control</li>
+:::
+::: fragment
+<li>Easy templating for simple assessment types</li>
+:::
+<ul>
+------------------------------------------------------------------------
+## Terms
+<font size = "5">
+<li>**RStudio** (soon to be **posit**) includes several ways to render documents into PDF/Office \[PowerPoint, Word\] and HTML files. You likely know this as `markdown` or `Rmarkdown`.</li>
+
+<ul>
+
+::: fragment
+<li>**Limited** by your familiarity with markdown syntax, $\LaTeX$, & patience for wrangling dev environment up-front</li>
+:::
+
+::: fragment
+<li>**Benefits** include quick updating of materials, high possibility for templates (especially for partials). No more `_final_finalFinal.docx`</li>
 :::
 
 </ul>
-
 ::: fragment
 <li>**Exploring** submitting the initial document for Plan Team as an HTML</li>
 :::
 
 </ul>
+</font>
 
 ## Quarto vs Rmarkdown
 
@@ -83,7 +102,7 @@ spp = 'GOA Flathead sole'
 </ul>
 
 ::: fragment
-<li>[Quarto](https://quarto.org/) deployed this summer: multilingual, MS Office porting</li>
+<li>[Quarto](https://quarto.org/) deployed this summer: multilingual, HTML/Word/PPT/PDF. Now has a visual editor!</li>
 :::
 
 </ul>
@@ -112,7 +131,7 @@ The MSY for `r spp` in `r thisyr` is `r prettyNum(MSY, big.mark = ",")`.
 
 ## BSAI Partial Example
 
-[live linnk](https://mkapur-noaa.github.io/bsai-fhs-2022/2022_BSAI_FHS_draft.html)
+[live link](https://mkapur-noaa.github.io/bsai-fhs-2022/2022_BSAI_FHS_draft.html)
 
 ## Add'l resources
 
