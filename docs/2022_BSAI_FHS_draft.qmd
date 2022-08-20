@@ -130,9 +130,10 @@ kableExtra::kable(table3, format.args = list(big.mark = ','),
 ::: panel-tabset
 ## Catch vs. Total Biomass
 
-![Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Dotted grey lines represent observed catches for 2021 and projected catches for 2022-2024.](C:/Users/maia.kapur/Work/assessments/2022/bsai-fhs-2022/docs/2022-05-31-Fig1_catchvsbio.png){fig-env="mdframed"}
+![Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Dotted grey lines represent observed catches for 2021 and projected catches for 2022-2024.](https://mkapur-noaa.github.io/bsai-fhs-2022/2022-05-31-Fig1_catchvsbio.png)
 
 ## Survey Biomass (EBS/AI)
 
-![Figure 2. Survey biomass from the EBS shelf and Aleutian Islands surveys for station depths less than or equal to 200 meters. A linear regression is used to estimate a relationship between EBS shelf *`r spp[3]`* survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year). Grey shading indicates ± 1 standard error. The blue point was the observed survey biomass in `r lastyr`, which is not included in the base assessment model.](C:/Users/maia.kapur/Work/assessments/2022/bsai-fhs-2022/docs/2022-05-31-Fig2_index_wCVs.png){fig-env="mdframed"}
+![Figure 2. Survey biomass from the EBS shelf and Aleutian Islands surveys for station depths less than or equal to 200 meters. A linear regression is used to estimate a relationship between EBS shelf *`r spp[3]`* survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year). Grey shading indicates ± 1 standard error. The blue point was the observed survey biomass in `r lastyr`, which is not included in the base assessment model.]((https://mkapur-noaa.github.io/bsai-fhs-2022/2022-05-31-Fig2_index_wCVs.png){fig-env="mdframed"}'
+
 :::
