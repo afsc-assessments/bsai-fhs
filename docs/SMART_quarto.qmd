@@ -112,7 +112,7 @@ The MSY for `r spp` in `r thisyr` is `r prettyNum(MSY, big.mark = ",")`.
 
 ## BSAI Partial Example
 
-[live link](https://mkapur-noaa.github.io/bsai-fhs-2022/2022_BSAI_FHS_draft.html)
+[live linnk](https://mkapur-noaa.github.io/bsai-fhs-2022/2022_BSAI_FHS_draft.html)
 
 ## Add'l resources
 
