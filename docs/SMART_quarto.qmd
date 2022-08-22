@@ -102,7 +102,11 @@ spp = 'GOA Flathead sole'
 </ul>
 
 ::: fragment
-<li>[Quarto](https://quarto.org/) deployed this summer: multilingual, HTML/Word/PPT/PDF. Now has a visual editor!</li>
+<li>[Quarto](https://quarto.org/) deployed this summer: multilingual, HTML/Word/PPT/PDF. !</li>
+:::
+
+::: fragment
+<li> Rmarkdown can be rendered with Quarto with no changes. RStudio now has a visual editor!</li>
 :::
 
 </ul>
