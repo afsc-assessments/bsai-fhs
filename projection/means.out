@@ -3,10 +3,10 @@ Alternative 1 Catch
 Equil_Fabc 35257.9 
 Year 
 2020 9392 
-2021 10260 
-2022 14373 
-2023 11130 
-2024 11130 
+2021 10259 
+2022 14240 
+2023 11129 
+2024 11129 
 
 Alternative 1 ABCs
      Model_Proj.dat 
@@ -14,9 +14,9 @@ Alternative 1 ABCs
 Year 
 2020 60927.1 
 2021 62447.8 
-2022 64212.2 
-2023 65390 
-2024 66969.3 
+2022 64212.4 
+2023 65411.6 
+2024 66989.4 
 
 Alternative 1 TACs
      Model_Proj.dat 
@@ -35,18 +35,18 @@ Year
 2020 146307 
 2021 150101 
 2022 155172 
-2023 159091 
-2024 164713 
+2023 159151 
+2024 164769 
 
 Alternative 1 Fishing Mortality
      Model_Proj.dat 
 Equil_Fabc 0.368177 
 Year 
 2020 0.052417 
-2021 0.055999 
-2022 0.0767568 
-2023 0.0581197 
-2024 0.0567111 
+2021 0.0559935 
+2022 0.0760326 
+2023 0.0580945 
+2024 0.0566883 
 
 Alternative 1 Biomass
      Model_Proj.dat 
@@ -54,33 +54,33 @@ Alternative 1 Biomass
 Year 
 2020 591002 
 2021 601154 
-2022 607493 
-2023 606775 
-2024 606302 
+2022 607494 
+2023 606894 
+2024 606407 
 
 Alternative 1 Implied SPR rate 
      Model_Proj.dat 
 Equil_Fabc 0.4 
 Year 
 2020 0.821671 
-2021 0.811837 
-2022 0.75929 
-2023 0.806128 
-2024 0.809911 
+2021 0.811852 
+2022 0.761005 
+2023 0.806195 
+2024 0.809973 
 
   Model_Proj.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.09778 
-AvgAgeYr2024 5.09265 
+AvgAgeYr2024 5.09314 
 Alternative 2 Catch
      Model_Proj.dat 
 Equil_Fabc 35257.9 
 Year 
 2020 9392 
-2021 10260 
-2022 14373 
-2023 11130 
-2024 11130 
+2021 10259 
+2022 14240 
+2023 11129 
+2024 11129 
 
 Alternative 2 ABCs
      Model_Proj.dat 
@@ -88,9 +88,9 @@ Alternative 2 ABCs
 Year 
 2020 60927.1 
 2021 62447.8 
-2022 64212.2 
-2023 65390 
-2024 66969.3 
+2022 64212.4 
+2023 65411.6 
+2024 66989.4 
 
 Alternative 2 TACs
      Model_Proj.dat 
@@ -109,18 +109,18 @@ Year
 2020 146307 
 2021 150101 
 2022 155172 
-2023 159091 
-2024 164713 
+2023 159151 
+2024 164769 
 
 Alternative 2 Fishing Mortality
      Model_Proj.dat 
 Equil_Fabc 0.368177 
 Year 
 2020 0.052417 
-2021 0.055999 
-2022 0.0767568 
-2023 0.0581197 
-2024 0.0567111 
+2021 0.0559935 
+2022 0.0760326 
+2023 0.0580945 
+2024 0.0566883 
 
 Alternative 2 Biomass
      Model_Proj.dat 
@@ -128,33 +128,33 @@ Alternative 2 Biomass
 Year 
 2020 591002 
 2021 601154 
-2022 607493 
-2023 606775 
-2024 606302 
+2022 607494 
+2023 606894 
+2024 606407 
 
 Alternative 2 Implied SPR rate 
      Model_Proj.dat 
 Equil_Fabc 0.4 
 Year 
 2020 0.821671 
-2021 0.811837 
-2022 0.75929 
-2023 0.806128 
-2024 0.809911 
+2021 0.811852 
+2022 0.761005 
+2023 0.806195 
+2024 0.809973 
 
   Model_Proj.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.09778 
-AvgAgeYr2024 5.09265 
+AvgAgeYr2024 5.09314 
 Alternative 3 Catch
      Model_Proj.dat 
 Equil_Fabc 35257.9 
 Year 
 2020 9392 
-2021 10260 
-2022 14373 
-2023 11130 
-2024 11130 
+2021 10259 
+2022 14240 
+2023 11129 
+2024 11129 
 
 Alternative 3 ABCs
      Model_Proj.dat 
@@ -163,8 +163,8 @@ Year
 2020 10816.1 
 2021 11070.4 
 2022 11373.3 
-2023 11577.3 
-2024 11861 
+2023 11581.2 
+2024 11864.7 
 
 Alternative 3 TACs
      Model_Proj.dat 
@@ -183,18 +183,18 @@ Year
 2020 146307 
 2021 150101 
 2022 155172 
-2023 159091 
-2024 164713 
+2023 159151 
+2024 164769 
 
 Alternative 3 Fishing Mortality
      Model_Proj.dat 
 Equil_Fabc 0.368177 
 Year 
 2020 0.052417 
-2021 0.055999 
-2022 0.0767568 
-2023 0.0581197 
-2024 0.0567111 
+2021 0.0559935 
+2022 0.0760326 
+2023 0.0580945 
+2024 0.0566883 
 
 Alternative 3 Biomass
      Model_Proj.dat 
@@ -202,33 +202,33 @@ Alternative 3 Biomass
 Year 
 2020 591002 
 2021 601154 
-2022 607493 
-2023 606775 
-2024 606302 
+2022 607494 
+2023 606894 
+2024 606407 
 
 Alternative 3 Implied SPR rate 
      Model_Proj.dat 
 Equil_Fabc 0.4 
 Year 
 2020 0.821671 
-2021 0.811837 
-2022 0.75929 
-2023 0.806128 
-2024 0.809911 
+2021 0.811852 
+2022 0.761005 
+2023 0.806195 
+2024 0.809973 
 
   Model_Proj.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.09778 
-AvgAgeYr2024 5.09265 
+AvgAgeYr2024 5.09314 
 Alternative 4 Catch
      Model_Proj.dat 
 Equil_Fabc 35257.9 
 Year 
 2020 9392 
-2021 10260 
-2022 14373 
-2023 11130 
-2024 11130 
+2021 10259 
+2022 14240 
+2023 11129 
+2024 11129 
 
 Alternative 4 ABCs
      Model_Proj.dat 
@@ -237,8 +237,8 @@ Year
 2020 14361.2 
 2021 14700.3 
 2022 15103.4 
-2023 15374.7 
-2024 15751.2 
+2023 15379.9 
+2024 15756 
 
 Alternative 4 TACs
      Model_Proj.dat 
@@ -257,18 +257,18 @@ Year
 2020 146307 
 2021 150101 
 2022 155172 
-2023 159091 
-2024 164713 
+2023 159151 
+2024 164769 
 
 Alternative 4 Fishing Mortality
      Model_Proj.dat 
 Equil_Fabc 0.368177 
 Year 
 2020 0.052417 
-2021 0.055999 
-2022 0.0767568 
-2023 0.0581197 
-2024 0.0567111 
+2021 0.0559935 
+2022 0.0760326 
+2023 0.0580945 
+2024 0.0566883 
 
 Alternative 4 Biomass
      Model_Proj.dat 
@@ -276,33 +276,33 @@ Alternative 4 Biomass
 Year 
 2020 591002 
 2021 601154 
-2022 607493 
-2023 606775 
-2024 606302 
+2022 607494 
+2023 606894 
+2024 606407 
 
 Alternative 4 Implied SPR rate 
      Model_Proj.dat 
 Equil_Fabc 0.4 
 Year 
 2020 0.821671 
-2021 0.811837 
-2022 0.75929 
-2023 0.806128 
-2024 0.809911 
+2021 0.811852 
+2022 0.761005 
+2023 0.806195 
+2024 0.809973 
 
   Model_Proj.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.09778 
-AvgAgeYr2024 5.09265 
+AvgAgeYr2024 5.09314 
 Alternative 5 Catch
      Model_Proj.dat 
 Equil_Fabc 35257.9 
 Year 
 2020 9392 
-2021 10260 
-2022 14373 
-2023 11130 
-2024 11130 
+2021 10259 
+2022 14240 
+2023 11129 
+2024 11129 
 
 Alternative 5 ABCs
      Model_Proj.dat 
@@ -331,18 +331,18 @@ Year
 2020 146307 
 2021 150101 
 2022 155172 
-2023 159091 
-2024 164713 
+2023 159151 
+2024 164769 
 
 Alternative 5 Fishing Mortality
      Model_Proj.dat 
 Equil_Fabc 0.368177 
 Year 
 2020 0.052417 
-2021 0.055999 
-2022 0.0767568 
-2023 0.0581197 
-2024 0.0567111 
+2021 0.0559935 
+2022 0.0760326 
+2023 0.0580945 
+2024 0.0566883 
 
 Alternative 5 Biomass
      Model_Proj.dat 
@@ -350,24 +350,24 @@ Alternative 5 Biomass
 Year 
 2020 591002 
 2021 601154 
-2022 607493 
-2023 606775 
-2024 606302 
+2022 607494 
+2023 606894 
+2024 606407 
 
 Alternative 5 Implied SPR rate 
      Model_Proj.dat 
 Equil_Fabc 0.4 
 Year 
 2020 0.821671 
-2021 0.811837 
-2022 0.75929 
-2023 0.806128 
-2024 0.809911 
+2021 0.811852 
+2022 0.761005 
+2023 0.806195 
+2024 0.809973 
 
   Model_Proj.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.09778 
-AvgAgeYr2024 5.09265 
+AvgAgeYr2024 5.09314 
 Alternative 6 Catch
      Model_Proj.dat 
 Equil_Fabc 35257.9 
