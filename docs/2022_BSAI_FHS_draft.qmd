@@ -15,9 +15,9 @@ require(dplyr)
 ## text values
 
 spp = c('Flathead sole','Hippoglossoides esassodon', 'Hippoglossoides spp.', 'Bering flounder')
-date_use = "2022-09-28" ## for file loading
+date_use = "2022-09-28" ## date for figures etc
 date_use_long = paste0(month(date_use, label = T), " ",day(date_use),", ",year(date_use))
-date_pull = "2022-10-01"
+date_pull = "2022-10-01" ## date the final catch pull was made
 date_pull_long = paste0(month(date_pull, label = T), " ",day(date_pull),", ",year(date_pull))
 thisyr = lubridate::year(Sys.Date())
 lastyr = thisyr-1
@@ -39,11 +39,11 @@ surv = round(read.csv(here('data',paste0(date_use,"-ss_survey_index.csv"))))
 
 ## Summary of Changes in Assessment Inputs
 
-This assessment used a single survey index of "total" Hippoglossoides spp. biomass that included the EBS "standard" survey areas and AI survey areas for the years 1982-`r thisyr` (Table 2). As was done in the `r lastyr` assessment, a linear regression is used to estimate a relationship between EBS shelf `r spp[3]` survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year). There was no AI survey conducted in `r thisyr` and AI biomass was estimated with the linear equation. The `r thisyr` total BSAI estimate was `r format(surv$obs[surv$year == lastyr], big.mark = ",")` t, an increase over the 2019 estimate of `r format(surv$obs[surv$year == 2019], big.mark = ",")` t.
+This assessment used a single survey index of "total" Hippoglossoides spp. biomass that included the EBS "standard" survey areas and AI survey areas for the years 1982-`r thisyr` (Table 2). As was done in the `r lastyr` assessment, a linear regression is used to estimate a relationship between EBS shelf `r spp[3]` survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year). There was no AI survey conducted in `r thisyr` and AI biomass was estimated with the linear equation. The `r thisyr` total BSAI estimate was `r format(last(surv$obs), big.mark = ",")` t, a roughly `round((last(surv$obs)-surv$obs[surv$year == 2021])/surv$obs[surv$year == 2021]*100,0)`\% increase over the `r lastyr` estimate of `r format(surv$obs[surv$year == 2021], big.mark = ",")` t.
 
 To run the projection model to predict ABCs for `r proj_years[1]` and `r proj_years[2]`, estimates are required for the total catches in `r thisyr`-`r proj_years[2]` The final catch for `r thisyr` (`r format(cproj$catch[cproj$year == thisyr], big.mark = ",")` t) was estimated by adding the average catch between `r paste0(month(date_pull, label = T), " ",day(date_pull))` and December 31 over the years `r thisyr-5`-`r lastyr` to the `r thisyr` catch as of `r date_pull_long`. The `r nextyr` and `r proj_years[2]` catches (`r format(cproj$catch[cproj$year == nextyr], big.mark = ",")` t) were estimated as the average catch over the previous 5 years (`r thisyr-5`-`r lastyr`).
 
-To ensure consistency with the most recent full assessment (Monnohan et al., 2020), the projection model was parameterized using mean recruitment and stock spawning biomass for all years included in the assessment model (1964 onwards). Future full assessments for BS/AI Flathead sole can consider updating these inputs in light of the Oct 4, 1999 memorandum by R. Marasco indicating that projections of future stock systes should be based on year classes 1977 onwards. Changing the projection inputs will affect the scale of the projected biomass and result in discontinuities between assessment cycles.
+To ensure consistency with the most recent full assessment (Monnohan et al., 2020), the projection model was parameterized using mean recruitment and stock spawning biomass for all years included in the assessment model (1964 onwards). Future full assessments for BS/AI Flathead sole can consider updating these inputs in light of the Oct 4, 1999 memorandum by R. Marasco indicating that projections of future stock states should be based on year classes 1977 and forward. Changing the projection inputs will affect the scale of the projected biomass, and result in discontinuities between assessment cycles.
 
 ## Summary of Results
 
@@ -62,7 +62,7 @@ kableExtra::kable(safe, format.args = list(big.mark = ','), digits = 2, row.name
                                    " t used in place of maximum permissible ABC for ",proj_range,
                                                                                              ". The final catch for ",
                                                                                              thisyr,
-                                                                                             " was estimated by taking the average tons caught between ",paste0(month(date_pull, label = T), " ",day(date_pull))," and December 31 over the previous 5 years (",paste(range(thisyr-5,lastyr),collapse='-')," and adding this average amount to the catch-to-date as of ", date_pull_long,". The ",nextyr," and ", proj_years[2], "catch was estimated as the average of the total catch in each of the last 5 years.")) %>%
+                                                                                             " was estimated by taking the average tons caught between ",paste0(month(date_pull, label = T), " ",day(date_pull))," and December 31 over the previous 5 years (",paste(range(thisyr-5,lastyr),collapse='-')," and adding this average amount to the catch-to-date as of ", date_pull_long,". The ",nextyr," and ", proj_years[2], " catch was estimated as the average of the total catch in each of the last 5 years.")) %>%
   kableExtra::kable_styling("striped")
                   
 ```
@@ -87,6 +87,9 @@ kableExtra::kable(table1, format.args = list(big.mark = ','), digits = 2,
 
 ```{r t2, echo = FALSE}
 table2 <-  read.csv(here('tables',paste0(date_use,'-survey_by_spp.csv'))) 
+table2[table2 > 1& !is.na(table2)] <- round(table2[table2 > 1 & !is.na(table2)],0) ## remove decimals on large numbers
+table2[table2 < 1& !is.na(table2)] <- round(table2[table2 < 1& !is.na(table2)],2) ## remove excess decimals on small numbers
+
 table2[is.na(table2)] <-""
 table2$year <- as.character(table2$year)
 names(table2) <- c('Year','Total', 
@@ -108,6 +111,11 @@ kableExtra::kable(table2, format.args = list(big.mark = ','), digits = 2,
 
 ```{r t3, echo = FALSE}
 table3 <- read.csv(here('tables',paste0(date_use,'-NBS_survey_by_spp.csv'))) 
+
+table3[table3 > 1& !is.na(table3)] <- round(table3[table3 > 1 & !is.na(table3)],0) ## remove decimals on large numbers
+table3[table3 < 1& !is.na(table3)] <- round(table3[table3 < 1& !is.na(table3)],2) ## remove excess decimals on small numbers
+
+
 table3[is.na(table3)] <-""
 table3$year <- as.character(table3$year)
 names(table3) <- c('Year',
@@ -132,13 +140,13 @@ kableExtra::kable(table3, format.args = list(big.mark = ','),
 ::: panel-tabset
 ## Catch vs. Total Biomass
 
-```{r echo = F, fig.cap="Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Dotted grey lines represent observed catches for 2021 and projected catches for 2022-2024."}
+```{r echo = F, fig.cap="Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Dotted grey lines represent observed catches for 2021 and projected catches for 2022-2024, none of which are included in the base model."}
 knitr::include_graphics( '2022-09-28-Fig1_catchvsbio.png')
 ```
 
 ## Survey Biomass (EBS/AI)
 
-```{r echo = F, fig.cap="Figure 2. Survey biomass from the EBS shelf and Aleutian Islands surveys for station depths less than or equal to 200 meters. Grey and blue points include true observations. A linear regression was used to estimate a relationship between EBS shelf Hippoglossoides spp. survey biomass estimates and AI survey biomass estimates in years when no AI survey occurred (grey x marks). Grey shading indicates ± 1 standard error. Blue points indicate the observed survey biomass in `r lastyr` and `r thisyr`, and are not included in the base assessment model."}
+```{r echo = F, fig.cap="Figure 2. Survey biomass from the EBS shelf and Aleutian Islands surveys for station depths less than or equal to 200 meters. Grey and blue points include true observations. A linear regression was used to estimate a relationship between EBS shelf Hippoglossoides spp. survey biomass estimates and AI survey biomass estimates in years when no AI survey occurred (grey 'x' marks). Grey shading indicates ± 1 standard error. Blue points indicate the observed survey biomass in 2021 and 2022, and are not included in the base assessment model."}
 knitr::include_graphics('2022-09-28-index_wCVs.png')
 ```
 :::
