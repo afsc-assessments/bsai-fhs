@@ -6,8 +6,7 @@ require(here)
 this_year = lubridate::year(Sys.Date())
 last_yr = this_year-1
 
-lapply(list.files("C:/Users/maia.kapur/Work/assessments/proj_functions/", full.names = T), 
-       source)
+lapply(list.files("C:/Users/maia.kapur/Work/assessments/proj_functions/", full.names = T, pattern = ".r$"),  source)
 file.copy('C:/Users/maia.kapur/Work/assessments/proj_functions/main.exe', here('projection'), overwrite = TRUE)
 file.copy('C:/Users/maia.kapur/Work/assessments/proj_functions/tacpar.dat', here('projection'), overwrite = TRUE)
 
@@ -21,7 +20,7 @@ fleets=1					# fleet index number (associated with commercial fishery)
 rec_age=3					# assumed age at recruitment
 max_age=21					# maximum age in model
 NAGE=length(rec_age:max_age)			# number of ages
-FY=1964 					# first year used to subset SSB
+FY=1964 					# first year used to subset SSB, per memo this is always 1977, 1964 for consistency
 rec_FY=1964					# first year used to subset recruitment
 rec_LY_decrement=0				# value subtracted from assessment final year to subset recruitment vector
 spawn_month=1					# spawning month
@@ -36,15 +35,16 @@ spp="BSAI_flathead"
 
 file.copy(from = here('projection','2021_projections','model_proj.dat'),
           to = here('projection'), overwrite = T)
-# write_proj(dir=here('projection'),  
+# write_proj(dir=here('projection'),
 #            # sdir =x,
-#            data_file="Model_Proj.dat", 
+#            data_file="Model_Proj.dat",
 #            data= mod_2020,
 #            NSEX=NSEX, NAGE=NAGE, Nfishery=Nfishery,
 #            fleets=fleets, rec_age=rec_age, max_age=max_age, FY=FY,
 #            rec_FY=rec_FY, rec_LY_decrement=rec_LY_decrement,
 #            spawn_month=spawn_month, Fratios=Fratios)
 ## write spcat with year-specific catch info
+## you might have to manually make the notes on lines 2 and 11 single lines
 write_proj_spcat(dir = here('projection'),
                  # sdir = here('projection'),
                  data_file = 'spp_catch.dat', ## name of new file - must match what is in spp_catch.dat
@@ -73,7 +73,7 @@ shell('main')
 ## ## table in report.xlsx.
 
 rec_table1 <-
-  read.table('percentdb.out') %>%
+  read.table(here('projection','percentdb.out')) %>%
   as.data.frame(stringsAsFactors=FALSE) %>%
   transmute(scenario=as.numeric(V2), year=as.numeric(V3), metric=V4,
             value=as.numeric(V5)) %>%
@@ -84,7 +84,7 @@ rec_table1 <-
 rec_table1[3:6,3:4] <- rec_table1[3:6,3:4]
 
 rec_table2 <-
-  read.table('alt2_proj.out', header=TRUE) %>%
+  read.table(here('projection','alt2_proj.out'), header=TRUE) %>%
   filter(Year %in% (this_year+1:2)) %>%
   pivot_longer(cols=c(-Stock, -Year), names_to='metric', values_to='value') %>%
   pivot_wider(names_from=Year, values_from=value)
@@ -93,7 +93,7 @@ rec_table2[,2:3] <- rec_table2[,2:3]
 rec_table <- bind_rows(rec_table1, rec_table2)
 
 ## change order to match SAFE format & magnitudes
-rec_table <-rec_table[c(11,6,3,5,4,2,1,1,9,8,8),] 
+rec_table <-rec_table[c(11,6,3,4,5,2,1,1,9,8,8),] 
 
 # rec_table[c(1:5,9:11),2:3] <-formatC(rec_table[c(1:5,9:11),2:3] , format="d", big.mark=",") 
 write.csv(rec_table, 'rec_table.csv', row.names=FALSE)
@@ -104,7 +104,9 @@ previous_rec_table <- read.csv("C:/Users/maia.kapur/Work/assessments/2021/BSAI-f
 previous_rec_table[,c('X2022','X2023')] <- apply(previous_rec_table[,c('X2022','X2023')],2,
                                                 FUN = function(x) as.numeric(gsub(",","",x)))
 
+## correct order error in previous table
 
+previous_rec_table[4:5,] <- previous_rec_table[5:4,]
 rec_table[c(1:5,9:11),2:3] <- round(rec_table[c(1:5,9:11),2:3])
 rec_table[c(6:8),2:3] <- round(rec_table[c(6:8),2:3],digits = 2)
 safe0 <- rbind(c(rep(0.2,3)),
@@ -196,7 +198,7 @@ ggplot(subset(fig1, Yr < this_year),
   geom_line(lwd = 1, col = 'dodgerblue2') +
   # geom_point(data = subset(fig1, Yr==2020),
   #           size = 3, col = 'grey44') +
-  geom_line(data = subset(fig1, Yr > 2019),
+  geom_line(data = subset(fig1, Yr >= this_year-1),
             lwd = 1, linetype = 'dotted',  col = 'grey44') +
   scale_x_continuous(labels = seq(1960,2025,5), 
                      breaks = seq(1960,2025,5))+
@@ -211,12 +213,14 @@ ggsave(last_plot(), height = 5, width = 8, dpi = 520,
 #* index plot ----
 # index <- read.csv(here('data','2021-09-15-index.csv'))
 index <- read.csv(here('data',paste0(date_use,'-ss_survey_index.csv'))) %>%
-  mutate(lci = obs-se_log*obs, uci = se_log*obs+obs)
+  mutate(lci = obs-se_log*obs, uci = se_log*obs+obs) %>%
+  mutate(lmyr = year %in% interpyr)
 # index %>% filter(  YEAR != 2019) %>% summarise(mb=mean(BIOM), sdb = sd(BIOM)) %>% mutate(mb+sdb)
 ggplot(index, aes(x = year, y = obs/1000)) +
   geom_line(lwd = 1, col = 'grey77') +
   # geom_point() +
-  geom_point(data = subset(index, year == 2021), color = 'blue') +
+  geom_point(data = subset(index, lmyr == T), pch = 4, color = 'grey44') +
+  geom_point(data = subset(index, year > 2020), color = 'blue') +
   scale_x_continuous(labels = seq(1980,2025,5),
                      breaks = seq(1980,2025,5))+
   scale_y_continuous(limits = c(0,1000) ) +
