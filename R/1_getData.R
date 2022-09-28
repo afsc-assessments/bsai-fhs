@@ -85,7 +85,7 @@ write.csv(test, here('data',paste0(Sys.Date(),'-biomass_survey_nbs_by_species.cs
 
 
 #** reformat surveys ----
-date_use <- "2022-05-31" ## dwnld date
+date_use <-  Sys.Date() #"2022-05-31" ## dwnld date
 data_folder = here('data','/')
 
 index_ebs <-  read.csv(paste0(data_folder,date_use,"-biomass_survey_ebs.csv")) %>%
@@ -100,6 +100,7 @@ index_raw <- rbind(index_ebs, index_ai) %>%
 
 ## Do a linear regression to get missing AI years
 index_raw  <- index_raw %>% mutate(sd_ebs=sqrt(variance_ebs), sd_AI=sqrt(variance_AI))
+interpyr <- index_raw$year[which(is.na(index_raw$biomass_AI))]
 z1 <- subset(index_raw, !is.na(biomass_AI))
 z2 <- subset(index_raw, is.na(biomass_AI))
 lmbio <- lm(biomass_AI~biomass_ebs, data=z1)
