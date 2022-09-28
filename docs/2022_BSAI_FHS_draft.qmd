@@ -15,7 +15,7 @@ require(dplyr)
 ## text values
 
 spp = c('Flathead sole','Hippoglossoides esassodon', 'Hippoglossoides spp.', 'Bering flounder')
-date_use = "2022-05-31" ## for file loading
+date_use = "2022-09-28" ## for file loading
 date_use_long = paste0(month(date_use, label = T), " ",day(date_use),", ",year(date_use))
 date_pull = "2022-10-01"
 date_pull_long = paste0(month(date_pull, label = T), " ",day(date_pull),", ",year(date_pull))
@@ -42,6 +42,8 @@ surv = round(read.csv(here('data',paste0(date_use,"-ss_survey_index.csv"))))
 This assessment used a single survey index of "total" Hippoglossoides spp. biomass that included the EBS "standard" survey areas and AI survey areas for the years 1982-`r thisyr` (Table 2). As was done in the `r lastyr` assessment, a linear regression is used to estimate a relationship between EBS shelf `r spp[3]` survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year). There was no AI survey conducted in `r thisyr` and AI biomass was estimated with the linear equation. The `r thisyr` total BSAI estimate was `r format(surv$obs[surv$year == lastyr], big.mark = ",")` t, an increase over the 2019 estimate of `r format(surv$obs[surv$year == 2019], big.mark = ",")` t.
 
 To run the projection model to predict ABCs for `r proj_years[1]` and `r proj_years[2]`, estimates are required for the total catches in `r thisyr`-`r proj_years[2]` The final catch for `r thisyr` (`r format(cproj$catch[cproj$year == thisyr], big.mark = ",")` t) was estimated by adding the average catch between `r paste0(month(date_pull, label = T), " ",day(date_pull))` and December 31 over the years `r thisyr-5`-`r lastyr` to the `r thisyr` catch as of `r date_pull_long`. The `r nextyr` and `r proj_years[2]` catches (`r format(cproj$catch[cproj$year == nextyr], big.mark = ",")` t) were estimated as the average catch over the previous 5 years (`r thisyr-5`-`r lastyr`).
+
+To ensure consistency with the most recent full assessment (Monnohan et al., 2020), the projection model was parameterized using mean recruitment and stock spawning biomass for all years included in the assessment model (1964 onwards). Future full assessments for BS/AI Flathead sole can consider updating these inputs in light of the Oct 4, 1999 memorandum by R. Marasco indicating that projections of future stock systes should be based on year classes 1977 onwards. Changing the projection inputs will affect the scale of the projected biomass and result in discontinuities between assessment cycles.
 
 ## Summary of Results
 
@@ -77,7 +79,7 @@ table1 <-  read.csv(here('tables',paste0(date_use,'-catch_proportions.csv')))
 names(table1) <- c('Year',paste0('Total ',spp[3]), spp[1],spp[4])
 table1$Year <- as.character(table1$Year)
 kableExtra::kable(table1, format.args = list(big.mark = ','), digits = 2,
-                  caption = paste0("Table 1. Catch (in tons) of flathead sole and Bering flounder combined ", spp[2]," and ", spp[1]," only, and ", spp[3]," only in the BSAI as of ",date_pull_long," Observer data on species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of flathead sole separately from that of Bering flounder.")) %>%
+                  caption = paste0("Table 1. Catch (in tons) of flathead sole and Bering flounder combined ", spp[2]," and ", spp[1]," only, and ", spp[3]," only in the BSAI as of ",date_pull_long," Observer data on species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of flathead sole separately from that of Bering flounder. 2022 catches current as of ",date_use_long,".")) %>%
   kableExtra::kable_styling("striped")
 ```
 
@@ -130,10 +132,13 @@ kableExtra::kable(table3, format.args = list(big.mark = ','),
 ::: panel-tabset
 ## Catch vs. Total Biomass
 
-![Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Dotted grey lines represent observed catches for 2021 and projected catches for 2022-2024.](https://mkapur-noaa.github.io/bsai-fhs-2022/2022-05-31-Fig1_catchvsbio.png)
+```{r echo = F, fig.cap="Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Dotted grey lines represent observed catches for 2021 and projected catches for 2022-2024."}
+knitr::include_graphics(here('figs','2022-09-28-Fig1_catchvsbio.png'))
+```
 
 ## Survey Biomass (EBS/AI)
 
-![Figure 2. Survey biomass from the EBS shelf and Aleutian Islands surveys for station depths less than or equal to 200 meters. A linear regression is used to estimate a relationship between EBS shelf *`r spp[3]`* survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year). Grey shading indicates ± 1 standard error. The blue point was the observed survey biomass in `r lastyr`, which is not included in the base assessment model.](https://mkapur-noaa.github.io/bsai-fhs-2022/2022-05-31-Fig2_index_wCVs.png){fig-env="mdframed"}
-
+```{r echo = F, fig.cap="Figure 2. Survey biomass from the EBS shelf and Aleutian Islands surveys for station depths less than or equal to 200 meters. Grey and blue points include true observations. A linear regression was used to estimate a relationship between EBS shelf Hippoglossoides spp. survey biomass estimates and AI survey biomass estimates in years when no AI survey occurred (grey x marks). Grey shading indicates ± 1 standard error. Blue points indicate the observed survey biomass in `r lastyr` and `r thisyr`, and are not included in the base assessment model."}
+knitr::include_graphics(here('figs','2022-09-28-index_wCVs.png'))
+```
 :::
