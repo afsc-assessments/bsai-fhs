@@ -3,15 +3,19 @@
 library(dplyr)
 # library(tidyr)
 library(ggplot2)
-theme_set(ggsidekick::theme_sleek())
-theme_update(legend.text = element_text(size = 14), legend.position = 'bottom',
-                     axis.text = element_text(size = 14),axis.title  = element_text(size = 14))
+require(MetBrewer)
+require(ggtext)
+require(showtext)
+# theme_set(ggsidekick::theme_sleek())
+font_add_google("roboto condensed")
+theme_replace(text= element_text(family = "roboto condensed", size = 15),
+              title = element_text(size = 15)) 
 require(here)
 require(lubridate)
 
 this_year = lubridate::year(Sys.Date())
 last_yr = this_year-1
-date_use <- "2022-05-31" ## dwnld date
+date_use <- Sys.Date()#"2022-05-31" ## dwnld date
 data_folder = here('data','/')
 ## Summarise and plot catches by discard/retention/geartype
 gearpal = c('grey22',
@@ -27,12 +31,13 @@ BSAIt <- read.csv(paste0(data_folder,date_use,"-catch.csv"))
 BSAIt %>% 
   group_by(YEAR, ZONE, TYPE, GEAR) %>%
   summarize(TONS=sum(TONS), .groups='drop') %>%
-  mutate(lab = paste0(GEAR, ifelse(TYPE == 'D',' Discarded', ' Retained'))) %>%
-  ggplot(aes(YEAR, TONS, color=lab)) +
+  mutate(lab = paste0(GEAR, ifelse(TYPE == 'D',' Discarded', ' Retained')),
+         TTONS = round(TONS, 3)) %>%
+  ggplot(., aes(YEAR, TTONS, color=lab)) + 
   scale_color_manual(values = gearpal)+
   geom_line() + 
   labs(x = 'Year', y= 'Catch (tons)', col = '')+ 
-  facet_wrap(GEAR~ZONE, scales = 'free', nrow = 3)  
+  facet_wrap(GEAR~ZONE, scales = 'free_y', nrow = 3)  
 
 ggsave(last_plot(), 
        file = here('figs',paste0(Sys.Date(),'-catch_by_gear_zone.png')))
@@ -45,7 +50,7 @@ annual_catch <- BSAIt %>%
   data.frame()
 ## Build SS structure
 SS_catch <- data.frame(year=annual_catch$YEAR, seas=1, fleet=1,
-                       catch=annual_catch$total, catch_se=.01)
+                       catch=round(annual_catch$total), catch_se=round(0.01,2))
 write.csv(x=SS_catch, file=here('data',paste0(Sys.Date(),'-SS_catch.csv') ), row.names=FALSE)
 
 ## for table - catch by area this year
