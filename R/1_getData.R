@@ -85,7 +85,7 @@ write.csv(test, here('data',paste0(Sys.Date(),'-biomass_survey_nbs_by_species.cs
 
 
 #** reformat surveys ----
-date_use <-  Sys.Date() #"2022-05-31" ## dwnld date
+date_use <-  "2022-09-28" #Sys.Date() ### dwnld date
 data_folder = here('data','/')
 
 index_ebs <-  read.csv(paste0(data_folder,date_use,"-biomass_survey_ebs.csv")) %>%

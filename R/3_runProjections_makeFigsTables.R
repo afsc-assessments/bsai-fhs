@@ -193,13 +193,13 @@ fig1 <- rbind(fig1a, fig1b)
 
 
 ## plot with diff colors for extrapolated and forecasted catches
-ggplot(subset(fig1, Yr < this_year), 
+ggplot(subset(fig1), 
        aes(x = Yr, y = catch_over_biomass)) +
-  geom_line(lwd = 1, col = 'dodgerblue2') +
+  geom_line(lwd = 1, col = 'grey77') +
   # geom_point(data = subset(fig1, Yr==2020),
   #           size = 3, col = 'grey44') +
-  geom_line(data = subset(fig1, Yr >= this_year-1),
-            lwd = 1, linetype = 'dotted',  col = 'grey44') +
+  geom_point(data = subset(fig1, Yr >= this_year-1),
+            lwd = 1,  col = 'blue') +
   scale_x_continuous(labels = seq(1960,2025,5), 
                      breaks = seq(1960,2025,5))+
   scale_y_continuous(limits = c(0,0.08),
@@ -216,11 +216,18 @@ index <- read.csv(here('data',paste0(date_use,'-ss_survey_index.csv'))) %>%
   mutate(lci = obs-se_log*obs, uci = se_log*obs+obs) %>%
   mutate(lmyr = year %in% interpyr)
 # index %>% filter(  YEAR != 2019) %>% summarise(mb=mean(BIOM), sdb = sd(BIOM)) %>% mutate(mb+sdb)
+
+## load prior index to check for changes
+index21 <- read.csv( "C:/Users/maia.kapur/Work/assessments/2021/bsai-flathead/data/2021-09-22-ss_survey_index.csv") %>%
+  mutate(lci = obs-se_log*obs, uci = se_log*obs+obs)  %>%
+  mutate(lmyr = NA)
+
 ggplot(index, aes(x = year, y = obs/1000)) +
   geom_line(lwd = 1, col = 'grey77') +
   # geom_point() +
   geom_point(data = subset(index, lmyr == T), pch = 4, color = 'grey44') +
   geom_point(data = subset(index, year > 2020), color = 'blue') +
+  geom_point(data = index21, color = 'red') +
   scale_x_continuous(labels = seq(1980,2025,5),
                      breaks = seq(1980,2025,5))+
   scale_y_continuous(limits = c(0,1000) ) +
@@ -272,7 +279,6 @@ merge(mgmt, mod_2020$catch %>%
   
   ggplot(., aes(x = Yr,y = value, color = variable, group = variable)) +
   geom_line(lwd = 1.1) +
-  ggsidekick::theme_sleek() +
 
   scale_x_continuous(limits = c(1995,2025),
                      breaks =  seq(1995,2025,5),

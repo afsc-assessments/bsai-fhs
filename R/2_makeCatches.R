@@ -6,7 +6,7 @@ library(ggplot2)
 require(MetBrewer)
 require(ggtext)
 require(showtext)
-# theme_set(ggsidekick::theme_sleek())
+theme_set(ggsidekick::theme_sleek())
 font_add_google("roboto condensed")
 theme_replace(text= element_text(family = "roboto condensed", size = 15),
               title = element_text(size = 15)) 
