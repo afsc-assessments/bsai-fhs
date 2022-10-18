@@ -134,7 +134,7 @@ rownames(safe0) <-c('M',
 status = matrix(NA, nrow = 3, ncol = 4)
 # colnames(status) <- c(2020,2021,2021,2022)
 rownames(status) <- c('Overfishing','Overfished','Approaching Overfished')
-status[1,c(1,4)] <- status[2,c(2,4)] <- status[3,c(2,4)] <- 'no'
+status[1,c(1,3)] <- status[2,c(2,4)] <- status[3,c(2,4)] <- 'no'
 status = data.frame(status)
 names(status) = names(safe0)
 safe0 = rbind(safe0,status) 
@@ -144,6 +144,17 @@ write.csv(safe, file = here('tables','safe_table.csv'), row.names=TRUE)
 
 
 # Figures ----
+ggplot2::theme_set(ggsidekick::theme_sleek( base_size = 10))
+theme_replace(text= element_text(family = "roboto condensed", size = 10),
+              title = element_text(size = 10))
+
+require(MetBrewer)
+require(ggtext)
+require(showtext)
+
+font_add_google("roboto condensed")
+showtext_opts(dpi = 520)
+showtext_auto(enable = TRUE)
 
 #* Projection plots ----
 ## notes from CMM
@@ -195,11 +206,11 @@ fig1 <- rbind(fig1a, fig1b)
 ## plot with diff colors for extrapolated and forecasted catches
 ggplot(subset(fig1), 
        aes(x = Yr, y = catch_over_biomass)) +
-  geom_line(lwd = 1, col = 'grey77') +
-  # geom_point(data = subset(fig1, Yr==2020),
-  #           size = 3, col = 'grey44') +
-  geom_point(data = subset(fig1, Yr >= this_year-1),
-            lwd = 1,  col = 'blue') +
+  geom_line(lwd = 1, col = 'grey77') + 
+  geom_point(data = subset(fig1, Yr > 2021),
+                                                  lwd = 1,  col = 'blue', pch = 1) +
+  geom_point(data = subset(fig1, Yr %in% c(2020,2021)),
+            lwd = 1,  col = 'blue', pch = 16) +
   scale_x_continuous(labels = seq(1960,2025,5), 
                      breaks = seq(1960,2025,5))+
   scale_y_continuous(limits = c(0,0.08),
@@ -227,7 +238,7 @@ ggplot(index, aes(x = year, y = obs/1000)) +
   # geom_point() +
   geom_point(data = subset(index, lmyr == T), pch = 4, color = 'grey44') +
   geom_point(data = subset(index, year > 2020), color = 'blue') +
-  geom_point(data = index21, color = 'red') +
+  # geom_point(data = index21, color = 'red') +
   scale_x_continuous(labels = seq(1980,2025,5),
                      breaks = seq(1980,2025,5))+
   scale_y_continuous(limits = c(0,1000) ) +
