@@ -2,9 +2,15 @@
 title: Assessment of the  Flathead sole-Bering flounder Stock in the Bering Sea and Aleutian Islands
 author: Maia S. Kapur
 date: October 2022
-format: html
+format:
+  html:
+    self-contained: true
 toc: true
-always_allow_html: true
+code-fold: true
+code-overflow: wrap
+execute: 
+  warning: false 
+theme: yeti
 editor: source
 ---
 
@@ -141,7 +147,7 @@ kableExtra::kable(table3, format.args = list(big.mark = ','),
 ## Catch vs. Total Biomass
 
 ```{r echo = F, fig.cap="Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Points include observed (open points) or estimated (open points) catches for years 2020-2024, which are not present in the base model."}
-knitr::include_graphics('2022-10-18-Fig1_catchvsbio.png')
+knitr::include_graphics(here('figs','2022-10-18-Fig1_catchvsbio.png'))
 ```
 
 ## Survey Biomass (EBS/AI)
