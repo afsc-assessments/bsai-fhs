@@ -41,7 +41,7 @@ surv = round(read.csv(here('data',paste0(date_use,"-ss_survey_index.csv"))))
 
 "`r spp[1]`" as currently managed by the North Pacific Fishery Management Council (NPFMC) in the Bering Sea and Aleutian Islands (BSAI) represents a two-species complex consisting of true `r spp[1]` (*`r spp[2]`*) and its morphologically-similar congener Bering flounder (*`r spp[3]`*). In 2012, the BSAI Groundfish Plan Team moved `r spp[1]` to a biennial stock assessment schedule because it has historically been lightly exploited. A full stock assessment report was most recently produced in 2020 (Monnahan and Haehn, 2020). This year, a partial assessment is presented. In partial assessment years, an executive summary is presented to recommend harvest levels for the next two years, along with trends in catch and biomass.
 
-`r spp[1]` is assessed using an age-structured model and Tier 3 determination. The single species projection model is run using parameter values from the accepted 2019 assessment model, together with updated catch information for `r paste0(range(2019, lastyr),collapse ="-")` and estimated catches for `r thisyr` and `r proj_range` (Figure 1), to predict stock status for `r spp[1]` in 2022 and 2023 and make ABC recommendations for those years (Table 1).
+`r spp[1]` is assessed using an age-structured model and Tier 3 determination. The single species projection model is run using parameter values from the accepted 2020 assessment model, together with updated catch information for `r paste0(range(2020, lastyr),collapse ="-")` and estimated catches for `r thisyr` and `r proj_range` (Figure 1), to predict stock status for `r spp[1]` in `r proj_range`, and to make ABC recommendations for those years (Table 1).
 
 ## Summary of Changes in Assessment Inputs
 
