@@ -61,14 +61,14 @@ names(safe) <- c("",thisyr,nextyr, nextyr, paste(proj_years[2]))
 safe[is.na(safe)] <- "n/a"
 kableExtra::kable(safe, format.args = list(big.mark = ','), digits = 2, row.names = FALSE,
                   caption = paste0("*Projections  are based on estimated catches of ", 
-                                   format(cproj$catch[cproj$year == nextyr], big.mark = ","),
+                                   format(cproj$catch[cproj$year == thisyr], big.mark = ","),
                                    "t used in place of maximum permissible ABC for ",
                                    thisyr," and ",
                                     format(cproj$catch[cproj$year == proj_years[1]], big.mark = ","),
                                    " t used in place of maximum permissible ABC for ",proj_range,
                                                                                              ". The final catch for ",
                                                                                              thisyr,
-                                                                                             " was estimated by taking the average tons caught between ",paste0(month(date_pull, label = T), " ",day(date_pull))," and December 31 over the previous 5 years (",paste(range(thisyr-5,lastyr),collapse='-')," and adding this average amount to the catch-to-date as of ", date_pull_long,". The ",nextyr," and ", proj_years[2], " catch was estimated as the average of the total catch in each of the last 5 years.")) %>%
+                                                                                             " was estimated by taking the average tons caught between ",paste0(month(date_pull, label = T), " ",day(date_pull))," and December 31 over the previous 5 years (",paste(range(thisyr-5,lastyr),collapse='-')," and adding this average amount to the catch-to-date as of ", date_pull_long," which is shown at the bottom of Table 1. The ",nextyr," and ", proj_years[2], " catch was estimated as the average of the total catch in each of the last 5 years.")) %>%
   kableExtra::kable_styling("striped")
                   
 ```
@@ -146,7 +146,7 @@ kableExtra::kable(table3, format.args = list(big.mark = ','),
 ::: panel-tabset
 ## Catch vs. Total Biomass
 
-```{r echo = F, fig.cap="Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Points include observed (open points) or estimated (open points) catches for years 2020-2024, which are not present in the base model."}
+```{r echo = F, fig.cap="Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Points include observed (closed points) or estimated (open points) catches for years 2020-2024, which are not present in the base model."}
 knitr::include_graphics(here('figs','2022-10-18-Fig1_catchvsbio.png'))
 ```
 
