@@ -141,13 +141,13 @@ kableExtra::kable(table3, format.args = list(big.mark = ','),
 ## Catch vs. Total Biomass
 
 ```{r echo = F, fig.cap="Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Points include observed (open points) or estimated (open points) catches for years 2020-2024, which are not present in the base model."}
-knitr::include_graphics(here('figs','2022-10-18-Fig1_catchvsbio.png'))
+knitr::include_graphics('2022-10-18-Fig1_catchvsbio.png')
 ```
 
 ## Survey Biomass (EBS/AI)
 
 ```{r echo = F, fig.cap="Figure 2. Survey biomass from the EBS shelf and Aleutian Islands surveys for station depths less than or equal to 200 meters. Grey and blue points include true observations. A linear regression was used to estimate a relationship between EBS shelf Hippoglossoides spp. survey biomass estimates and AI survey biomass estimates in years when no AI survey occurred (grey 'x' marks). Grey shading indicates ± 1 standard error. Blue points indicate the observed survey biomass in 2021 and 2022, and are not included in the base assessment model."}
-knitr::include_graphics(here('figs','2022-10-18-index_wCVs.png'))
+knitr::include_graphics('2022-10-18-index_wCVs.png')
 ```
 Author's note: Changes have been made to the stratum-area table, which affects biomass and abundance estimates for EBS data (all years and species). In late 2022, Duane Stevenson (AFSC) provided the following communication about these changes. A visual comparison of EBS FHS survey values from a 2021 data pull vs. the values shown above indicated that the effect of the strata update was negligible. Future benchmark assessments for this species should update the entire survey time series, for consistency.
 
