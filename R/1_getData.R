@@ -29,10 +29,10 @@ fsh_sp_str <- "103"                     # AKFIN species code
 fsh_start_yr <- 1977                    # start year
 sp_area <- "'BS'"                       #
 ## length bins to use for fsh and srv length comp data
-max_size <- 40 ##65 = rex ##70 = Dover and Flathead
-min_size <- 6
+max_size <- max(mod_2020$lbins) ##65 = rex ##70 = Dover and Flathead
+min_size <- min(mod_2020$lbins)
 bin_width <- 2
-len_bins <- c(seq(min_size,max_size,bin_width),43,46,49,52,55,58)
+len_bins <- mod_2020$lbins#c(seq(min_size,max_size,bin_width),43,46,49,52,55,58)
 lapply(list.files(here('sql'), full.names = T), source) ## load all sql queries
 
 # DATA DOWNLOAD ---- 
