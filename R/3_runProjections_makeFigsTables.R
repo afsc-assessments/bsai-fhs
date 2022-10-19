@@ -236,15 +236,16 @@ index21 <- read.csv( "C:/Users/maia.kapur/Work/assessments/2021/bsai-flathead/da
 ggplot(index, aes(x = year, y = obs/1000)) +
   geom_line(lwd = 1, col = 'grey77') +
   # geom_point() +
-  geom_point(data = subset(index, lmyr == T), pch = 4, color = 'grey44') +
-  geom_point(data = subset(index, lmyr == F), color = 'grey44')+
-  geom_point(data = subset(index, year > 2020), color = 'blue') +
+  geom_point(data = subset(index, lmyr == T), pch = 4, color = 'grey66') +
+  geom_point(data = subset(index, lmyr == F), color = 'grey66')+
+  geom_point(data = subset(index, year == 2021), pch = 4, size = 2, color = 'blue') +
+  geom_point(data = subset(index, year == 2022), color = 'blue') +
 
   scale_x_continuous(labels = seq(1980,2025,5),
                      breaks = seq(1980,2025,5))+
   scale_y_continuous(limits = c(0,1000) ) +
   labs(x = 'Year', y = 'Survey Biomass (1000 mt)')+
-  geom_ribbon(aes(ymin =lci/1000, ymax = uci/1000 ),alpha = 0.2)
+  geom_ribbon(aes(ymin =lci/1000, ymax = uci/1000 ),alpha = 0.1)
 
 ggsave(last_plot(), height = 6, width = 10, dpi = 520,
        file = here('figs',paste0(Sys.Date(),'-index_wCVs.png')))
