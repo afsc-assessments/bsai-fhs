@@ -2,9 +2,11 @@
 title: Assessment of the  Flathead sole-Bering flounder Stock in the Bering Sea and Aleutian Islands
 author: Maia S. Kapur
 date: October 2022
-format:
-  html:
-    self-contained: true
+format: docx
+always_allow_html: true
+# format:
+#   html:
+#     self-contained: true
 toc: true
 code-fold: true
 code-overflow: wrap
@@ -45,7 +47,7 @@ surv = round(read.csv(here('data',paste0("2022-09-28-ss_survey_index.csv"))))
 
 ## Summary of Changes in Assessment Inputs
 
-This assessment used a single survey index of "total" *`r spp[3]`* biomass that included the EBS "standard" survey areas and AI survey areas for the years 1982-2019 (Table 2). As was done in the 2020 full assessment (Monnohan et. al. 2020) and the 2021 partial assessment (Kapur 2021), a linear regression is used to estimate a relationship between EBS shelf *`r spp[3]`* survey biomass estimates and AI survey biomass estimates in years when no AI survey occurred. The regression uses the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year. There was no AI survey conducted in 2021 and AI biomass was estimated with the linear equation (for plotting purposes). The `r thisyr` total BSAI estimate was `r format(last(surv$obs), big.mark = ",")` t, a roughly `r round((last(surv$obs)-surv$obs[surv$year == 2021])/surv$obs[surv$year == 2021]*100,0)`\% increase over the `r lastyr` regression estimate of `r format(surv$obs[surv$year == 2021], big.mark = ",")` t (Figure 2).
+This assessment used a single survey index of "total" *`r spp[3]`* biomass that included the EBS "standard" survey areas and AI survey areas for the years 1982-2019 (Table 2). As was done in the 2020 full assessment (Monnohan et. al. 2020) and the 2021 partial assessment (Kapur 2021), we estimated a relationship between EBS shelf *`r spp[3]`* survey biomass estimates and AI survey biomass estimates in years when no AI survey occurred. The estimation method uses the linear regression to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year. There was no AI survey conducted in 2021 and AI biomass was estimated with the linear equation (for plotting purposes). The `r thisyr` total BSAI estimate was `r format(last(surv$obs), big.mark = ",")` t, a roughly `r round((last(surv$obs)-surv$obs[surv$year == 2021])/surv$obs[surv$year == 2021]*100,0)`\% increase over the `r lastyr` regression estimate of `r format(surv$obs[surv$year == 2021], big.mark = ",")` t (Figure 2). 
 
 To run the projection model to predict ABCs for `r proj_years[1]` and `r proj_years[2]`, we used true, updated catches for 2020 and 2021 and estimates for the total catches in `r thisyr`-`r proj_years[2]`. Note that the 2020 catch used in the last benchmark model was itself an estimate (`r format(8555.53, big.mark = ",")`), about `r round((cproj[1,2]-8555.53)/cproj[1,2]*100)`\% less than the finalized observation used for projections here. The catch for `r thisyr` (`r format(cproj$catch[cproj$year == thisyr], big.mark = ",")` t) was estimated by adding the average catch between `r paste0(month(date_pull, label = T), " ",day(date_pull))` and December 31 over the years `r thisyr-5`-`r lastyr` to the `r thisyr` catch as of `r date_pull_long`. The `r nextyr` and `r proj_years[2]` catches (`r format(cproj$catch[cproj$year == nextyr], big.mark = ",")` t) were estimated as the average catch over the previous 5 years (`r thisyr-5`-`r lastyr`).
 
