@@ -85,14 +85,15 @@ weekly_catches <- weekly_catches %>%
   ## No species for Bering flounder, probably in FHS already
   filter(grepl("Flathead", x=species)) %>%
   mutate(date=mdy(date), week=week(date),  year=year(date))
-catch_this_year <- weekly_catches %>% filter(year==this_year) %>%
-  pull(catch) %>% sum
+# catch_this_year <- weekly_catches %>% filter(year==this_year) %>%
+#   pull(catch) %>% sum
 ## Get average catch between now and end of year for previous 5
 ## years
+catch_this_year <- SS_catch$catch[SS_catch$year == this_year] 
 catch_to_add <- weekly_catches %>% filter(year>=this_year-5 & week > week(today())) %>%
   group_by(year) %>% summarize(catch=sum(catch), .groups='drop') %>%
   pull(catch) %>% mean
-message("Predicted ", this_year, " catch= ", round(catch_this_year + catch_to_add,0)) ##9272
+message("Predicted ", this_year, " catch= ", round(catch_this_year+ catch_to_add,0)) ##9272
 
 #* catches for projection years ----
 ##  use last 5 years' real data average
