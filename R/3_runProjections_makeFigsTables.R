@@ -237,8 +237,9 @@ ggplot(index, aes(x = year, y = obs/1000)) +
   geom_line(lwd = 1, col = 'grey77') +
   # geom_point() +
   geom_point(data = subset(index, lmyr == T), pch = 4, color = 'grey44') +
-  geom_point(data = subset(index, year > 2020), color = 'blue') +
   geom_point(data = subset(index, lmyr == F), color = 'grey44')+
+  geom_point(data = subset(index, year > 2020), color = 'blue') +
+
   scale_x_continuous(labels = seq(1980,2025,5),
                      breaks = seq(1980,2025,5))+
   scale_y_continuous(limits = c(0,1000) ) +
