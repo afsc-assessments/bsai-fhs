@@ -41,7 +41,7 @@ surv = round(read.csv(here('data',paste0("2022-09-28-ss_survey_index.csv"))))
 
 # Executive Summary
 
-"`r spp[1]`" as currently managed by the North Pacific Fishery Management Council (NPFMC) in the Bering Sea and Aleutian Islands (BSAI) represents a two-species complex consisting of true `r spp[1]` (*`r spp[2]`*) and its morphologically-similar congener Bering flounder (*`r spp[3]`*). In 2012, the BSAI Groundfish Plan Team moved `r spp[1]` to a biennial stock assessment schedule because it has historically been lightly exploited. A full stock assessment report was most recently produced in 2020 (Monnahan and Haehn, https://apps-afsc.fisheries.noaa.gov/refm/docs/2020/BSAIflathead.pdfMonnahan). A full assessment for BSAI `r spp[1]` was scheduled for 2022, but due to limited staff resources, a partial assessment is presented this year. In partial assessment years, an executive summary is presented to recommend harvest levels for the next two years, along with trends in catch and biomass.
+"`r spp[1]`" as currently managed by the North Pacific Fishery Management Council (NPFMC) in the Bering Sea and Aleutian Islands (BSAI) represents a two-species complex consisting of true `r spp[1]` (*`r spp[2]`*) and its morphologically-similar congener Bering flounder (*`r spp[3]`*). In 2012, the BSAI Groundfish Plan Team moved `r spp[1]` to a biennial stock assessment schedule because it has historically been lightly exploited. A full stock assessment report was most recently produced in 2020 (Monnahan and Haehn, https://apps-afsc.fisheries.noaa.gov/refm/docs/2020/BSAIflathead.pdf). A full assessment for BSAI `r spp[1]` was scheduled for 2022, but due to limited staff resources, a partial assessment is presented this year. In partial assessment years, an executive summary is presented to recommend harvest levels for the next two years, along with trends in catch and biomass.
 
 `r spp[1]` is assessed using an age-structured model and Tier 3 determination. The single species projection model is run using parameter values from the accepted 2020 assessment model, together with updated catch information for `r paste0(range(2020, lastyr),collapse ="-")` and estimated catches for `r thisyr` and `r proj_range` (Figure 1), to predict stock status for `r spp[1]` in `r proj_range`, and to make ABC recommendations and set OFL for those years.
 
@@ -87,7 +87,7 @@ table1 <-  read.csv(here('tables',paste0(date_use,'-catch_proportions.csv')))
 names(table1) <- c('Year',paste0('Total ',spp[3]), spp[1],spp[4])
 table1$Year <- as.character(table1$Year)
 kableExtra::kable(table1, format.args = list(big.mark = ','), digits = 2,
-                  caption = paste0("Table 1. Catch (in tons) of Flathead sole and Bering flounder combined (", spp[2],") and ", spp[1]," only, and ", spp[4]," only inas of ",date_pull_long," Observer data of species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was Flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (Flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of Flathead sole separately from that of Bering flounder. The 2022 catches are current as of ",date_pull_long," and the value shown below does not include projections through the end of the year.")) %>%
+                  caption = paste0("Table 1. Catch (in tons) of Flathead sole and Bering flounder combined (", spp[2],") and ", spp[1]," only, and ", spp[4]," only as of ",date_pull_long," Observer data of species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was Flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (Flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of Flathead sole separately from that of Bering flounder. The 2022 catches are current as of ",date_pull_long," and the value shown below does not include projections through the end of the year.")) %>%
   kableExtra::kable_styling("striped", font_size = 9)
 ```
 
@@ -111,7 +111,7 @@ names(table2) <- c('Year','Total',
                     'Biomass (EBS, Bering Flounder)',
                     'CV (EBS, Bering Flounder)')
 kableExtra::kable(table2, format.args = list(big.mark = ','), digits = 2,
-                  caption = paste0("Table 2. Survey biomass in tons and coefficient of variation (CV) of Hippoglossoides spp. (combined Flathead sole and Bering flounder) across the entire BSAI; Flathead sole only in the Aleutian Islands, Hippoglossoides spp. combined in the Eastern Bering Sea (EBS) shelf survey, Flathead sole only in EBS shelf survey, and Bering flounder only in the EBS shelf survey. Slight discrepancies in totals may occur due to rounding. Bolded years are not included in base model.")) %>%
+                  caption = paste0("Table 2. Survey biomass in tons and coefficient of variation (CV) of Hippoglossoides spp. (combined Flathead sole and Bering flounder) across the entire BSAI; Flathead sole only in the Aleutian Islands, Hippoglossoides spp. combined in the Eastern Bering Sea (EBS) shelf survey, Flathead sole only in EBS shelf survey, and Bering flounder only in the EBS shelf survey. Slight discrepancies in totals may occur due to rounding")) %>%
   kableExtra::kable_styling("striped", font_size = 9)
 ```
 
@@ -134,7 +134,7 @@ names(table3) <- c('Year',
                     'Biomass (NBS, Bering Flounder)',
                     'CV (NBS, Bering Flounder)')
 kableExtra::kable(table3, format.args = list(big.mark = ','), 
-                  caption = paste0("Table 3. Northern Bering Sea survey biomass (t) and coefficient of variation (CV) for Flathead sole, Bering flounder, and the two combined (Hippoglossoides spp.).  These data are not included in the base model and are presented here for reference only."))%>%
+                  caption = paste0("Table 3. Northern Bering Sea survey biomass (t) and coefficient of variation (CV) for Flathead sole, Bering flounder, and the two combined (Hippoglossoides spp.).  These data are presented here for reference only."))%>%
   kableExtra::kable_styling("striped", font_size = 9)
 
 
@@ -148,7 +148,7 @@ kableExtra::kable(table3, format.args = list(big.mark = ','),
 ::: panel-tabset
 ## Catch vs. Total Biomass
 
-```{r echo = F, fig.cap="Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for Flathead sole in the Bering Sea and Aleutian Islands. Points include observed (closed points) or estimated (open points) catches for years 2020-2024, which are not present in the base model."}
+```{r echo = F, fig.cap="Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for Flathead sole in the Bering Sea and Aleutian Islands. Points include observed (closed points) or estimated (open points) catches for years 2020-2024."}
 knitr::include_graphics(here('figs','2022-10-19-Fig1_catchvsbio.png'))
 ```
 
