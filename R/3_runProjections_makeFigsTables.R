@@ -221,6 +221,31 @@ ggplot(subset(fig1),
 ggsave(last_plot(), height = 5, width = 8, dpi = 520,
        file = here('figs',paste0(Sys.Date(),'-Fig1_catchvsbio.png')))
 
+#* Fig1.2 for ppt----
+## show a line for the mean, remove the projected catches and indicate %change
+diff<- round(-100*(fig1$catch_over_biomass[fig1$Yr==2019]-fig1$catch_over_biomass[fig1$Yr==2021])/
+  fig1$catch_over_biomass[fig1$Yr==2019])
+
+ggplot(subset(fig1), 
+       aes(x = Yr, y = catch_over_biomass)) +
+  geom_hline(aes(yintercept = mean(fig1$catch_over_biomass)
+                  ),linetype = 'dashed', col = 'grey88') +
+  geom_text(check.overlap = T, aes(x = 2021, y = 0.027, label = paste0(diff,'%'))) +
+  geom_line(lwd = 1, col = 'grey77') +  
+  geom_point(data = subset(fig1, Yr %in% c(2019,2021))) +
+  ggsidekick::theme_sleek(base_size = 18) +
+  scale_x_continuous(limits = c(1960,2021),
+                     labels = seq(1960,2021,5), 
+                     breaks = seq(1960,2021,5))+
+  scale_y_continuous(limits = c(0,0.07),
+                     breaks = seq(0,0.75,0.01), 
+                     labels = seq(0,0.75,0.01))+
+  labs(x = 'Year', y = 'Catch/Summary Biomass (age 3+)')
+
+ggsave(last_plot(), height = 5, width = 8, dpi = 520,
+       file = here('figs',paste0(Sys.Date(),'-Fig1_catchvsbio_ppt.png')))
+
+
 #* index plot ----
 # index <- read.csv(here('data','2021-09-15-index.csv'))
 index <- read.csv(here('data',paste0(date_use,'-ss_survey_index.csv'))) %>%
