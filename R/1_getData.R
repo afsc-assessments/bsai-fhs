@@ -162,7 +162,7 @@ write.csv(x=SS_index, file= here('data',paste0(Sys.Date(),'-SS_survey_index.csv'
 # query <- "
 # select a.species_code,b.species_name, b.common_name,  year, stratum, length,
 # round(males) males, round(females) females, round(unsexed) unsexed, round(total) total
-# from haehnr. sizecomp_ebs_standard_stratum a, racebase.species b
+# from haehnr.sizecomp_ebs_standard_stratum a, racebase.species b
 # where a.species_code=b.species_code
 # and a.species_code in (10130,10140)
 # order by b.species_code, year, stratum, length;
