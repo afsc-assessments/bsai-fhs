@@ -2,12 +2,12 @@
     "sortOrder": [
         {
             "columnIndex": 2,
-            "ascending": true
+            "ascending": false
         },
         {
             "columnIndex": 4,
             "ascending": false
         }
     ],
-    "path": "~/assessments/2022/bsai-fhs-2022/R"
+    "path": "~/assessments/2022/bsai-fhs-2022"
 }
