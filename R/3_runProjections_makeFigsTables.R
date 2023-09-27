@@ -5,7 +5,7 @@ require(ggplot2)
 require(here)
 this_year = lubridate::year(Sys.Date())
 last_yr = this_year-1
-
+theme_set(afscassess::theme_report())
 lapply(list.files("C:/Users/maia.kapur/Work/assessments/proj_functions/", full.names = T, pattern = ".r$"),  source)
 file.copy('C:/Users/maia.kapur/Work/assessments/proj_functions/main.exe', here('projection'), overwrite = TRUE)
 file.copy('C:/Users/maia.kapur/Work/assessments/proj_functions/tacpar.dat', here('projection'), overwrite = TRUE)
@@ -236,20 +236,20 @@ ggsave(last_plot(), height = 5, width = 8, dpi = 520,
 
 #* Fig1.2 for ppt----
 ## show a line for the mean, remove the projected catches and indicate %change
-diff<- round(-100*(fig1$catch_over_biomass[fig1$Yr==2019]-fig1$catch_over_biomass[fig1$Yr==2021])/
+diff<- round(-100*(fig1$catch_over_biomass[fig1$Yr==2019]-fig1$catch_over_biomass[fig1$Yr==2023])/
   fig1$catch_over_biomass[fig1$Yr==2019])
 
 ggplot(subset(fig1), 
        aes(x = Yr, y = catch_over_biomass)) +
   geom_hline(aes(yintercept = mean(fig1$catch_over_biomass)
                   ),linetype = 'dashed', col = 'grey88') +
-  geom_text(check.overlap = T, aes(x = 2021, y = 0.027, label = paste0(diff,'%'))) +
+  # geom_text(check.overlap = T, aes(x = 2021, y = 0.027, label = paste0(diff,'%'))) +
   geom_line(lwd = 1, col = 'grey77') +  
-  geom_point(data = subset(fig1, Yr %in% c(2019,2021))) +
-  ggsidekick::theme_sleek(base_size = 18) +
-  scale_x_continuous(limits = c(1960,2021),
-                     labels = seq(1960,2021,5), 
-                     breaks = seq(1960,2021,5))+
+  geom_point(data = subset(fig1, Yr %in% c(2019,2023))) +
+  # ggsidekick::theme_sleek(base_size = 18) +
+  scale_x_continuous(limits = c(1960,2023),
+                     labels = seq(1960,2023,5), 
+                     breaks = seq(1960,2023,5))+
   scale_y_continuous(limits = c(0,0.07),
                      breaks = seq(0,0.75,0.01), 
                      labels = seq(0,0.75,0.01))+
@@ -263,7 +263,8 @@ ggsave(last_plot(), height = 5, width = 8, dpi = 520,
 # index <- read.csv(here('data','2021-09-15-index.csv'))
 index <- read.csv(here('data',paste0(date_use,'-ss_survey_index.csv'))) %>%
   mutate(lci = obs-se_log*obs, uci = se_log*obs+obs) %>%
-  mutate(lmyr = year %in% interpyr)
+  mutate(lmyr = year %in% interpyr) %>%
+  filter(year <2023)
 # index %>% filter(  YEAR != 2019) %>% summarise(mb=mean(BIOM), sdb = sd(BIOM)) %>% mutate(mb+sdb)
 
 ## load prior index to check for changes
@@ -278,7 +279,7 @@ ggplot(index, aes(x = year, y = obs/1000)) +
   geom_point(data = subset(index, lmyr == F), color = 'grey66')+
   geom_point(data = subset(index, year == 2021), pch = 4, size = 2, color = 'blue') +
   geom_point(data = subset(index, year == 2022), color = 'blue') +
-
+  geom_point(data = subset(index, year == 2022), color = 'blue') +
   scale_x_continuous(labels = seq(1980,2025,5),
                      breaks = seq(1980,2025,5))+
   scale_y_continuous(limits = c(0,1000) ) +
@@ -300,7 +301,7 @@ cbpal <- c("#999999", "#E69F00", "#56B4E9", "#009E73" ,"#F0E442", "#0072B2", "#D
 cbpal <- c("#E69F00", "#56B4E9", "#009E73" ,'black','grey66' )
 cbpal <- c("#E69F00", "#56B4E9", 'black','grey66' )
 
-catch <- read.csv(here('data','2021-10-29-catch.csv'))
+catch <- read.csv(here('data','2023-09-27-catch.csv'))
 mgmt0 <- read.csv(here('data','2021-11-12-BSAI_harvest_specs_1986_2021new.csv'), header = F)[,-1]
 mgmt1 <- rbind(mgmt0[1:2,],as.numeric(gsub(",", "", mgmt0[3,]))) ## make harvest specs numeric (remove comma)
 mgmt<- mgmt1%>%
