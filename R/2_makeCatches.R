@@ -99,13 +99,13 @@ projc <- SS_catch %>%
   filter(year  < this_year & year  > (this_year-6)) %>% 
   summarise(mean(catch )) %>% as.numeric()
 
-catchvec = matrix(c((last_yr-1),
-                  last_yr,
-                  this_year:(this_year+2),
-                  SS_catch$catch[SS_catch$year == last_yr-1],
-                  SS_catch$catch[SS_catch$year == last_yr],
-       round(catch_this_year + catch_to_add,0),
-         projc,
-         projc), ncol = 2)
+yrs_spcat <- 2020:(this_year+2) ## years to infill catches
+catchvec <- data.frame('year' = yrs_spcat, 'catches' = NA) 
+## fill in known catches (complete years)
+catchvec$catches[catchvec$year < this_year] <- SS_catch$catch[SS_catch$year < this_year & SS_catch$year %in% yrs_spcat]
+## fill in estimated & projected catches
+catchvec$catches[catchvec$year == this_year] <- round(catch_this_year + catch_to_add,0)
+catchvec$catches[catchvec$year > this_year] <- round(projc,0)
+catchvec <- as.matrix(catchvec)
 
 save(catchvec,file = here('data', paste0(Sys.Date(),"-catches_for_proj.rdata")))
