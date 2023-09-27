@@ -77,6 +77,8 @@ c3 = as.numeric(catchvec[6,2]) # proj catch year + 2
 ```{r, child="13-references.Rmd", eval = T}
 ```
 
+\newpage
+
 ```{r, child="11-tables.Rmd", eval = T}
 ```
 
