@@ -1,0 +1,4 @@
+```{r}
+load(here::here('projection','safe_table.rdata')) ##safe02
+safe::main_table(safe02, year=2023, tier=3, c1, c2, c3)
+```
