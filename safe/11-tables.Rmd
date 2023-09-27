@@ -1,18 +1,40 @@
 # Tables
 
 ```{r tab1}
-knitr::kable(data.frame(year = 1999:2000,
-                 catch = 1:2), 
-             caption = "Summary of key management measures and the time series of catch, ABC, and TAC for northern rockfish in the Gulf of Alaska",
-             booktabs = TRUE)
+catches <- read.csv(here::here('tables','2023-09-27-catch_proportions.csv'))
+catches$year<-as.character(catches$year)
+flextable::flextable(catches) %>%
+  flextable::set_caption("Catch (in tons) of Flathead sole and Bering flounder combined (Hippoglossoides elassodon) and Flathead sole only, and Bering flounder only. Observer data of species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was Flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (Flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of Flathead sole separately from that of Bering flounder. The 2023 catches are current as of Oct 19, 2023 and the value shown below does not include projections through the end of the year.") %>%
+  flextable::set_header_labels(., values = c('Year','Total Hippoglossoides spp.','Flathead Sole','Bering Flounder')) 
+           
 ```
 
 \pagebreak
 
 ```{r tab2}
-flextable::regulartable(data.frame(year = 1999:2000,
-                 catch = 1:2)) %>%  
-      flextable::set_caption("Commercial catch (t) and management action for northern rockfish in the Gulf of Alaska, 1961-present. The *Description of the catch time series* Section describes procedures use to estimate catch during 1961-1993. Ctach estimates for 1993-2019 are from NMFS Observer Program and Alaska Regional Office updated through October XX, 2020.")
+survspp <- read.csv(here::here('tables','2023-09-27-survey_by_spp.csv'))
+survspp$year<-as.character(survspp$year)
+
+flextable::regulartable(survspp) %>%  
+  flextable::set_caption("Survey biomass in tons and coefficient of variation (CV) of Hippoglossoides spp. (combined Flathead sole and Bering flounder) across the entire BSAI; Flathead sole only in the Aleutian Islands, Hippoglossoides spp. combined in the Eastern Bering Sea (EBS) shelf survey, Flathead sole only in EBS shelf survey, and Bering flounder only in the EBS shelf survey. Slight discrepancies in totals may occur due to rounding.") %>%
+  flextable::colformat_double(j = seq(2,10,2), big.mark = ',', digits = 0) %>%
+  flextable::colformat_double(j = seq(3,11,2), digits = 2) %>%
+  flextable::set_header_labels(., values = c('Year',	'Biomass (Total)','CV (Total)',	'Biomass (AI)',	'CV (AI)',	'Biomass (EBS, all)',	'CV (EBS, all)',	'Biomass (EBS, flathead)',	'CV (EBS, flathead)',	'Biomass (EBS, Bering Flounder)',	'CV (EBS, Bering Flounder)')) 
 ```
 
 \pagebreak
+
+```{r tab3}
+nbssurvspp <- read.csv(here::here('tables','2023-09-27-NBS_survey_by_spp.csv'))
+nbssurvspp$year<-as.character(nbssurvspp$year)
+
+flextable::regulartable(nbssurvspp) %>%  
+      flextable::set_caption("Northern Bering Sea survey biomass (t) and coefficient of variation (CV) for Flathead sole, Bering flounder, and the two combined (Hippoglossoides spp.). These data are presented here for reference only.") %>%
+    flextable::colformat_double(j = seq(2,6,2), big.mark = ',', digits = 0) %>%
+  flextable::colformat_double(j = seq(3,7,2), digits = 2) %>%
+  flextable::set_header_labels(., values = c('Year',	'Biomass (Total)',	'CV (Total)',	'Biomass (NBS, flathead)',	'CV (NBS, flathead)',	'Biomass (NBS, Bering Flounder)',	'CV (NBS, Bering Flounder)')) 
+```
+
+\pagebreak
+
+
