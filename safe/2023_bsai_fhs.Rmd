@@ -1,0 +1,90 @@
+---
+params: 
+  chapter: 10
+  species: "Assessment of the Flathead sole-Bering flounder Stock in the Bering Sea and Aleutian Islands"
+  species_complex: "no"
+  area: "Gulf of Alaska"
+  tier: 3
+
+author: "Kapur, Maia S."
+date: "November 2023"
+
+# don't do anything below this line unless you are cool with the consequences
+output:
+  bookdown::word_document2:
+     reference_docx: "template.docx"
+     toc: false
+     number_sections: false
+     css: "styles.css"
+     pandoc_args:  
+       - '--lua-filter=scholarly-metadata.lua'
+       - '--lua-filter=author-info-blocks.lua'
+
+always_allow_html: true        
+fontsize: 11pt
+geometry:
+  - top=1in
+  - bottom=1in
+  - left=1in
+  - right=1in     
+fig_caption: true
+bibliography: "safe_bibby.bib"
+csl: "fishfish.csl"
+
+---
+
+```{r setup, include=FALSE, echo = FALSE}
+# remotes::install_github("crsh/rmdfiltr")
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.pos = "!h", out.extra = "")
+```
+
+```{r}
+if(params$species_complex=="no"){
+   title = paste0(params$chapter, ". Assessment of the ", tools::toTitleCase(params$species), " Stock in the ", params$area)
+  } else {
+    title = paste0(params$chapter, ". Assessment of the ", tools::toTitleCase(params$species), " Stock complex in the ", params$area)  
+  }
+
+
+```
+
+---
+title: `r title`
+---
+
+```{r load, warning=F, message=F}
+# load
+library(safe)
+# globals
+species = params$species
+year = 2023
+date = 'October 22, 2023'
+model = "base"
+end_proj = year + 15
+best_f = 0.0641 # from the best_f function in groundfishr package
+ofl = 8000 # placeholder while i figure things out
+
+load(here::here('data', paste0("2023-09-27-catches_for_proj.rdata")))
+c1 = as.numeric(catchvec[4,2]) # estimated catch in current year
+c2 = as.numeric(catchvec[5,2]) # proj catch year + 1
+c3 = as.numeric(catchvec[6,2]) # proj catch year + 2
+# todo: build a function/switch to auto run the tier(a/b) - also for overfishing/overfished
+```
+
+```{r, child="01-summary.Rmd", eval = T}
+```
+
+```{r, child="02-responses.Rmd", eval = T}
+```
+
+\pagebreak
+\allsectionsfont{\centering}
+# References
+<div id="refs"></div>
+
+```{r, child="11-tables.Rmd", eval = T}
+```
+
+```{r, child="12-figures.Rmd", eval = T}
+```
+
