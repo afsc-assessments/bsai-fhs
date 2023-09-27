@@ -96,17 +96,17 @@ rec_table <- bind_rows(rec_table1, rec_table2)
 rec_table <-rec_table[c(11,6,3,4,5,2,1,1,9,8,8),] 
 
 # rec_table[c(1:5,9:11),2:3] <-formatC(rec_table[c(1:5,9:11),2:3] , format="d", big.mark=",") 
-write.csv(rec_table, 'rec_table.csv', row.names=FALSE)
+write.csv(rec_table, file = here::here('projection','rec_table.csv'), row.names=FALSE)
 
 ## load last year's values and make full safe
-previous_rec_table <- read.csv("C:/Users/maia.kapur/Work/assessments/2021/BSAI-flathead/projection/Projections/REC_TABLE.CSV")
+previous_rec_table <- read.csv("C:/Users/maia.kapur/Work/assessments/2022/BSAI-fhs-2022/REC_TABLE.CSV")
 
-previous_rec_table[,c('X2022','X2023')] <- apply(previous_rec_table[,c('X2022','X2023')],2,
+previous_rec_table[,c('X2023','X2024')] <- apply(previous_rec_table[,c('X2023','X2024')],2,
                                                 FUN = function(x) as.numeric(gsub(",","",x)))
 
 ## correct order error in previous table
 
-previous_rec_table[4:5,] <- previous_rec_table[5:4,]
+# previous_rec_table[4:5,] <- previous_rec_table[5:4,]
 rec_table[c(1:5,9:11),2:3] <- round(rec_table[c(1:5,9:11),2:3])
 rec_table[c(6:8),2:3] <- round(rec_table[c(6:8),2:3],digits = 2)
 safe0 <- rbind(c(rep(0.2,3)),
@@ -131,16 +131,29 @@ rownames(safe0) <-c('M',
 )
 # xtable(prettyNum(c(rec_table[,3]),big.mark=","))
 
-status = matrix(NA, nrow = 3, ncol = 4)
+status = matrix(NA, nrow = 5, ncol = 4)
 # colnames(status) <- c(2020,2021,2021,2022)
-rownames(status) <- c('Overfishing','Overfished','Approaching Overfished')
+rownames(status) <- c('blank','Status','Overfishing','Overfished','Approaching Overfished')
+status[2,] <- c(this_year-1,this_year,this_year,this_year+1)
 status[1,c(1,3)] <- status[2,c(2,4)] <- status[3,c(2,4)] <- 'no'
 status = data.frame(status)
 names(status) = names(safe0)
-safe0 = rbind(safe0,status) 
-safe = noquote(apply(safe0, 2, function(x) prettyNum(x, big.mark = ",")))
+
+safe01 = rbind(safe0,status) 
+# safe = noquote(apply(safe0, 2, function(x) prettyNum(x, big.mark = ",")))
 # safe[safe > 10e6] <- safe[safe>10e6]/1000
-write.csv(safe, file = here('tables','safe_table.csv'), row.names=TRUE)
+## round & clean up values
+safe01[8:10,] <- sapply(safe01[8:10,],  FUN = function(x) sprintf("%.2f",as.numeric(x)))
+safe01[c(3:7,11:13),] <- sapply(safe01[c(3:7,11:13),],  FUN = function(x) prettyNum(round(as.numeric(x),0),big.mark=','))
+safe01$item <- rownames(safe01)
+
+safe02 <- safe01%>% select(item, y1 = "X2023", y2 = "X2024", y3 = "2024", y4="2025")
+write.csv(safe02, file = here('tables','safe_table.csv'), row.names=TRUE)
+
+safe::main_table(data=safe02, year=2023, tier=3, 
+                 c1=catchvec[4,2], c2=catchvec[5,2], c3=catchvec[6,2])
+
+save(safe02, file = here::here('tables','safe_table.rdata')) ## this can be used in RMD
 
 
 # Figures ----
