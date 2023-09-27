@@ -22,7 +22,7 @@ password_AKFIN <- askForPassword(prompt="Enter your AKFIN password:")
 AKFIN <- odbcConnect("AKFIN",username_AKFIN,password_AKFIN,  believeNRows = FALSE)
 
 #* Query spex ----
-final_year <- 2022
+final_year <- 2023
 fsh_sp_area <- "'BS','AI'"              # FMP
 fsh_sp_label <- "'FSOL'"                # AKFIN group species label
 fsh_sp_str <- "103"                     # AKFIN species code
@@ -85,7 +85,7 @@ write.csv(test, here('data',paste0(Sys.Date(),'-biomass_survey_nbs_by_species.cs
 
 
 #** reformat surveys ----
-date_use <-  "2022-09-28" #Sys.Date() ### dwnld date
+date_use <-  "2023-09-27" #Sys.Date() ### dwnld date
 data_folder = here('data','/')
 
 index_ebs <-  read.csv(paste0(data_folder,date_use,"-biomass_survey_ebs.csv")) %>%
