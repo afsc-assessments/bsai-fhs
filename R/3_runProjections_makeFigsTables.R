@@ -220,9 +220,9 @@ fig1 <- rbind(fig1a, fig1b)
 ggplot(subset(fig1), 
        aes(x = Yr, y = catch_over_biomass)) +
   geom_line(lwd = 1, col = 'grey77') + 
-  geom_point(data = subset(fig1, Yr > 2021),
+  geom_point(data = subset(fig1, Yr > 2022),
                                                   lwd = 1,  col = 'blue', pch = 1) +
-  geom_point(data = subset(fig1, Yr %in% c(2020,2021)),
+  geom_point(data = subset(fig1, Yr %in% c(2020,2021,2022)),
             lwd = 1,  col = 'blue', pch = 16) +
   scale_x_continuous(labels = seq(1960,2025,5), 
                      breaks = seq(1960,2025,5))+
@@ -243,7 +243,7 @@ ggplot(subset(fig1),
        aes(x = Yr, y = catch_over_biomass)) +
   geom_hline(aes(yintercept = mean(fig1$catch_over_biomass)
                   ),linetype = 'dashed', col = 'grey88') +
-  # geom_text(check.overlap = T, aes(x = 2021, y = 0.027, label = paste0(diff,'%'))) +
+  geom_text(check.overlap = T, aes(x = 2021, y = 0.027, label = paste0(diff,'%'))) +
   geom_line(lwd = 1, col = 'grey77') +  
   geom_point(data = subset(fig1, Yr %in% c(2019,2023))) +
   # ggsidekick::theme_sleek(base_size = 18) +
