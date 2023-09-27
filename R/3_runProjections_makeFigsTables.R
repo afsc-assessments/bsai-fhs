@@ -49,7 +49,7 @@ write_proj_spcat(dir = here('projection'),
                  # sdir = here('projection'),
                  data_file = 'spp_catch.dat', ## name of new file - must match what is in spp_catch.dat
                  data =  mod_2020, ## model basis
-                 ct_yrs = 5, ## eg for 2009 takes proj catch 2008-2012
+                 ct_yrs = 6, ## eg for 2009 takes proj catch 2008-2012; increments up each yr
                  catch_vector_use= catchvec ## matrix made at bottom of 2_makeCatches
 )
 # ## write setup 
@@ -57,7 +57,7 @@ setup(dir =  here('projection'),
       # sdir =  here('projection'),
       data_file = 'setup.dat', ## name of new file
       data = mod_2020 , ## model basis
-      nproj = 5
+      nproj = 6
 )
 
 
