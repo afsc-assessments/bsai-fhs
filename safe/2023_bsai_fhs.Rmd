@@ -74,14 +74,14 @@ c3 = as.numeric(catchvec[6,2]) # proj catch year + 2
 ```{r, child="01-summary.Rmd", eval = T}
 ```
 
-\pagebreak
-\allsectionsfont{\centering}
-# References
-<div id="refs"></div>
+```{r, child="13-references.Rmd", eval = T}
+```
 
 ```{r, child="11-tables.Rmd", eval = T}
 ```
 
 ```{r, child="12-figures.Rmd", eval = T}
 ```
+
+
 
