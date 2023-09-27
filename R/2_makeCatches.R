@@ -8,7 +8,7 @@ require(ggtext)
 require(showtext)
 require(here)
 require(lubridate)
-
+theme_set(afscassess::theme_report())
 this_year = lubridate::year(Sys.Date())
 last_yr = this_year-1
 date_use <- Sys.Date()#"2022-05-31" ## dwnld date
@@ -20,8 +20,6 @@ gearpal = c('grey22',
             alpha('goldenrod',0.65),
             'seagreen4',
             alpha('seagreen4',0.65)) 
-
-
 
 BSAIt <- read.csv(paste0(data_folder,date_use,"-catch.csv")) 
 BSAIt %>% 
