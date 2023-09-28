@@ -7,3 +7,8 @@ The branches correspond to the years for each assessment. The years/type of asse
 
 2022: Partial assessment update (since renamed "Harvest Projection")
 
+2021: Partial assessment update (since renamed "Harvest Projection")
+
+2020: Full Assessment (led by C Monnahan)
+
+
