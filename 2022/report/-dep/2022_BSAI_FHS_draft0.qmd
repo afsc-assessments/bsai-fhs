@@ -1,0 +1,126 @@
+---
+title: Assessment of the  Flathead sole-Bering flounder Stock in the Bering Sea and
+  Aleutian Islands
+author: "Maia S. Kapur"
+date: "November 2022"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+fig_caption: yes
+---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+require(lubridate)
+require(here)
+require(dplyr)
+## text values
+
+spp = c('Flathead sole','Hippoglossoides esassodon', 'Hippoglossoides spp.', 'Bering flounder')
+date_use = "2022-05-31" ## for file loading
+date_use_long = paste0(month(date_use, label = T), " ",day(date_use),", ",year(date_use))
+date_pull = "2022-10-01"
+date_pull_long = paste0(month(date_pull, label = T), " ",day(date_pull),", ",year(date_pull))
+thisyr = lubridate::year(Sys.Date())
+lastyr = thisyr-1
+nextyr = thisyr+1
+proj_years = nextyr:(thisyr+2)
+proj_range = paste0(range(proj_years), collapse = "-")
+
+## read tables
+load(here('data',paste0(date_use,'-catches_for_proj.rdata'))) ## catchvec
+cproj = round(data.frame(catchvec)); names(cproj)=c('year','catch')
+surv = round(read.csv(here('data',paste0(date_use,"-ss_survey_index.csv"))))
+```
+
+# Executive Summary
+
+"`r spp[1]`" as currently managed by the North Pacific Fishery Management Council (NPFMC) in the Bering Sea and Aleutian Islands (BSAI) represents a two-species complex consisting of true `r spp[1]` (*`r spp[2]`*) and its morphologically-similar congener Bering flounder (*`r spp[3]`*). In 2012, the BSAI Groundfish Plan Team moved `r spp[1]` to a biennial stock assessment schedule because it has historically been lightly exploited. A full stock assessment report was most recently produced in 2019 (Monnahan and Haehn, 2019, available online at https://apps-afsc.fisheries.noaa.gov/refm/docs/2019/BSAIflathead.pdf). This year, a partial assessment is presented. In partial assessment years, an executive summary is presented to recommend harvest levels for the next two years, along with trends in catch and biomass.
+
+`r spp[1]` is assessed using an age-structured model and Tier 3 determination. The single species projection model is run using parameter values from the accepted 2019 assessment model, together with updated catch information for `r paste0(range(2019, lastyr),collapse ="-")` and estimated catches for `r thisyr` and `r proj_range`, to predict stock status for `r spp[1]` in 2022 and 2023 and make ABC recommendations for those years.
+
+## Summary of Changes in Assessment Inputs
+
+This assessment used a single survey index of "total" Hippoglossoides spp. biomass that included the EBS "standard" survey areas and AI survey areas for the years 1982-`r thisyr` (Table 2). As was done in the `r lastyr` assessment, a linear regression is used to estimate a relationship between EBS shelf `r spp[3]` survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year). There was no AI survey conducted in `r thisyr` and AI biomass was estimated with the linear equation. The `r thisyr` total BSAI estimate was `r format(surv$obs[surv$year == lastyr], big.mark = ",")` t, an increase over the 2019 estimate of `r format(surv$obs[surv$year == 2019], big.mark = ",")` t.
+
+To run the projection model to predict ABCs for `r proj_years[1]` and `r proj_years[2]`, estimates are required for the total catches in `r thisyr`-`r proj_years[2]` The final catch for `r thisyr` (`r format(cproj$catch[cproj$year == thisyr], big.mark = ",")` t) was estimated by adding the average catch between `r paste0(month(date_pull, label = T), " ",day(date_pull))` and December 31 over the years `r thisyr-5`-`r lastyr` to the `r thisyr` catch as of `r date_pull_long`. The `r nextyr` and `r proj_years[2]` catches (`r format(cproj$catch[cproj$year == nextyr], big.mark = ",")` t) were estimated as the average catch over the previous 5 years (`r thisyr-5`-`r lastyr`).
+
+## Summary of Results
+
+Based on the updated projection model results, the recommended ABCs for `r nextyr` and `r proj_years[2]` are listed in the table below; the new ABC recommendation and OFL for both `r nextyr` and `r proj_years[2]` are both slightly higher than those projected during the last full assessment (`r lastyr`).
+
+```{r safe, echo = F}
+safe = read.csv(here('tables','safe_table.csv'))
+names(safe) <- c("",thisyr,nextyr, nextyr, paste(proj_years[2]))
+safe[is.na(safe)] <- "n/a"
+kableExtra::kable(safe, format.args = list(big.mark = ','), digits = 2, row.names = FALSE,
+                  caption = paste0("*Projections  are based on estimated catches of ", 
+                                   format(cproj$catch[cproj$year == nextyr], big.mark = ","),
+                                   "t used in place of maximum permissible ABC for ",
+                                   thisyr," and ",
+                                    format(cproj$catch[cproj$year == proj_years[1]], big.mark = ","),
+                                   " t used in place of maximum permissible ABC for ",proj_range,
+                                                                                             ". The final catch for ",
+                                                                                             thisyr,
+                                                                                             " was estimated by taking the average tons caught between ",paste0(month(date_pull, label = T), " ",day(date_pull))," and December 31 over the previous 5 years (",paste(range(thisyr-5,lastyr),collapse='-')," and adding this average amount to the catch-to-date as of ", date_pull_long,". The ",nextyr," and ", proj_years[2], "catch was estimated as the average of the total catch in each of the last 5 years.")) %>%
+  kableExtra::kable_styling("striped")
+                  
+```
+
+\newpage
+
+# Tables
+
+```{r t1, echo = FALSE}
+table1 <-  read.csv(here('tables',paste0(date_use,'-catch_proportions.csv'))) 
+names(table1) <- c('Year',paste0('Total ',spp[3]), spp[1],spp[4])
+table1$Year <- as.character(table1$Year)
+kableExtra::kable(table1, format.args = list(big.mark = ','), digits = 2,
+                  caption = paste0("Table 1. Catch (in tons) of flathead sole and Bering flounder combined ", spp[2]," and ", spp[1]," only, and ", spp[3]," only in the BSAI as of ",date_pull_long," Observer data on species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of flathead sole separately from that of Bering flounder.")) %>%
+  kableExtra::kable_styling("striped")
+```
+
+```{r t2, echo = FALSE}
+table2 <- read.csv(here('tables',paste0(date_use,'-survey_by_spp.csv'))) 
+table2 
+table2$year <- as.character(table2$year)
+table2[is.na(table2)] <-""
+# names(table2) <- c('Year','Total','CV Total',
+#                    'AI Biomass','AI CV',
+#                    'EBS Biomass','EBS CV',
+                   
+
+
+kableExtra::kable(table2, format.args = list(big.mark = ','), digits = 2,
+                  caption = paste0("Table 2. Survey biomass in tons and coefficient of variation (CV) of Hippoglossoides spp. combined (flathead sole and Bering flounder) across the entire BSAI; flathead sole only in the Aleutian Islands, Hippoglossoides spp. combined in the Eastern Bering Sea (EBS) shelf survey, flathead sole only in EBS shelf survey, and Bering flounder only in the EBS shelf survey. Slight discrepancies in totals may occur due to rounding. Bolded years are not included in base model.'Data accessed via Oracle database query on ",date_use_long,".")) %>%
+  kableExtra::kable_styling("striped")
+
+```
+
+```{r t3, echo = FALSE}
+table3 <- read.csv(here('tables',paste0(date_use,'-NBS_survey_by_spp.csv'))) 
+
+kableExtra::kable(table3, format.args = list(big.mark = ','), 
+                  caption = paste0("Table 3. Northern Bering Sea survey biomass (t) and coefficient of variation (CV) for flathead sole, Bering flounder, and the two combined (Hippoglossoides spp.).  These data are not included in the base model and are presented here for reference only. Data accessed via Oracle database query on ",date_use_long,"."))%>%
+  kableExtra::kable_styling("striped")
+
+
+```
+
+\newpage
+
+# Figures
+
+```{r f1, eval = T, echo = F,  fig.cap = "Figure 1. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Dotted grey lines represent observed catches for 2021 and projected catches for 2022-2024." }
+
+knitr::include_graphics(here('figs',paste0(date_use,"-Fig1_catchvsbio.png")))
+
+```
+
+**Figure 1**. Catch to total biomass ratio using total biomass for age 3+ individuals for flathead sole in the Bering Sea and Aleutian Islands. Dotted grey lines represent observed catches for `r lastyr` and projected catches for `r thisyr` and `r proj_range`.
+
+```{r f2, echo = FALSE}
+knitr::include_graphics(here('figs',paste0(date_use,"-Fig2_index_wCVs.png")))
+```
+
+**Figure 2**. Survey biomass from the EBS shelf and Aleutian Islands surveys for station depths less than or equal to 200 meters. A linear regression is used to estimate a relationship between EBS shelf *`r spp[3]`* survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year). Grey shading indicates ± 1 standard error. The blue point was the observed survey biomass in `r lastyr`, which is not included in the base assessment model.

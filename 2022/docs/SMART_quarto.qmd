@@ -1,0 +1,192 @@
+---
+title: "HTML Files for Plan Team"
+format: 
+  revealjs:
+    theme: [simple]
+    auto-animate-easing: ease-in-out
+    footer: "Maia Sosa Kapur  | SMART Kickoff 2022"
+    self-contained: false
+    slide-number: true
+    df-print: paged
+knitr:
+  opts_chunk: 
+    fig-format: png
+---
+
+```{r setup_environment}
+#| include: false
+
+library("here")
+library("tidyverse") 
+library("patchwork")
+library("ggdensity")
+library("kableExtra")
+
+theme_set(theme_bw(13)) 
+
+theme_update(
+  panel.grid.minor = element_blank()
+)
+
+MSY = 126645
+thisyr = lubridate::year(Sys.Date())
+spp = 'GOA Flathead sole'
+```
+
+------------------------------------------------------------------------
+
+<h1>**Reproducible files for Plan Team**</h1>
+
+<hr>
+
+<h3>Maia Sosa Kapur</h3>
+
+<h3>SMART Kickoff</h3>
+
+<h3>8/23/2022</h3>
+
+::: footer
+:::
+
+# Introduction
+
+------------------------------------------------------------------------
+
+## The Bottleneck
+
+::: fragment
+<li>Static Word documents hosted and maintained by 1 PoC</li>
+:::
+
+::: fragment
+<li>Lots of redundant effort to present same information</li>
+:::
+
+## The proposal
+::: fragment
+<li>Deploy documents from github so author has control</li>
+:::
+::: fragment
+<li>Easy templating for simple assessment types</li>
+:::
+<ul>
+------------------------------------------------------------------------
+## Terms
+<font size = "5">
+<li>**RStudio** (soon to be **posit**) includes several ways to render documents into PDF/Office \[PowerPoint, Word\] and HTML files. You likely know this as `markdown` or `Rmarkdown`.</li>
+
+<ul>
+
+::: fragment
+<li>**Limited** by your familiarity with markdown syntax, $\LaTeX$, & patience for wrangling dev environment up-front</li>
+:::
+
+::: fragment
+<li>**Benefits** include quick updating of materials, high possibility for templates (especially for partials). No more `_final_finalFinal.docx`</li>
+:::
+
+</ul>
+::: fragment
+<li>**Exploring** submitting the initial document for Plan Team as an HTML</li>
+:::
+
+</ul>
+</font>
+
+## Quarto vs Rmarkdown
+
+::: fragment
+<li>**Rmarkdown** is a tool for generating dynamic, rich documents with code backup</li>
+:::
+
+</ul>
+
+::: fragment
+<li>[Quarto](https://quarto.org/) deployed this summer: multilingual, HTML/Word/PPT/PDF. !</li>
+:::
+
+::: fragment
+<li> Rmarkdown can be rendered with Quarto with no changes. RStudio now has a visual editor!</li>
+:::
+
+</ul>
+
+## A Motivating Example
+
+<ul>
+
+::: fragment
+<h6>I can specify MSY, the current year, and species name as variables once, and call them throughout document.</h6>
+:::
+
+</ul>
+
+<ul>
+
+::: fragment
+`The MSY for  r spp  in  r thisyr  is r prettyNum(MSY, big.mark = ",").`
+:::
+
+::: fragment
+The MSY for `r spp` in `r thisyr` is `r prettyNum(MSY, big.mark = ",")`.
+:::
+
+</ul>
+
+## BSAI Partial Example
+
+[live link](https://mkapur-noaa.github.io/bsai-fhs-2022/2022_BSAI_FHS_draft.html)
+
+## Add'l resources
+
+[Quarto](https://quarto.org/)
+
+[R-Ladies Freiburg (English) - Getting to know Quarto](https://www.youtube.com/watch?v=shVSmYna3GM)
+
+[Welcome to Quarto Workshop!](https://www.youtube.com/watch?v=yvi5uXQMvu4)
+
+## Sky is the limit
+
+::: panel-tabset
+## SAFE Table
+
+```{r echo = F}
+dt <- read.csv(here('tables','safe_table.csv')) 
+kbl(dt, booktabs = T, col.names = c("","2022",  "2023", "2023","2024")) %>%
+kable_styling(latex_options = "striped", font_size = 15)
+```
+
+## LenComps ❌
+
+::: columns
+::: {.column width="40%"}
+<font size = "5"> $\Sigma_{year,sex,length}Nhauls_{year,sex}\times p_{sex,length+\delta}log(\hat p_{sex, length})$
+
+Where $\delta$ is a small number less than 1 added to account for the possibility of zero observations in a length category. The weights ($Nhauls$) are shown in the table below.
+:::
+
+::: {.column width="60%"}
+| Year | Nhauls |
+|------|--------|
+| 2015 | 55     |
+| 2016 | 27     |
+| 2017 | 76     |
+| 2018 | 57     |
+| 2019 | 44     |
+:::
+:::
+
+## Summary Biomass
+
+::: columns
+::: {.column width="40%"}
+![](https://mkapur-noaa.github.io/bsai-fhs-2022/ts4_Summary_biomass_mt.png)
+
+
+:::
+
+::: {.column width="60%"}
+This figure is called directly from a `r4ss` plots/ directory. Since the file names are standardized, I'd only need to change the directory to update any/all figures.
+:::
+:::
+:::

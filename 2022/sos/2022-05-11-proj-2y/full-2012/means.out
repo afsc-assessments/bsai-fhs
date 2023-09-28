@@ -1,0 +1,420 @@
+Alternative 1 Catch
+     Model_Proj.dat 
+Equil_Fabc 33964 
+Year 
+2012 11367.5 
+2013 17354.8 
+2014 16512.3 
+
+Alternative 1 ABCs
+     Model_Proj.dat 
+
+Year 
+2012 63029.9 
+2013 62013.9 
+2014 59365.1 
+
+Alternative 1 TACs
+     Model_Proj.dat 
+
+Year 
+2012  NA 
+2013  NA 
+2014  NA 
+
+Alternative 1 Sp_Biomass
+     Model_Proj.dat 
+Equil_Fabc 76414.1 
+Year 
+2012 155439 
+2013 156095 
+2014 150252 
+
+Alternative 1 Fishing Mortality
+     Model_Proj.dat 
+Equil_Fabc 0.383378 
+Year 
+2012 0.063905 
+2013 0.0999289 
+2014 0.0991911 
+
+Alternative 1 Biomass
+     Model_Proj.dat 
+
+Year 
+2012 501407 
+2013 491058 
+2014 481480 
+
+Alternative 1 Implied SPR rate 
+     Model_Proj.dat 
+Equil_Fabc 0.4 
+Year 
+2012 0.797368 
+2013 0.716393 
+2014 0.717882 
+
+  Model_Proj.dat 
+EquilAvgAgeF0  5.39324 
+EquilAvgAgeFabc  4.09146 
+AvgAgeYr2014 4.83027 
+Alternative 2 Catch
+     Model_Proj.dat 
+Equil_Fabc 33964 
+Year 
+2012 11367.5 
+2013 17354.8 
+2014 16512.3 
+
+Alternative 2 ABCs
+     Model_Proj.dat 
+
+Year 
+2012 63029.9 
+2013 62013.9 
+2014 59365.1 
+
+Alternative 2 TACs
+     Model_Proj.dat 
+
+Year 
+2012  NA 
+2013  NA 
+2014  NA 
+
+Alternative 2 Sp_Biomass
+     Model_Proj.dat 
+Equil_Fabc 76414.1 
+Year 
+2012 155439 
+2013 156095 
+2014 150252 
+
+Alternative 2 Fishing Mortality
+     Model_Proj.dat 
+Equil_Fabc 0.383378 
+Year 
+2012 0.063905 
+2013 0.0999289 
+2014 0.0991911 
+
+Alternative 2 Biomass
+     Model_Proj.dat 
+
+Year 
+2012 501407 
+2013 491058 
+2014 481480 
+
+Alternative 2 Implied SPR rate 
+     Model_Proj.dat 
+Equil_Fabc 0.4 
+Year 
+2012 0.797368 
+2013 0.716393 
+2014 0.717882 
+
+  Model_Proj.dat 
+EquilAvgAgeF0  5.39324 
+EquilAvgAgeFabc  4.09146 
+AvgAgeYr2014 4.83027 
+Alternative 3 Catch
+     Model_Proj.dat 
+Equil_Fabc 33964 
+Year 
+2012 11367.5 
+2013 17354.8 
+2014 16512.3 
+
+Alternative 3 ABCs
+     Model_Proj.dat 
+
+Year 
+2012 17163.4 
+2013 16910 
+2014 16205.8 
+
+Alternative 3 TACs
+     Model_Proj.dat 
+
+Year 
+2012  NA 
+2013  NA 
+2014  NA 
+
+Alternative 3 Sp_Biomass
+     Model_Proj.dat 
+Equil_Fabc 76414.1 
+Year 
+2012 155439 
+2013 156095 
+2014 150252 
+
+Alternative 3 Fishing Mortality
+     Model_Proj.dat 
+Equil_Fabc 0.383378 
+Year 
+2012 0.063905 
+2013 0.0999289 
+2014 0.0991911 
+
+Alternative 3 Biomass
+     Model_Proj.dat 
+
+Year 
+2012 501407 
+2013 491058 
+2014 481480 
+
+Alternative 3 Implied SPR rate 
+     Model_Proj.dat 
+Equil_Fabc 0.4 
+Year 
+2012 0.797368 
+2013 0.716393 
+2014 0.717882 
+
+  Model_Proj.dat 
+EquilAvgAgeF0  5.39324 
+EquilAvgAgeFabc  4.09146 
+AvgAgeYr2014 4.83027 
+Alternative 4 Catch
+     Model_Proj.dat 
+Equil_Fabc 33964 
+Year 
+2012 11367.5 
+2013 17354.8 
+2014 16512.3 
+
+Alternative 4 ABCs
+     Model_Proj.dat 
+
+Year 
+2012 14867.8 
+2013 14649.2 
+2014 14040 
+
+Alternative 4 TACs
+     Model_Proj.dat 
+
+Year 
+2012  NA 
+2013  NA 
+2014  NA 
+
+Alternative 4 Sp_Biomass
+     Model_Proj.dat 
+Equil_Fabc 76414.1 
+Year 
+2012 155439 
+2013 156095 
+2014 150252 
+
+Alternative 4 Fishing Mortality
+     Model_Proj.dat 
+Equil_Fabc 0.383378 
+Year 
+2012 0.063905 
+2013 0.0999289 
+2014 0.0991911 
+
+Alternative 4 Biomass
+     Model_Proj.dat 
+
+Year 
+2012 501407 
+2013 491058 
+2014 481480 
+
+Alternative 4 Implied SPR rate 
+     Model_Proj.dat 
+Equil_Fabc 0.4 
+Year 
+2012 0.797368 
+2013 0.716393 
+2014 0.717882 
+
+  Model_Proj.dat 
+EquilAvgAgeF0  5.39324 
+EquilAvgAgeFabc  4.09146 
+AvgAgeYr2014 4.83027 
+Alternative 5 Catch
+     Model_Proj.dat 
+Equil_Fabc 33964 
+Year 
+2012 11367.5 
+2013 17354.8 
+2014 16512.3 
+
+Alternative 5 ABCs
+     Model_Proj.dat 
+
+Year 
+2012  NA 
+2013  NA 
+2014  NA 
+
+Alternative 5 TACs
+     Model_Proj.dat 
+
+Year 
+2012  NA 
+2013  NA 
+2014  NA 
+
+Alternative 5 Sp_Biomass
+     Model_Proj.dat 
+Equil_Fabc 76414.1 
+Year 
+2012 155439 
+2013 156095 
+2014 150252 
+
+Alternative 5 Fishing Mortality
+     Model_Proj.dat 
+Equil_Fabc 0.383378 
+Year 
+2012 0.063905 
+2013 0.0999289 
+2014 0.0991911 
+
+Alternative 5 Biomass
+     Model_Proj.dat 
+
+Year 
+2012 501407 
+2013 491058 
+2014 481480 
+
+Alternative 5 Implied SPR rate 
+     Model_Proj.dat 
+Equil_Fabc 0.4 
+Year 
+2012 0.797368 
+2013 0.716393 
+2014 0.717882 
+
+  Model_Proj.dat 
+EquilAvgAgeF0  5.39324 
+EquilAvgAgeFabc  4.09146 
+AvgAgeYr2014 4.83027 
+Alternative 6 Catch
+     Model_Proj.dat 
+Equil_Fabc 33964 
+Year 
+2012 11367.5 
+2013 75068.8 
+2014 60118.7 
+
+Alternative 6 ABCs
+     Model_Proj.dat 
+
+Year 
+2012 76331.9 
+2013 75068.8 
+2014 60118.8 
+
+Alternative 6 TACs
+     Model_Proj.dat 
+
+Year 
+2012  NA 
+2013 75068.8 
+2014 60118.8 
+
+Alternative 6 Sp_Biomass
+     Model_Proj.dat 
+Equil_Fabc 76414.1 
+Year 
+2012 155439 
+2013 156095 
+2014 123357 
+
+Alternative 6 Fishing Mortality
+     Model_Proj.dat 
+Equil_Fabc 0.383378 
+Year 
+2012 0.063905 
+2013 0.474532 
+2014 0.474532 
+
+Alternative 6 Biomass
+     Model_Proj.dat 
+
+Year 
+2012 501407 
+2013 491058 
+2014 430474 
+
+Alternative 6 Implied SPR rate 
+     Model_Proj.dat 
+Equil_Fabc 0.4 
+Year 
+2012 0.797368 
+2013 0.35 
+2014 0.35 
+
+  Model_Proj.dat 
+EquilAvgAgeF0  5.39324 
+EquilAvgAgeFabc  4.09146 
+AvgAgeYr2014 4.28719 
+Alternative 7 Catch
+     Model_Proj.dat 
+Equil_Fabc 33964 
+Year 
+2012 11367.5 
+2013 62013.9 
+2014 51823.7 
+
+Alternative 7 ABCs
+     Model_Proj.dat 
+
+Year 
+2012 76331.9 
+2013 75068.8 
+2014 62742.7 
+
+Alternative 7 TACs
+     Model_Proj.dat 
+
+Year 
+2012  NA 
+2013 75068.8 
+2014 62742.7 
+
+Alternative 7 Sp_Biomass
+     Model_Proj.dat 
+Equil_Fabc 76414.1 
+Year 
+2012 155439 
+2013 156095 
+2014 129346 
+
+Alternative 7 Fishing Mortality
+     Model_Proj.dat 
+Equil_Fabc 0.383378 
+Year 
+2012 0.063905 
+2013 0.383378 
+2014 0.383378 
+
+Alternative 7 Biomass
+     Model_Proj.dat 
+
+Year 
+2012 501407 
+2013 491058 
+2014 441986 
+
+Alternative 7 Implied SPR rate 
+     Model_Proj.dat 
+Equil_Fabc 0.4 
+Year 
+2012 0.797368 
+2013 0.4 
+2014 0.4 
+
+  Model_Proj.dat 
+EquilAvgAgeF0  5.39324 
+EquilAvgAgeFabc  4.09146 
+AvgAgeYr2014 4.40417 
