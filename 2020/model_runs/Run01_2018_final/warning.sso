@@ -1,0 +1,12 @@
+#V3.30.12.00-safe;_2018_09_13;_Stock_Synthesis_by_Richard_Methot_(NOAA)_using_ADMB_11.6
+#Stock Synthesis (SS) is a work of the U.S. Government and is not subject to copyright protection in the United States.
+#Foreign copyrights may apply. See copyright.txt for more information.
+Wed Oct 17 13:02:32 2018
+
+You have just one settlement event; recommend changing to recr_dist_method 4 which takes no parameters
+Recommend changing to recr_dist_method 3 which takes 1 parm for each settlement
+ warning: poor convergence in Fmsy, final dy/dy2= -0.249759
+ Fmsy is close to max allowed; check for convergence 
+Final gradient: 0.000245832 is larger than final_conv: 0.0001
+ N warnings: 5
+Number_of_active_parameters_on_or_near_bounds: 0
