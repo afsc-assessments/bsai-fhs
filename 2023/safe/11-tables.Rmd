@@ -1,10 +1,10 @@
 # Tables
 
 ```{r tab1}
-catches <- read.csv(here::here('tables','2023-09-27-catch_proportions.csv'))
+catches <- read.csv(here::here(this_year,'tables','2023-09-27-catch_proportions.csv'))
 catches$year<-as.character(catches$year)
 flextable::flextable(catches) %>%
-  flextable::set_caption("Catch (in tons) of Flathead sole and Bering flounder combined (Hippoglossoides elassodon) and Flathead sole only, and Bering flounder only. Observer data of species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was Flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (Flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of Flathead sole separately from that of Bering flounder. The 2023 catches are current as of Oct 19, 2023 and the value shown below does not include projections through the end of the year.") %>%
+  flextable::set_caption("Catch (in tons) of Flathead sole and Bering flounder combined (Hippoglossoides elassodon) and Flathead sole only, and Bering flounder only. Observer data of species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was Flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (Flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of Flathead sole separately from that of Bering flounder. The ",this_year," catches are current as of", pull_date," and the value shown below does not include projections through the end of the year.") %>%
   flextable::set_header_labels(., values = c('Year','Total Hippoglossoides spp.','Flathead Sole','Bering Flounder')) 
            
 ```
@@ -12,7 +12,7 @@ flextable::flextable(catches) %>%
 \pagebreak
 
 ```{r tab2}
-survspp <- read.csv(here::here('tables','2023-09-27-survey_by_spp.csv'))
+survspp <- read.csv(here::here(this_year,'tables','2023-09-27-survey_by_spp.csv')) %>% filter(year< 2023)
 survspp$year<-as.character(survspp$year)
 
 flextable::regulartable(survspp) %>%  
