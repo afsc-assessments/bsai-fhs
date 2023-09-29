@@ -25,7 +25,7 @@ flextable::regulartable(survspp) %>%
 \pagebreak
 
 ```{r tab3}
-nbssurvspp <- read.csv(here::here('tables','2023-09-27-NBS_survey_by_spp.csv'))
+nbssurvspp <- read.csv(here::here(this_year, 'tables','2023-09-27-NBS_survey_by_spp.csv'))
 nbssurvspp$year<-as.character(nbssurvspp$year)
 
 flextable::regulartable(nbssurvspp) %>%  
