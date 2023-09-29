@@ -1,11 +1,11 @@
 # Figures
 
-```{r fig1, fig.cap = "Catch to total biomass ratio using total biomass for age 3+ individuals for Flathead sole in the Bering Sea and Aleutian Islands. Points include observed (closed points) or estimated (open points) catches for years 2020-2024."}
-knitr::include_graphics(here::here('figs','2023-09-27-fig1_catchvsbio.png'))
+```{r fig1, fig.cap = "Catch to total biomass ratio using total biomass for age 3+ individuals for Flathead sole in the Bering Sea and Aleutian Islands. Blue points are catches included in the projection model; open points are estimated or projected, whereas solid points are complete observed years."}
+knitr::include_graphics(here::here(this_year,'figs','2023-09-27-fig1_catchvsbio.png'))
 ```
 
-```{r fig2, fig.cap = "Survey biomass from the EBS shelf and Aleutian Islands surveys for station depths less than or equal to 200 meters. Grey and blue points include true observations. A linear regression was used to estimate a relationship between EBS shelf Hippoglossoides spp. survey biomass estimates and AI survey biomass estimates in years when no AI survey occurred (‘x’ marks). Grey shading indicates ± 1 standard error. Blue points and ‘x’ marks indicate the survey biomass in 2021 and 2022."}
-knitr::include_graphics(here::here('figs','2023-09-27-index_wCVs.png'))
+```{r fig2, fig.cap = "Survey biomass from the EBS shelf and Aleutian Islands surveys for station depths less than or equal to 200 meters. Grey and blue points include true observations. A linear regression was used to estimate a relationship between EBS shelf Hippoglossoides spp. survey biomass estimates and AI survey biomass estimates in years when no AI survey occurred (‘x’ marks). Grey shading indicates ± 1 standard error.  None of the interpolated or observed values from 2020 onwards (blue points/'x' marks) are included in the base assessment model, nor the projection; they are provided here for reference only."}
+knitr::include_graphics(here::here(this_year,'figs','2023-09-27-index_wCVs.png'))
 ```
 
 Author’s note: Changes have been made to the survey data in the stratum-area files, which affects biomass and abundance estimates for EBS data (all years and species, Duane Stevenson, AFSC). A visual comparison of EBS Flathead survey values from a 2021 data pull vs. the values shown above indicated that the effect of the strata update was negligible. Future benchmark assessments for this species should update the entire survey time series, for consistency.
