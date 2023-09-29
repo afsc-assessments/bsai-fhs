@@ -68,7 +68,6 @@ load(here::here('data', paste0("2023-09-27-catches_for_proj.rdata")))
 c1 = as.numeric(catchvec[4,2]) # estimated catch in current year
 c2 = as.numeric(catchvec[5,2]) # proj catch year + 1
 c3 = as.numeric(catchvec[6,2]) # proj catch year + 2
-# todo: build a function/switch to auto run the tier(a/b) - also for overfishing/overfished
 ```
 
 ```{r, child="01-summary.Rmd", eval = T}
