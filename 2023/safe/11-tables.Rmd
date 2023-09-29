@@ -23,8 +23,7 @@ flextable::regulartable(survspp) %>%
   flextable::colformat_double(j = seq(3,11,2), digits = 2) %>%
   flextable::set_header_labels(., values = c('Year',	'Biomass (Total)','CV (Total)',	'Biomass (AI)',	'CV (AI)',	'Biomass (EBS, all)',	'CV (EBS, all)',	'Biomass (EBS, flathead)',	'CV (EBS, flathead)',	'Biomass (EBS, Bering Flounder)',	'CV (EBS, Bering Flounder)'))  %>%
   flextable::font(fontname = "Times New Roman", part = "all") %>% 
-  flextable::fontsize(size = 11, part = "all") %>%
-  flextable::autofit()
+  flextable::fontsize(size = 11, part = "all") 
 ```
 
 \pagebreak
@@ -39,8 +38,7 @@ flextable::regulartable(nbssurvspp) %>%
   flextable::colformat_double(j = seq(3,7,2), digits = 2) %>%
   flextable::set_header_labels(., values = c('Year',	'Biomass (Total)',	'CV (Total)',	'Biomass (NBS, flathead)',	'CV (NBS, flathead)',	'Biomass (NBS, Bering Flounder)',	'CV (NBS, Bering Flounder)'))  %>%
   flextable::font(fontname = "Times New Roman", part = "all") %>% 
-  flextable::fontsize(size = 11, part = "all") %>%
-  flextable::autofit()
+  flextable::fontsize(size = 11, part = "all") 
 ```
 
 \pagebreak
