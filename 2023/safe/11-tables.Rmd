@@ -4,8 +4,10 @@
 catches <- read.csv(here::here(this_year,'tables','2023-09-27-catch_proportions.csv'))
 catches$year<-as.character(catches$year)
 flextable::flextable(catches) %>%
-  flextable::set_caption(paste0("Catch (in tons) of Flathead sole and Bering flounder combined (Hippoglossoides elassodon) and Flathead sole only, and Bering flounder only. Observer data of species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was Flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (Flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of Flathead sole separately from that of Bering flounder. Note that the value for ",this_year," is the observed catch, current through ", pull_date," and the extrapolated catches used for this year in the projection model are higher.")) %>%
-  flextable::set_header_labels(., values = c('Year','Total Hippoglossoides spp.','Flathead Sole','Bering Flounder')) 
+  flextable::set_caption(paste0("Catch (in tons) of Flathead sole and Bering flounder combined (Hippoglossoides elassodon) and Flathead sole only, and Bering flounder only. Observer data of species-specific extrapolated weight in each haul was summed over hauls within each year and used to calculate the proportion of the total Hippoglossoides spp. catch that was Flathead sole or Bering flounder. Proportions were multiplied by the total Hippoglossoides spp. (Flathead sole and Bering flounder combined) catches reported by AKFIN to obtain total catch of Flathead sole separately from that of Bering flounder. Note that the value for ",this_year," is the observed catch, current through ", pull_date,"; the extrapolated catches used for this year in the projection model are higher.")) %>%
+  flextable::set_header_labels(., values = c('Year','Total Hippoglossoides spp.','Flathead Sole','Bering Flounder'))  %>%
+  flextable::font(fontname = "Times New Roman", part = "all") %>% 
+  flextable::fontsize(size = 11, part = "all")
            
 ```
 
@@ -19,7 +21,10 @@ flextable::regulartable(survspp) %>%
   flextable::set_caption("Survey biomass in tons and coefficient of variation (CV) of Hippoglossoides spp. (combined Flathead sole and Bering flounder) across the entire BSAI; Flathead sole only in the Aleutian Islands, Hippoglossoides spp. combined in the Eastern Bering Sea (EBS) shelf survey, Flathead sole only in EBS shelf survey, and Bering flounder only in the EBS shelf survey. Slight discrepancies in totals may occur due to rounding.") %>%
   flextable::colformat_double(j = seq(2,10,2), big.mark = ',', digits = 0) %>%
   flextable::colformat_double(j = seq(3,11,2), digits = 2) %>%
-  flextable::set_header_labels(., values = c('Year',	'Biomass (Total)','CV (Total)',	'Biomass (AI)',	'CV (AI)',	'Biomass (EBS, all)',	'CV (EBS, all)',	'Biomass (EBS, flathead)',	'CV (EBS, flathead)',	'Biomass (EBS, Bering Flounder)',	'CV (EBS, Bering Flounder)')) 
+  flextable::set_header_labels(., values = c('Year',	'Biomass (Total)','CV (Total)',	'Biomass (AI)',	'CV (AI)',	'Biomass (EBS, all)',	'CV (EBS, all)',	'Biomass (EBS, flathead)',	'CV (EBS, flathead)',	'Biomass (EBS, Bering Flounder)',	'CV (EBS, Bering Flounder)'))  %>%
+  flextable::font(fontname = "Times New Roman", part = "all") %>% 
+  flextable::fontsize(size = 11, part = "all") %>%
+  flextable::autofit()
 ```
 
 \pagebreak
@@ -32,7 +37,10 @@ flextable::regulartable(nbssurvspp) %>%
       flextable::set_caption("Northern Bering Sea survey biomass (t) and coefficient of variation (CV) for Flathead sole, Bering flounder, and the two combined (Hippoglossoides spp.). These data are presented here for reference only and are not used in any assessments.") %>%
     flextable::colformat_double(j = seq(2,6,2), big.mark = ',', digits = 0) %>%
   flextable::colformat_double(j = seq(3,7,2), digits = 2) %>%
-  flextable::set_header_labels(., values = c('Year',	'Biomass (Total)',	'CV (Total)',	'Biomass (NBS, flathead)',	'CV (NBS, flathead)',	'Biomass (NBS, Bering Flounder)',	'CV (NBS, Bering Flounder)')) 
+  flextable::set_header_labels(., values = c('Year',	'Biomass (Total)',	'CV (Total)',	'Biomass (NBS, flathead)',	'CV (NBS, flathead)',	'Biomass (NBS, Bering Flounder)',	'CV (NBS, Bering Flounder)'))  %>%
+  flextable::font(fontname = "Times New Roman", part = "all") %>% 
+  flextable::fontsize(size = 11, part = "all") %>%
+  flextable::autofit()
 ```
 
 \pagebreak
