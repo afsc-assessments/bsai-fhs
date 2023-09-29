@@ -12,3 +12,8 @@ To run the projection model to predict ABCs for `r this_year+1` and `r this_year
 
 To ensure consistency with the most recent full assessment (Monnohan and Haehn, 2020), the projection model was parameterized using mean recruitment and stock spawning biomass for all years included in the assessment model (1964 onwards). Future full assessments for BSAI Flathead sole can consider updating these inputs in light of the determination of a regime shift in 1977, and subsequent recommendation that projections of future stock states should be based on year classes 1977 and forward.
 
+
+```{r, child="01a-main_table.Rmd", eval = T}
+```
+
+
