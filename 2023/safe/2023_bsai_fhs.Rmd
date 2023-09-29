@@ -1,12 +1,12 @@
 ---
 params: 
   chapter: 10
-  species: "Assessment of the Flathead sole-Bering flounder Stock in the Bering Sea and Aleutian Islands"
+  species: "Flathead sole-Bering flounder"
   species_complex: "no"
-  area: "Gulf of Alaska"
+  area: "Bering Sea and Aleutian Islands"
   tier: 3
 
-author: "Kapur, Maia S."
+author: "Maia S. Kapur"
 date: "November 2023"
 
 # don't do anything below this line unless you are cool with the consequences
@@ -55,14 +55,23 @@ title: `r title`
 ```{r load, warning=F, message=F}
 # load
 library(safe)
+library(dplyr)
 # globals
 species = params$species
 this_year = 2023
 date = 'October 22, 2023'
+pull_date = "2023-09-27"
 model = "base"
-end_proj = year + 15
+end_proj = this_year + 15
 best_f = 0.0641 # from the best_f function in groundfishr package
-ofl = 8000 # placeholder while i figure things out
+
+ofl_24<-81605
+ofl_25<-82699
+abc_24<-67289
+abc_25<-67203
+
+ofl_24_22 <-81167
+abc_24_22 <-66927
 
 load(here::here(this_year,'data', paste0("2023-09-27-catches_for_proj.rdata")))
 c1 = as.numeric(catchvec[4,2]) # estimated catch in current year
