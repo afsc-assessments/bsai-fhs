@@ -1,6 +1,6 @@
 ---
 params: 
-  chapter: 10
+  chapter:  
   species: "Flathead sole-Bering flounder"
   species_complex: "no"
   area: "Bering Sea and Aleutian Islands"
@@ -32,6 +32,10 @@ bibliography: "safe_bibby.bib"
 csl: "fishfish.csl"
 
 ---
+
+This report may be cited as:
+Kapur, M.S., Hulson, P-J., Williams, B.C., 2023. Assessment of the Pacific Ocean Perch Stock in the Gulf of Alaska. North Pacific Fishery Management Council, Anchorage, AK. Available from https://www.npfmc.org/library/safe-reports/
+  
 
 ```{r setup, include=FALSE, echo = FALSE}
 # remotes::install_github("crsh/rmdfiltr")
