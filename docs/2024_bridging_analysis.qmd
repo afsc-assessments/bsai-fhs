@@ -5,34 +5,70 @@ format: html
 editor: source
 ---
 
-```{r echo = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
 library(r4ss)
 library(here)
 library(dplyr)
+colvec <- c("dodgerblue4", "#ffb703","#219ebc", "#023047",  "#fb8500")
+
 year <- 2024
 old_mdl_fldr <- here::here(year,'mgmt','18.2c_2020')
-
-mod18.2c_2020 <- SS_output(old_mdl_fldr)
-mod18.2c_2020_v33022 <- SS_output(here::here(year,'mgmt','18.2c_2020_ss3v33022'))
-
+mod18.2c_2020 <- SS_output(old_mdl_fldr, verbose = FALSE)
 ```
 
-
 # Overview
+
 This electronic document describes the analyses undertaken to bridge the last "full" assessment of BSAI Flathead Sole (Monnahan, 2020) into the latest Stock Synthesis (SS3) software version, as well as explorations of sequential inclusion of recent data.
 
-The general workflow was as follows:
-1) The 2020 model, referred to as Model 18.2c (2020), was moved from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods are provided in this document. The version with the updated software is labeled as 18.2c (2024).
+The general workflow was as follows: 1) The 2020 model, referred to as Model 18.2c (2020), was moved from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods are provided in this document. The version with the updated software is labeled as 18.2c (2024).
 
-2) Data bridging proceeded
+2)  Data bridging proceeded
 
 # Bridging to SS3 v 3.30.22
 
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+mod18.2c_2020_v33022 <- SS_output(here::here(year,'model_runs','18.2c_2020_ss3v33022'), verbose = FALSE)
+ss_compare <- SSsummarize(list(mod18.2c_2020,mod18.2c_2020_v33022))
+```
+
 ## Warnings
-M18.2c (2020) had generic warnings about the recr_dist method; poor FMSY convergence, and an issue with the final gradient. Only the latter is of concern. 
-M18.2c (2023) threw the same warnings as well as an indication that the initial value for parm 11 was greater than the max (999>5); this is the end logit for the survey selex (forcing it to be asymptotic). I am comfortable with the consistency of these warnings; the gradient is identical between models (`r  mod18.2c_2020$maximum_gradient_component`).
+
+M18.2c (2020) had generic warnings about the recr_dist method; poor FMSY convergence, and an issue with the final gradient. Only the latter is of concern. M18.2c (2024) threw the same warnings as well as an indication that the initial value for parm 11 was greater than the max (999\>5); this is the end logit for the survey selex (forcing it to be asymptotic). I am comfortable with the consistency of these warnings; the gradient is identical between models (`r  mod18.2c_2020$maximum_gradient_component`).
+
+## Likelihood Components
+
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+names(ss_compare$likelihoods)[c(1,2)] <- c('Model 18.2c (2020)', 'M18.2c (2024)')
+ss_compare$likelihoods[c(1:7,11),]
+SSplotComparisons(ss_compare, print = T, plotdir = here(year,'figs'), legendlabels = names(ss_compare$likelihoods)[c(1,2)], col = colvec)
+```
 
 
+::: panel-tabset
+## Spawning Biomass
 
+```{r, echo=FALSE, fig.cap="The spawning biomass trajectory and associated uncertainty are identical between models"}
+knitr::include_graphics(here(year,'figs','ss_version_bridge','compare2_spawnbio_uncertainty.png'))
+```
+## Survey Fits
+
+```{r, echo=FALSE, fig.cap="Survey fits are identical between models"}
+knitr::include_graphics(here(year,'figs','ss_version_bridge','compare13_indices.png'))
+```
+
+## Recruitment Time Series
+
+```{r, echo=FALSE, fig.cap="The recruitment time series and associated uncertainty are identical between models"}
+knitr::include_graphics(here(year,'figs','ss_version_bridge','compare10_recruits_uncertainty.png'))
+```
+
+## Unfished Recruitment
+
+```{r, echo=FALSE, fig.cap="The R0 posteriors are identical between models"}
+knitr::include_graphics(here(year,'figs','ss_version_bridge','compare16_densities_SR_LN(R0).png'))
+```
+:::
+
+Based on the above explorations, I am comfortable that moving to the latest SS3 version is not impacting model behavior.
 
 # Data Bridging
