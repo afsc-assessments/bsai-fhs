@@ -3,9 +3,10 @@ title: "2024 BSAI FHS Bridging Analyses"
 author: "Maia Kapur maia.kapur@noaa.gov"
 format: html
 editor: source
+toc: true
 ---
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE}
+```{r, include = FALSE, warning = FALSE, message = FALSE}
 library(r4ss)
 library(here)
 library(dplyr)
@@ -20,13 +21,20 @@ mod18.2c_2020 <- SS_output(old_mdl_fldr, verbose = FALSE)
 
 This electronic document describes the analyses undertaken to bridge the last "full" assessment of BSAI Flathead Sole (Monnahan, 2020) into the latest Stock Synthesis (SS3) software version, as well as explorations of sequential inclusion of recent data.
 
-The general workflow was as follows: 1) The 2020 model, referred to as Model 18.2c (2020), was moved from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods are provided in this document. The version with the updated software is labeled as 18.2c (2024).
+The general workflow was as follows: 
 
-2)  Data bridging proceeded
+1) The 2020 model, referred to as Model 18.2c (2020), was moved from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods are provided in this document. The version with the updated software is labeled as 18.2c (2024).
 
-# Bridging to SS3 v 3.30.22
+2)  Bridge the data systematically. The previous model has catches and fishery length comps thru 2020, and everything else thru 2019. There is also mean size-at-age data thru 2016 in this model. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey CAALs (marginal survey lengths & ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below.
 
-```{r echo = FALSE, warning = FALSE, message = FALSE}
+```{r include = FALSE, warning = FALSE, message = FALSE}
+SSplotData(mod18.2c_2020, subplots = 2)
+```
+
+
+# Stock Synthesis Software Update 3.30.22
+
+```{r include = FALSE, warning = FALSE, message = FALSE}
 mod18.2c_2020_v33022 <- SS_output(here::here(year,'model_runs','18.2c_2020_ss3v33022'), verbose = FALSE)
 ss_compare <- SSsummarize(list(mod18.2c_2020,mod18.2c_2020_v33022))
 ```
@@ -37,7 +45,7 @@ M18.2c (2020) had generic warnings about the recr_dist method; poor FMSY converg
 
 ## Likelihood Components
 
-```{r echo = FALSE, warning = FALSE, message = FALSE}
+```{r include = FALSE, warning = FALSE, message = FALSE}
 names(ss_compare$likelihoods)[c(1,2)] <- c('Model 18.2c (2020)', 'M18.2c (2024)')
 ss_compare$likelihoods[c(1:7,11),]
 SSplotComparisons(ss_compare, print = T, plotdir = here(year,'figs'), legendlabels = names(ss_compare$likelihoods)[c(1,2)], col = colvec)
@@ -47,28 +55,50 @@ SSplotComparisons(ss_compare, print = T, plotdir = here(year,'figs'), legendlabe
 ::: panel-tabset
 ## Spawning Biomass
 
-```{r, echo=FALSE, fig.cap="The spawning biomass trajectory and associated uncertainty are identical between models"}
-knitr::include_graphics(here(year,'figs','ss_version_bridge','compare2_spawnbio_uncertainty.png'))
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The spawning biomass trajectory and associated uncertainty are identical between models"}
+knitr::include_graphics(here::here(year,'figs','ss_version_bridge','compare2_spawnbio_uncertainty.png'))
 ```
 ## Survey Fits
 
-```{r, echo=FALSE, fig.cap="Survey fits are identical between models"}
-knitr::include_graphics(here(year,'figs','ss_version_bridge','compare13_indices.png'))
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="Survey fits are identical between models"}
+knitr::include_graphics(here::here(year,'figs','ss_version_bridge','compare13_indices.png'))
 ```
 
 ## Recruitment Time Series
 
-```{r, echo=FALSE, fig.cap="The recruitment time series and associated uncertainty are identical between models"}
-knitr::include_graphics(here(year,'figs','ss_version_bridge','compare10_recruits_uncertainty.png'))
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The recruitment time series and associated uncertainty are identical between models"}
+knitr::include_graphics(here::here(year,'figs','ss_version_bridge','compare10_recruits_uncertainty.png'))
 ```
 
 ## Unfished Recruitment
 
-```{r, echo=FALSE, fig.cap="The R0 posteriors are identical between models"}
-knitr::include_graphics(here(year,'figs','ss_version_bridge','compare16_densities_SR_LN(R0).png'))
+```{r, include=T, echo = FALSE, warning = FALSE,fig.cap="The R0 posteriors are identical between models"}
+knitr::include_graphics(here::here(year,'figs','ss_version_bridge','compare16_densities_SR_LN(R0).png'))
 ```
 :::
 
-Based on the above explorations, I am comfortable that moving to the latest SS3 version is not impacting model behavior.
+## SS3 Bridging Conclusion
+
+Based on the above explorations, I am comfortable that moving to the latest SS3 version is not impacting model behavior. After completing this exercise, I addressed the `warnings` in the latest model via the following. The warning-free model is in `model_runs/18.2c_2020_ss3v33022w`.
+  + Change `recr_dist_method` to 4 (line 17) and removing associated stuff lines 99-101
+  + Change the `INIT` for Age_DblN_end_logit_Survey to 20 and the MAX to 25 to get rid of the bound error. The selectivity is the same.
+```{r include = FALSE, message = FALSE, warning = FALSE}
+m18.2cv33022w <- SS_output(here::here(year,'model_runs','18.2c_2020_ss3v33022w'), verbose = FALSE)
+SSplotSelex(m18.2cv33022w, fleets = 2, sexes = 1)
+```
+
 
 # Data Bridging
+This section of the script assumes that one has already downloaded the data; to avoid separate scripts doing the same thing, I'm completing that step in `R/2024_analysis.R`. Importantly, the data updates conducted here are holistic, meaning that the entire time series of data for each component (where available) is replaced with what is currently available in the AKFIN database. A comparison of each data source is provided below. The model that includes each change is named in the relevant header; these are hosted under `model_runs/`.
+
+## Adding Catches
+## Adding Survey Biomass
+## Adding Survey CAALs
+## Adding Fishery Lengths
+## Adding Fishery Ages
+
+## Marginal Survey Ages & Lengths (ghosted)
+
+
+# Bridged "Update" Model, 18.2c (2024)
+This is model 18.2c (2024) and represents an "operational update"; the model structure has not been modified, and only the input data have been revised to reflect the current database. Additional explorations with this model including changes to the
