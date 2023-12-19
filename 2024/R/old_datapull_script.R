@@ -22,7 +22,7 @@ password_AKFIN <- askForPassword(prompt="Enter your AKFIN password:")
 AKFIN <- odbcConnect("AKFIN",username_AKFIN,password_AKFIN,  believeNRows = FALSE)
 
 #* Query spex ----
-final_year <- 2023
+final_year <- 2024
 fsh_sp_area <- "'BS','AI'"              # FMP
 fsh_sp_label <- "'FSOL'"                # AKFIN group species label
 fsh_sp_str <- "103"                     # AKFIN species code
@@ -33,13 +33,13 @@ max_size <- max(mod_2020$lbins) ##65 = rex ##70 = Dover and Flathead
 min_size <- min(mod_2020$lbins)
 bin_width <- 2
 len_bins <- mod_2020$lbins#c(seq(min_size,max_size,bin_width),43,46,49,52,55,58)
-lapply(list.files(here('sql'), full.names = T), source) ## load all sql queries
+lapply(list.files(here('2023','sql'), full.names = T), source) ## load all sql queries
 
 # DATA DOWNLOAD ---- 
 #* AKFIN Catches ---- 
 message("Querying AKFIN to get catch...")
 catch <- sqlQuery(AKFIN,qcatch) %>% arrange(YEAR, ZONE, GEAR)
-write.csv(catch, file=here('data',paste0(Sys.Date(),'-catch.csv') ), row.names=FALSE)
+write.csv(catch, file=here(year,'data','raw',paste0(Sys.Date(),'-catch.csv') ), row.names=FALSE)
 
 #* AFSC observer catches ---- 
 message("Querying haul-level catch from observer DB...")
@@ -49,8 +49,8 @@ catches_observer$SPECIES <- ifelse(catches_observer$SPECIES==103, 'flathead_sole
 catches_observer <- select(catches_observer, -CRUISE, -PERMIT, -HAUL) %>%
   rename(species=SPECIES, year=YEAR, weight=EXTRAPOLATED_WEIGHT,
          gear=GEAR_TYPE, area=NMFS_AREA, pct.retained=PERCENT_RETAINED)
-saveRDS(catches_observer, file = here('data',paste0(Sys.Date(),'-catches_observer.RDS') ))
-write.csv(catches_observer, file=here('data',paste0(Sys.Date(),'-catches_observer.csv') ), row.names=FALSE)
+saveRDS(catches_observer, file = here(year,'data','raw',paste0(Sys.Date(),'-catches_observer.RDS') ))
+write.csv(catches_observer, file=here(year,'data','raw',paste0(Sys.Date(),'-catches_observer.csv') ), row.names=FALSE)
 
 #* Weekly catches ---
 message("Make sure to manually copy the weekly catch data")
@@ -64,11 +64,11 @@ message("Make sure to manually copy the weekly catch data")
 message("Querying EBS survey biomass data...")
 test <- sqlQuery(AFSC, qsurv)
 if(!is.data.frame(test)) stop("Failed to query EBS survey data")
-write.csv(test, file=here('data',paste0(Sys.Date(),'-biomass_survey_ebs.csv') ), row.names=FALSE)
+write.csv(test, file=here(year,'data','raw',paste0(Sys.Date(),'-biomass_survey_ebs.csv') ), row.names=FALSE)
 
 test <- sqlQuery(AFSC, qsurvspp)
 if(!is.data.frame(test)) stop("Failed to query EBS survey data")
-write.csv(test, here('data',paste0(Sys.Date(),'-biomass_survey_ebs_by_species.csv')), row.names=FALSE)
+write.csv(test, here(year,'data','raw',paste0(Sys.Date(),'-biomass_survey_ebs_by_species.csv')), row.names=FALSE)
 
 
 #* Survey biomass (AI) ----
@@ -76,22 +76,22 @@ write.csv(test, here('data',paste0(Sys.Date(),'-biomass_survey_ebs_by_species.cs
 message("Querying AI survey biomass data...")
 ai <- sqlQuery(AFSC, qsurvAI)
 if(!is.data.frame(ai)) stop("Failed to query AI survey data")
-write.csv(ai, file=here('data',paste0(Sys.Date(),'-biomass_survey_ai.csv') ), row.names=FALSE)
+write.csv(ai, file=here(year,'data','raw',paste0(Sys.Date(),'-biomass_survey_ai.csv') ), row.names=FALSE)
 
 #* Survey biomass (NBS, for illustration only)  ----
 test <- sqlQuery(AFSC, qnbs)
 if(!is.data.frame(test)) stop("Failed to query NBS survey data")
-write.csv(test, here('data',paste0(Sys.Date(),'-biomass_survey_nbs_by_species.csv')), row.names=FALSE)
+write.csv(test, here(year,'data','raw',paste0(Sys.Date(),'-biomass_survey_nbs_by_species.csv')), row.names=FALSE)
 
 
 #** reformat surveys ----
-date_use <-  "2023-09-27" #Sys.Date() ### dwnld date
-data_folder = here('data','/')
 
-index_ebs <-  read.csv(paste0(data_folder,date_use,"-biomass_survey_ebs.csv")) %>%
+data_folder = 
+
+index_ebs <-  read.csv(here(year,'data','raw',"2023-12-19-biomass_survey_ebs.csv")) %>%
   select(year=YEAR, biomass=BIOMASS,
          variance=VARBIO) %>% cbind(survey='ebs')
-index_ai <- read.csv(paste0(data_folder,date_use,'-biomass_survey_ai.csv')) %>%
+index_ai <- read.csv(here(year, 'data','raw','2023-12-19-biomass_survey_ai.csv')) %>%
   mutate(species=gsub(" ", "_",COMMON_NAME)) %>%
   select(year=YEAR, biomass=TOTAL_BIOMASS,
          variance=BIOMASS_VAR) %>% cbind(survey='AI')
@@ -111,14 +111,15 @@ z2$sd_AI <- as.numeric(predict(lmvar, newdata=z2))
 ## Recombine and add together biomass and variances
 index <- rbind(z1,z2) %>% group_by(year) %>%
   summarize(biomass=round(biomass_AI+biomass_ebs,5),
-            variance=sd_AI^2+sd_ebs^2,
+            variance=sum(sd_AI^2,sd_ebs^2,na.rm = TRUE),
             .groups='drop') %>%
   ## SE on log scale, which SS requires, is sqrt(log(1+CV^2))
   mutate(se_log=round(sqrt(log(1+variance/biomass^2)),5)) %>%
   select(-variance)
 
-SS_index <- data.frame(year=index$year, seas=7, index=2, obs=index$biomass, se_log=index$se_log)
-write.csv(x=SS_index, file= here('data',paste0(Sys.Date(),'-SS_survey_index.csv')) , row.names=FALSE)
+SS_index <- data.frame(year=index$year, seas=7, index=2, 
+                       obs=index$biomass, se_log=index$se_log)
+write.csv(x=SS_index, file= here(year,'data','output',paste0(Sys.Date(),'-SS_survey_index.csv')) , row.names=FALSE)
 
 # UNUSED ----
 ## Code below this line was not revisited for the update assessment.
