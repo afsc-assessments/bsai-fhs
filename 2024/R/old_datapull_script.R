@@ -111,7 +111,7 @@ z2$sd_AI <- as.numeric(predict(lmvar, newdata=z2))
 ## Recombine and add together biomass and variances
 index <- rbind(z1,z2) %>% group_by(year) %>%
   summarize(biomass=round(biomass_AI+biomass_ebs,5),
-            variance=sum(sd_AI^2,sd_ebs^2,
+            variance=sum(sd_AI^2,sd_ebs^2,na.rm = TRUE),
             .groups='drop') %>%
   ## SE on log scale, which SS requires, is sqrt(log(1+CV^2))
   mutate(se_log=round(sqrt(log(1+variance/biomass^2)),5)) %>%
