@@ -144,9 +144,9 @@ write.csv(x=SS_index, file= here(year,'data','output',paste0(Sys.Date(),'-SS_sur
 #     species_code in (10130, 10140) and
 #     b.abundance_haul = 'Y';
 # "
-# test <- sqlQuery(AFSC, query)
-# if(!is.data.frame(test)) stop("Failed to query age-length survey data")
-# write.csv(test,file= here('data',paste0(Sys.Date(),'-ages_survey_ebs.csv')), test, row.names=FALSE)
+test <- sqlQuery(AFSC, query)
+if(!is.data.frame(test)) stop("Failed to query age-length survey data")
+write.csv(test,file= here(year,'data','raw', paste0(Sys.Date(),'-ages_survey_ebs.csv')), test, row.names=FALSE)
 
 #* survey size composition data -----
 # message("Querying sizecomp EBS survey hauls...")
