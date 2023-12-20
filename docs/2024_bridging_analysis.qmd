@@ -14,7 +14,7 @@ colvec <- c("dodgerblue4", "#ffb703","#219ebc", "#023047",  "#fb8500")
 
 year <- 2024
 old_mdl_fldr <- here::here(year,'mgmt','18.2c_2020')
-mod18.2c_2020 <- SS_output(old_mdl_fldr, verbose = FALSE)
+mod18.2c_2020 <- mod_2020 <- SS_output(old_mdl_fldr, verbose = FALSE)
 ```
 
 # Overview
