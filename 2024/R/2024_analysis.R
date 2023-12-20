@@ -2,9 +2,10 @@
 # maia.kapur@noaa.gov
 
 # load ----
-devtools::install_github("afsc-assessments/afscdata", force = TRUE)
-devtools::install_github("BenWilliams-NOAA/afscassess", force = TRUE)
-devtools::install_github('r4ss/r4ss', force = TRUE)
+## do NOT update odbc or connect() won't work
+#devtools::install_github("afsc-assessments/afscdata", force = TRUE) 
+#devtools::install_github("BenWilliams-NOAA/afscassess", force = TRUE)
+#devtools::install_github('r4ss/r4ss', force = TRUE)
 
 library(afscdata)
 library(afscassess)
@@ -13,23 +14,20 @@ library(dplyr)
 library(here)
 library(ggplot2)
 theme_set(afscassess::theme_report())
-# working on getting rema installed, but not working on my machine at the moment, don't have time to figure out
+
 ## This worked for MK in VSCode:
 # options(buildtools.check = function(action) TRUE )
 # devtools::install_github("afsc-assessments/rema") ## did not update other pckgs
 # pak::pkg_install("afsc-assessments/rema")
 library(rema)
 
-# previous accepted model
-# this is more for an example since the previous assessment was not in the afscdata framework
-# accepted_model(base_year=2021, base_model="model_20_1", year=2023)
 
 # globals ----
 year = 2024
 rec_age = 0 ## this is default for SS3
 plus_age = 21
 lengths = c(seq(6,40,2),seq(43,58,3))
-TAC = c(31238, 36177, 38268) # previous 3 years
+TAC = c(25000, 25000, 35500) # 2021, 2022, 2023
 #species = "FSOL"
 #curr_mdl_fldr = "2020.1-2023"
 #prev_mdl_fldr = "2020.1-2021"
@@ -43,22 +41,8 @@ TAC = c(31238, 36177, 38268) # previous 3 years
 # afscassess::setup_tpl(year)
 
 # query data ----
-## you must be on the VPN for this to work
+## you must be on the VPN for this to work, and it takes about 5 minutes
 afscdata::bsai_fhs(year)
-## you must be on the VPN for this to work
-DBI::dbConnect(odbc::odbc(), 'AKFIN', uid = 'mkapur', pwd = 'ssmamk22')
-
-# get data files together (dat and ctl) ----
-
-    akfin = RODBC::odbcConnect ( "akfin",uid = 'mkapur', pwd = 'ssmamk22')
-
-
-# weight-at-age
-# note from ben on these admb called functions: !!! I'm having trouble running this function via R2admb so stepped out and ran it command line, works fine if I compile it command line and then use the R2admb run function, maybe I'll pass the .exe instead of rebuilding the .tpl each year?
-afscassess::weight_at_age(year = year,
-                          admb_home = admb_home,
-                          rec_age = rec_age,
-                          area = "goa")
 
 # fishery catch (note: this automates the in-year estimation)
 ## output/yld_ratio.csv has the expansion factor ($ratio) and the 3-year catch/TAC ratio ($yld)
