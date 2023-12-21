@@ -25,7 +25,9 @@ The general workflow was as follows:
 
 1) The 2020 model, referred to as Model 18.2c (2020), was moved from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods are provided in this document. The version with the updated software is labeled as 18.2c (2024).
 
-2)  Bridge the data systematically. The previous model has catches and fishery length comps thru 2020, and everything else thru 2019. There is also mean size-at-age data thru 2016 in this model. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey CAALs (marginal survey lengths & ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below.
+2) Compare the historical and newly-pulled data, and compare data from 2020-2023 between the old data pull approach (using code from Dr. McGilliard in the `newsbss` package) and the `afscdata` package. The latter is the preferred method since it is actively maintained and provides a unified approach for many stocks.
+
+3)  Bridge the data obtained via `afscdata` systematically. The previous model has catches and fishery length comps thru 2020, and everything else thru 2019. There is also mean size-at-age data thru 2016 in this model. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey CAALs (marginal survey lengths & ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below.
 
 ```{r include = FALSE, warning = FALSE, message = FALSE}
 SSplotData(mod18.2c_2020, subplots = 2)
@@ -87,9 +89,46 @@ m18.2cv33022w <- SS_output(here::here(year,'model_runs','18.2c_2020_ss3v33022w')
 SSplotSelex(m18.2cv33022w, fleets = 2, sexes = 1)
 ```
 
+# Data Exploration/Comparison
+This section of the script assumes that one has already downloaded the data; to avoid separate scripts doing the same thing, I'm completing that step in `R/2024_analysis.R`. I wrote some functions for `afscdata` that reshape those data frames into the SS3 format, which is also accomplished in that script. 
+
+The original data pull method is in `R/old_datapull_script.R`. I used that code to download data in the manner consistent with the historical approach, and below reshape it into the SS3 format for comparison as a one-off. 
+
+The figures at the bottom of this section compare the key data sources both historically and within the new period from both approaches. The text headers describe any discrepancies between approaches.
+
+## Catch data
+
+Both queries call from the `council.comprehensive_blend_ca` table. I ran the `afscassess::clean_catch()` function on the downloaded data, and the summary code for t
+
+```{r load dfs include = FALSE, message = FALSE, warning = FALSE}
+oldc <- 
+
+## Aggregate catch to just year
+annual_catch <- read.csv(here(year,'data','raw','2023-12-19-catch.csv')) %>%
+  group_by(YEAR) %>% 
+  summarize(total=sum(TONS), .groups='drop') %>% 
+  data.frame()
+
+## Build SS structure
+SS_catch <- data.frame(year=annual_catch$YEAR, seas=1, fleet=1,
+                       catch=round(annual_catch$total), catch_se=round(0.01,2))
+write.csv(x=SS_catch, file=here('data',paste0(Sys.Date(),'-SS_catch.csv') ), row.names=FALSE)
+
+newc <- read.csv(here(year,'data','raw','fsh_catch_data.csv'))
+
+dim(oldc)
+dim(newc)
+names(newc)
+names(oldc)
+
+
+```
+
+
+
 
 # Data Bridging
-This section of the script assumes that one has already downloaded the data; to avoid separate scripts doing the same thing, I'm completing that step in `R/2024_analysis.R`. Importantly, the data updates conducted here are holistic, meaning that the entire time series of data for each component (where available) is replaced with what is currently available in the AKFIN database. A comparison of each data source is provided below. The model that includes each change is named in the relevant header; these are hosted under `model_runs/`.
+ Importantly, the data updates conducted here are holistic, meaning that the entire time series of data for each component (where available) is replaced with what is currently available in the AKFIN database. A comparison of each data source is provided below. The model that includes each change is named in the relevant header; these are hosted under `model_runs/`.
 
 ## Adding Catches
 ## Adding Survey Biomass
