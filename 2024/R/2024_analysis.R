@@ -62,8 +62,7 @@ afscdata::catch_to_ss(year, seas = 1, fleet = 1)
 
 
 afscassess::bts_biomass(area = 'bsai', 
-                        year = year, 
-                        rmv_yrs = c(1984, 1987))
+                        year = year)
 
 # fishery age comp
 # base case (currently used)
