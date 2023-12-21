@@ -28,7 +28,7 @@ rec_age = 0 ## this is default for SS3
 plus_age = 21
 lengths = c(seq(6,40,2),seq(43,58,3))
 TAC = c(25000, 25000, 35500) # 2021, 2022, 2023
-#species = "FSOL"
+species = "FSOL"
 #curr_mdl_fldr = "2020.1-2023"
 #prev_mdl_fldr = "2020.1-2021"
 #mdl_name = "model_20_1"
@@ -44,15 +44,25 @@ TAC = c(25000, 25000, 35500) # 2021, 2022, 2023
 ## you must be on the VPN for this to work, and it takes about 5 minutes
 afscdata::bsai_fhs(year)
 
+
+
 # fishery catch (note: this automates the in-year estimation)
 ## output/yld_ratio.csv has the expansion factor ($ratio) and the 3-year catch/TAC ratio ($yld)
 ## which are used for in-year and next-two-year catches, respectively
 suppressWarnings(afscassess::clean_catch(year = year, 
                                         species = species, 
-                                        TAC = TAC))
+                                        TAC = TAC,
+                                        fixed_catch = 'bsai_fhs_catch_1964_1994.csv'))
+
+## reformat catches
+afscdata::catch_to_ss(year)
 
 # bottom trawl survey biomass
-afscassess::bts_biomass(year = year, 
+## need to do AI interpolation stuff as well
+
+
+afscassess::bts_biomass(area = 'bsai', 
+                        year = year, 
                         rmv_yrs = c(1984, 1987))
 
 # fishery age comp
@@ -111,6 +121,10 @@ afscassess::age_error(year = year,
                       species = species, 
                       rec_age = rec_age, 
                       plus_age = plus_age)
+
+## placeholder, re-shape things into SS format
+## note that the functions in afscdata to do this are still in dev 
+## and likely need further testing/customization to work well with all species.                      
 
 ## manually rename a file; lookup funs want "bts"
 file.rename(from=here::here(year, 'data','output','goa_ts_length_comp.csv'),
