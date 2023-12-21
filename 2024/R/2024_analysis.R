@@ -55,7 +55,7 @@ suppressWarnings(afscassess::clean_catch(year = year,
                                         fixed_catch = 'bsai_fhs_catch_1964_1994.csv'))
 
 ## reformat catches
-afscdata::catch_to_ss(year)
+afscdata::catch_to_ss(year, seas = 1, fleet = 1)
 
 # bottom trawl survey biomass
 ## need to do AI interpolation stuff as well
