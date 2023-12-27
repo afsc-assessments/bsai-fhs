@@ -125,7 +125,8 @@ rbind( mod_2020$catch %>% select(Yr, Obs) %>%
   geom_line() +
   scale_color_manual(values = c('blue','grey22'),
                      labels = c('2024 Model Data', '2020 Model Data'))+
-  labs(x = 'Year', y = 'Observed Catch (t)', color = '')
+  labs(x = 'Year', y = 'Observed Catch (t)', color = '') +
+  geom_vline(data = NULL, aes(xintercept = 2020), linetype = 'dotted', color = 'grey66')
 
 ```
 
@@ -148,7 +149,8 @@ rbind( mod_2020$cpue %>% select(Yr, Obs, SE) %>%
   geom_errorbar(aes(ymin = Obs - Obs*SE, ymax = Obs+Obs*SE), width = 0) +
   scale_color_manual(values = c('blue','grey22'),
                      labels = c('2024 Model Data', '2020 Model Data'))+
-  labs(x = 'Year', y = 'Observed Survey Biomass (t)', color = '')
+  labs(x = 'Year', y = 'Observed Survey Biomass (t)', color = '')+
+  geom_vline(data = NULL, aes(xintercept = 2019), linetype = 'dotted', color = 'grey66')
 
 ```
 
