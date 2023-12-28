@@ -99,11 +99,11 @@ The original data pull method is in `R/old_datapull_script.R`. I used that code 
 
 The figures at the bottom of this section compare the key data sources both historically and within the new period from both approaches. The text headers describe any discrepancies between approaches.
 
-## Catch data
+## Fishery catch data
 
 Both queries call from the `council.comprehensive_blend_ca` table. I ran the `afscassess::clean_catch()` function on the downloaded data, and the summary code for aggregating into TONS. The approaches result in consistent catch histories.  
 
-```{r load dfs include = FALSE, message = FALSE, warning = FALSE}
+```{r load dfs, include = FALSE, message = FALSE, warning = FALSE}
 
 
 ## Aggregate catch to just year
@@ -130,6 +130,59 @@ rbind( mod_2020$catch %>% select(Yr, Obs) %>%
 
 ```
 
+## Fishery Length Compositions
+
+## Fishery Age Compositions
+
+The old datapull script and `afscdata` both read from `norpac.debriefed_spcomp`, though one reads from `mv` and the other doesn't
+1) Years 1994, 1995 and 1998 are not used in the model as length comp data are available.
+2) The number of hauls is used as the input sample size; these values were recoverable using the `afscdata` approach.
+3) The default `afscdata` approach did not have a means for getting sex-specific values; I simply added these to the summary calls (ignoring unsexed fish) and reformatting things in SS3. 
+
+*I was unable to reproduce the lengthy age-comp routine* used for the older version of the model; for reproducibility purposes, I am going to move towards the `afscdata` approach, which requires about 10% of the code to run. Importantly, I tested Model 18.2c with *only* the age-comp data changed to those available using my new approach and found the impact on derived quantities to be trivial.
+
+See the comments on the figures below for more information.
+
+There are some inconsistencies between the `afscdata` and old data pull approaches. Specifically, the old approach resulted in a duplicated vector of integer age-frequencies (for males & females); it appears that he number of hauls 
+```{r, include=T, echo = FALSE, warning = FALSE,}
+mod_2020_newcomps <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-newcomps'))
+```
+
+::: panel-tabset
+
+## Input Fishery AgeComp Data
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight "squashing" of observations towards older ages; the input sample sizes are essentially unchanged. }
+SSplotComps(mod_2020, kind = 'AGE', subplots = 1, datonly = TRUE, maxrows = 6,showsampsize = TRUE, showeffN = FALSE)
+SSplotComps(mod_2020_newcomps, kind = 'AGE', subplots = 1, datonly = TRUE, maxrows = 6,showsampsize = TRUE, showeffN = FALSE)
+```
+## Spawning Biomass
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
+SSplotComparisons(SSsummarize(list(mod_2020,mod_2020_newcomps)), 
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new comp data'),
+                  subplots = 2)
+```
+
+## Recruitment Time Series
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
+SSplotComparisons(SSsummarize(list(mod_2020,mod_2020_newcomps)), 
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new comp data'),
+                  subplots = 12)
+```
+
+## Survey Fits
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
+SSplotComparisons(SSsummarize(list(mod_2020,mod_2020_newcomps)), 
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new comp data'),
+                  subplots = 13)
+```
+:::
+
+
+
+
 ## Survey Biomass Data
 From the 2020 SAFE: 
 >"This assessment used a single survey index of "total" *Hippoglossoides* spp. biomass that included the EBS “standard” survey areas and AI survey areas for the years 1982-2018 (Table 9.9). Survey biomass for *Hippoglossoides* spp. in the Aleutian Islands is very small as compared to that from the EBS shelf survey, and survey biomass for Bering flounder is very small as compared to that of flathead sole. A linear regression is used to estimate a relationship between EBS shelf *Hippoglossoides* spp. survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year)."
@@ -154,8 +207,11 @@ rbind( mod_2020$cpue %>% select(Yr, Obs, SE) %>%
 
 ```
 
+## Survey CAALs 
+
+
 # Data Bridging
- Importantly, the data updates conducted here are holistic, meaning that the entire time series of data for each component (where available) is replaced with what is currently available in the AKFIN database. A comparison of each data source is provided below. The model that includes each change is named in the relevant header; these are hosted under `model_runs/`.
+ Importantly, the data updates conducted here are holistic, meaning that the entire time series of data for each component (where available) is replaced with what is currently available in the AKFIN database. A comparison between the data used in the last assessment and the latest version of that dataset is provided for each component above. The model that includes each change is named in the relevant header; these are hosted under `model_runs/`.
 
 ## Adding Catches
 ## Adding Survey Biomass
