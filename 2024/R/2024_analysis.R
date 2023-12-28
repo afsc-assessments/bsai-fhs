@@ -42,8 +42,8 @@ species = "FSOL"
 
 # query data ----
 ## you must be on the VPN for this to work, and it takes about 5 minutes
+## this automates the AI interpolation for the biomass survey and outputs in in SS format
 afscdata::bsai_fhs(year)
-
 
 
 # fishery catch (note: this automates the in-year estimation)
@@ -57,21 +57,21 @@ suppressWarnings(afscassess::clean_catch(year = year,
 ## reformat catches
 afscdata::catch_to_ss(year, seas = 1, fleet = 1)
 
-# bottom trawl survey biomass
-## need to do AI interpolation stuff as well
 
 
-afscassess::bts_biomass(area = 'bsai', 
-                        year = year)
-
-# fishery age comp
-# base case (currently used)
+# fishery age comp, by sex
 afscassess::fish_age_comp(year = year,
-                          exp_meth = 'marg_len',
                           rec_age = rec_age, 
-                          plus_age = plus_age,
-                          lenbins = lengths,
-                          rmv_yrs = c(1987, 1989))
+                          plus_age = plus_age)
+
+
+
+read.csv(here::here(year, 'data','output','fsh_age_comp.csv')) %>%
+  arrange(year) %>%
+  mutate(Seas = 7, FltSvy = 1, Gender = 3, Part = 0, Ageerr = 1, LbinLo = -1, LbinHi = -1, Nsamp = n_h) %>%
+  # select( everything(),) %>%
+  select(Yr = year, Seas, FltSvy, Gender, Part, Ageerr, LbinLo, LbinHi, Nsamp, everything(), -n_s, -n_h, -AA_Index)
+
 
 # expanded comps (expanded in years with obs catch data)
 # afscassess::fish_age_comp(year = year,
