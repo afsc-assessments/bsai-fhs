@@ -60,6 +60,35 @@ afscdata::catch_to_ss(year, seas = 1, fleet = 1)
 
 
 # fishery age comp, by sex
+fac <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), delim = ",", 
+                    col_type = c(join_key = "c", 
+                                 haul_join = "c", port_join = "c")) %>% 
+ tidytable::filter(age >= rec_age,  
+                   !is.na(length), 
+                   !is.na(sex),
+                   sex != 'U',
+                   !is.na(performance)) %>% 
+  tidytable::mutate(age = ifelse(age > plus_age, plus_age, 
+                                 age)) %>% 
+  tidytable::mutate(tot = tidytable::n(),   .by = year) %>% 
+  # tidytable::filter(tot > 49) %>% 
+  tidytable::mutate(n_h = length(unique(na.omit(haul_join))) + length(unique(na.omit(port_join))), .by = year) %>% 
+  tidytable::summarise(n_s = mean(tot), 
+                       n_h = mean(n_h), 
+                       age_tot = tidytable::n(), .by = c(sex,year,age)) %>% 
+  tidytable::mutate(prop = age_tot/n_s) %>% 
+  tidytable::left_join(expand.grid(sex = unique(.$sex), 
+                                   year = unique(.$year),    
+                                   age = 1:plus_age), .) %>% 
+  tidytable::replace_na(list(prop = 0)) %>% 
+  tidytable::mutate(AA_Index = 1, n_s = mean(n_s, na.rm = T), 
+                    n_h = mean(n_h, na.rm = T), .by = year) %>% 
+  tidytable::select(-age_tot) %>% 
+  tidytable::pivot_wider(names_from = age, values_from = prop)
+
+fac %>% filter(year == 2010 )
+## year 2000 age 4 females
+mod18.2c_2020$agedbase %>% filter(Fleet == 1, Yr == 2010 & Sex == 1) %>% select(Obs)
 afscassess::fish_age_comp(year = year,
                           rec_age = rec_age, 
                           plus_age = plus_age)
