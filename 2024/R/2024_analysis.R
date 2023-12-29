@@ -60,7 +60,7 @@ afscdata::catch_to_ss(year, seas = 1, fleet = 1)
 
 
 # fishery age comp, by sex
-fac <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), delim = ",", 
+fac0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), delim = ",", 
                     col_type = c(join_key = "c", 
                                  haul_join = "c", port_join = "c")) %>% 
  tidytable::filter(age >= rec_age,  
@@ -86,20 +86,17 @@ fac <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), de
   tidytable::select(-age_tot) %>% 
   tidytable::pivot_wider(names_from = age, values_from = prop)
 
-fac %>% filter(year == 2010 )
-## year 2000 age 4 females
-mod18.2c_2020$agedbase %>% filter(Fleet == 1, Yr == 2010 & Sex == 1) %>% select(Obs)
-afscassess::fish_age_comp(year = year,
-                          rec_age = rec_age, 
-                          plus_age = plus_age)
-
-
-
-read.csv(here::here(year, 'data','output','fsh_age_comp.csv')) %>%
+fac %>% filter(sex == 'F') %>% 
+  merge(., fac %>% 
+          filter(sex == 'M') %>% 
+          select(-sex, -n_s,-n_h, - AA_Index), 
+                                     by = 'year', all.y = FALSE) %>%
   arrange(year) %>%
-  mutate(Seas = 7, FltSvy = 1, Gender = 3, Part = 0, Ageerr = 1, LbinLo = -1, LbinHi = -1, Nsamp = n_h) %>%
-  # select( everything(),) %>%
-  select(Yr = year, Seas, FltSvy, Gender, Part, Ageerr, LbinLo, LbinHi, Nsamp, everything(), -n_s, -n_h, -AA_Index)
+  mutate(Seas = 7, FltSvy = ifelse(year < 2000, -1, 1), Gender = 3, Part = 0, Ageerr = 1, LbinLo = -1, LbinHi = -1, Nsamp = n_h) %>%
+  select(Yr = year, Seas, FltSvy, Gender, Part, Ageerr, LbinLo, LbinHi, Nsamp, everything(), -sex, -n_s, -n_h, -AA_Index) %>%
+  write.csv(., file = here::here(year,'data','output','fsh_age_comp_ss3.csv'), row.names = FALSE)
+
+
 
 
 # expanded comps (expanded in years with obs catch data)
