@@ -4,6 +4,7 @@ author: "Maia Kapur maia.kapur@noaa.gov"
 format: html
 editor: source
 toc: true
+toc-depth: 2
 ---
 
 ```{r, include = FALSE, warning = FALSE, message = FALSE}
@@ -26,34 +27,33 @@ This electronic document describes the analyses undertaken to bridge the last "f
 
 The general workflow was as follows: 
 
-1) The 2020 model, referred to as Model 18.2c (2020), was moved from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods are provided in this document. The version with the updated software is labeled as 18.2c (2024).
+1) The 2020 model, referred to as Model 18.2c (2020), was moved from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods are provided in this document.  
 
-2) Compare the historical and newly-pulled data, and compare data from 2020-2023 between the old data pull approach (using code from Dr. McGilliard in the `newsbss` package) and the `afscdata` package. The latter is the preferred method since it is actively maintained and provides a unified approach for many stocks.
+2) Compare the historical and newly-pulled data. The "old data pull approach" (uses code from Drs. McGilliard & Monnahan in a local R package entitled `newsbss`, which is highly customized and not actively maintained. The "newly-pulled" data are obtained using the `afscdata` package. The latter is the preferred method since it is actively maintained and provides a unified approach for many stocks. Much of these analyses involve comparing the observed historical data (pre-2020) and exploring impacts of the individual data sources in Model 18.2c (2020).
 
-3)  Bridge the data obtained via `afscdata` systematically. The previous model has catches and fishery length comps thru 2020, and everything else thru 2019. There is also mean size-at-age data thru 2016 in this model. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey CAALs (marginal survey lengths & ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below.
+3)  Bridge the data obtained via `afscdata` systematically. Model 18.2c (2020) has catches and fishery length comps through 2020, and everything else through 2019. There is also mean size-at-age data through 2016. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey CAALs (marginal survey lengths & ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below. **This bridged model, with updated software and data inputs but no structural changes is labeled as Model 18.2c (2024)**.
 
-```{r include = FALSE, warning = FALSE, message = FALSE}
+```{r include = TRUE, echo = FALSE, warning = FALSE, message = FALSE}
 SSplotData(mod18.2c_2020, subplots = 2)
 ```
 
 
 # Stock Synthesis Software Update 3.30.22
 
-```{r include = FALSE, warning = FALSE, message = FALSE}
+```{r include = FALSE, echo = FALSE,  warning = FALSE, message = FALSE}
 mod18.2c_2020_v33022 <- SS_output(here::here(year,'model_runs','18.2c_2020_ss3v33022'), verbose = FALSE)
 ss_compare <- SSsummarize(list(mod18.2c_2020,mod18.2c_2020_v33022))
 ```
 
 ## Warnings
 
-M18.2c (2020) had generic warnings about the recr_dist method; poor FMSY convergence, and an issue with the final gradient. Only the latter is of concern. M18.2c (2024) threw the same warnings as well as an indication that the initial value for parm 11 was greater than the max (999\>5); this is the end logit for the survey selex (forcing it to be asymptotic). I am comfortable with the consistency of these warnings; the gradient is identical between models (`r  mod18.2c_2020$maximum_gradient_component`).
+Model 18.2c (2020) had generic warnings about the `recr_dist` method, poor $F_{MSY}$ convergence, and an issue with the final gradient. Only the latter is of concern. Model 18.2c run with the new SS3 software threw the same warnings as well as an indication that the initial value for `parm 11` was greater than the max (`999\>5`); this is the end logit for the survey selex (forcing it to be asymptotic). I am comfortable with the consistency of these warnings and clean them up below; the gradient is identical between models (`r  mod18.2c_2020$maximum_gradient_component`).
 
 ## Likelihood Components
-
-```{r include = FALSE, warning = FALSE, message = FALSE}
-names(ss_compare$likelihoods)[c(1,2)] <- c('Model 18.2c (2020)', 'M18.2c (2024)')
+```{r include = TRUE, echo = FALSE,  warning = FALSE, message = FALSE}
+names(ss_compare$likelihoods)[c(1,2)] <- c('Model 18.2c (2020)', 'Model 18.2c (2020) - software transition')
 ss_compare$likelihoods[c(1:7,11),]
-SSplotComparisons(ss_compare, print = T, plotdir = here(year,'figs'), legendlabels = names(ss_compare$likelihoods)[c(1,2)], col = colvec)
+SSplotComparisons(ss_compare, print = T, plotdir = here('docs','ss_version_bridge'), legendlabels = names(ss_compare$likelihoods)[c(1,2)], col = colvec)
 ```
 
 
@@ -61,32 +61,37 @@ SSplotComparisons(ss_compare, print = T, plotdir = here(year,'figs'), legendlabe
 ## Spawning Biomass
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The spawning biomass trajectory and associated uncertainty are identical between models"}
-knitr::include_graphics(here::here(year,'figs','ss_version_bridge','compare2_spawnbio_uncertainty.png'))
+knitr::include_graphics(here::here('docs','ss_version_bridge','compare2_spawnbio_uncertainty.png'))
 ```
 ## Survey Fits
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="Survey fits are identical between models"}
-knitr::include_graphics(here::here(year,'figs','ss_version_bridge','compare13_indices.png'))
+knitr::include_graphics(here::here('docs','ss_version_bridge','compare13_indices.png'))
 ```
 
 ## Recruitment Time Series
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The recruitment time series and associated uncertainty are identical between models"}
-knitr::include_graphics(here::here(year,'figs','ss_version_bridge','compare10_recruits_uncertainty.png'))
+knitr::include_graphics(here::here('docs','ss_version_bridge','compare10_recruits_uncertainty.png'))
 ```
 
 ## Unfished Recruitment
 
 ```{r, include=T, echo = FALSE, warning = FALSE,fig.cap="The R0 posteriors are identical between models"}
-knitr::include_graphics(here::here(year,'figs','ss_version_bridge','compare16_densities_SR_LN(R0).png'))
+knitr::include_graphics(here::here('docs','ss_version_bridge','compare16_densities_SR_LN(R0).png'))
 ```
 :::
 
 ## SS3 Bridging Conclusion
 
-Based on the above explorations, I am comfortable that moving to the latest SS3 version is not impacting model behavior. After completing this exercise, I addressed the `warnings` in the latest model via the following. The warning-free model is in `model_runs/18.2c_2020_ss3v33022w`.
+Based on the above explorations, I am comfortable that moving to the latest SS3 version is not impacting model behavior. After completing this exercise, I addressed the `warnings` in the latest model via the following:
+
   + Change `recr_dist_method` to 4 (line 17) and removing associated stuff lines 99-101
   + Change the `INIT` for Age_DblN_end_logit_Survey to 20 and the MAX to 25 to get rid of the bound error. The selectivity is the same.
+  
+The warning-free model is in `model_runs/18.2c_2020_ss3v33022w`.
+
+
 ```{r include = FALSE, message = FALSE, warning = FALSE}
 m18.2cv33022w <- SS_output(here::here(year,'model_runs','18.2c_2020_ss3v33022w'), verbose = FALSE)
 SSplotSelex(m18.2cv33022w, fleets = 2, sexes = 1)
@@ -99,13 +104,11 @@ The original data pull method is in `R/old_datapull_script.R`. I used that code 
 
 The figures at the bottom of this section compare the key data sources both historically and within the new period from both approaches. The text headers describe any discrepancies between approaches.
 
-## Fishery catch data
+## Fishery Catches
 
-Both queries call from the `council.comprehensive_blend_ca` table. I ran the `afscassess::clean_catch()` function on the downloaded data, and the summary code for aggregating into TONS. The approaches result in consistent catch histories.  
+Both queries call from the `council.comprehensive_blend_ca` table. I ran the `afscassess::clean_catch()` function on the downloaded data, and the summary code for aggregating into tons. **The approaches result in consistent catch histories.** 
 
-```{r load dfs, include = FALSE, message = FALSE, warning = FALSE}
-
-
+```{r load dfs, include = TRUE, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE}
 ## Aggregate catch to just year
 annual_catch <- read.csv(here(year,'data','raw','2023-12-19-catch.csv')) %>%
   group_by(YEAR) %>% 
@@ -115,8 +118,7 @@ annual_catch <- read.csv(here(year,'data','raw','2023-12-19-catch.csv')) %>%
 ## Build SS structure
 SS_catch <- data.frame(year=annual_catch$YEAR, seas=1, fleet=1,
                        catch=round(annual_catch$total), catch_se=round(0.01,2))
-write.csv(x=SS_catch, file=here('data',paste0(Sys.Date(),'-SS_catch.csv') ), row.names=FALSE)
-
+# write.csv(x=SS_catch, file=here::here(year,'data',paste0(Sys.Date(),'-SS_catch.csv') ), row.names=FALSE)
 
 rbind( mod_2020$catch %>% select(Yr, Obs) %>%
          mutate(src = 'Old'),
@@ -134,47 +136,52 @@ rbind( mod_2020$catch %>% select(Yr, Obs) %>%
 
 ## Fishery Age Compositions
 
-The old datapull script and `afscdata` both read from `norpac.debriefed_spcomp`, though one reads from `mv` and the other doesn't
+The old datapull script and `afscdata` both read from `norpac.debriefed_spcomp`, though the latter reads from `mv` and the other doesn't.
 1) Years 1994, 1995 and 1998 are not used in the model as length comp data are available.
 2) The number of hauls is used as the input sample size; these values were recoverable using the `afscdata` approach.
 3) The default `afscdata` approach did not have a means for getting sex-specific values; I simply added these to the summary calls (ignoring unsexed fish) and reformatting things in SS3. 
 
-*I was unable to reproduce the lengthy age-comp routine* used for the older version of the model; for reproducibility purposes, I am going to move towards the `afscdata` approach, which requires about 10% of the code to run. Importantly, I tested Model 18.2c with *only* the age-comp data changed to those available using my new approach and found the impact on derived quantities to be trivial.
+*I was unable to reproduce the lengthy age-comp routine* used for the older version of the model; for reproducibility purposes, I am going to move towards the `afscdata` approach, which requires about 10% of the code to run, and does not require multiple reads of the same data sources. Importantly, I tested Model 18.2c with *only* the age-comp data changed to those available using my new approach and found the impact on derived quantities to be trivial.
 
 See the comments on the figures below for more information.
 
-There are some inconsistencies between the `afscdata` and old data pull approaches. Specifically, the old approach resulted in a duplicated vector of integer age-frequencies (for males & females); it appears that he number of hauls 
-```{r, include=T, echo = FALSE, warning = FALSE,}
+```{r, include=FALSE, echo = FALSE, warning = FALSE,}
 mod_2020_newcomps <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-newcomps'))
+compsummary <- SSsummarize(list(mod_2020,mod_2020_newcomps))
 ```
 
 ::: panel-tabset
 
-## Input Fishery AgeComp Data
+### Fish Age Comps from 18.c (2020)
 
-```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight "squashing" of observations towards older ages; the input sample sizes are essentially unchanged. }
-SSplotComps(mod_2020, kind = 'AGE', subplots = 1, datonly = TRUE, maxrows = 6,showsampsize = TRUE, showeffN = FALSE)
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight squashing of observations towards older ages; the input sample sizes are essentially unchanged." }
 SSplotComps(mod_2020_newcomps, kind = 'AGE', subplots = 1, datonly = TRUE, maxrows = 6,showsampsize = TRUE, showeffN = FALSE)
 ```
-## Spawning Biomass
 
-```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
-SSplotComparisons(SSsummarize(list(mod_2020,mod_2020_newcomps)), 
+### Fish Age Comps using `afscdata`
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight squashing of observations towards older ages; the input sample sizes are essentially unchanged." }
+SSplotComps(mod_2020, kind = 'AGE', subplots = 1, datonly = TRUE, maxrows = 6,showsampsize = TRUE, showeffN = FALSE)
+
+```
+### Spawning Biomass, old vs new data
+
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
+SSplotComparisons(compsummary, 
                   legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new comp data'),
                   subplots = 2)
 ```
 
-## Recruitment Time Series
-```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
-SSplotComparisons(SSsummarize(list(mod_2020,mod_2020_newcomps)), 
+### Recruitment Time Series, old vs new data
+```{r, include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
+SSplotComparisons(compsummary, 
                   legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new comp data'),
                   subplots = 12)
 ```
 
-## Survey Fits
+### Survey Fits, old vs new data
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
-SSplotComparisons(SSsummarize(list(mod_2020,mod_2020_newcomps)), 
+SSplotComparisons(compsummary, 
                   legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new comp data'),
                   subplots = 13)
 ```
@@ -184,15 +191,17 @@ SSplotComparisons(SSsummarize(list(mod_2020,mod_2020_newcomps)),
 
 
 ## Survey Biomass Data
+
 From the 2020 SAFE: 
+
 >"This assessment used a single survey index of "total" *Hippoglossoides* spp. biomass that included the EBS “standard” survey areas and AI survey areas for the years 1982-2018 (Table 9.9). Survey biomass for *Hippoglossoides* spp. in the Aleutian Islands is very small as compared to that from the EBS shelf survey, and survey biomass for Bering flounder is very small as compared to that of flathead sole. A linear regression is used to estimate a relationship between EBS shelf *Hippoglossoides* spp. survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year)."
 
 Both Dr. Monnohan (per his notes) and I are not thrilled with this approach, since being model-based means that even historical datapoints can change with each new observation (assuming that the output of the lm is used to replace the survey biomass series wholesale, which would be statistically prudent).
 
-I coded the linear model into the `afscdata::bsai_fhs` data extraction function and did *not* use the `afscassess::bts_biomass` function for further post-processing. The former function saves the Synthesis-formatted dataframe directly to `output/`. The resultant index is similar to what was used before.
+I coded the linear model into the `afscdata::bsai_fhs` data extraction function and did *not* use the `afscassess::bts_biomass` function for further post-processing. The former function saves the Synthesis-formatted dataframe directly to `output/`. The resultant index is identical to what was used before.
 
 
-```{r}
+```{r, include=T, echo = FALSE, warning = FALSE}
 
 rbind( mod_2020$cpue %>% select(Yr, Obs, SE) %>%
          mutate(src = 'Old'),
