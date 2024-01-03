@@ -27,9 +27,9 @@ This electronic document describes the analyses undertaken to bridge the last "f
 
 The general workflow was as follows: 
 
-1) The 2020 model, referred to as Model 18.2c (2020), was moved from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods are provided in this document.  
+1) Move the 2020 model, referred to as Model 18.2c (2020), from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods are provided in this document.  
 
-2) Compare the historical and newly-pulled data. The "old data pull approach" (uses code from Drs. McGilliard & Monnahan in a local R package entitled `newsbss`, which is highly customized and not actively maintained. The "newly-pulled" data are obtained using the `afscdata` package. The latter is the preferred method since it is actively maintained and provides a unified approach for many stocks. Much of these analyses involve comparing the observed historical data (pre-2020) and exploring impacts of the individual data sources in Model 18.2c (2020).
+2) Compare the historical and newly-pulled data. The "old data pull approach" (uses code from Drs. McGilliard & Monnahan in a local R package entitled `newsbss`, which is highly customized and not actively maintained. The "newly-pulled" data are obtained using the `afscdata` package. The latter is the preferred method since it is actively maintained and provides a unified approach for many stocks.  
 
 3)  Bridge the data obtained via `afscdata` systematically. Model 18.2c (2020) has catches and fishery length comps through 2020, and everything else through 2019. There is also mean size-at-age data through 2016. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey CAALs (marginal survey lengths & ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below. **This bridged model, with updated software and data inputs but no structural changes is labeled as Model 18.2c (2024)**.
 
@@ -98,27 +98,25 @@ SSplotSelex(m18.2cv33022w, fleets = 2, sexes = 1)
 ```
 
 # Data Exploration/Comparison
-This section of the script assumes that one has already downloaded the data; to avoid separate scripts doing the same thing, I'm completing that step in `R/2024_analysis.R`. I wrote some functions for `afscdata` that reshape those data frames into the SS3 format, which is also accomplished in that script. 
+## Big-Picture Data Notes
+This section of the script assumes that one has already downloaded and formatted the data one plans to use in the assesssment. To avoid separate scripts doing the same thing, I'm completing that step in `R/2024_analysis.R`. I wrote some functions for the `afscdata` and `afscassess` packages that reshape those data frames into the SS3 format, which is also accomplished in that script. 
 
-The original data pull method is in `R/old_datapull_script.R`. I used that code to download data in the manner consistent with the historical approach, and below reshape it into the SS3 format for comparison as a one-off. 
+The original data pull method is in `R/old_datapull_script.R`. I used that code to download data in the manner consistent with the historical approach, when possible, and below reshape it into the SS3 format for comparison as a one-off. There are several cases where I wasn't able to re-trace the 2020 model's steps, mostly due to deprecated Oracle schemata. 
+
+Bering Flounder is *not* included in the compositional data; Dr. Monnahan caught and corrected this issue in 2020. The total survey biomass and catches do include both species.
+
+**Due to staffing issues** we had to triage the number of otoliths read for all sources in years 2022 and 2023. After consulting with the Age & Growth team, they indicated they could read a *total* of about 750 BSAI FHS otoliths this year. This is a considerable (~75%) reduction given than normally we have about 600-800 otoliths for each source (survey and fishery) for each year; this typically encompasses every collected otolith from each source, so there are not historical ratios to use for guidance. Dr. Kapur decided in January 2024 that the ratio of the Francis weights from Model 18.2c (2020) would guide how the reduction in age-reads was allocated accross sources. The Francis survey age data weights were about 2.5x higher than those for the fishery age data. Using this ratio and splitting age-reads evenly across the two missing years resulted in a request of 107 age-reads for fishery otoliths from each of 2022 & 2023, and 267 age-reads for survey otoliths from each of 2022 & 2023. 
+
+Normally, the number of hauls is used as the input sample size for the compositional data, but doing so for 2022 and 2023 would not reflect the fact that the input data represent far fewer of those hauls for those years. I will later do a sensitivity analysis to how the specification of input sample size for those years impacts model behavior; for now the number of hauls is retained as the default.
 
 The figures at the bottom of this section compare the key data sources both historically and within the new period from both approaches. The text headers describe any discrepancies between approaches.
 
 ## Fishery Catches
 
-Both queries call from the `council.comprehensive_blend_ca` table. I ran the `afscassess::clean_catch()` function on the downloaded data, and the summary code for aggregating into tons. **The approaches result in consistent catch histories.** 
+Both queries call from the `council.comprehensive_blend_ca` table. I ran the `afscassess::clean_catch()` function on the downloaded data, and the summary code for aggregating into tons. **The approaches result in consistent catch histories,** with the understandable exception of in-year catches for 2020 (which were under-estimated). 
 
 ```{r load dfs, include = TRUE, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE}
 ## Aggregate catch to just year
-annual_catch <- read.csv(here(year,'data','raw','2023-12-19-catch.csv')) %>%
-  group_by(YEAR) %>% 
-  summarize(total=sum(TONS), .groups='drop') %>% 
-  data.frame()
-
-## Build SS structure
-SS_catch <- data.frame(year=annual_catch$YEAR, seas=1, fleet=1,
-                       catch=round(annual_catch$total), catch_se=round(0.01,2))
-# write.csv(x=SS_catch, file=here::here(year,'data',paste0(Sys.Date(),'-SS_catch.csv') ), row.names=FALSE)
 
 rbind( mod_2020$catch %>% select(Yr, Obs) %>%
          mutate(src = 'Old'),
@@ -133,15 +131,19 @@ rbind( mod_2020$catch %>% select(Yr, Obs) %>%
 ```
 
 ## Fishery Length Compositions
+The current assessment passes the fishery length comp time series but only fits to year where there are not age-comp data (1977-1999, 2002-2003, 2008 and 2020). I am not thrilled with this approach but have replicated it for consistency.
+
 
 ## Fishery Age Compositions
 
-The old datapull script and `afscdata` both read from `norpac.debriefed_spcomp`, though the latter reads from `mv` and the other doesn't.
-1) Years 1994, 1995 and 1998 are not used in the model as length comp data are available.
-2) The number of hauls is used as the input sample size; these values were recoverable using the `afscdata` approach.
-3) The default `afscdata` approach did not have a means for getting sex-specific values; I simply added these to the summary calls (ignoring unsexed fish) and reformatting things in SS3. 
+The old datapull script and `afscdata` both read from `norpac.debriefed_spcomp`, though the latter reads from `mv` and the former doesn't.
+  + Years 1994, 1995 and 1998 are not used in the model as length comp data are available.
+  + The number of hauls is used as the input sample size; these values were recoverable using the `afscdata` approach.
+  + The default `afscdata` approach did not have a means for getting sex-specific values; I simply added these to the summary calls (ignoring unsexed fish) and reformatting things in SS3. 
 
-*I was unable to reproduce the lengthy age-comp routine* used for the older version of the model; for reproducibility purposes, I am going to move towards the `afscdata` approach, which requires about 10% of the code to run, and does not require multiple reads of the same data sources. Importantly, I tested Model 18.2c with *only* the age-comp data changed to those available using my new approach and found the impact on derived quantities to be trivial.
+*I was unable to reproduce the fishery age-comp routine* used for the older version of the model. For reproducibility purposes, I am going to move towards the `afscdata` approach, which requires about 10% of the code to run, and does not require multiple reads of the same data sources. Importantly, I tested Model 18.2c with *only* the age-comp data changed to those available using my new approach and found the impact on derived quantities to be trivial.
+
+
 
 See the comments on the figures below for more information.
 
@@ -216,7 +218,18 @@ rbind( mod_2020$cpue %>% select(Yr, Obs, SE) %>%
 
 ```
 
-## Survey CAALs 
+## Survey Compositional Data
+
+**Important**: I could not reproduce the 2020 Model's method of pulling these data from scratch because the schema (`haehnr`) that it calls from has been deleted.
+
+The model uses conditional age-at-length data from the survey as well as marginal length composition data. The marginal survey ages are ghosted into the model for plotting purposes. The workflow for these data are as follows:
+  1) Pull the raw data from `racebase` using the `afscdata` approach (see `2024_analysis.R`)
+  2) Expand the marginal trawl survey compositional data using the `afscassess` functions
+  3) Calculate conditional ages-at-length for each sex via the following. 
+    + Starting with the EBS ages, filter out Bering Flounder (code `10140`) and only include the EBS (subarea <= 6) and sexed fish (3)
+    + Bin the data into length and age bins greater than 0 (legacy code `BIN_AGE_DATA` and `BIN_LEN_DATA`).
+    + Group by bins and tabulate the number in each unique combination; filling missing values from zero
+    + Reformat into SS3 syntax.
 
 
 # Data Bridging
