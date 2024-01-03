@@ -149,15 +149,15 @@ if(!is.data.frame(test)) stop("Failed to query age-length survey data")
 write.csv(test,file= here(year,'data','raw', paste0(Sys.Date(),'-ages_survey_ebs.csv')), test, row.names=FALSE)
 
 #* survey size composition data -----
-# message("Querying sizecomp EBS survey hauls...")
-# query <- "
-# select * from haehnr.samplesize_ebs_standard
-# where species_code = 10130
-# order by year;
-# "
-# test <- sqlQuery(AFSC, query)
-# if(!is.data.frame(test)) stop("Query failed")
-# write.csv(test, 'data/lengths_survey_hauls.csv', row.names=FALSE)
+message("Querying sizecomp EBS survey hauls...")
+query <- "
+select * from haehnr.samplesize_ebs_standard
+where species_code = 10130
+order by year;
+"
+test <- sqlQuery(AFSC, query)
+if(!is.data.frame(test)) stop("Query failed")
+write.csv(test, 'data/lengths_survey_hauls.csv', row.names=FALSE)
 # 
 # message("Querying sizecomp EBS survey...")
 # query <- "
