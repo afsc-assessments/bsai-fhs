@@ -132,11 +132,14 @@ flc0 %>% filter(sex == 'F') %>%
   arrange(year) %>%
   ## drop the years before 2000 since Lcomps are available
   mutate(Seas = 7, 
-         FltSvy = ifelse(year %in% unique(fac0$year[which(fac0$year > 2000)]), -1, 1),  
+         FltSvy = ifelse(year %in% unique(fac0$year[which(fac0$year >= 2000)]), -1, 1),  
          Gender = 3, 
-         Part = 0, Ageerr = 1, LbinLo = -1, LbinHi = -1, Nsamp = n_h) %>%
+         Part = 0, 
+         Nsamp = n_h) %>%
   select(Yr = year, Seas, FltSvy, Gender, Part, Ageerr, LbinLo, LbinHi, Nsamp, everything(), -sex, -n_s, -n_h) %>% 
   write.csv(., file = here::here(year,'data','output','fsh_len_comp_ss3.csv'), row.names = FALSE)
+
+afscassess::fish_length_comp(year, lenbins = len_bins,rec_age = 0)
 
 ## survey comps to CAALs ----
 
