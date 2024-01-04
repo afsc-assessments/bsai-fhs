@@ -45,7 +45,11 @@ species = "FSOL"
 afscdata::bsai_fhs(year)
 
 
-# fishery catch (note: this automates the in-year estimation)
+# reshape data ----
+## only need to do this if you have re-queried data
+
+## fishery catches ----
+# (note: this automates the in-year estimation)
 ## output/yld_ratio.csv has the expansion factor ($ratio) and the 3-year catch/TAC ratio ($yld)
 ## which are used for in-year and next-two-year catches, respectively
 suppressWarnings(afscassess::clean_catch(year = year, 
@@ -56,7 +60,9 @@ suppressWarnings(afscassess::clean_catch(year = year,
 ## reformat catches
 afscdata::catch_to_ss3(year, seas = 1, fleet = 1)
 
-# expand fishery age comps by sex; adapted from afscassess::fish_age_comp function
+## fishery age comps ----
+# expand fishery age comps by sex expanded in years with obs catch data); 
+## adapted from afscassess::fish_age_comp function
 fac0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), delim = ",", 
                     col_type = c(join_key = "c", 
                                  haul_join = "c", port_join = "c")) %>% 
@@ -96,44 +102,18 @@ fac0 %>% filter(sex == 'F') %>%
   write.csv(., file = here::here(year,'data','output','fsh_age_comp_ss3.csv'), row.names = FALSE)
 
 
-## fishery length comp, by sex
-
-## survey marginal ages
-## survey lengths
-## survey caals (used in model)
-
-# expanded comps (expanded in years with obs catch data)
-# afscassess::fish_age_comp(year = year,
-#                           exp_meth = 'exp_len',
-#                           rec_age = rec_age, 
-#                           plus_age = plus_age,
-#                           lenbins = lengths,
-#                           rmv_yrs = c(1987, 1989),
-#                           id = "exp")
-
-# bottom trawl survey age comp
-afscassess::bts_age_comp(year = year,
-                         area = "goa",
-                         rec_age = rec_age,
-                         plus_age = plus_age,
-                         rmv_yrs = c(1984,1987))
-
-# fishery size comp expansion, adapted from afscassess::fish_length_comp
+## fishery length comps ----
 
 ages <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), delim = ",", col_type = c(join_key = "c", 
-                                                                                                              haul_join = "c", port_join = "c")) %>% tidytable::filter(!is.na(age), 
-                                                                                                                                                                       age >= rec_age) %>% tidytable::group_by(year) %>% tidytable::tally(name = "age") %>% 
+                                                                                                         haul_join = "c", port_join = "c")) %>% tidytable::filter(!is.na(age), 
+                                                                                                                                                                  age >= rec_age) %>% tidytable::group_by(year) %>% tidytable::tally(name = "age") %>% 
   tidytable::filter(age >= 50) %>% 
   tidytable::ungroup()
 flc0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_length_data.txt"), 
-                    delim = ",", 
-                    col_type = c(haul_join = "c", 
-                                 port_join = "c")) %>% 
-  # tidytable::filter(!(year %in% unique(ages$year))) %>% 
-  tidytable::mutate(tot = sum(frequency), 
-                                                                                                                                                                                                 length = ifelse(length >= max(lenbins), max(lenbins), 
-                                                                                                                                                                                                                 length), n_h = length(unique(na.omit(haul_join))) + 
-                                                                                                                                                                                                   length(unique(na.omit(port_join))), .by = year) %>% 
+                     delim = ",", 
+                     col_type = c(haul_join = "c", 
+                                  port_join = "c")) %>% 
+  tidytable::mutate(tot = sum(frequency),                                                                                                                                                                                         length(unique(na.omit(port_join))), .by = year) %>% 
   tidytable::summarise(n_s = mean(tot), n_h = mean(n_h), 
                        length_tot = sum(frequency), .by = c(sex,year, length)) %>% 
   tidytable::mutate(prop = length_tot/n_s) %>% tidytable::left_join(expand.grid(sex = unique(.$sex), 
@@ -158,11 +138,23 @@ flc0 %>% filter(sex == 'F') %>%
   select(Yr = year, Seas, FltSvy, Gender, Part, Ageerr, LbinLo, LbinHi, Nsamp, everything(), -sex, -n_s, -n_h) %>% 
   write.csv(., file = here::here(year,'data','output','fsh_len_comp_ss3.csv'), row.names = FALSE)
 
+## survey comps to CAALs ----
 
-# afscassess::fish_length_comp(year = year,
-#                                  rec_age = rec_age,
-#                                  lenbins = lengths) 
-  
+
+## survey marginal ages
+## survey lengths
+## survey caals (used in model)
+
+
+
+# bottom trawl survey age comp
+afscassess::bts_age_comp(year = year,
+                         area = "goa",
+                         rec_age = rec_age,
+                         plus_age = plus_age,
+                         rmv_yrs = c(1984,1987))
+
+# fishery size comp expansion, adapted from afscassess::fish_length_comp
 
 # bottom trawl survey size comp (not fit to in model, used for size-age matrices)
 afscassess::bts_length_comp(year = year,
@@ -170,11 +162,7 @@ afscassess::bts_length_comp(year = year,
                             sa_index = 2,
                             lenbins = lengths)
 
-# 60s size-age matrix
-afscassess::size_at_age_pop_60(year = year,
-                               rec_age = rec_age,
-                               lenbins = lengths)
-
+ 
 # current size-age matrix
 afscassess::size_at_age(year = year,
                         admb_home = admb_home,
