@@ -3,7 +3,7 @@
 
 # load ----
 ## do NOT update odbc or connect() won't work
-#devtools::install_github("afsc-assessments/afscdata", force = TRUE) 
+devtools::install_github("afsc-assessments/afscdata", force = TRUE) 
 #devtools::install_github("BenWilliams-NOAA/afscassess", force = TRUE)
 #devtools::install_github('r4ss/r4ss', force = TRUE)
 
@@ -33,7 +33,6 @@ species = "FSOL"
 #prev_mdl_fldr = "2020.1-2021"
 #mdl_name = "model_20_1"
 #dat_name = "goa_pop"
-
 #afscassess::sp_switch(species)
 # setup folder structure - only run this once
 # afscdata::setup_folders(year)
@@ -55,11 +54,9 @@ suppressWarnings(afscassess::clean_catch(year = year,
                                         fixed_catch = 'bsai_fhs_catch_1964_1994.csv'))
 
 ## reformat catches
-afscdata::catch_to_ss(year, seas = 1, fleet = 1)
+afscdata::catch_to_ss3(year, seas = 1, fleet = 1)
 
-
-
-# fishery age comp, by sex
+# expand fishery age comps by sex; adapted from afscassess::fish_age_comp function
 fac0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), delim = ",", 
                     col_type = c(join_key = "c", 
                                  haul_join = "c", port_join = "c")) %>% 
@@ -86,18 +83,24 @@ fac0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), d
   tidytable::select(-age_tot) %>% 
   tidytable::pivot_wider(names_from = age, values_from = prop)
 
-fac %>% filter(sex == 'F') %>% 
-  merge(., fac %>% 
+fac0 %>% filter(sex == 'F') %>% 
+  merge(., fac0 %>% 
           filter(sex == 'M') %>% 
           select(-sex, -n_s,-n_h, - AA_Index), 
                                      by = 'year', all.y = FALSE) %>%
   arrange(year) %>%
-  mutate(Seas = 7, FltSvy = ifelse(year < 2000, -1, 1), Gender = 3, Part = 0, Ageerr = 1, LbinLo = -1, LbinHi = -1, Nsamp = n_h) %>%
+  ## drop the years before 2000 since Lcomps are available
+  mutate(Seas = 7, FltSvy = ifelse(year < 2000, -1, 1), Gender = 3, 
+         Part = 0, Ageerr = 1, LbinLo = -1, LbinHi = -1, Nsamp = n_h) %>%
   select(Yr = year, Seas, FltSvy, Gender, Part, Ageerr, LbinLo, LbinHi, Nsamp, everything(), -sex, -n_s, -n_h, -AA_Index) %>%
   write.csv(., file = here::here(year,'data','output','fsh_age_comp_ss3.csv'), row.names = FALSE)
 
 
+## fishery length comp, by sex
 
+## survey marginal ages
+## survey lengths
+## survey caals (used in model)
 
 # expanded comps (expanded in years with obs catch data)
 # afscassess::fish_age_comp(year = year,
@@ -115,12 +118,51 @@ afscassess::bts_age_comp(year = year,
                          plus_age = plus_age,
                          rmv_yrs = c(1984,1987))
 
-# fishery size comp
-afscassess::fish_length_comp_pop(year = year,
-                                 rec_age = rec_age,
-                                 lenbins = lengths,
-                                 rmv_yrs = c(1988, 1993, 1994, 2003, 2007, 2009,
-                                  2011, 2013, 2015, 2017, 2019, 2021, 2022, 2023))
+# fishery size comp expansion, adapted from afscassess::fish_length_comp
+
+ages <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), delim = ",", col_type = c(join_key = "c", 
+                                                                                                              haul_join = "c", port_join = "c")) %>% tidytable::filter(!is.na(age), 
+                                                                                                                                                                       age >= rec_age) %>% tidytable::group_by(year) %>% tidytable::tally(name = "age") %>% 
+  tidytable::filter(age >= 50) %>% 
+  tidytable::ungroup()
+flc0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_length_data.txt"), 
+                    delim = ",", 
+                    col_type = c(haul_join = "c", 
+                                 port_join = "c")) %>% 
+  # tidytable::filter(!(year %in% unique(ages$year))) %>% 
+  tidytable::mutate(tot = sum(frequency), 
+                                                                                                                                                                                                 length = ifelse(length >= max(lenbins), max(lenbins), 
+                                                                                                                                                                                                                 length), n_h = length(unique(na.omit(haul_join))) + 
+                                                                                                                                                                                                   length(unique(na.omit(port_join))), .by = year) %>% 
+  tidytable::summarise(n_s = mean(tot), n_h = mean(n_h), 
+                       length_tot = sum(frequency), .by = c(sex,year, length)) %>% 
+  tidytable::mutate(prop = length_tot/n_s) %>% tidytable::left_join(expand.grid(sex = unique(.$sex), 
+                                                                                year = unique(.$year), 
+                                                                                length = lenbins), .) %>% tidytable::replace_na(list(prop = 0)) %>% 
+  tidytable::mutate(SA_Index = 1, n_s = mean(n_s, na.rm = T), 
+                    n_h = mean(n_h, na.rm = T), .by = year) %>% tidytable::select(-length_tot) %>% 
+  tidytable::pivot_wider(names_from = length, values_from = prop)
+
+
+flc0 %>% filter(sex == 'F') %>% 
+  merge(., flc0 %>% 
+          filter(sex == 'M') %>% 
+          select(-sex, -n_s,-n_h), 
+        by = 'year', all.y = FALSE) %>%
+  arrange(year) %>%
+  ## drop the years before 2000 since Lcomps are available
+  mutate(Seas = 7, 
+         FltSvy = ifelse(year %in% unique(fac0$year[which(fac0$year > 2000)]), -1, 1),  
+         Gender = 3, 
+         Part = 0, Ageerr = 1, LbinLo = -1, LbinHi = -1, Nsamp = n_h) %>%
+  select(Yr = year, Seas, FltSvy, Gender, Part, Ageerr, LbinLo, LbinHi, Nsamp, everything(), -sex, -n_s, -n_h) %>% 
+  write.csv(., file = here::here(year,'data','output','fsh_len_comp_ss3.csv'), row.names = FALSE)
+
+
+# afscassess::fish_length_comp(year = year,
+#                                  rec_age = rec_age,
+#                                  lenbins = lengths) 
+  
 
 # bottom trawl survey size comp (not fit to in model, used for size-age matrices)
 afscassess::bts_length_comp(year = year,
