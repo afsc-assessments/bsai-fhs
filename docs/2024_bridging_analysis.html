@@ -66,6 +66,7 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#data-bridging" id="toc-data-bridging" class="nav-link" data-scroll-target="#data-bridging">Data Bridging</a>
   <ul class="collapse">
+  <li><a href="#timeseries-prep" id="toc-timeseries-prep" class="nav-link" data-scroll-target="#timeseries-prep">Timeseries Prep</a></li>
   <li><a href="#adding-catches" id="toc-adding-catches" class="nav-link" data-scroll-target="#adding-catches">Adding Catches</a></li>
   <li><a href="#adding-survey-biomass" id="toc-adding-survey-biomass" class="nav-link" data-scroll-target="#adding-survey-biomass">Adding Survey Biomass</a></li>
   <li><a href="#adding-survey-caals" id="toc-adding-survey-caals" class="nav-link" data-scroll-target="#adding-survey-caals">Adding Survey CAALs</a></li>
@@ -73,7 +74,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#adding-fishery-ages" id="toc-adding-fishery-ages" class="nav-link" data-scroll-target="#adding-fishery-ages">Adding Fishery Ages</a></li>
   <li><a href="#marginal-survey-ages-lengths-ghosted" id="toc-marginal-survey-ages-lengths-ghosted" class="nav-link" data-scroll-target="#marginal-survey-ages-lengths-ghosted">Marginal Survey Ages &amp; Lengths (ghosted)</a></li>
   </ul></li>
-  <li><a href="#bridged-update-model-18.2c-2024" id="toc-bridged-update-model-18.2c-2024" class="nav-link" data-scroll-target="#bridged-update-model-18.2c-2024">Bridged “Update” Model, 18.2c (2024)</a></li>
+  <li><a href="#bridged-operational-update-model-18.2c-2024" id="toc-bridged-operational-update-model-18.2c-2024" class="nav-link" data-scroll-target="#bridged-operational-update-model-18.2c-2024">Bridged Operational Update Model, 18.2c (2024)</a></li>
   </ul>
 </nav>
 </div>
@@ -108,8 +109,8 @@ ul.task-list li input[type="checkbox"] {
 <p>The general workflow was as follows:</p>
 <ol type="1">
 <li><p>Move the 2020 model, referred to as Model 18.2c (2020), from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the <a href="https://github.com/nmfs-ost/ss3-source-code/releases">NOAA Virtual Lab</a>. Comparisons between model derived quantities and likelihoods are provided in this document.</p></li>
-<li><p>Compare the historical and newly-pulled data. The “old data pull approach” (uses code from Drs. McGilliard &amp; Monnahan in a local R package entitled <code>newsbss</code>, which is highly customized and not actively maintained. The “newly-pulled” data are obtained using the <code>afscdata</code> package. The latter is the preferred method since it is actively maintained and provides a unified approach for many stocks.</p></li>
-<li><p>Bridge the data obtained via <code>afscdata</code> systematically. Model 18.2c (2020) has catches and fishery length comps through 2020, and everything else through 2019. There is also mean size-at-age data through 2016. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey CAALs (marginal survey lengths &amp; ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below. <strong>This bridged model, with updated software and data inputs but no structural changes is labeled as Model 18.2c (2024)</strong>.</p></li>
+<li><p>Compare the historical and newly-pulled data. The “old data pull approach” uses code from Drs. McGilliard &amp; Monnahan in a local R package entitled <code>newsbss</code>, which is highly customized and not actively maintained. The “newly-pulled” data are obtained using the <code>afscdata</code> package. The latter is the preferred method since it is actively maintained and provides a unified approach for many stocks.</p></li>
+<li><p>Bridge the data obtained via <code>afscdata</code> systematically. Model 18.2c (2020) has catches and fishery length comps through 2020, and everything else through 2019. There was also mean size-at-age data through 2016 but it was not used (fit to) in the model. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey CAALs (marginal survey lengths &amp; ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below. <strong>This bridged model, with updated software and data inputs but no structural changes is labeled as Model 18.2c (2024)</strong>.</p></li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
@@ -206,16 +207,26 @@ ul.task-list li input[type="checkbox"] {
 <h1>Data Exploration/Comparison</h1>
 <section id="big-picture-data-notes" class="level2">
 <h2 class="anchored" data-anchor-id="big-picture-data-notes">Big-Picture Data Notes</h2>
-<p>This section of the script assumes that one has already downloaded the data; to avoid separate scripts doing the same thing, I’m completing that step in <code>R/2024_analysis.R</code>. I wrote some functions for <code>afscdata</code> that reshape those data frames into the SS3 format, which is also accomplished in that script.</p>
-<p>The original data pull method is in <code>R/old_datapull_script.R</code>. I used that code to download data in the manner consistent with the historical approach when possible, and below reshape it into the SS3 format for comparison. There are several cases where I wasn’t able to re-trace the 2020 model’s steps, mostly due to deprecated Oracle schemata.</p>
-<p>Bering Flounder is <em>not</em> included in the compositional data; Dr.&nbsp;Monnahan caught and corrected this issue 2020. The total survey biomass and catches do include both species.</p>
-<p><em>Due to staffing issues</em> we had to triage the number of otoliths read for all sources in years 2022 and 2023. After consulting with the Age &amp; Growth team, they indicated they could read a <em>total</em> of about 750 BSAI FHS otoliths this year. This is a considerable reduction given than normally we have about 600-800 otoliths for each source (survey and fishery) for each year; this typically encompasses every collected otolith from each source, so there are not historical ratios to use for guidance. Dr.&nbsp;Kapur decided in January 2024 that the ratio of the Francis weights from Model 18.2c (2020) would guide how the reduction in age-reads was allocated accross sources. The survey age data were weighted about 2.5x higher than the fishery age data. Using this ratio and splitting age-reads evenly across the two missing years resulted in a request of 107 age-reads for each of 2022 &amp; 2023 from the fishery, and 267 age-reads for each of 2022 &amp; 2023 from the survey.</p>
-<p>Normally, the number of hauls is used as the input sample size for the compositional data, but doing so this time would not reflect the fact that the input data represent far fewer of those hauls.</p>
+<p>This section of the script assumes that one has already downloaded and formatted the data one plans to use in the assesssment. To avoid separate scripts doing the same thing, I’m completing that step in <code>R/2024_analysis.R</code>. I wrote some functions for the <code>afscdata</code> and <code>afscassess</code> packages that reshape those data frames into the SS3 format, which is also accomplished in that script.</p>
+<p>The original data pull method is in <code>R/old_datapull_script.R</code>. I used that code to download data in the manner consistent with the historical approach, when possible, and below reshape it into the SS3 format for comparison as a one-off. There are several cases where I wasn’t able to re-trace the 2020 model’s steps, mostly due to deprecated Oracle schemata.</p>
+<p>Bering Flounder is <em>not</em> included in the compositional data; Dr.&nbsp;Monnahan caught and corrected this issue in 2020. The total survey biomass and catches do include both species.</p>
+<p><strong>Due to staffing issues</strong> we had to triage the number of otoliths read for all sources in years 2022 and 2023. After consulting with the Age &amp; Growth team, they indicated they could read a <em>total</em> of about 750 BSAI FHS otoliths this year. This is a considerable (~75%) reduction given than normally we have about 600-800 otoliths for each source (survey and fishery) for each year; this typically encompasses every collected otolith from each source, so there are not historical ratios to use for guidance. Dr.&nbsp;Kapur decided in January 2024 that the ratio of the Francis weights from Model 18.2c (2020) would guide how the reduction in age-reads was allocated accross sources. The Francis survey age data weights were about 2.5x higher than those for the fishery age data. Using this ratio and splitting age-reads evenly across the two missing years resulted in a request of 107 age-reads for fishery otoliths from each of 2022 &amp; 2023, and 267 age-reads for survey otoliths from each of 2022 &amp; 2023.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Historical numbers of Bering Sea otoliths collected and read, by source. Survey collections from the AI remain unread. There is variation in the proportion of collected fishery otoliths that were read through time, though the input sample size (for the fishery) has always been the number of hauls. The survey has consistently read nearly all collected otoliths. The red bars are the proposed number of age-reads for 2022 and 2023 data.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Normally, the number of hauls is used as the input sample size for the compositional data, but doing so for 2022 and 2023 would not reflect the fact that the input data represent far fewer of those hauls for those years. I will later do a sensitivity analysis to how the specification of input sample size for those years impacts model behavior; for now the number of hauls is retained as the default.</p>
 <p>The figures at the bottom of this section compare the key data sources both historically and within the new period from both approaches. The text headers describe any discrepancies between approaches.</p>
 </section>
 <section id="fishery-catches" class="level2">
 <h2 class="anchored" data-anchor-id="fishery-catches">Fishery Catches</h2>
-<p>Both queries call from the <code>council.comprehensive_blend_ca</code> table. I ran the <code>afscassess::clean_catch()</code> function on the downloaded data, and the summary code for aggregating into tons. <strong>The approaches result in consistent catch histories.</strong></p>
+<p>Both queries call from the <code>council.comprehensive_blend_ca</code> table. I ran the <code>afscassess::clean_catch()</code> function on the downloaded data, and the summary code for aggregating into tons. <strong>The approaches result in consistent catch histories,</strong> with the understandable exception of in-year catches for 2020 (which were under-estimated).</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="2024_bridging_analysis_files/figure-html/load%20dfs-1.png" class="img-fluid" width="672"></p>
@@ -224,21 +235,17 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="fishery-length-compositions" class="level2">
 <h2 class="anchored" data-anchor-id="fishery-length-compositions">Fishery Length Compositions</h2>
-</section>
-<section id="fishery-age-compositions" class="level2">
-<h2 class="anchored" data-anchor-id="fishery-age-compositions">Fishery Age Compositions</h2>
-<p>The old datapull script and <code>afscdata</code> both read from <code>norpac.debriefed_spcomp</code>, though the latter reads from <code>mv</code> and the other doesn’t. + Years 1994, 1995 and 1998 are not used in the model as length comp data are available. + The number of hauls is used as the input sample size; these values were recoverable using the <code>afscdata</code> approach. + The default <code>afscdata</code> approach did not have a means for getting sex-specific values; I simply added these to the summary calls (ignoring unsexed fish) and reformatting things in SS3.</p>
-<p><em>I was unable to reproduce the fishery age-comp routine</em> used for the older version of the model. For reproducibility purposes, I am going to move towards the <code>afscdata</code> approach, which requires about 10% of the code to run, and does not require multiple reads of the same data sources. Importantly, I tested Model 18.2c with <em>only</em> the age-comp data changed to those available using my new approach and found the impact on derived quantities to be trivial.</p>
-<p>See the comments on the figures below for more information.</p>
+<p><em>I was unable to reproduce the fishery age- and len-comp routine</em> used for the older version of the model. For reproducibility purposes, I am going to move towards the <code>afscdata</code> approach, which requires about 10% of the code to run, and does not require multiple reads of the same data sources. Importantly, I tested Model 18.2c with <em>only</em> the age-comp or len-comp data (separately) changed to those available using my new approach and found the impact on derived quantities to be trivial.</p>
+<p>The current assessment passes the fishery length comp time series but only fits to data in years where there are not age-comp data (1977-1999, 2002-2003, 2008 and 2020).</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Fish Age Comps from 18.c (2020)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Fish Age Comps using <code>afscdata</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Spawning Biomass, old vs new data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">Recruitment Time Series, old vs new data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false" href="">Survey Fits, old vs new data</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Fish Len Comps from 18.c (2020)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Fish Len Comps using <code>afscdata</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Spawning Biomass, old vs new length comp data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">Recruitment Time Series, old vs new length comp data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false" href="">Survey Fits, old vs new length comp data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-6" role="tab" aria-controls="tabset-2-6" aria-selected="false" href="">Input Sample Sizes, Fishery Length Data</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight squashing of observations towards older ages; the input sample sizes are essentially unchanged.</figcaption>
 </figure>
 </div>
@@ -250,7 +257,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight squashing of observations towards older ages; the input sample sizes are essentially unchanged.</figcaption>
 </figure>
 </div>
@@ -273,32 +280,108 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+<div id="tabset-2-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-6-tab">
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Yr', 'Fleet'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">The discrepancies between the number of hauls is more pronounced earlier in the time series; the afscdata() approach seems to have slightly higher values. This is likely due to filtration steps in the old code that I cannot test by hand. There are missing years in the 2000’s because those data were not fit to (in lieu of age data).</figcaption>
+</figure>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="fishery-age-compositions" class="level2">
+<h2 class="anchored" data-anchor-id="fishery-age-compositions">Fishery Age Compositions</h2>
+<p>The old datapull script and <code>afscdata</code> both read from <code>norpac.debriefed_spcomp</code>, though the latter reads from <code>mv</code> and the former doesn’t. - Years 1994, 1995 and 1998 are not used in the model as length comp data are available. - The number of hauls is used as the input sample size; these values were recoverable for the age data using the <code>afscdata</code> approach, but the values for the length data are fairly different (see figure below). My guess is this has to do with updates to the database and/how filtration happens before compiling the comps. - The default <code>afscdata</code> approach did not have a means for getting sex-specific values for either comp dataset; I simply added these to the summary calls (ignoring unsexed fish) and reformatting things in SS3.</p>
+<p>See the comments on the figures below for more information.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Fish Age Comps from 18.c (2020)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Fish Age Comps using <code>afscdata</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href="">Spawning Biomass, old vs new age data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-4" role="tab" aria-controls="tabset-3-4" aria-selected="false" href="">Recruitment Time Series, old vs new age data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-5" role="tab" aria-controls="tabset-3-5" aria-selected="false" href="">Survey Fits, old vs new age data</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight squashing of observations towards older ages; the input sample sizes are essentially unchanged.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight squashing of observations towards older ages; the input sample sizes are essentially unchanged.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+
+</div>
+<div id="tabset-3-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-4-tab">
+
+</div>
+<div id="tabset-3-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-5-tab">
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>showing uncertainty for all models</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>subplot 13: index fits</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>I am satisfied by this exploration that replacing the fishery compositional data with the outputs of <code>afscdata</code> does not have an unreasonable impact on model behavior, even given small changes in the observations.</strong></p>
 </section>
 <section id="survey-biomass-data" class="level2">
 <h2 class="anchored" data-anchor-id="survey-biomass-data">Survey Biomass Data</h2>
 <p>From the 2020 SAFE:</p>
 <blockquote class="blockquote">
-<p>“This assessment used a single survey index of”total” <em>Hippoglossoides</em> spp. biomass that included the EBS “standard” survey areas and AI survey areas for the years 1982-2018 (Table 9.9). Survey biomass for <em>Hippoglossoides</em> spp. in the Aleutian Islands is very small as compared to that from the EBS shelf survey, and survey biomass for Bering flounder is very small as compared to that of flathead sole. A linear regression is used to estimate a relationship between EBS shelf <em>Hippoglossoides</em> spp. survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year).”</p>
+<p>“This assessment used a single survey index of”total” <em>Hippoglossoides</em> spp. biomass that included the EBS “standard” survey areas and AI survey areas for the years 1982-2018. Survey biomass for <em>Hippoglossoides</em> spp. in the Aleutian Islands is very small as compared to that from the EBS shelf survey, and survey biomass for Bering flounder is very small as compared to that of flathead sole. A linear regression is used to estimate a relationship between EBS shelf <em>Hippoglossoides</em> spp. survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year).”</p>
 </blockquote>
-<p>Both Dr.&nbsp;Monnohan (per his notes) and I are not thrilled with this approach, since being model-based means that even historical datapoints can change with each new observation (assuming that the output of the lm is used to replace the survey biomass series wholesale, which would be statistically prudent).</p>
+<p>Both Dr.&nbsp;Monnohan (per his notes) and I are not thrilled with this approach, since being model-based means that even historical datapoints can change with each new observation (assuming that the output of the lm is used to replace the survey biomass series wholesale, which would be statistically prudent). It’s also odd to me that the survey biomass data include both congeners while the compositional data does not; though it’s important to remember that Bering flounder constitutes about 1% of catches.</p>
 <p>I coded the linear model into the <code>afscdata::bsai_fhs</code> data extraction function and did <em>not</em> use the <code>afscassess::bts_biomass</code> function for further post-processing. The former function saves the Synthesis-formatted dataframe directly to <code>output/</code>. The resultant index is identical to what was used before.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
 <section id="survey-compositional-data" class="level2">
 <h2 class="anchored" data-anchor-id="survey-compositional-data">Survey Compositional Data</h2>
 <p><strong>Important</strong>: I could not reproduce the 2020 Model’s method of pulling these data from scratch because the schema (<code>haehnr</code>) that it calls from has been deleted.</p>
-<p>The model uses conditional age-at-length data from the survey as well as marginal length composition data. The marginal survey ages are ghosted into the model for plotting purposes. The workflow for these data are as follows: 1) Pull the raw data from <code>racebase</code> using the <code>afscdata</code> approach (see <code>2024_analysis.R</code>) 2) Expand the marginal trawl survey compositional data using the <code>afscassess</code> functions 3) Calculate conditional ages-at-length for each sex via the following. + Starting with the EBS ages, filter out Bering Flounder (code <code>10140</code>) and only include the EBS (subarea &lt;= 6) and sexed fish (3) + Bin the data into length and age bins greater than 0 (legacy code <code>BIN_AGE_DATA</code> and <code>BIN_LEN_DATA</code>). + Group by bins and tabulate the number in each unique combination; filling missing values from zero + Reformat into SS3 syntax.</p>
+<p>The model uses survey conditional age-at-length data and marginal length composition data. The marginal survey <em>ages</em> are ghosted into the model for plotting purposes. The workflow for these data are as follows:</p>
+<ul>
+<li>Pull the raw data from <code>racebase</code> using the <code>afscdata</code> approach (see <code>2024_analysis.R</code>)</li>
+<li>Expand the marginal trawl survey compositional data using the <code>afscassess</code> functions</li>
+<li>Calculate conditional ages-at-length for each sex via the following: Starting with the EBS ages, filter out Bering Flounder (code <code>10140</code>) and only include the EBS (subarea &lt;= 6) and sexed fish (3). Bin the data into length and age bins greater than 0 (legacy code <code>BIN_AGE_DATA</code> and <code>BIN_LEN_DATA</code>). Group by bins and tabulate the number in each unique combination; filling missing values from zero. Reformat into SS3 syntax.</li>
+</ul>
 </section>
 </section>
 <section id="data-bridging" class="level1">
 <h1>Data Bridging</h1>
 <p>Importantly, the data updates conducted here are holistic, meaning that the entire time series of data for each component (where available) is replaced with what is currently available in the AKFIN database. A comparison between the data used in the last assessment and the latest version of that dataset is provided for each component above. The model that includes each change is named in the relevant header; these are hosted under <code>model_runs/</code>.</p>
+<section id="timeseries-prep" class="level2">
+<h2 class="anchored" data-anchor-id="timeseries-prep">Timeseries Prep</h2>
+<p>Some initial steps are required to model dynamics through the present year. These are as follows: - end year - selex - forecasting file/doesn’t matter</p>
+</section>
 <section id="adding-catches" class="level2">
 <h2 class="anchored" data-anchor-id="adding-catches">Adding Catches</h2>
 </section>
@@ -318,9 +401,9 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="marginal-survey-ages-lengths-ghosted">Marginal Survey Ages &amp; Lengths (ghosted)</h2>
 </section>
 </section>
-<section id="bridged-update-model-18.2c-2024" class="level1">
-<h1>Bridged “Update” Model, 18.2c (2024)</h1>
-<p>This is model 18.2c (2024) and represents an “operational update”; the model structure has not been modified, and only the input data have been revised to reflect the current database. Additional explorations with this model including changes to the</p>
+<section id="bridged-operational-update-model-18.2c-2024" class="level1">
+<h1>Bridged Operational Update Model, 18.2c (2024)</h1>
+<p>This is model 18.2c (2024) and represents an “operational update”; the model structure has not been modified, and only the input data have been revised to reflect the current database. Additional explorations with this model that extend beyond the scope of an “operational update” are provided in <code>2024_sensitivity_analysis.qmd</code>.</p>
 </section>
 
 </main>
