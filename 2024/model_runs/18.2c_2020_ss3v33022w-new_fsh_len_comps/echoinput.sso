@@ -1863,12 +1863,27 @@ yr 2020, seas: 1, fleet:1
  finished time series 
 Finished time_series
 Finished survey obj_fun  0 136.717
-Finished lencomp obj_fun  52.1052 247.676
+Finished lencomp obj_fun  43.4756 247.676
 Finished agecomp obj_fun  58.9189 1705.85
  initequ_catch -log(L)  0.000153127 0
  catch -log(L)  6.68002e-14 0
 Finished recruitdev obj_fun -25.148 36.2808 0.5
- OK with obj_func 2176.12
+ OK with obj_func 2167.49
 Wrote first version of output files (before hessian, benchmark, and forecast)
 Start benchmark and forecast, if requested
 Finished benchmark, forecast, and sdreporting
+Iterations: 585
+ finished COVAR.SSO
+Finished forecast
+Writing wtatage.ss_new
+Finished StdDev quantities
+Finished posteriors
+Finished SS_summary.sso
+Finished final writing of report.sso
+Begin writing data_echo.ss_new file
+Begin writing data_expval.ss file
+Write starter.ss_new file 
+Write forecast.ss_new file 
+Note 1 Information: A revised protocol for the Fcast_yr specification is available and recommended.
+Write control.ss_new file 
+Begin final output calculations and warnings
