@@ -3,10 +3,12 @@
 
 # load ----
 ## do NOT update odbc or connect() won't work
+
 devtools::install_github("afsc-assessments/afscdata", force = TRUE) 
+# devtools::install_github("afsc-gap-products/gapindex")
 #devtools::install_github("BenWilliams-NOAA/afscassess", force = TRUE)
 #devtools::install_github('r4ss/r4ss', force = TRUE)
-
+library(gapindex)
 library(afscdata)
 library(afscassess)
 library(r4ss)
@@ -26,6 +28,7 @@ library(rema)
 year = 2024
 rec_age = 0 ## this is default for SS3
 plus_age = 21
+ages = rec_age:plus_age
 lengths = c(seq(6,40,2),seq(43,58,3))
 TAC = c(25000, 25000, 35500) # 2021, 2022, 2023
 species = "FSOL"
@@ -43,7 +46,6 @@ species = "FSOL"
 ## you must be on the VPN for this to work, and it takes about 5 minutes
 ## this automates the AI interpolation for the biomass survey and outputs in in SS format
 afscdata::bsai_fhs(year)
-
 
 # reshape data ----
 ## only need to do this if you have re-queried data
@@ -141,12 +143,56 @@ flc0 %>% filter(sex == 'F') %>%
 
 afscassess::fish_length_comp(year, lenbins = len_bins,rec_age = 0)
 
-## survey comps to CAALs ----
+## survey comps ----
+## this will save csvs for CAALs and marginal lengths/ages in output/. This is Carey's method.
+source(here::here(year,"R","calculate_survey_comps.R"))
 
 
-## survey marginal ages
-## survey lengths
-## survey caals (used in model)
+
+## survey marginal ages (ghosted in model) ----
+tmp <- read.csv(here::here(year, 'data','raw','bsai_ts_length_specimen_data.csv'))  %>%
+  filter(sex != 3 & !is.na(age) & !is.na(length) & age > 0 & age<plus_age, species_code == 10130) %>%
+  mutate(
+    # sex = ifelse(sex == 1,2,1),  ## SS sex is inverse of this dataset
+    length_grp = cut(round(length/10,0) ,
+                     breaks = seq(0,60,2),
+                     right = FALSE,
+                     labels = FALSE),
+    length_bin_use = seq(0,60,2)[length_grp])
+inputN_total <- tmp %>%
+  group_by(year,sex) %>%
+  dplyr::summarise(Nsamp = n())
+inputN_h <- tmp %>% 
+  group_by(year, sex) %>% 
+  summarise(n_h = length(unique(hauljoin)))
+            
+srvage0 <- tmp %>% 
+  group_by(year, sex, age) %>%
+  summarise(n_combo = n()) %>%
+  ungroup()%>%
+  left_join(., inputN_total, by = c('year','sex')) %>%
+  mutate(freq = n_combo/Nsamp) %>%
+  select(-n_combo) %>%
+  tidyr::pivot_wider(names_from = age, values_from = freq, values_fill = 0, names_expand = TRUE) 
+
+## note: cole had these all set to nsamp = 200
+srvage0 %>% 
+  filter(sex == 1) %>% 
+  merge(., srvage0 %>% 
+          filter(sex == 2) %>% 
+          select(-sex, -Nsamp), 
+        by = c('year'), all.y = FALSE) %>%
+  filter(year %in%  unique(mod_2020$condbase$Yr)) %>%
+  arrange(year) %>%
+  mutate(Seas = 7, FltSvy = -2, Gender = 3, Part = 0, Ageerr = 1, Lbin_lo = -1,
+         Lbin_hi = -1) %>%
+  select(year, Seas, FltSvy, Gender, Part, Ageerr, Lbin_lo, Lbin_hi, Nsamp, everything(),
+         -sex) %>%
+  write.csv(., file = here::here(year,'data','output','srv_age_ghost_ss3.csv'), row.names = FALSE)
+
+
+
+
 
 
 
@@ -158,11 +204,16 @@ afscassess::bts_age_comp(year = year,
                          rmv_yrs = c(1984,1987))
 
 # fishery size comp expansion, adapted from afscassess::fish_length_comp
-
+## manually rename a file; lookup funs want "bts"
+file.rename(from=here::here(year, 'data','raw','bts_length_data.csv'),
+            to = here::here(year, 'data','raw','bsai_ts_length_data.csv'))
+file.rename(from=here::here(year, 'data','raw','bsai_ts_specimen_data.csv'),
+            to = here::here(year, 'data','raw','bsai_ts_length_specimen_data.csv'))
 # bottom trawl survey size comp (not fit to in model, used for size-age matrices)
+
 afscassess::bts_length_comp(year = year,
-                            area = "goa",
-                            sa_index = 2,
+                            area = "bsai",
+                            bysex = TRUE,
                             lenbins = lengths)
 
  
@@ -184,9 +235,7 @@ afscassess::age_error(year = year,
 ## note that the functions in afscdata to do this are still in dev 
 ## and likely need further testing/customization to work well with all species.                      
 
-## manually rename a file; lookup funs want "bts"
-file.rename(from=here::here(year, 'data','output','goa_ts_length_comp.csv'),
-to = here::here(year, 'data','output','goa_bts_length_comp.csv'))
+
 
 # concatenate dat file, for now writing it to output folder in data
 afscassess::concat_dat_pop(year = year,
