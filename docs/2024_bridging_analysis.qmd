@@ -29,11 +29,11 @@ The general workflow was as follows:
 
 1)  Move the 2020 model, referred to as Model 18.2c (2020), from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods are provided in this document.
 
-2)  Compare the historical and newly-pulled data. The "old data pull approach" uses code from Drs. McGilliard & Monnahan in a local R package entitled `newsbss`, which is highly customized and not actively maintained. The "newly-pulled" data are obtained using the `afscdata` package. The latter is the preferred method since it is actively maintained and provides a unified approach for many stocks.
+2)  Compare the historical and newly-pulled data. The "old data pull approach" uses code from Drs. McGilliard & Monnahan in a local R package entitled `newsbss`, which is highly customized and not actively maintained. The "newly-pulled" data are obtained using the `afscdata` package. The latter is the preferred method since it is actively maintained and provides a unified approach for many stocks. For many data sources I ran the 2020 model with *only* that data source changed, when I needed to convince myself that trivial differences in the raw data extraction were indeed trivially impactful.
 
-3)  Bridge the data obtained via `afscdata` systematically. Model 18.2c (2020) has catches and fishery length comps through 2020, and everything else through 2019. There was also mean size-at-age data through 2016 but it was not used (fit to) in the model. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey CAALs (marginal survey lengths & ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below. **This bridged model, with updated software and data inputs but no structural changes is labeled as Model 18.2c (2024)**.
+3)  Sequentially bridge the data obtained via `afscdata` Model 18.2c (2020) has catches and fishery length comps through 2020, and everything else through 2019. There was also mean size-at-age data through 2016 but it was not used (fit to) in the model. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey lengths, then survey CAALs (marginal ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below. **This bridged model, with updated software and data inputs but no structural changes is labeled as Model 18.2c (2024)**.
 
-```{r include = TRUE, echo = FALSE, warning = FALSE, message = FALSE}
+```{r include = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.cap="Data used in model Model 18.2c (2020). Most of these will be updated with at least 3 years of data for the bridged model, with the exception of fishery age compositions; there was not enough age-reader time to complete otolith reads for 2022 and 2023 (more details below). Also note that while there are fishery length data for most of the time series, fitting to these data is disabled in years where fishery ages are available."}
 SSplotData(mod18.2c_2020, subplots = 2)
 ```
 
@@ -96,7 +96,7 @@ m18.2cv33022w <- SS_output(here::here(year,'model_runs','18.2c_2020_ss3v33022w')
 SSplotSelex(m18.2cv33022w, fleets = 2, sexes = 1)
 ```
 
-# Data Exploration/Comparison
+# Data Exploration
 
 ## Big-Picture Data Notes
 
@@ -106,10 +106,25 @@ The original data pull method is in `R/old_datapull_script.R`. I used that code 
 
 Bering Flounder is *not* included in the compositional data; Dr. Monnahan caught and corrected this issue in 2020. The total survey biomass and catches do include both species.
 
-**Due to staffing issues** we had to triage the number of otoliths read for all sources in years 2022 and 2023. After consulting with the Age & Growth team, they indicated they could read a *total* of about 750 BSAI FHS otoliths this year. This is a considerable (\~75%) reduction given than normally we have about 600-800 otoliths for each source (survey and fishery) for each year; this typically encompasses every collected otolith from each source, so there are not historical ratios to use for guidance. Dr. Kapur decided in January 2024 that the ratio of the Francis weights from Model 18.2c (2020) would guide how the reduction in age-reads was allocated accross sources. The Francis survey age data weights were about 2.5x higher than those for the fishery age data. Using this ratio and splitting age-reads evenly across the two missing years resulted in a request of 107 age-reads for fishery otoliths from each of 2022 & 2023, and 267 age-reads for survey otoliths from each of 2022 & 2023. 
+### Age-Read triaging
 
+**Due to staffing issues** we had to reduce the number of otoliths read for all sources in years 2022 and 2023. After consulting with the Age & Growth team, they indicated they could read a *total* of about 750 BSAI FHS otoliths this year. This is a considerable (\~75%) reduction given than normally we have about 600-800 otoliths for each source (survey and fishery) for each year; this typically encompasses every collected otolith from each source, so there are not historical ratios to use for guidance.
 
-```{r eval = TRUE, echo = FALSE, include = TRUE, message = FALSE, warning = FALSE, fig.cap = "Historical numbers of Bering Sea otoliths collected and read, by source. Survey collections from the AI remain unread. There is variation in the proportion of collected fishery otoliths that were read through time, though the input sample size (for the fishery) has always been the number of hauls. The survey has consistently read nearly all collected otoliths. The red bars are the proposed number of age-reads for 2022 and 2023 data."}
+The two alternatives are to 1) disregard the fishery age-comps from 2022 & 2023 for this assessment, and devote all reading effort to the survey or 2) find a compromise (split) among the two fleets and years that doesn't amount to simply adding noise to the model.
+
+The figures below illustrate simulated composition data at varying levels of age-reads. We evaluated the resultant datasets based on how distinct they appeared from the full dataset. Our findings were as follows:
+
+-   Simply splitting the 750 otoliths evenly across years & fleets (187 reads each) results in a mis-represented plus group for the survey.
+-   Based on the data weights in the 2020 model, and the fact that survey CAALs are used to inform growth, it's intuitively preferable to assign more otolith reads to the survey data. This could range from completely ignoring the fishery data for these years to forming some sort of compromise among the datasets.
+-   The data weights would suggest that 2.5x the number of otoliths should be read from the survey (equaling 267 survey otoliths per year). This approach results in satisfactory compositions for the survey but not for the fishery.
+-   A compromise between these two approaches, shown in blue below, where the survey gets 225 age-reads per year, and the fishery gets 175 age-reads per year, result in satisfactory compositions for both fleets. 
+
+After considering these results, Dr. Kapur decided in January 2024 to go with the first option and **assign all available reader time to the survey**, with the understanding that a) the A&G program could finish reading the leftover fishery otoliths for future assessment years, and b) we don't expect these simulated datasets to have a strong influence on the terminal derived quantities given that recruitment deviations are set to zero for the last three years.
+
+::: panel-tabset
+### Otolith Collections thru Time
+
+```{r eval = TRUE, echo = FALSE, include = TRUE, message = FALSE, warning = FALSE, fig.cap = "Historical numbers of Bering Sea otoliths collected and read, by source. Survey collections from the AI remain unread. There is variation in the proportion of collected fishery otoliths that were read through time. The survey has consistently read nearly all collected otoliths. The red bars are the proposed number of age-reads for 2022 and 2023 data."}
 ## note that I changed the "collected" column so that only the difference between collected & aged is peeking out
 
 otodat <- read.csv(here::here(year,'data','user_input','otolith_reads_vs_aged.csv')) %>%
@@ -130,12 +145,98 @@ otodat <- read.csv(here::here(year,'data','user_input','otolith_reads_vs_aged.cs
 
 ```
 
+### Simulated Fishery Ages
 
-Normally, the number of hauls is used as the input sample size for the compositional data, but doing so for 2022 and 2023 would not reflect the fact that the input data represent far fewer of those hauls for those years. I will later do a sensitivity analysis to how the specification of input sample size for those years impacts model behavior; for now the number of hauls is retained as the default.
+```{r eval = TRUE, echo = FALSE, include = TRUE, message = FALSE, warning = FALSE, fig.cap = "Experimental visualization of simulated fishery age-comp data using fewer otolith reads."}
+## visualize the comps data with fewer samples
+obs_fsh_19<-  subset(mod_2020$agedbase, Yr == 2019 & Sex == 1 & Fleet == 1) %>% select(Obs) %>% unlist()
+sim600 <- rmultinom(n  = 1, prob= obs_fsh_19, size = 600 ) %>%
+  data.frame('raw'=.) %>%
+  mutate(freq = raw/sum(raw),
+         age = as.numeric(gsub('Obs','',rownames(.))))
+sim187 <- rmultinom(n  = 1, prob= obs_fsh_19, size = 187 ) %>%
+  data.frame('raw'=.) %>%
+  mutate(freq = raw/sum(raw),
+         age = as.numeric(gsub('Obs','',rownames(.))))
+sim175 <- rmultinom(n  = 1, prob= obs_fsh_19, size = 175 ) %>%
+  data.frame('raw'=.) %>%
+  mutate(freq = raw/sum(raw),
+         age = as.numeric(gsub('Obs','',rownames(.))))
+sim107 <- rmultinom(n  = 1, prob= obs_fsh_19, size = 107 ) %>%
+  data.frame('raw'=.) %>%
+  mutate(freq = raw/sum(raw),
+         age = as.numeric(gsub('Obs','',rownames(.)))) 
+p1 <- ggplot(sim600, aes(x = age, y = freq)) +
+  geom_area(fill = 'grey55')+   geom_point() + 
+  labs(x = 'age',y = 'simulated frequency', title = 'Full Sampling (n = 600)') +
+  scale_y_continuous(limits = c(0,0.15))
+p2 <-ggplot(sim187, aes(x = age, y = freq)) +
+  geom_area(fill = 'grey55')+   geom_point() + 
+  labs(x = 'age',y = 'simulated frequency', title = 'Equivalent Sampling (n = 187)')+scale_y_continuous(limits = c(0,0.15))
 
+p3 <-ggplot(sim175, aes(x = age, y = freq)) +
+  geom_area(fill = 'dodgerblue4')+   geom_point() + 
+  labs(x = 'age',y = 'simulated frequency', title = 'Compromise Sampling (n = 175)')+scale_y_continuous(limits = c(0,0.15))
 
+p4 <-ggplot(sim107, aes(x = age, y = freq)) +
+  geom_area(fill = 'grey55')+   geom_point() + 
+  labs(x = 'age',y = 'simulated frequency', title = 'Data Weighted Sampling (n = 107)')+scale_y_continuous(limits = c(0,0.15)) 
 
-The figures at the bottom of this section compare the key data sources both historically and within the new period from both approaches. The text headers describe any discrepancies between approaches.
+Rmisc::multiplot(plotlist = list(p1,p3,p2, p4), cols = 2)
+```
+
+### Simulated Survey Ages
+
+```{r eval = TRUE, echo = FALSE, include = TRUE, message = FALSE, warning = FALSE, fig.cap = "Experimental visualization of simulated survey age-comp data using fewer otolith reads. These are simulated using marginal age comp data from females in 2019."}
+## simulate the survey CAALs at lower SS.
+
+obs_srv_19 <-  subset(mod_2020$condbase, Yr == 2019 & Sex == 1 & Fleet == 2) %>% 
+  group_by(Bin) %>%
+  summarise(mean(Obs)) %>%
+  select(Obs = `mean(Obs)`) %>% unlist()
+
+sim600 <- rmultinom(n  = 1, prob= obs_srv_19, size = 600 ) %>%
+  data.frame('raw'=.) %>%
+  mutate(freq = raw/sum(raw),
+         age = as.numeric(gsub('Obs','',rownames(.))))
+sim187 <- rmultinom(n  = 1, prob= obs_srv_19, size = 187 ) %>%
+  data.frame('raw'=.) %>%
+  mutate(freq = raw/sum(raw),
+         age = as.numeric(gsub('Obs','',rownames(.))))
+
+sim225 <- rmultinom(n  = 1, prob= obs_srv_19, size = 225 ) %>%
+  data.frame('raw'=.) %>%
+  mutate(freq = raw/sum(raw),
+         age = as.numeric(gsub('Obs','',rownames(.))))
+sim267 <- rmultinom(n  = 1, prob= obs_srv_19, size = 267 ) %>%
+  data.frame('raw'=.) %>%
+  mutate(freq = raw/sum(raw),
+         age = as.numeric(gsub('Obs','',rownames(.))))
+sim50 <- rmultinom(n  = 1, prob= obs_srv_19, size = 50 ) %>%
+  data.frame('raw'=.) %>%
+  mutate(freq = raw/sum(raw),
+         age = as.numeric(gsub('Obs','',rownames(.))))
+
+p1 <- ggplot(sim600, aes(x = age, y = freq)) +
+  geom_area(fill = 'grey55')+   geom_point() + 
+  labs(x = 'age',y = 'simulated frequency', title =  'Full Sampling (n = 600)') +
+  scale_y_continuous(limits = c(0,0.1))
+p4 <-ggplot(sim187, aes(x = age, y = freq)) +
+  geom_area(fill = 'grey55')+   geom_point() + 
+  labs(x = 'age',y = 'simulated frequency', title = 'Equivalent Sampling (n = 187)')+scale_y_continuous(limits = c(0,0.15))
+p2 <-ggplot(sim267, aes(x = age, y = freq)) +
+  geom_area(fill = 'grey55')+   geom_point() + 
+  labs(x = 'age',y = 'simulated frequency', title = 'Data Weighted Sampling (n = 267)')+scale_y_continuous(limits = c(0,0.15))
+ 
+
+p3 <- ggplot(sim225, aes(x = age, y = freq)) +
+  geom_area(fill = 'dodgerblue4')+   geom_point() + 
+  labs(x = 'age',y = 'simulated frequency', title = 'Compromise Sampling (n = 225)')+scale_y_continuous(limits = c(0,0.15))
+
+Rmisc::multiplot(plotlist = list(p1,p3,p2, p4), cols = 2)
+```
+:::
+
 
 ## Fishery Catches
 
@@ -158,7 +259,7 @@ rbind( mod_2020$catch %>% select(Yr, Obs) %>%
 
 ## Fishery Length Compositions
 
-```{r, include=FALSE, echo = FALSE, warning = FALSE,}
+```{r, include=FALSE, echo = FALSE, warning = FALSE}
 mod_2020_new_fsh_age_comps <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_fsh_age_comps'))
 mod_2020_new_fsh_len_comps <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_fsh_len_comps'))
 compsummary_1 <- SSsummarize(list(mod_2020,mod_2020_new_fsh_age_comps))
@@ -167,8 +268,7 @@ compsummary_2 <- SSsummarize(list(mod_2020,mod_2020_new_fsh_len_comps))
 
 *I was unable to reproduce the fishery age- and len-comp routine* used for the older version of the model. For reproducibility purposes, I am going to move towards the `afscdata` approach, which requires about 10% of the code to run, and does not require multiple reads of the same data sources. Importantly, I tested Model 18.2c with *only* the age-comp or len-comp data (separately) changed to those available using my new approach and found the impact on derived quantities to be trivial.
 
-The current assessment passes the fishery length comp time series but only fits to data in years where there are not age-comp data (1977-1999, 2002-2003, 2008 and 2020).  
-
+The current assessment passes the fishery length comp time series but only fits to data in years where there are not age-comp data (1977-1999, 2002-2003, 2008 and 2020).
 
 ::: panel-tabset
 ### Fish Len Comps from 18.c (2020)
@@ -208,7 +308,6 @@ SSplotComparisons(compsummary_2,
                   subplots = 13)
 ```
 
-
 ### Input Sample Sizes, Fishery Length Data
 
 ```{r, include=T, echo = FALSE, warning = FALSE, message= FALSE,fig.cap="The discrepancies between the number of hauls is more pronounced earlier in the time series; the afscdata() approach seems to have slightly higher values. This is likely due to filtration steps in the old code that I cannot test by hand. There are missing years in the 2000's because those data were not fit to (in lieu of age data)."}
@@ -226,22 +325,13 @@ mod_2020$lendbase %>% mutate(src = 'Old') %>%
   scale_color_manual(values = colvec, labels = c('afscdata()','Model 18.2c (2020) data')) +
   labs(x = 'Year',  y = 'Input Sample Size (nhauls)', fill = '',color = '')
 ```
-
 :::
 
 ## Fishery Age Compositions
 
-The old datapull script and `afscdata` both read from `norpac.debriefed_spcomp`, though the latter reads from `mv` and the former doesn't. 
--   Years 1994, 1995 and 1998 are not used in the model as length comp data are available.
--   The number of hauls is used as the input sample size; these values were recoverable for the age data using the `afscdata` approach, but the values for the length data are fairly different (see figure below). My guess is this has to do with updates to the database and/how filtration happens before compiling the comps.
--   The default `afscdata` approach did not have a means for getting sex-specific values for either comp dataset; I simply added these to the summary calls (ignoring unsexed fish) and reformatting things in SS3.
-
-
-
-
+The old datapull script and `afscdata` both read from `norpac.debriefed_spcomp`, though the latter reads from `mv` and the former doesn't. - Years 1994, 1995 and 1998 are not used in the model as length comp data are available. - The number of hauls is used as the input sample size; these values were recoverable for the age data using the `afscdata` approach, but the values for the length data are fairly different (see figure below). My guess is this has to do with updates to the database and/how filtration happens before compiling the comps. - The default `afscdata` approach did not have a means for getting sex-specific values for either comp dataset; I simply added these to the summary calls (ignoring unsexed fish) and reformatting things in SS3.
 
 See the comments on the figures below for more information.
-
 
 ::: panel-tabset
 ### Fish Age Comps from 18.c (2020)
@@ -280,10 +370,13 @@ SSplotComparisons(compsummary_1,
                   legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new age comp data'),
                   subplots = 13)
 ```
+
+
+
+
 :::
 
 **I am satisfied by this exploration that replacing the fishery compositional data with the outputs of `afscdata` does not have an unreasonable impact on model behavior, even given small changes in the observations.**
-
 
 ## Survey Biomass Data
 
@@ -312,23 +405,141 @@ rbind( mod_2020$cpue %>% select(Yr, Obs, SE) %>%
 
 ## Survey Compositional Data
 
-*I could not reproduce the 2020 Model's* method of pulling these data from scratch because the schema (`haehnr`) that it calls from has been deleted.
+### Survey CAALs
+
+*I could not completely reproduce the 2020 Model's* method of pulling these data from scratch because the schema (`haehnr`) that it calls from has been deleted. The workup on the `AL.df` object corresponds to `2020/data/ages_survey_ebs.csv` which is the roughly the same as what comes out of `_specimen`. I first tried to calculate the CAALs starting from the raw data using an intuitive aprpoach, but returned very different datasets. Instead, I consolidated the code used in the last model into `R/calculate_survey_CAALs.R`
+
+In addition, the `afscassess` functions aren't yet ready to handle the BSAI survey data, so this had to be done with my own functions in `R/`.
 
 The model uses survey conditional age-at-length data and marginal length composition data. The marginal survey *ages* are ghosted into the model for plotting purposes. The workflow for these data are as follows:
 
 -   Pull the raw data from `racebase` using the `afscdata` approach (see `2024_analysis.R`)
--   Expand the marginal trawl survey compositional data using the `afscassess` functions
+-   Calculate the marginal survey ages from `bsai_length_specimen.csv`.
+-   Calculate the marginal survey lengths from `bsai_length_data.csv`.
 -   Calculate conditional ages-at-length for each sex via the following: Starting with the EBS ages, filter out Bering Flounder (code `10140`) and only include the EBS (subarea \<= 6) and sexed fish (3). Bin the data into length and age bins greater than 0 (legacy code `BIN_AGE_DATA` and `BIN_LEN_DATA`). Group by bins and tabulate the number in each unique combination; filling missing values from zero. Reformat into SS3 syntax.
+
+```{r, include=FALSE, echo = FALSE, warning = FALSE}
+mod_2020_new_srv_caal <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_caal'))
+compsummary_3 <- SSsummarize(list(mod_2020,mod_2020_new_srv_caal))
+```
+
+
+::: panel-tabset
+#### Survey CAALs from 18.c (2020)
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap= "Only trivial differences in this historical data provided to the original assessment (shown here) vs. those pulled using a combination of afscdata and the legacy code (next tab)." }
+SSplotComps(mod_2020,fleets=2, subplots = 3, kind = 'cond', 
+            datonly = TRUE, maxrows = 6,showsampsize = TRUE, showeffN = FALSE)
+```
+
+#### Survey CAALs using `afscdata`
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="Only trivial differences in this historical data provided to the original assessment (previous tab) vs. those pulled using a combination of afscdata and the legacy code (shown here)." }
+SSplotComps(mod_2020_new_srv_caal,fleets=2, subplots = 3, kind = 'cond',
+            datonly = TRUE, maxrows = 6,showsampsize = TRUE, showeffN = FALSE)
+
+```
+
+#### Spawning Biomass, old vs new survey CAAL data
+
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in derived quantities."}
+SSplotComparisons(compsummary_3, 
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new CAAL data'),
+                  subplots = 2)
+```
+
+#### Recruitment Time Series, new survey CAAL data
+
+```{r, include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in recruitment deviations."}
+SSplotComparisons(compsummary_3, 
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new CAAL data'),
+                  subplots = 12)
+```
+
+#### Survey Fits, old vs new survey CAAL data
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
+SSplotComparisons(compsummary_3, 
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new CAAL data'),
+                  subplots = 13)
+```
+
+#### Growth Curves, old vs new survey CAAL data
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap=""}
+par(mfrow = c(1,2))
+SSplotBiology(mod_2020,subplots = 1)
+SSplotBiology(mod_2020_new_srv_caal,subplots = 1)
+```
+:::
+
+
+## Survey Marginal Lengths
+```{r, include=FALSE, echo = FALSE, warning = FALSE}
+mod_2020_new_srv_len <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_lengths'))
+compsummary_4 <- SSsummarize(list(mod_2020,mod_2020_new_srv_len))
+```
+
+::: panel-tabset
+#### Survey lengths from 18.c (2020)
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap= "Only trivial differences in this historical data provided to the original assessment (shown here) vs. those pulled using a combination of afscdata and the legacy code (next tab)." }
+SSplotComps(mod_2020,fleets=2, subplots = 1, kind = 'LEN', 
+            datonly = TRUE, maxrows = 6,showsampsize = TRUE, showeffN = FALSE)
+```
+
+#### Survey lengths using `afscdata`
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="Only trivial differences in this historical data provided to the original assessment (previous tab) vs. those pulled using a combination of afscdata and the legacy code (shown here)." }
+SSplotComps(mod_2020_new_srv_len,fleets=2, subplots = 1, kind = 'LEN',
+            datonly = TRUE, maxrows = 6,showsampsize = TRUE, showeffN = FALSE)
+
+```
+
+#### Spawning Biomass, old vs new survey lengths
+
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in derived quantities."}
+SSplotComparisons(compsummary_4, 
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new survey length data'),
+                  subplots = 2)
+```
+
+#### Recruitment Time Series, new survey lengths
+
+```{r, include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in recruitment deviations."}
+SSplotComparisons(compsummary_3, 
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new CAAL data'),
+                  subplots = 12)
+```
+
+#### Survey Fits, old vs new survey lengths
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
+SSplotComparisons(compsummary_3, 
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new survey lengths'),
+                  subplots = 13)
+```
+
+#### Growth Curves, old vs new survey lengths
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap=""}
+par(mfrow = c(1,2))
+SSplotBiology(mod_2020,subplots = 1)
+SSplotBiology(mod_2020_new_srv_caal,subplots = 1)
+```
+:::
+
+
+## Survey Ages (ghosted)
+These aren't used in the model but I wanted to confirm the pull from `afscdata` looked reasonable.
 
 # Data Bridging
 
 Importantly, the data updates conducted here are holistic, meaning that the entire time series of data for each component (where available) is replaced with what is currently available in the AKFIN database. A comparison between the data used in the last assessment and the latest version of that dataset is provided for each component above. The model that includes each change is named in the relevant header; these are hosted under `model_runs/`.
 
 ## Timeseries Prep
-Some initial steps are required to model dynamics through the present year. These are as follows:
--   end year
--   selex
--   forecasting file/doesn't matter
+
+Some initial steps are required to model dynamics through the present year. These are as follows: - end year - selex - forecasting file/doesn't matter
 
 ## Adding Catches
 
