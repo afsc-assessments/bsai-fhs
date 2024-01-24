@@ -1,0 +1,352 @@
+---
+title: "Survey Comps Deep Dive"
+author: "Maia Kapur maia.kapur@noaa.gov"
+format: html
+editor: source
+toc: true
+toc-depth: 2
+---
+
+# Background
+
+I've had a lot of trouble reproducing the survey compositional data used in Model 18.c (2020), which was generated using a combination of data extractions from the deprecated `haehnr` schema and some bespoke filtration/workup code. For the assessment we use conditional ages-at-length (by sex), marginal lengths (by sex), and marginal ages (by sex, which are ghosted).
+
+The disappearance of the `haehnr` schema means that I am forced to start with either the `bts_specimen_data.csv` drawn from `afscdata()` or the size composition dataframe from `gapindex`. I am unable to pass either dataset to the legacy (2020) code, since it's looking for individual columns for `MALES` and `FEMALES` (which have been superceded by a `SEX` column in both cases). Following an intuitive grouping/expansion pipeline (e.g., re-writing my own code to calculate the marginal comp data) resulted in drastically different datasets and modeling outcomes. I was able to calculate CAAL data near enough to the old dataset by starting with the raw `specimen` data (not `gapindex`) and passing it through Carey's code. This is less-than desireable, because I'd prefer to have a single starting source (one package or the other) and updated munging routines for all survey compositional data.
+
+So, the purpose of this document is to dig into where the discrepancy between data sources and workup is arising, and to see whether we can find a best way forward for reproducibly generating these data. **For simplicity we are going to focus on data in year 2010.**
+
+# Close-up Data Comparisons
+
+## Marginal Lengths
+
+As stated above, the 2020 model pulled from the `haehnr` schema, which I can no longer do, while I do have the raw file (`'2020/data/lengths_survey_ebs.csv'`). Let's compare that with `2024/raw/bsai_ts_length_data.csv`, from `afscdata`, and the contents of `production_sizecomp_stratum` following the `gapindex` vignette hosted [here](https://github.com/afsc-gap-products/gapindex/blob/main/vignettes/ex_agecomps_ebs_standard.Rmd).
+
+```{r setup, include = FALSE, warning = FALSE, message = FALSE}
+library(dplyr)
+library(here)
+library(ggplot2)
+library(r4ss)
+theme_set(afscassess::theme_report())
+year <- 2024
+old_mdl_fldr <- here::here(year,'mgmt','18.2c_2020')
+mod18.2c_2020 <- mod_2020 <- SS_output(old_mdl_fldr, verbose = FALSE)
+```
+
+```{r load raw data, include = FALSE, warning = FALSE, message = FALSE}
+haehn_size <- read.csv(here('2020','data','lengths_survey_ebs.csv')) %>% 
+  filter(YEAR %in% 2006:2011 &SPECIES_CODE == 10130) ## where the 2020 workup starts
+names(haehn_size) <- tolower(names(haehn_size))
+afscdata_size <- read.csv(here('2024','data','raw','bsai_ts_length_data.csv')) %>% 
+  filter(year %in% 2006:2011 & sex != 3) %>% 
+  mutate(sex = ifelse(sex == 1,'males','females')) ## from afscdata
+names(afscdata_size) <- tolower(names(afscdata_size))
+load(here::here('2024','data','raw','production_sizecomp_stratum.rdata'))
+gapindex_size <- production_sizecomp_stratum %>% filter(YEAR %in% 2006:2011 & SEX != 3) %>%
+  mutate(SEX = ifelse(SEX == 1, 'males','females')) ## made in gapindex_survey_method.R, per vignette
+names(gapindex_size) <- tolower(names(gapindex_size))
+```
+
+```{r munge, include = FALSE, warning = FALSE, message = FALSE}
+## MINIMAL munging just so datasets are comparable
+## colnames year, lengthbin, variable (sex, 1 = females), count
+
+size_data <- haehn_size %>% select(year, length, males, females) %>%
+  reshape2::melt(id = c('year','length')) %>%
+
+  # mutate(variable = ifelse(variable == 'females', 1,2)) %>%
+    group_by(year, length, variable) %>%
+  summarise(value = sum(value)) %>%
+  mutate(source = 'haehnr$MALES/$FEMALES') %>%
+  bind_rows(.,afscdata_size %>% 
+              # mutate(sex2 = ifelse(sex == 1,2,1)) %>% ## recall these are swapped in the raw
+              select(year, length,variable = sex, value = frequency) %>%
+                  group_by(year, length, variable) %>%
+  summarise(value = sum(value)) %>%
+              mutate(source = 'afscdata$frequency') ) %>%
+  bind_rows(.,gapindex_size %>% 
+              select(year, length=length_mm,variable = sex, value = population_count) %>%     group_by(year, length, variable) %>%
+  summarise(value = sum(value)) %>%
+              mutate(source = 'gapindex$population_count') ) %>%
+  filter(variable != 3) %>%
+  select(year, length, sex = variable, value, source) %>%
+  ungroup()
+
+```
+
+Comparing the `names` of these objects, there are a few key differences: - the `haehnr` table has a column for males and females separately; GAP told us this should be replaced by filtering `POPULATIONCOUNT` on the `SEX` column of their table. There doesn't seem to be an equivalent column for the `afscdata` table.
+
+-   The counts suggest that `haehnr` table has pre-filled zeros (hence roughly double the number of records as `gapindex`, and an identical number of records between sexes). For example, for length bin 80 the `haehnr` schema has automatically populated itself with an empty row for males of length 80.
+-   What comes out of `afscata` is subjectively less similar to `haehnr` than `gapindex`. (Always important to recall that in these datasets, males are coded as sex = 1). The scale is different between approaches.
+
+```{r, eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.cap="Strong distinctions between all three data pull methods; afscdata seems to have far more small individuals."}
+size_data %>% group_by(source, sex) %>% summarise(n())
+
+ggplot(data = subset(size_data, year == 2010), aes(x = length, y= value, fill = factor(sex))) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(sex~source, scales = 'free_y') +
+  scale_fill_manual(values = c('dodgerblue2','navy')) +
+  labs(x = 'length, mm',  fill = 'sex', y = 'raw count', title = 'comparison of 2010 raw data', subtitle = 'unsexed fish and bering flounder have been removed')
+```
+
+Now I will calculate the frequencies of each length bin and compare outcomes, across data sources as well as compared to the inputs in the 2020 model. Recall that these are still the raw data; they haven't been binned. This gives me reason to a) abandon the `afscdata` pull from the outset, and b) dig into what's happening to cause the subsequent workup on these data to diverge so much from before.
+
+```{r, eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.cap="The gapindex and haehnr compositional curves are nearly indistinguishable, but they still don't match the 2020 data (not shown)."}
+size_comps <- size_data %>%
+  mutate(tot = sum(value), .by = c(year, sex, source)) %>%
+  mutate(freq = value/tot)
+
+ggplot(data = subset(size_comps, year == 2010), aes(x = length, y= freq, fill = factor(sex))) +
+  geom_bar(stat = 'identity') +
+  scale_y_continuous(limits = c(0,0.1))+
+  facet_wrap(sex~source) +
+  scale_fill_manual(values = c('dodgerblue2','navy')) +
+  labs(x = 'length, mm',  fill = 'sex', y = 'raw count', title = 'comparison of 2010 raw data', subtitle = 'unsexed fish and bering flounder have been removed')
+  
+```
+
+Looking at an individual value, they match to the third decimal with the 2020 model.
+
+```{r, eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE}
+size_comps %>% 
+  filter(sex == 'females' & year == 2006) %>%  
+  filter(length > 270 & length < 290) %>%
+  mutate(freq = round(freq,5))
+mod_2020$lendbase %>% filter(Yr == 2010 & sex == 1 & Bin==22 & Fleet == 2) %>% mutate(Obs = round(Obs,5)) %>% select(Obs)
+```
+
+This is good news; it means we can safely use the `gapindex` products. I went through and did some data wrangling, and after debugging some unwieldy `dplyr::group_by()` terms was able to reproduce the marginal length compositions from the 2020 assessment. Other mistakes involved wrong binning behavior for the plus and minus groups.
+
+```{r, eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.cap=""}
+survlen <- production_sizecomp_stratum %>% 
+  filter(SEX != 3) %>%
+  mutate(SEX = ifelse(SEX == 1, 'males','females'),
+         LENGTH_MM  = ifelse(LENGTH_MM < 60, 60.5,LENGTH_MM),
+         LENGTH_MM = ifelse(LENGTH_MM >= 580, 580, LENGTH_MM))  %>%
+  mutate( length_grp0 = cut(round(LENGTH_MM/10,0),
+                            right = F,
+                     breaks =  c(seq(6,40,2),seq(43,61,3))))  %>%
+  tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>% 
+  mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%
+  select(-first, -second) %>%
+  group_by(YEAR, LENGTH_BIN, SEX) %>%
+  summarise(value = sum(POPULATION_COUNT))   %>%  
+  ungroup()%>%
+  mutate(tot = sum(value), .by = c(YEAR)) %>%
+  mutate(freq = value/tot) 
+
+compare <- bind_rows(survlen %>% mutate(SEX = ifelse(SEX == 'males',2,1), src = 'gapindex workup'), 
+          mod_2020$lendbase %>% 
+            filter(Fleet == 2) %>%
+            mutate(value= NA, tot = NA,src = 'Model 18.2c (2020)')  %>% 
+            select(YEAR = Yr, LENGTH_BIN = Bin, SEX = Sex, value, tot, freq = Obs, src))
+
+```
+
+
+::: panel-tabset
+
+### Comparison of marginal length comps, early years
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="All of the lines are overlapping." }
+ggplot(subset(compare, YEAR > 1980 & YEAR < 1993), 
+       aes(x= LENGTH_BIN, y= freq, color = src)) +
+  geom_line()  +
+  scale_color_manual(values = c('dodgerblue2','navy')) +
+  labs(x = 'Length (cm)', y= 'frequency', title = 'early years; females in first row', color = '')+
+  facet_grid(SEX~YEAR)
+```
+
+### Comparison of marginal length comps, later years
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="All of the lines are overlapping." }
+
+ggplot(subset(compare, YEAR > 2010 & YEAR < 2021), 
+       aes(x= LENGTH_BIN, y= freq, color = src)) +
+  geom_line()  +
+  scale_color_manual(values = c('dodgerblue2','navy')) +
+  labs(x = 'Length (cm)', y= 'frequency', title = 'later years; females in first row', color = '')+
+  facet_grid(SEX~YEAR)
+```
+:::
+
+
+**I am confident I can use the** `gapindex` `production_sizecomp_stratum` **object to get to a faithful reproduction of the 2020 marginal length comps**.
+
+## Marginal Ages
+
+Let's do the same workup starting with the `gapindex` `production_agecomp_stratum`. If these faithfully match we can more confidently move forward with the CAAL calculation (though remember the marginal ages are ghosted).
+
+```{r, include = FALSE, warning = FALSE, message = FALSE}
+gapindex_ages <- read.csv(here::here('2024','data','raw','production_agecomp.csv'))
+survage <- gapindex_ages %>% 
+  filter(SEX != 3 & AGE > 0) %>%
+  mutate(SEX = ifelse(SEX == 1, 'males','females'), 
+         AGE = ifelse(AGE  >= 21, 21, AGE ),
+         LENGTH_MM  = ifelse(LENGTH_MM_MEAN  < 60, 60.5,LENGTH_MM_MEAN ),
+         LENGTH_MM = ifelse(LENGTH_MM_MEAN  >= 580, 580, LENGTH_MM_MEAN ))  %>%
+  mutate( length_grp0 = cut(round(LENGTH_MM_MEAN /10,0),
+                            right = F,
+                     breaks =  c(seq(6,40,2),seq(43,61,3))))  %>%
+  tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>% 
+  mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%
+  select(-first, -second) %>% 
+  summarise(value = sum(POPULATION_COUNT), .by = c(YEAR,AGE,SEX))   %>%  
+  mutate(tot = sum(value), .by = c(YEAR)) %>%
+  mutate(freq = value/tot) 
+
+compare <- bind_rows(survage %>% mutate(SEX = ifelse(SEX == 'males',2,1), src = 'gapindex workup'), 
+          mod_2020$ghostagedbase %>% 
+            filter(Fleet == 2) %>%
+            mutate(value= NA, tot = NA,src = 'Model 18.2c (2020)')  %>% 
+            select(YEAR = Yr, AGE = Bin, SEX = Sex, value, tot, freq = Obs, src))
+
+```
+
+
+::: panel-tabset
+
+### Comparison of marginal age comps, early years
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="All of the lines are overlapping." }
+ggplot(subset(compare, YEAR > 1980 & YEAR < 2000), 
+       aes(x= AGE, y= freq, color = src)) +
+  geom_line()  +
+  scale_color_manual(values = c('dodgerblue2','navy')) +
+  labs(x = 'Length (cm)', y= 'frequency', title = 'early years; females in first row', color = '')+
+  facet_grid(SEX~YEAR)
+```
+
+### Comparison of marginal age comps, later years
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="All of the lines are overlapping." }
+ggplot(subset(compare, YEAR > 2010 & YEAR < 2018), 
+       aes(x= AGE, y= freq, color = src)) +
+  geom_line()  +
+  scale_color_manual(values = c('dodgerblue2','navy')) +
+  labs(x = 'Length (cm)', y= 'frequency', title = 'later years; females in first row', color = '')+
+  facet_grid(SEX~YEAR)
+```
+
+:::
+
+**I am confident I can use the** `gapindex` `production_agecomp` **object to get to a faithful reproduction of the 2020 marginal age comps (these are not fit to in the model).**
+
+## CAALs
+
+I was original able to get something that looked like the previous inputs by starting with the specimen CSV from `afscdata` and passing it through Carey's code. I'd rather do this using the `gapindex` data and a clean, single pipe workflow. 
+
+Note that this ignores the values in `POPULATION_COUNT` and also is not calculating an actual frequency (e.g., inputs are > 1). We simply ensure the data are classified into the right bins, then summarise the number of fish in each bin.
+```{r, include = FALSE, warning = FALSE, message = FALSE}
+# caal <- gapindex_ages %>% ## this also has lengths
+#   filter(SEX != 3 & AGE > 0 & SPECIES_CODE == 10130) %>%
+#   mutate(SEX = ifelse(SEX == 1, 'males','females'), 
+#          AGE = ifelse(AGE  >= 21, 21, AGE ),
+#          LENGTH_MM  = ifelse(LENGTH_MM_MEAN  < 60, 60.5,LENGTH_MM_MEAN ),
+#          LENGTH_MM = ifelse(LENGTH_MM_MEAN  >= 580, 580, LENGTH_MM_MEAN ))  %>%
+#   mutate( length_grp0 = cut(round(LENGTH_MM_MEAN /10,0),
+#                             right = F,
+#                      breaks =  c(seq(6,40,2),seq(43,61,3))))  %>%
+#   tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>% 
+#   mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%
+#   summarise(value = n(), .by = c(YEAR,AGE,SEX,LENGTH_BIN))
+
+## option 2 start with $specimen and basically do Carey's approach
+ load("~/assessments/bsai-fhs/2024/data/raw/gapindex_production_data.rdata")
+
+
+caal00 <-   production_data$specimen %>%
+  filter(!is.na(AGE) & !is.na(LENGTH) & SEX != 3 & AGE > 0 & SPECIES_CODE == 10130 ) %>%
+  mutate(YEAR =  floor(x = CRUISE / 100),
+         SEX = ifelse(SEX == 1, 'males','females'), 
+         AGE = ifelse(AGE  >= 21, 21, AGE ),
+         LENGTH_MM  = ifelse(LENGTH   < 60, 60.5,LENGTH ),
+         LENGTH_MM = ifelse(LENGTH   >= 580, 580, LENGTH ))  %>%
+  mutate( length_grp0 = cut(round(LENGTH_MM /10,0),
+                            right = F,
+                            breaks =  mod_2020$lbinspop))  %>%
+  tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>% 
+  mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%
+  group_by(YEAR, SEX, AGE, LENGTH_BIN) %>%
+  summarize(Num_Fish=length(SPECIMENID), .groups='drop') %>%
+  arrange(AGE, SEX) %>%
+  group_by(SEX, YEAR, LENGTH_BIN) %>%
+  mutate(value=sum(Num_Fish)) 
+
+caal0 <- caal00 %>% ## raw number of individuals
+  tidyr::pivot_wider(names_from=AGE, values_from=Num_Fish,
+               names_prefix='a', values_fill=0) %>%
+  arrange(YEAR, SEX, LENGTH_BIN)
+
+bind_cols(caal0,caal0[,-(1:4)]) %>%
+  mutate(Seas = 7, Fleet = 2, SEX = ifelse(SEX == 'males',2,1),
+         Part = 0, Ageerr = 1) %>%  
+  select(Yr = YEAR, Seas, Fleet, Sex =SEX, Part, Ageerr, Lbin_lo = LENGTH_BIN,
+         Lbin_hi = LENGTH_BIN, Nsamp=value,everything()) #%>%
+  # write.csv(file = here::here(year,'data','output','srv_caal_ss3-gapindex-specimen.csv'), row.names = FALSE)
+```
+ 
+
+```{r, include = FALSE, warning = FALSE, message = FALSE}
+# gapindex_laa <- read.csv(here('2024','data','raw','production_agecomp_stratum_laa.csv'))
+# caal <- gapindex_laa %>% ## this also has lengths
+#   filter(SEX != 3 & AGE > 0 & SPECIES_CODE == 10130) %>%
+#   mutate(SEX = ifelse(SEX == 1, 'males','females'),
+#          AGE = ifelse(AGE  >= 21, 21, AGE ),
+#          LENGTH_MM  = ifelse(LENGTH_MM  < 60, 60.5,LENGTH_MM ),
+#          LENGTH_MM = ifelse(LENGTH_MM  >= 580, 580, LENGTH_MM ))  %>%
+#   mutate( length_grp0 = cut(round(LENGTH_MM /10,0),
+#                             right = F,
+#                      breaks =  c(seq(6,40,2),seq(43,61,3))))  %>%
+#   tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>%
+#   mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%
+#   summarise(value = n(), .by = c(YEAR,AGE,SEX,LENGTH_BIN))
+
+
+
+compare <- bind_rows(caal0 %>% mutate(SEX = ifelse(SEX == 'males',2,1), src = 'gapindex workup'), 
+          mod_2020$condbase %>% 
+            filter(Fleet == 2) %>%
+            mutate(value= NA, tot = NA,src = 'Model 18.2c (2020)')  %>% 
+            select(YEAR = Yr, SEX = Sex, AGE = Bin,  LENGTH_BIN = Lbin_lo, value=Obs, src))
+
+# SS_caal_survey <-
+#   data.frame(year=caal$YEAR, Month=7, Fleet=2,
+#              sex=ifelse(caal$SEX==1,2,1), ## SS sex is reversed
+#              Part=0, Ageerr=1,
+#              Lbin_lo=caal$length_bin_use, Lbin_hi=caal$length_bin_use,
+#              Nsamp=caal$Nsamp,
+#              ## Double up b/c SS needs dummy columns
+#              caal[,-(1:4)], caal[,-(1:4)]) %>%
+#   arrange(sex, year, Lbin_lo)
+# 
+# write.csv(SS_caal_survey, file = here::here(year,'data','output','srv_caal_ss3-gapindex.csv'), row.names = FALSE)
+# message("Saved survey CAAL data in ", here::here(year,'data','output','srv_caal_ss3-gapindex.csv'))
+# 
+```
+
+
+::: panel-tabset
+
+### Comparison of CAALs, early years
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap=""}
+ggplot(subset(compare, YEAR > 1980 & YEAR < 2000), 
+       aes(x= AGE, y= LENGTH_BIN, color = src, size = value)) +
+  geom_point(pch = 1)+
+  scale_color_manual(values = c('dodgerblue2','navy')) +
+  labs(x = 'Age', y= 'Length', size = 'Number Observed', color = '', title = 'early years; females in first row')+
+  facet_grid(SEX~YEAR)
+```
+
+### Comparison of CAALs, later years
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="" }
+ggplot(subset(compare, YEAR > 2010 & YEAR < 2018), 
+       aes(x= AGE, y= LENGTH_BIN, color = src, size = value)) +
+  geom_point(pch = 1)+
+  scale_color_manual(values = c('dodgerblue2','navy')) +
+  labs(x = 'Age', y= 'Length', size = 'Number Observed', color = '', title = 'early years; females in first row')+
+  facet_grid(SEX~YEAR)
+```
+
+:::
