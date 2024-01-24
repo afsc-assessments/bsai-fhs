@@ -84,7 +84,7 @@ write.csv(x=SS_index, file='inputs/SS_survey_index.csv', row.names=FALSE)
 message("Processing survey length data...")
 species <- "10130" #flathead sole only, no BF
 lcomp_raw <-
-  read.csv('data/lengths_survey_ebs.csv') %>%
+  read.csv('2020/data/lengths_survey_ebs.csv') %>%
   filter(SPECIES_CODE %in% species & STRATUM==999999 & LENGTH>0) %>%
   droplevels() %>% mutate(LENGTH=LENGTH/10) # mm to cm
 lcomp <- BIN_LEN_DATA(data=lcomp_raw, len_bins=len_bins) %>%
