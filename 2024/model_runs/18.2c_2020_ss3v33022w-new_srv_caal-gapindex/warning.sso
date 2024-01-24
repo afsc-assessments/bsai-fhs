@@ -1,0 +1,5 @@
+Warning 1 : poor convergence in Fmsy, final dy/dy2= -0.249021
+Warning 2 : Fmsy.mey is close to max allowed; check for convergence 
+Warning 3 : Final gradient: 0.00646222 is larger than final_conv: 0.0001
+Note 1 Information: A revised protocol for the Fcast_yr specification is available and recommended.
+ 3 warnings  and 1 note 
