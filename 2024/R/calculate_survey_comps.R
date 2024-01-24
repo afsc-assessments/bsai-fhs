@@ -31,7 +31,7 @@ names(AL.df) <- toupper(names(AL.df)) ## in the original script they are upperca
 
 ## filtration steps (clunky)
 # AL.df <- AL.df[AL.df$SUBAREA <=6,]
-AL.df<-AL.df[AL.df$SPECIES_CODE==species1,]
+AL.df<-AL.df[AL.df$SPECIES_CODE==10130,]
 
 ## Bin data into length and age bins. There is an age of 0 that
 ## results in NA bin so drop it, also drop unsexed fish
@@ -52,7 +52,7 @@ caal <- AL.df %>%
   rename(AGE=aBIN) %>% arrange(AGE) %>%
   group_by(SEX, YEAR, BIN) %>%
   mutate(Nsamp=sum(Num_Fish)) %>%
-  pivot_wider(names_from=AGE, values_from=Num_Fish,
+  tidyr::pivot_wider(names_from=AGE, values_from=Num_Fish,
               names_prefix='a', values_fill=0)
 ## Just being careful the columns are in right order
 stopifnot(all(names(caal)[-(1:4)] == paste0('a', age_bins[2:22])))
@@ -77,25 +77,29 @@ message("Saved survey CAAL data in ", here::here(year,'data','output','srv_caal_
 ## Survey length comps ----
 message("Processing survey length data...")
 species <- "10130" #flathead sole only, no BF
-tmp <-  read.csv(here::here(year,'data','raw','bsai_ts_length_data.csv')) 
-names(tmp) <- toupper(names(tmp))
-tmp <- tmp %>%
-  filter(SPECIES_CODE %in% afsc_species & 
-           SEX != 3 &
-           REGION == 'BS' &
-           YEAR > 1980 &
-           # grepl('Eastern Bering Sea', SURVEY_NAME),
-           # STRATUM==999999 & 
-           LENGTH>0) %>%
-  # mm to cm
-  droplevels() %>% 
-  mutate(LENGTH=LENGTH/10)
+# tmp <-  read.csv(here::here(year,'data','raw','bsai_ts_length_data.csv'))
+## The sample sizes come from the number of hauls with lengths
+## which is in this file.
+lcomp_Nsamp <- read.csv('2020/data/lengths_survey_hauls.csv')
 
-lcomp_raw <- tmp %>% 
+tmp <-  read.csv(here::here(year,'data','raw','production_sizecomp_stratum.csv'))
+names(tmp) <- toupper(names(tmp))
+tmp <- tmp %>% 
+  filter(SPECIES_CODE %in% species 
+         & SEX != 3 
+         # & STRATUM==999999 
+         & LENGTH_MM>0) %>%
+  droplevels() %>% 
+  mutate(LENGTH=LENGTH_MM/10) # mm to cm
+
+## re-jigger it to look like the original
+lcomp_raw <- tmp %>%
   group_by(YEAR, LENGTH, SEX) %>%
-  summarise(FREQUENCY=sum(FREQUENCY)) %>%
-  tidyr::pivot_wider(names_from = SEX, values_from = FREQUENCY, id_cols = c(YEAR, LENGTH), values_fill = 0)
-names(lcomp_raw)[3:4] <- c('FEMALES','MALES')
+  summarise(FREQUENCY=sum(POPULATION_COUNT)) %>%
+  tidyr::pivot_wider(names_from = SEX, values_from = FREQUENCY,
+                     id_cols = c(YEAR, LENGTH), values_fill = 0)
+# names(lcomp_raw)[3:4] <- c('FEMALES','MALES')
+names(lcomp_raw)[3:4] <- c('MALES','FEMALES')
 
 
 lcomp <- BIN_LEN_DATA(data=lcomp_raw, len_bins=len_bins) %>%
@@ -120,12 +124,10 @@ lcomp_male <- select(lcomp, -F_PROP) %>%
               values_from='M_PROP', values_fill=0) %>%
   arrange(year)
 stopifnot(all.equal(lcomp_fem$year, lcomp_male$year))
-## The sample sizes come from the number of hauls with lengths
-## which is in this file.
-# lcomp_Nsamp <- read.csv('data/lengths_survey_hauls.csv')
-lcomp_Nsamp <- tmp %>%
-  group_by(YEAR) %>%
-  summarise(HAULS_W_LENGTH=length(unique(HAULJOIN)))
+
+# lcomp_Nsamp <- tmp %>%
+#   group_by(YEAR) %>%
+#   summarise(HAULS_W_LENGTH=length(unique(HAULJOIN)))
 
 
 stopifnot(all(lcomp_Nsamp$YEAR == lcomp_fem$year))
@@ -133,12 +135,18 @@ stopifnot(all(!is.na(lcomp_Nsamp$HAULS_W_LENGTH)))
 SS_lcomp_survey <- data.frame(year=lcomp_fem$year, 
                               month=7,
                               fleet=2, sex=3, part=0, 
-                              Nsamp=lcomp_Nsamp$HAULS_W_LENGTH,
+                              # Nsamp=lcomp_Nsamp$HAULS_W_LENGTH,
+                              Nsamp=NA,
                               lcomp_fem[,-1], lcomp_male[,-1])
 # names(SS_lcomp_survey)[1:6] <- names(SS_dat$lencomp)[1:6]
 stopifnot(all(1==rowSums(SS_lcomp_survey[,-(1:6)])))
+ 
+
+
 write.csv(SS_lcomp_survey, here::here(year,'data','output','srv_lengths_ss3.csv'), row.names=FALSE)
-message("Saved survey CAAL data in ", here::here(year,'data','output','srv_lengths_ss3.csv'))
+
+SS_lcomp_survey %>% filter(year == 2019)
+# message("Saved survey CAAL data in ", here::here(year,'data','output','srv_lengths_ss3.csv'))
 
 
 ## MK's attempt -----
