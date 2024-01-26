@@ -254,9 +254,11 @@ ggplot(subset(compare, YEAR > 2010 & YEAR < 2018),
 
 I was original able to get something that looked like the previous inputs by starting with the specimen CSV from `afscdata` and passing it through Carey's code. I'd rather do this using the `gapindex` data and a clean, single pipe workflow. 
 
-Note that this ignores the values in `POPULATION_COUNT` and also is not calculating an actual frequency (e.g., inputs are > 1). We simply ensure the data are classified into the right bins, then summarise the number of fish in each bin. Also note that the `GAP_PRODUCTS.AGECOMP` table for the EBS currently only contains stratum- and region-level age composition values calculated using a global ALK conditioned on age data from the EBS Standard + NW area. The vignette on gapindex is a workaround if you wanted to get age composition values using a global ALK conditioned on age data from just the EBS Standard area. 
+Note that this ignores the values in `POPULATION_COUNT` and also is not calculating an actual frequency (e.g., inputs are > 1). We simply ensure the data are classified into the right bins, then summarise the number of fish in each bin. 
 
+Also note that the `GAP_PRODUCTS.AGECOMP` table for the EBS currently only contains stratum- and region-level age composition values calculated using a global ALK conditioned on age data from the EBS Standard + NW area. The vignette on `gapindex` is a workaround if you wanted to get age composition values using a global ALK conditioned on age data from just the EBS Standard area. 
 
+**The bubbles on these plots now overlap completely; I'm confident I can re-create the CAALs using a much tighter pipeline than before.**
 
 ```{r, include = FALSE, warning = FALSE, message = FALSE}
 ## start with what comes out of the gapindex vignette for $specimen
