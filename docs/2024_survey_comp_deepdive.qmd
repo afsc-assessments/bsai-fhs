@@ -266,7 +266,9 @@ load(here::here('2024','data','raw','gapindex_production_data.rdata'))
 production_data$specimen$YEAR <- floor(x = production_data$specimen$CRUISE / 100)
 
 caal00 <-   production_data$specimen %>%
+  ## filter out bering flounder and unsexed
   filter(!is.na(AGE) & !is.na(LENGTH) & SEX != 3 & AGE > 0 & SPECIES_CODE == 10130 ) %>%
+  ## deal with plus groups
   mutate(YEAR =  floor(x = CRUISE / 100),
          SEX = ifelse(SEX == 1, 'males','females'), 
          AGE = ifelse(AGE  >= 21, 21, AGE ),
@@ -275,14 +277,18 @@ caal00 <-   production_data$specimen %>%
   mutate( length_grp0 = cut(round(LENGTH_MM /10,0),
                             right = F,
                             breaks =  mod_2020$lbinspop))  %>%
+  ## make integer-based length bin
   tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>% 
   mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%
   group_by(YEAR, SEX, AGE, LENGTH_BIN) %>%
+  ## calculate number of samples in each age-length bin (Obs)
   summarize(Num_Fish=length(SPECIMENID), .groups='drop') %>%
   arrange(AGE, SEX) %>%
+  ## calculate the number of samples in each length bin (inputN)
   group_by(SEX, YEAR, LENGTH_BIN) %>%
   mutate(value=sum(Num_Fish)) 
 
+## reshape to ss3 format
 caal0 <- caal00 %>% ## raw number of individuals
   tidyr::pivot_wider(names_from=AGE, values_from=Num_Fish,
                names_prefix='a', values_fill=0) %>%
@@ -298,41 +304,12 @@ bind_cols(caal0,caal0[,-(1:4)]) %>%
  
 
 ```{r, include = FALSE, warning = FALSE, message = FALSE}
-# gapindex_laa <- read.csv(here('2024','data','raw','production_agecomp_stratum_laa.csv'))
-# caal <- gapindex_laa %>% ## this also has lengths
-#   filter(SEX != 3 & AGE > 0 & SPECIES_CODE == 10130) %>%
-#   mutate(SEX = ifelse(SEX == 1, 'males','females'),
-#          AGE = ifelse(AGE  >= 21, 21, AGE ),
-#          LENGTH_MM  = ifelse(LENGTH_MM  < 60, 60.5,LENGTH_MM ),
-#          LENGTH_MM = ifelse(LENGTH_MM  >= 580, 580, LENGTH_MM ))  %>%
-#   mutate( length_grp0 = cut(round(LENGTH_MM /10,0),
-#                             right = F,
-#                      breaks =  c(seq(6,40,2),seq(43,61,3))))  %>%
-#   tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>%
-#   mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%
-#   summarise(value = n(), .by = c(YEAR,AGE,SEX,LENGTH_BIN))
-
-
-
 compare <- bind_rows(caal0 %>% mutate(SEX = ifelse(SEX == 'males',2,1), src = 'gapindex workup'), 
           mod_2020$condbase %>% 
             filter(Fleet == 2) %>%
             mutate(value= NA, tot = NA,src = 'Model 18.2c (2020)')  %>% 
             select(YEAR = Yr, SEX = Sex, AGE = Bin,  LENGTH_BIN = Lbin_lo, value=Obs, src))
 
-# SS_caal_survey <-
-#   data.frame(year=caal$YEAR, Month=7, Fleet=2,
-#              sex=ifelse(caal$SEX==1,2,1), ## SS sex is reversed
-#              Part=0, Ageerr=1,
-#              Lbin_lo=caal$length_bin_use, Lbin_hi=caal$length_bin_use,
-#              Nsamp=caal$Nsamp,
-#              ## Double up b/c SS needs dummy columns
-#              caal[,-(1:4)], caal[,-(1:4)]) %>%
-#   arrange(sex, year, Lbin_lo)
-# 
-# write.csv(SS_caal_survey, file = here::here(year,'data','output','srv_caal_ss3-gapindex.csv'), row.names = FALSE)
-# message("Saved survey CAAL data in ", here::here(year,'data','output','srv_caal_ss3-gapindex.csv'))
-# 
 ```
 
 
