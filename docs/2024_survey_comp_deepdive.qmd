@@ -71,6 +71,8 @@ size_data <- haehn_size %>% select(year, length, males, females) %>%
   select(year, length, sex = variable, value, source) %>%
   ungroup()
 
+
+ 
 ```
 
 Comparing the `names` of these objects, there are a few key differences: - the `haehnr` table has a column for males and females separately; GAP told us this should be replaced by filtering `POPULATIONCOUNT` on the `SEX` column of their table. There doesn't seem to be an equivalent column for the `afscdata` table.
@@ -94,6 +96,23 @@ Now I will calculate the frequencies of each length bin and compare outcomes, ac
 size_comps <- size_data %>%
   mutate(tot = sum(value), .by = c(year, sex, source)) %>%
   mutate(freq = value/tot)
+
+
+production_sizecomp_stratum %>%
+    filter(SEX != 3 & !is.na(SEX)) %>%
+  mutate(SEX = ifelse(SEX == 1, 'males','females'),
+         
+         LENGTH_MM  = ifelse(LENGTH_MM < 60, 60.5,LENGTH_MM),
+         LENGTH_MM = ifelse(LENGTH_MM >= 580, 580, LENGTH_MM))  %>%
+  mutate( length_grp0 = cut(round(LENGTH_MM/10,0),
+                            right = F,
+                     breaks =  c(seq(6,58,2)))) %>%  
+  summarise(POPULATION_COUNT = sum(POPULATION_COUNT), .by = c(YEAR, LENGTH_MM,SEX)) %>%
+  # mutate(length_bin = )
+  mutate(tot = sum(POPULATION_COUNT), .by = c(YEAR, SEX)) %>%
+  mutate(freq = POPULATION_COUNT/tot) %>%
+  select(YEAR, SEX, LENGTH_MM, freq) %>%
+  tidyr::pivot_wider(id_cols = c(YEAR, SEX), names_from = LENGTH_MM, values_from = freq, values_fill = 0)
 
 ggplot(data = subset(size_comps, year == 2010), aes(x = length, y= freq, fill = factor(sex))) +
   geom_bar(stat = 'identity') +
@@ -235,24 +254,14 @@ ggplot(subset(compare, YEAR > 2010 & YEAR < 2018),
 
 I was original able to get something that looked like the previous inputs by starting with the specimen CSV from `afscdata` and passing it through Carey's code. I'd rather do this using the `gapindex` data and a clean, single pipe workflow. 
 
-Note that this ignores the values in `POPULATION_COUNT` and also is not calculating an actual frequency (e.g., inputs are > 1). We simply ensure the data are classified into the right bins, then summarise the number of fish in each bin.
+Note that this ignores the values in `POPULATION_COUNT` and also is not calculating an actual frequency (e.g., inputs are > 1). We simply ensure the data are classified into the right bins, then summarise the number of fish in each bin. Also note that the `GAP_PRODUCTS.AGECOMP` table for the EBS currently only contains stratum- and region-level age composition values calculated using a global ALK conditioned on age data from the EBS Standard + NW area. The vignette on gapindex is a workaround if you wanted to get age composition values using a global ALK conditioned on age data from just the EBS Standard area. 
+
+
+
 ```{r, include = FALSE, warning = FALSE, message = FALSE}
-# caal <- gapindex_ages %>% ## this also has lengths
-#   filter(SEX != 3 & AGE > 0 & SPECIES_CODE == 10130) %>%
-#   mutate(SEX = ifelse(SEX == 1, 'males','females'), 
-#          AGE = ifelse(AGE  >= 21, 21, AGE ),
-#          LENGTH_MM  = ifelse(LENGTH_MM_MEAN  < 60, 60.5,LENGTH_MM_MEAN ),
-#          LENGTH_MM = ifelse(LENGTH_MM_MEAN  >= 580, 580, LENGTH_MM_MEAN ))  %>%
-#   mutate( length_grp0 = cut(round(LENGTH_MM_MEAN /10,0),
-#                             right = F,
-#                      breaks =  c(seq(6,40,2),seq(43,61,3))))  %>%
-#   tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>% 
-#   mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%
-#   summarise(value = n(), .by = c(YEAR,AGE,SEX,LENGTH_BIN))
-
-## option 2 start with $specimen and basically do Carey's approach
- load("~/assessments/bsai-fhs/2024/data/raw/gapindex_production_data.rdata")
-
+## start with what comes out of the gapindex vignette for $specimen
+load(here::here('2024','data','raw','gapindex_production_data.rdata'))
+production_data$specimen$YEAR <- floor(x = production_data$specimen$CRUISE / 100)
 
 caal00 <-   production_data$specimen %>%
   filter(!is.na(AGE) & !is.na(LENGTH) & SEX != 3 & AGE > 0 & SPECIES_CODE == 10130 ) %>%

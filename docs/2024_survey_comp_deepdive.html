@@ -121,6 +121,28 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <p>Now I will calculate the frequencies of each length bin and compare outcomes, across data sources as well as compared to the inputs in the 2020 model. Recall that these are still the raw data; they haven’t been binned. This gives me reason to a) abandon the <code>afscdata</code> pull from the outset, and b) dig into what’s happening to cause the subsequent workup on these data to diverge so much from before.</p>
 <div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 82 × 55
+    YEAR SEX       `350`     `400`  `320`   `150`   `140`  `240`  `190`   `130`
+   &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+ 1  1982 females 0.0249  0.00835   0.0556 0.0209  0.0236  0.0486 0.0296 0.0217 
+ 2  1982 males   0.00492 0.000222  0.0352 0.0253  0.0284  0.0481 0.0304 0.0239 
+ 3  1983 females 0.0427  0.00535   0.0577 0.0174  0.0182  0.0333 0.0386 0.0270 
+ 4  1983 males   0.0121  0.0000508 0.0486 0.0155  0.0238  0.0395 0.0445 0.0345 
+ 5  1984 males   0.0124  0.000128  0.0460 0.0368  0.0298  0.0425 0.0405 0.0171 
+ 6  1984 females 0.0335  0.00580   0.0398 0.0439  0.0235  0.0443 0.0319 0.0226 
+ 7  1985 males   0.0246  0.000560  0.0499 0.0144  0.0152  0.0407 0.0458 0.00776
+ 8  1985 females 0.0354  0.0113    0.0446 0.0169  0.0145  0.0408 0.0459 0.00876
+ 9  1986 females 0.0450  0.0195    0.0482 0.00892 0.00806 0.0519 0.0175 0.00687
+10  1986 males   0.0266  0.000757  0.0681 0.00897 0.0130  0.0598 0.0316 0.0190 
+# ℹ 72 more rows
+# ℹ 45 more variables: `280` &lt;dbl&gt;, `160` &lt;dbl&gt;, `230` &lt;dbl&gt;, `120` &lt;dbl&gt;,
+#   `270` &lt;dbl&gt;, `180` &lt;dbl&gt;, `290` &lt;dbl&gt;, `260` &lt;dbl&gt;, `300` &lt;dbl&gt;,
+#   `100` &lt;dbl&gt;, `330` &lt;dbl&gt;, `380` &lt;dbl&gt;, `210` &lt;dbl&gt;, `220` &lt;dbl&gt;,
+#   `340` &lt;dbl&gt;, `110` &lt;dbl&gt;, `200` &lt;dbl&gt;, `170` &lt;dbl&gt;, `250` &lt;dbl&gt;,
+#   `310` &lt;dbl&gt;, `420` &lt;dbl&gt;, `360` &lt;dbl&gt;, `370` &lt;dbl&gt;, `440` &lt;dbl&gt;,
+#   `390` &lt;dbl&gt;, `80` &lt;dbl&gt;, `450` &lt;dbl&gt;, `430` &lt;dbl&gt;, `410` &lt;dbl&gt;, …</code></pre>
+</div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -214,7 +236,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="caals" class="level2">
 <h2 class="anchored" data-anchor-id="caals">CAALs</h2>
 <p>I was original able to get something that looked like the previous inputs by starting with the specimen CSV from <code>afscdata</code> and passing it through Carey’s code. I’d rather do this using the <code>gapindex</code> data and a clean, single pipe workflow.</p>
-<p>Note that this ignores the values in <code>POPULATION_COUNT</code> and also is not calculating an actual frequency (e.g., inputs are &gt; 1). We simply ensure the data are classified into the right bins, then summarise the number of fish in each bin.</p>
+<p>Note that this ignores the values in <code>POPULATION_COUNT</code> and also is not calculating an actual frequency (e.g., inputs are &gt; 1). We simply ensure the data are classified into the right bins, then summarise the number of fish in each bin. Also note that the <code>GAP_PRODUCTS.AGECOMP</code> table for the EBS currently only contains stratum- and region-level age composition values calculated using a global ALK conditioned on age data from the EBS Standard + NW area. The vignette on gapindex is a workaround if you wanted to get age composition values using a global ALK conditioned on age data from just the EBS Standard area.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Comparison of CAALs, early years</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Comparison of CAALs, later years</a></li></ul>
 <div class="tab-content">
