@@ -470,6 +470,8 @@ SSplotBiology(mod_2020_new_srv_caal,subplots = 1)
 
 
 ## Survey Marginal Lengths
+The input sample sizes are slightly different in the new datapull (from `gapindex`)
+
 ```{r, include=FALSE, echo = FALSE, warning = FALSE}
 mod_2020_new_srv_len <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_lengths'))
 compsummary_4 <- SSsummarize(list(mod_2020,mod_2020_new_srv_len))
@@ -502,15 +504,15 @@ SSplotComparisons(compsummary_4,
 #### Recruitment Time Series, new survey lengths
 
 ```{r, include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in recruitment deviations."}
-SSplotComparisons(compsummary_3, 
-                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new CAAL data'),
+SSplotComparisons(compsummary_4, 
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new survey length data'),
                   subplots = 12)
 ```
 
 #### Survey Fits, old vs new survey lengths
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
-SSplotComparisons(compsummary_3, 
+SSplotComparisons(compsummary_4, 
                   legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new survey lengths'),
                   subplots = 13)
 ```
@@ -520,13 +522,31 @@ SSplotComparisons(compsummary_3,
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap=""}
 par(mfrow = c(1,2))
 SSplotBiology(mod_2020,subplots = 1)
-SSplotBiology(mod_2020_new_srv_caal,subplots = 1)
+SSplotBiology(mod_2020_new_srv_len,subplots = 1)
 ```
 :::
 
 
 ## Survey Ages (ghosted)
-These aren't used in the model but I wanted to confirm the pull from `afscdata` looked reasonable.
+These aren't used in the model but I wanted to confirm the pull from `afscdata` looked reasonable. Annoyingly, the SS3 plots for ghosted values aren't callable and the zoom is wrong, but these are satisfactory.
+
+::: panel-tabset
+### Ghosted Survey Ages from 18.c (2020)
+```{r, include=FALSE, echo = FALSE, warning = FALSE}
+mod_2020_new_srv_age <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_ages_ghost'))
+compsummary_5 <- SSsummarize(list(mod_2020,mod_2020_new_srv_age))
+
+```
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap= "Only trivial differences in this historical data provided to the original assessment (shown here) vs. those pulled using  the gapindex package (next tab)." }
+knitr::include_graphics(here::here(old_mdl_fldr,'plots','comp_gstagedat_flt2mkt0.png'))
+```
+
+### Ghosted Survey Ages from `gapindex`
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap= "Only trivial differences in this historical data provided to the original assessment (previous tab) vs. those pulled using  the gapindex package (shown here)." }
+knitr::include_graphics(here::here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_ages_ghost','plots','comp_gstagedat_flt2mkt0_page1.png'))
+```
 
 # Data Bridging
 

@@ -412,17 +412,10 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="survey-compositional-data">Survey Compositional Data</h2>
 <section id="survey-caals" class="level3">
 <h3 class="anchored" data-anchor-id="survey-caals">Survey CAALs</h3>
-<p>I was unable to reproduce the CAAL data used in 2020 with my own methods: starting with the <code>_specimen</code> data from either <code>afscdata()</code> or <code>gapindex</code> and running an intuitive calculation resulted in very different datasets (and derived quantities). The only thing that came close was to recycle Carey’s code to workup on the <code>AL.df</code> object corresponds to <code>2020/data/ages_survey_ebs.csv</code> which is the roughly the same as what comes out of <code>_specimen</code>. So, I consolidated the code used in the last model into <code>R/calculate_survey_comps.R</code>. I suspect that the <code>gapindex</code> data pull has some behind-the-scenes summary steps (e.g., those leading to the MEAN length column) that render it distinct from the raw specimen data, and that my “creative” use of <code>dplyr</code> might be masking discrepancies in summary methods.</p>
-<p>In addition, the <code>afscassess</code> package is not ready to handle the BSAI survey data, so marginal calculations had to be done with my own functions in <code>R/</code>.</p>
-<p>The model uses survey conditional age-at-length data and marginal length composition data. The marginal survey <em>ages</em> are ghosted into the model for plotting purposes. The workflow for these data are as follows:</p>
-<ul>
-<li>Pull the raw data from <code>racebase</code> using the <code>afscdata</code> approach (see <code>2024_analysis.R</code>)</li>
-<li>Calculate the marginal survey ages from <code>bsai_length_specimen.csv</code>.</li>
-<li>Calculate the marginal survey lengths from <code>bsai_length_data.csv</code>.</li>
-<li>Calculate conditional ages-at-length for each sex via the following: Starting with the EBS ages, filter out Bering Flounder (code <code>10140</code>) and only include the EBS (subarea &lt;= 6) and sexed fish (3). Bin the data into length and age bins greater than 0 (legacy code <code>BIN_AGE_DATA</code> and <code>BIN_LEN_DATA</code>). Group by bins and tabulate the number in each unique combination; filling missing values from zero. Reformat into SS3 syntax.</li>
-</ul>
+<p>I went on a long journey to reproduce the survey compositional data, and came to the conclusion that it must be done using the material in the <code>gapindex</code> package, which is more faithful to what was provided in earlier years in the <code>HAEHNR</code> schema. My suspicion is that there is under-the-hood filtration and expansion taht <code>afscdata</code> simply can’t handle yet (at least for the BSAI), and going forward it is more sensible that we work with a tool that is maintained by the folks collecting the data.</p>
+<p>A deep dive into these issues is undertaken in R/2024_survey_comp_deepdive.qmd, and the lessons learned led to the development of a standalone workup script that 1) pulls from <code>gapindex</code> and 2) munges the appropriate subtables in to the SS3-style compositional data. This replaces the long and redundant set of code that was developed for 2020. For simplicity, the plots here simply illustrate that we were able to get identical datasets and derived quantities using the new methods.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Survey CAALs from 18.c (2020)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">Survey CAALs using <code>afscdata</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Spawning Biomass, old vs new survey CAAL data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-4" role="tab" aria-controls="tabset-5-4" aria-selected="false" href="">Recruitment Time Series, new survey CAAL data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-5" role="tab" aria-controls="tabset-5-5" aria-selected="false" href="">Survey Fits, old vs new survey CAAL data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-6" role="tab" aria-controls="tabset-5-6" aria-selected="false" href="">Growth Curves, old vs new survey CAAL data</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Survey CAALs from 18.c (2020)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">Survey CAALs using <code>gapindex</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Spawning Biomass, old vs new survey CAAL data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-4" role="tab" aria-controls="tabset-5-4" aria-selected="false" href="">Recruitment Time Series, new survey CAAL data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-5" role="tab" aria-controls="tabset-5-5" aria-selected="false" href="">Survey Fits, old vs new survey CAAL data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-6" role="tab" aria-controls="tabset-5-6" aria-selected="false" href="">Growth Curves, old vs new survey CAAL data</a></li></ul>
 <div class="tab-content">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
 <div class="cell">
@@ -430,7 +423,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (next tab).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package.</figcaption>
 </figure>
 </div>
 </div>
@@ -438,7 +431,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-27-2.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (next tab).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package.</figcaption>
 </figure>
 </div>
 </div>
@@ -446,7 +439,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-27-3.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (next tab).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package.</figcaption>
 </figure>
 </div>
 </div>
@@ -454,7 +447,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-27-4.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (next tab).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package.</figcaption>
 </figure>
 </div>
 </div>
@@ -466,7 +459,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (shown here).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
 </div>
@@ -474,7 +467,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-28-2.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (shown here).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
 </div>
@@ -482,7 +475,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-28-3.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (shown here).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
 </div>
@@ -490,7 +483,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-28-4.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (shown here).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
 </div>
@@ -525,6 +518,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="survey-marginal-lengths" class="level2">
 <h2 class="anchored" data-anchor-id="survey-marginal-lengths">Survey Marginal Lengths</h2>
+<p>The input sample sizes are slightly different in the new datapull (from <code>gapindex</code>)</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">Survey lengths from 18.c (2020)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">Survey lengths using <code>afscdata</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false" href="">Spawning Biomass, old vs new survey lengths</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-4" role="tab" aria-controls="tabset-6-4" aria-selected="false" href="">Recruitment Time Series, new survey lengths</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-5" role="tab" aria-controls="tabset-6-5" aria-selected="false" href="">Survey Fits, old vs new survey lengths</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-6" role="tab" aria-controls="tabset-6-6" aria-selected="false" href="">Growth Curves, old vs new survey lengths</a></li></ul>
 <div class="tab-content">
@@ -534,7 +528,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (next tab).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package (next tab).</figcaption>
 </figure>
 </div>
 </div>
@@ -542,7 +536,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-34-2.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (next tab).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package (next tab).</figcaption>
 </figure>
 </div>
 </div>
@@ -554,7 +548,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (shown here).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
 </div>
@@ -562,7 +556,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-35-2.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using a combination of afscdata and the legacy code (shown here).</figcaption>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
 </div>
@@ -596,7 +590,31 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="survey-ages-ghosted" class="level2">
 <h2 class="anchored" data-anchor-id="survey-ages-ghosted">Survey Ages (ghosted)</h2>
-<p>These aren’t used in the model but I wanted to confirm the pull from <code>afscdata</code> looked reasonable.</p>
+<p>These aren’t used in the model but I wanted to confirm the pull from <code>afscdata</code> looked reasonable. Annoyingly, the SS3 plots for ghosted values aren’t callable and the zoom is wrong, but these are satisfactory.</p>
+<p>::: panel-tabset ### Ghosted Survey Ages from 18.c (2020)</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../2024/mgmt/18.2c_2020/plots/comp_gstagedat_flt2mkt0.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package (next tab).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="ghosted-survey-ages-from-gapindex" class="level3">
+<h3 class="anchored" data-anchor-id="ghosted-survey-ages-from-gapindex">Ghosted Survey Ages from <code>gapindex</code></h3>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../2024/model_runs/18.2c_2020_ss3v33022w-new_srv_ages_ghost/plots/comp_gstagedat_flt2mkt0_page1.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="data-bridging" class="level1">
