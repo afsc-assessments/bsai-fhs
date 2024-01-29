@@ -13,7 +13,12 @@ I've had a lot of trouble reproducing the survey compositional data used in Mode
 
 The disappearance of the `haehnr` schema means that I am forced to start with either the `bts_specimen_data.csv` drawn from `afscdata()` or the size composition dataframe from `gapindex`. I am unable to pass either dataset to the legacy (2020) code, since it's looking for individual columns for `MALES` and `FEMALES` (which have been superceded by a `SEX` column in both cases). Following an intuitive grouping/expansion pipeline (e.g., re-writing my own code to calculate the marginal comp data) resulted in drastically different datasets and modeling outcomes. I was able to calculate CAAL data near enough to the old dataset by starting with the raw `specimen` data (not `gapindex`) and passing it through Carey's code. This is less-than desireable, because I'd prefer to have a single starting source (one package or the other) and updated munging routines for all survey compositional data.
 
-So, the purpose of this document is to dig into where the discrepancy between data sources and workup is arising, and to see whether we can find a best way forward for reproducibly generating these data. **For simplicity we are going to focus on data in year 2010.**
+So, the purpose of this document is to dig into where the discrepancy between data sources and workup is arising, and to see whether we can find a best way forward for reproducibly generating these data.
+
+**Top Line Takeaways**
+I was able to reproduce what we needed using the values in `gapindex`, but as of this writing (Jan 2024) had to work with the package-specific functions to ensure that the compositional values use a global ALK conditioned on age data from *just* the EBS Standard area. This matches what was done before.
+
+I am *not* going to use/start with the survey data arising from `afscdata` at present.
 
 # Close-up Data Comparisons
 
@@ -26,6 +31,7 @@ library(dplyr)
 library(here)
 library(ggplot2)
 library(r4ss)
+load(here::here('2024','data','raw','gapindex_production_data.rdata'))
 theme_set(afscassess::theme_report())
 year <- 2024
 old_mdl_fldr <- here::here(year,'mgmt','18.2c_2020')
@@ -135,6 +141,7 @@ mod_2020$lendbase %>% filter(Yr == 2010 & sex == 1 & Bin==22 & Fleet == 2) %>% m
 
 This is good news; it means we can safely use the `gapindex` products. I went through and did some data wrangling, and after debugging some unwieldy `dplyr::group_by()` terms was able to reproduce the marginal length compositions from the 2020 assessment. Other mistakes involved wrong binning behavior for the plus and minus groups.
 
+
 ```{r, eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.cap=""}
 survlen <- production_sizecomp_stratum %>% 
   filter(SEX != 3) %>%
@@ -190,6 +197,38 @@ ggplot(subset(compare, YEAR > 2010 & YEAR < 2021),
 
 
 **I am confident I can use the** `gapindex` `production_sizecomp_stratum` **object to get to a faithful reproduction of the 2020 marginal length comps**.
+
+
+### Render length comps SS3 format
+
+```{r, eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.cap=""}
+## reshape the survey marginal lengths from gapindex into the ss3 format
+production_data$size <- merge(production_data$size, production_data$haul[,c('HAULJOIN','CRUISE')], by = 'HAULJOIN') %>%
+  mutate(YEAR = floor(x = CRUISE / 100))
+production_data$size$YEAR <- floor(x = production_data$size$CRUISE / 100)
+
+nsamp_len <- aggregate(HAULJOIN ~ YEAR,
+                       data = production_data$size,
+                       FUN = function(x) length(x = unique(x = x)))
+
+srvlen0 <- survlen %>%
+  tidyr::pivot_wider(names_from = LENGTH_BIN, values_from = freq, id_cols = c(YEAR, SEX), values_fill = 0) %>%
+  mutate(SEX = ifelse(SEX == 'males',2,1)) %>%
+  merge(., nsamp_len, by = 'YEAR')
+
+
+srvlen0 %>% 
+  filter(SEX == 1) %>% 
+  merge(., srvlen0 %>% 
+          filter(SEX == 2) %>% 
+          select(-SEX, -HAULJOIN), 
+        by = c('YEAR'), all.y = FALSE) %>%
+  mutate(Seas = 7, FltSvy = 2, Gender = 3, Part = 0,) %>%
+  select(Yr = YEAR, Seas, FltSvy, Gender, Part, Nsamp=HAULJOIN, everything(),
+         -SEX) %>%
+    arrange(Yr) #%>%
+  # write.csv(., file = here::here(year,'data','output','srv_lengths_ss3.csv'), row.names = FALSE)
+```
 
 ## Marginal Ages
 
@@ -250,6 +289,38 @@ ggplot(subset(compare, YEAR > 2010 & YEAR < 2018),
 
 **I am confident I can use the** `gapindex` `production_agecomp` **object to get to a faithful reproduction of the 2020 marginal age comps (these are not fit to in the model).**
 
+
+
+### Render age comps SS3 format
+
+```{r, eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.cap=""}
+## reshape the survey marginal ages from gapindex into the ss3 format
+production_data$specimen$YEAR <- floor(x = production_data$specimen$CRUISE / 100)
+nsamp_age <- aggregate(HAULJOIN ~ YEAR,
+          data = production_data$specimen,
+          FUN = function(x) length(x = unique(x = x)))
+
+srvage0 <- survage %>%
+  mutate(AGE = as.numeric(AGE)) %>%
+  tidyr::pivot_wider(names_from = AGE, values_from = freq, id_cols = c(YEAR, SEX), values_fill = 0) %>%
+  mutate(SEX = ifelse(SEX == 'males',2,1)) %>%
+  merge(., nsamp_age, by = 'YEAR') %>%
+  select(YEAR, SEX, HAULJOIN, paste0(1:21)) ## ensure correct order
+
+
+srvage0 %>% 
+  filter(SEX == 1) %>% 
+  merge(., srvage0 %>% 
+          filter(SEX == 2) %>% 
+          select(-SEX, -HAULJOIN), 
+        by = c('YEAR'), all.y = FALSE) %>%
+  mutate(Seas = 7, FltSvy = -2, Gender = 3, Part = 0,Ageerr = 1, Lbin_lo = -1) %>%
+  select(Yr = YEAR, Seas, FltSvy, Gender, Part, Ageerr, Lbin_lo = Lbin_lo, Lbin_hi = Lbin_lo, Nsamp=HAULJOIN, everything(),
+         -SEX) %>%
+    arrange(Yr) #%>%
+  # write.csv(., file = here::here(year,'data','output','srv_ages_ss3-ghost.csv'), row.names = FALSE)
+```
+
 ## CAALs
 
 I was original able to get something that looked like the previous inputs by starting with the specimen CSV from `afscdata` and passing it through Carey's code. I'd rather do this using the `gapindex` data and a clean, single pipe workflow. 
@@ -262,7 +333,7 @@ Also note that the `GAP_PRODUCTS.AGECOMP` table for the EBS currently only conta
 
 ```{r, include = FALSE, warning = FALSE, message = FALSE}
 ## start with what comes out of the gapindex vignette for $specimen
-load(here::here('2024','data','raw','gapindex_production_data.rdata'))
+
 production_data$specimen$YEAR <- floor(x = production_data$specimen$CRUISE / 100)
 
 caal00 <-   production_data$specimen %>%
