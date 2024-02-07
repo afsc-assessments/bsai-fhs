@@ -51,147 +51,17 @@ afscdata::bsai_fhs(year)
 ## only need to do this if you have re-queried data
 
 ## fishery catches ----
-# (note: this automates the in-year estimation)
-## output/yld_ratio.csv has the expansion factor ($ratio) and the 3-year catch/TAC ratio ($yld)
-## which are used for in-year and next-two-year catches, respectively
-suppressWarnings(afscassess::clean_catch(year = year, 
-                                        species = species, 
-                                        TAC = TAC,
-                                        fixed_catch = 'bsai_fhs_catch_1964_1994.csv'))
-
-## reformat catches
-afscdata::catch_to_ss3(year, seas = 1, fleet = 1)
 
 ## fishery age comps ----
-# expand fishery age comps by sex expanded in years with obs catch data); 
-## adapted from afscassess::fish_age_comp function
-fac0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), delim = ",", 
-                    col_type = c(join_key = "c", 
-                                 haul_join = "c", port_join = "c")) %>% 
- tidytable::filter(age >= rec_age,  
-                   !is.na(length), 
-                   !is.na(sex),
-                   sex != 'U',
-                   !is.na(performance)) %>% 
-  tidytable::mutate(age = ifelse(age > plus_age, plus_age, 
-                                 age)) %>% 
-  tidytable::mutate(tot = tidytable::n(),   .by = year) %>% 
-  # tidytable::filter(tot > 49) %>% 
-  tidytable::mutate(n_h = length(unique(na.omit(haul_join))) + length(unique(na.omit(port_join))), .by = year) %>% 
-  tidytable::summarise(n_s = mean(tot), 
-                       n_h = mean(n_h), 
-                       age_tot = tidytable::n(), .by = c(sex,year,age)) %>% 
-  tidytable::mutate(prop = age_tot/n_s) %>% 
-  tidytable::left_join(expand.grid(sex = unique(.$sex), 
-                                   year = unique(.$year),    
-                                   age = 1:plus_age), .) %>% 
-  tidytable::replace_na(list(prop = 0)) %>% 
-  tidytable::mutate(AA_Index = 1, n_s = mean(n_s, na.rm = T), 
-                    n_h = mean(n_h, na.rm = T), .by = year) %>% 
-  tidytable::select(-age_tot) %>% 
-  tidytable::pivot_wider(names_from = age, values_from = prop)
-
-fac0 %>% filter(sex == 'F') %>% 
-  merge(., fac0 %>% 
-          filter(sex == 'M') %>% 
-          select(-sex, -n_s,-n_h, - AA_Index), 
-                                     by = 'year', all.y = FALSE) %>%
-  arrange(year) %>%
-  ## drop the years before 2000 since Lcomps are available
-  mutate(Seas = 7, FltSvy = ifelse(year < 2000, -1, 1), Gender = 3, 
-         Part = 0, Ageerr = 1, LbinLo = -1, LbinHi = -1, Nsamp = n_h) %>%
-  select(Yr = year, Seas, FltSvy, Gender, Part, Ageerr, LbinLo, LbinHi, Nsamp, everything(), -sex, -n_s, -n_h, -AA_Index) %>%
-  write.csv(., file = here::here(year,'data','output','fsh_age_comp_ss3.csv'), row.names = FALSE)
-
 
 ## fishery length comps ----
-
-ages <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), delim = ",", col_type = c(join_key = "c", 
-                                                                                                         haul_join = "c", port_join = "c")) %>% tidytable::filter(!is.na(age), 
-                                                                                                                                                                  age >= rec_age) %>% tidytable::group_by(year) %>% tidytable::tally(name = "age") %>% 
-  tidytable::filter(age >= 50) %>% 
-  tidytable::ungroup()
-flc0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_length_data.txt"), 
-                     delim = ",", 
-                     col_type = c(haul_join = "c", 
-                                  port_join = "c")) %>% 
-  tidytable::mutate(tot = sum(frequency),                                                                                                                                                                                         length(unique(na.omit(port_join))), .by = year) %>% 
-  tidytable::summarise(n_s = mean(tot), n_h = mean(n_h), 
-                       length_tot = sum(frequency), .by = c(sex,year, length)) %>% 
-  tidytable::mutate(prop = length_tot/n_s) %>% tidytable::left_join(expand.grid(sex = unique(.$sex), 
-                                                                                year = unique(.$year), 
-                                                                                length = lenbins), .) %>% tidytable::replace_na(list(prop = 0)) %>% 
-  tidytable::mutate(SA_Index = 1, n_s = mean(n_s, na.rm = T), 
-                    n_h = mean(n_h, na.rm = T), .by = year) %>% tidytable::select(-length_tot) %>% 
-  tidytable::pivot_wider(names_from = length, values_from = prop)
-
-
-flc0 %>% filter(sex == 'F') %>% 
-  merge(., flc0 %>% 
-          filter(sex == 'M') %>% 
-          select(-sex, -n_s,-n_h), 
-        by = 'year', all.y = FALSE) %>%
-  arrange(year) %>%
-  ## drop the years before 2000 since Lcomps are available
-  mutate(Seas = 7, 
-         FltSvy = ifelse(year %in% unique(fac0$year[which(fac0$year >= 2000)]), -1, 1),  
-         Gender = 3, 
-         Part = 0, 
-         Nsamp = n_h) %>%
-  select(Yr = year, Seas, FltSvy, Gender, Part, Ageerr, LbinLo, LbinHi, Nsamp, everything(), -sex, -n_s, -n_h) %>% 
-  write.csv(., file = here::here(year,'data','output','fsh_len_comp_ss3.csv'), row.names = FALSE)
 
 afscassess::fish_length_comp(year, lenbins = len_bins,rec_age = 0)
 
 ## survey comps ----
-## this will save csvs for CAALs and marginal lengths/ages in output/. This is Carey's method.
-source(here::here(year,"R","calculate_survey_comps.R"))
-
-
+ 
 
 ## survey marginal ages (ghosted in model) ----
-tmp <- read.csv(here::here(year, 'data','raw','bsai_ts_length_specimen_data.csv'))  %>%
-  filter(sex != 3 & !is.na(age) & !is.na(length) & age > 0 & age<plus_age, species_code == 10130) %>%
-  mutate(
-    # sex = ifelse(sex == 1,2,1),  ## SS sex is inverse of this dataset
-    length_grp = cut(round(length/10,0) ,
-                     breaks = seq(0,60,2),
-                     right = FALSE,
-                     labels = FALSE),
-    length_bin_use = seq(0,60,2)[length_grp])
-inputN_total <- tmp %>%
-  group_by(year,sex) %>%
-  dplyr::summarise(Nsamp = n())
-inputN_h <- tmp %>% 
-  group_by(year, sex) %>% 
-  summarise(n_h = length(unique(hauljoin)))
-            
-srvage0 <- tmp %>% 
-  group_by(year, sex, age) %>%
-  summarise(n_combo = n()) %>%
-  ungroup()%>%
-  left_join(., inputN_total, by = c('year','sex')) %>%
-  mutate(freq = n_combo/Nsamp) %>%
-  select(-n_combo) %>%
-  tidyr::pivot_wider(names_from = age, values_from = freq, values_fill = 0, names_expand = TRUE) 
-
-## note: cole had these all set to nsamp = 200
-srvage0 %>% 
-  filter(sex == 1) %>% 
-  merge(., srvage0 %>% 
-          filter(sex == 2) %>% 
-          select(-sex, -Nsamp), 
-        by = c('year'), all.y = FALSE) %>%
-  filter(year %in%  unique(mod_2020$condbase$Yr)) %>%
-  arrange(year) %>%
-  mutate(Seas = 7, FltSvy = -2, Gender = 3, Part = 0, Ageerr = 1, Lbin_lo = -1,
-         Lbin_hi = -1) %>%
-  select(year, Seas, FltSvy, Gender, Part, Ageerr, Lbin_lo, Lbin_hi, Nsamp, everything(),
-         -sex) %>%
-  write.csv(., file = here::here(year,'data','output','srv_age_ghost_ss3.csv'), row.names = FALSE)
-
-
-
 
 
 
