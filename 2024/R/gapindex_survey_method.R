@@ -6,6 +6,53 @@ spp_start_year <-
   RODBC::sqlQuery(channel = sql_channel, 
                   query = "SELECT * FROM GAP_PRODUCTS.SPECIES_YEAR")
 
+## use complex for surv bio
+production_data_forbio <- gapindex::get_data(
+  year_set = 1982:2023,
+  survey_set = "EBS",
+  spp_codes = data.frame(GROUP = 10129, SPECIES_CODE = 10130:10140),
+  pull_lengths = FALSE, 
+  haul_type = 3, 
+  abundance_haul = "Y",
+  sql_channel = sql_channel)
+
+
+production_cpue <- gapindex::calc_cpue(racebase_tables = production_data_forbio)
+production_biomass_stratum <- 
+  gapindex::calc_biomass_stratum(racebase_tables = production_data_forbio,
+                                 cpue = production_cpue)
+# Aggregate Biomass to subareas and region
+production_biomass_subarea <- 
+  gapindex::calc_biomass_subarea(racebase_tables = production_data_forbio, 
+                       biomass_strata = production_biomass_stratum)
+
+#called from afsc.race_biomass_ebsshelf_plusnw
+bts_sparse_og <- read.csv("C:/Users/maia.kapur/Work/assessments/bsai-fhs/2024/data/raw/bsai_total_bts_biomass_data.csv")  %>% 
+  dplyr::group_by(year, survey) %>%
+  dplyr::summarise(biomass= sum(total_biomass), ## to MT
+                   sd = sqrt(sum(biomass_var ))) %>%
+  tidyr::pivot_wider(names_from=survey, values_from=c(biomass, sd)) 
+
+## called using vignette
+bts_sparse <- production_biomass_subarea  %>% 
+  dplyr::group_by(YEAR, SURVEY) %>%
+  dplyr::summarise(biomass= sum(BIOMASS_MT  ),## to MT
+                   sd = sqrt(sum(BIOMASS_VAR ))) %>%
+  tidyr::pivot_wider(names_from=SURVEY, values_from=c(biomass, sd)) 
+names(bts_sparse) <- tolower(names(bts_sparse))
+
+ggplot(data = NULL) + 
+  
+  geom_line(data = bts_sparse_og, aes(x = year, y = biomass_EBS_SHELF/1000, 
+                                      color = 'afsc.race_biomass_ebsshelf_plusnw, individual codes') ) +
+  geom_line(data = bts_sparse, aes(x = year, y = biomass_ebs/1000, color = 'vignette, complex')) +
+  labs(x = 'Year', y = 'Biomass (t)', color = '') +
+  theme(legend.position = 'top')
+  
+
+
+tail(bts_sparse);tail(bts_sparse_og)
+
 production_data <- gapindex::get_data(
   year_set = 1982:2023,
   survey_set = "EBS",
