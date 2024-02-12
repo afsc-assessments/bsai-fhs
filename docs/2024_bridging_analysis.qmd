@@ -27,17 +27,17 @@ This electronic document describes the analyses undertaken to bridge the last "f
 
 The general workflow was as follows:
 
-1)  Move the 2020 model, referred to as Model 18.2c (2020), from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods are provided in this document.
+1)  Move the 2020 model, referred to as Model 18.2c (2020), from SS3 version 3.30.16 to the the newest SS3 software version as of December 2023 (3.30.22) downloaded from the [NOAA Virtual Lab](https://github.com/nmfs-ost/ss3-source-code/releases). Comparisons between model derived quantities and likelihoods given this change are provided in this document. 
 
-2)  Compare the historical and newly-pulled data. The "old data pull approach" uses code from Drs. McGilliard & Monnahan in a local R package entitled `newsbss`, which is highly customized and not actively maintained. The "newly-pulled" data are obtained using the `afscdata` package. The latter is the preferred method since it is actively maintained and provides a unified approach for many stocks. For many data sources I ran the 2020 model with *only* that data source changed, when I needed to convince myself that trivial differences in the raw data extraction were indeed trivially impactful.
+2)  Compare the historical and newly-pulled data. The "old data pull approach" used code from Drs. McGilliard & Monnahan originating from a local R package entitled `newsbss`, which is highly customized and not actively maintained. The "newly-pulled" data are obtained using a combination of the `afscdata` and `gapindex` packages (the former for fishery data, the latter for survey data). This is the preferred approach since these packages are actively maintained and provide a unified approach for many stocks. To confirm things looked right, I ran the 2020 model with *only* individual (historical) data sources changed, to convince myself that trivial differences in the raw data extraction were indeed trivially impactful.
 
-3)  Sequentially bridge the data obtained via `afscdata` Model 18.2c (2020) has catches and fishery length comps through 2020, and everything else through 2019. There was also mean size-at-age data through 2016 but it was not used (fit to) in the model. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey lengths, then survey CAALs (marginal ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below. **This bridged model, with updated software and data inputs but no structural changes is labeled as Model 18.2c (2024)**.
+3)  Sequentially bridge the data. Model 18.2c (2020) has catches and fishery length comps through 2020, and everything else through 2019. We added catches through 2023, with an estimate of 2024 catches, then survey abundance indices, then survey lengths, then survey CAALs (marginal ages are ghosted, but included as well), then fishery lengths, then fishery ages. The impact of each of these five steps is documented below. **This bridged model, with updated software and data inputs but no structural changes is labeled as Model 18.2c (2024)**.
 
 ```{r include = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.cap="Data used in model Model 18.2c (2020). Most of these will be updated with at least 3 years of data for the bridged model, with the exception of fishery age compositions; there was not enough age-reader time to complete otolith reads for 2022 and 2023 (more details below). Also note that while there are fishery length data for most of the time series, fitting to these data is disabled in years where fishery ages are available."}
 SSplotData(mod18.2c_2020, subplots = 2)
 ```
 
-# Stock Synthesis Software Update 3.30.22
+# Stock Synthesis Software Update 3.30.22 
 
 ```{r include = FALSE, echo = FALSE,  warning = FALSE, message = FALSE}
 mod18.2c_2020_v33022 <- SS_output(here::here(year,'model_runs','18.2c_2020_ss3v33022'), verbose = FALSE)
@@ -46,7 +46,7 @@ ss_compare <- SSsummarize(list(mod18.2c_2020,mod18.2c_2020_v33022))
 
 ## Warnings
 
-Model 18.2c (2020) had generic warnings about the `recr_dist` method, poor $F_{MSY}$ convergence, and an issue with the final gradient. Only the latter is of concern. Model 18.2c run with the new SS3 software threw the same warnings as well as an indication that the initial value for `parm 11` was greater than the max (`999\>5`); this is the end logit for the survey selex (forcing it to be asymptotic). I am comfortable with the consistency of these warnings and clean them up below; the gradient is identical between models (`r  mod18.2c_2020$maximum_gradient_component`).
+Model 18.2c (2020) had generic warnings about the `recr_dist` method, poor $F_{MSY}$ convergence, and an issue with the final gradient. Only the latter is of concern. Model 18.2c run with the new SS3 software threw the same warnings as well as an indication that the initial value for `parm 11` was greater than the max (`999 > 5`); this is the end logit parameter for double-normal survey selex (forcing it to be asymptotic). I am comfortable with the consistency of these warnings and clean them up below; the gradient is identical between models (`r  mod18.2c_2020$maximum_gradient_component`).
 
 ## Likelihood Components
 
@@ -89,7 +89,7 @@ Based on the above explorations, I am comfortable that moving to the latest SS3 
 -   Change `recr_dist_method` to 4 (line 17) and removing associated stuff lines 99-101
 -   Change the `INIT` for Age_DblN_end_logit_Survey to 20 and the MAX to 25 to get rid of the bound error. The selectivity is the same.
 
-The warning-free model is in `model_runs/18.2c_2020_ss3v33022w`.
+The warning-free model is in `model_runs/18.2c_2020_ss3v33022w`. I use this warning-free model to do the data explorations in the next section.
 
 ```{r include = FALSE, message = FALSE, warning = FALSE}
 m18.2cv33022w <- SS_output(here::here(year,'model_runs','18.2c_2020_ss3v33022w'), verbose = FALSE)
@@ -100,26 +100,25 @@ SSplotSelex(m18.2cv33022w, fleets = 2, sexes = 1)
 
 ## Big-Picture Data Notes
 
-This section of the script assumes that one has already downloaded and formatted the data one plans to use in the assesssment. To avoid separate scripts doing the same thing, I'm completing that step in `R/2024_analysis.R`. I wrote some functions for the `afscdata` and `afscassess` packages that reshape those data frames into the SS3 format, which is also accomplished in that script.
-
-The original data pull method is in `R/old_datapull_script.R`. I used that code to download data in the manner consistent with the historical approach, when possible, and below reshape it into the SS3 format for comparison as a one-off. There are several cases where I wasn't able to re-trace the 2020 model's steps, mostly due to deprecated Oracle schemata.
+This section of the script assumes that one has already downloaded and formatted the data one plans to use in the assesssment. To avoid separate scripts doing the same thing, I'm completing that step in `R/2024_analysis.R`, with a `source()` call to `R/bsai_fhs_wrangle_data`. I wrote some functions for the `afscdata` and `afscassess` packages that reshape those data frames into the SS3 format, which is also accomplished in that script.
 
 Bering Flounder is *not* included in the compositional data; Dr. Monnahan caught and corrected this issue in 2020. The total survey biomass and catches do include both species.
 
 ### Age-Read triaging
 
-**Due to staffing issues** we had to reduce the number of otoliths read for all sources in years 2022 and 2023. After consulting with the Age & Growth team, they indicated they could read a *total* of about 750 BSAI FHS otoliths this year. This is a considerable (\~75%) reduction given than normally we have about 600-800 otoliths for each source (survey and fishery) for each year; this typically encompasses every collected otolith from each source, so there are not historical ratios to use for guidance.
+**Due to staffing issues** we had to reduce the number of otoliths read for all sources in years 2022 and 2023. After consulting with the Age & Growth team, they indicated they could read a *total* of about 750 BSAI FHS otoliths this year. This is a considerable reduction (\~75%) given that normally we have about 600-800 otoliths for each source (survey and fishery) for each year. We normally read every collected otolith from each source, so there are not historical ratios to use for guidance.
 
-The two alternatives are to 1) disregard the fishery age-comps from 2022 & 2023 for this assessment, and devote all reading effort to the survey or 2) find a compromise (split) among the two fleets and years that doesn't amount to simply adding noise to the model.
+The two alternatives in this situation were to 1) disregard the fishery age-comps from 2022 & 2023 for this assessment, and devote all reading effort to the survey or 2) find a compromise (split) among the two fleets and years that doesn't amount to simply adding noise to the model.
 
-The figures below illustrate simulated composition data at varying levels of age-reads. We evaluated the resultant datasets based on how distinct they appeared from the full dataset. Our findings were as follows:
+The figures below illustrate simulated composition data at varying levels of age-reads which I generated to determine the best way forward. We evaluated the resultant datasets based on how distinct they appeared from the full dataset. Our findings were as follows:
 
 -   Simply splitting the 750 otoliths evenly across years & fleets (187 reads each) results in a mis-represented plus group for the survey.
 -   Based on the data weights in the 2020 model, and the fact that survey CAALs are used to inform growth, it's intuitively preferable to assign more otolith reads to the survey data. This could range from completely ignoring the fishery data for these years to forming some sort of compromise among the datasets.
 -   The data weights would suggest that 2.5x the number of otoliths should be read from the survey (equaling 267 survey otoliths per year). This approach results in satisfactory compositions for the survey but not for the fishery.
--   A compromise between these two approaches, shown in blue below, where the survey gets 225 age-reads per year, and the fishery gets 175 age-reads per year, result in satisfactory compositions for both fleets. 
+-   A compromise between these two approaches, shown in blue below, where the survey gets 225 age-reads per year, and the fishery gets 175 age-reads per year, result in satisfactory compositions for the survey but risk missing young fish from the fishery. 
 
-After considering these results, Dr. Kapur decided in January 2024 to go with the first option and **assign all available reader time to the survey**, with the understanding that a) the A&G program could finish reading the leftover fishery otoliths for future assessment years, and b) we don't expect these simulated datasets to have a strong influence on the terminal derived quantities given that recruitment deviations are set to zero for the last three years.
+After considering these results, Dr. Kapur decided in January 2024 to go with the very first option and **assign all available reader time to the survey**, with the understanding that a) the A&G program could finish reading the leftover fishery otoliths for future assessment years, and b) we don't expect these simulated datasets to have a strong influence on the terminal derived quantities given that recruitment deviations are set to zero for the last three years.
+
 
 ::: panel-tabset
 ### Otolith Collections thru Time
@@ -237,7 +236,6 @@ Rmisc::multiplot(plotlist = list(p1,p3,p2, p4), cols = 2)
 ```
 :::
 
-
 ## Fishery Catches
 
 Both queries call from the `council.comprehensive_blend_ca` table. I ran the `afscassess::clean_catch()` function on the downloaded data, and the summary code for aggregating into tons. **The approaches result in consistent catch histories,** with the understandable exception of in-year catches for 2020 (which were under-estimated).
@@ -268,7 +266,7 @@ compsummary_2 <- SSsummarize(list(mod_2020,mod_2020_new_fsh_len_comps))
 
 *I was unable to reproduce the fishery age- and len-comp routine* used for the older version of the model. For reproducibility purposes, I am going to move towards the `afscdata` approach, which requires about 10% of the code to run, and does not require multiple reads of the same data sources. Importantly, I tested Model 18.2c with *only* the age-comp or len-comp data (separately) changed to those available using my new approach and found the impact on derived quantities to be trivial.
 
-The current assessment passes the fishery length comp time series but only fits to data in years where there are not age-comp data (1977-1999, 2002-2003, 2008 and 2020).
+The current assessment passes the fishery length comp time series but only fits to data in years where there are not age-comp data (1977-1999, 2002-2003, 2008 and 2020). Note that the new data pull routine only gets values from 1988 onwards, so values before that are unchanged.
 
 ::: panel-tabset
 ### Fish Len Comps from 18.c (2020)
@@ -388,32 +386,53 @@ Both Dr. Monnohan (per his notes) and I are not thrilled with this approach, sin
 
 I coded the linear model into the `afscdata::bsai_fhs` data extraction function and did *not* use the `afscassess::bts_biomass` function for further post-processing. The former function saves the Synthesis-formatted dataframe directly to `output/`. The resultant index is identical to what was used before.
 
-```{r, include=T, echo = FALSE, warning = FALSE}
-
-rbind( mod_2020$cpue %>% select(Yr, Obs, SE) %>%
-         mutate(src = 'Old'),
-       read.csv(here(year,'data','output','2023-12-19-ss_survey_index.csv')) %>% mutate(src = 'New') %>% select(Yr = year, Obs = obs, SE = se_log, src) ) %>%
-  ggplot(., aes(x = Yr, y = Obs, col = src )) +
-  geom_point(alpha = 0.2) +
-  geom_errorbar(aes(ymin = Obs - Obs*SE, ymax = Obs+Obs*SE), width = 0) +
-  scale_color_manual(values = c('blue','grey22'),
-                     labels = c('2024 Model Data', '2020 Model Data'))+
-  labs(x = 'Year', y = 'Observed Survey Biomass (t)', color = '')+
-  geom_vline(data = NULL, aes(xintercept = 2019), linetype = 'dotted', color = 'grey66')
-
+```{r, include=FALSE, echo = FALSE, warning = FALSE}
+mod_2020_new_srv_bio <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_biomass')) 
+compsummary_b <- SSsummarize(list(mod_2020,mod_2020_new_srv_bio))
 ```
+
+::: panel-tabset
+ 
+#### Spawning Biomass, old vs new survey biomass data
+
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in derived quantities."}
+SSplotComparisons(compsummary_b, 
+                  legendlabels = c('Model 18.2c (2020)',
+                                   'Model 18.2c (2020) with new survey biomass data'),
+                  subplots = 2)
+```
+
+#### Recruitment Time Series, old vs new survey biomass data
+```{r, include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in recruitment deviations."}
+SSplotComparisons(compsummary_b, 
+                  legendlabels = c('Model 18.2c (2020)',
+                                   'Model 18.2c (2020) with new survey biomass data'),
+                  subplots = 12)
+```
+
+#### Survey Fits, old vs new survey biomass data
+
+```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="Survey input data are identical and fits are the same."}
+SSplotComparisons(compsummary_b, 
+                  indexPlotEach = TRUE,
+                  legendlabels = c('Model 18.2c (2020)',
+                                   'Model 18.2c (2020) with new survey biomass data'),
+                  subplots = 13)
+```
+:::
+
 
 ## Survey Compositional Data
 
 ### Survey CAALs
 
-I went on a long journey to reproduce the survey compositional data, and came to the conclusion that it must be done using the material in the `gapindex` package, which is more faithful to what was provided in earlier years in the `HAEHNR` schema. My suspicion is that there is under-the-hood filtration and expansion taht `afscdata` simply can't handle yet (at least for the BSAI), and going forward it is more sensible that we work with a tool that is maintained by the folks collecting the data. 
+I went on a long journey to reproduce the survey compositional data, and came to the conclusion that it must be done using the material in the `gapindex` package, which is more faithful to what was provided in earlier years in the `HAEHNR` schema. My suspicion is that there is under-the-hood filtration and expansion that `afscdata` simply can't handle yet (at least for the BSAI), and going forward it is more sensible that we work with a tool that is maintained by the folks collecting the data. 
 
-A deep dive into these issues is undertaken in R/2024_survey_comp_deepdive.qmd, and the lessons learned led to the development of a standalone workup script that 1) pulls from `gapindex` and 2) munges the appropriate subtables in to the SS3-style compositional data. This replaces the long and redundant set of code that was developed for 2020. For simplicity, the plots here simply illustrate that we were able to get identical datasets and derived quantities using the new methods.
+A deep dive into these issues is undertaken in R/2024_survey_comp_deepdive.qmd, and the lessons learned led to the development of a standalone workup script that 1) pulls from `gapindex` and 2) munges the appropriate sub tables in to the SS3-style compositional data. This replaces the long and redundant set of code that was developed for 2020. For simplicity, the plots here simply illustrate that we were able to get identical datasets and derived quantities using the new methods.
 
 
 ```{r, include=FALSE, echo = FALSE, warning = FALSE}
-mod_2020_new_srv_caal <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_caal-gapindex-specimen')) 
+mod_2020_new_srv_caal <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_caal')) 
 compsummary_3 <- SSsummarize(list(mod_2020,mod_2020_new_srv_caal))
 ```
 
@@ -473,7 +492,8 @@ SSplotBiology(mod_2020_new_srv_caal,subplots = 1)
 The input sample sizes are slightly different in the new datapull (from `gapindex`)
 
 ```{r, include=FALSE, echo = FALSE, warning = FALSE}
-mod_2020_new_srv_len <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_lengths'))
+# mod_2020_new_srv_len <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_lengths'))
+mod_2020_new_srv_len <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_len'))
 compsummary_4 <- SSsummarize(list(mod_2020,mod_2020_new_srv_len))
 ```
 
@@ -548,7 +568,7 @@ knitr::include_graphics(here::here(old_mdl_fldr,'plots','comp_gstagedat_flt2mkt0
 knitr::include_graphics(here::here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_ages_ghost','plots','comp_gstagedat_flt2mkt0_page1.png'))
 ```
 
-# Data Bridging
+# Model Bridging
 
 Importantly, the data updates conducted here are holistic, meaning that the entire time series of data for each component (where available) is replaced with what is currently available in the AKFIN database. A comparison between the data used in the last assessment and the latest version of that dataset is provided for each component above. The model that includes each change is named in the relevant header; these are hosted under `model_runs/`.
 
