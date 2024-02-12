@@ -3,11 +3,10 @@
 
 # load ----
 ## do NOT update odbc or connect() won't work
-
 devtools::install_github("afsc-assessments/afscdata", force = TRUE) 
 # devtools::install_github("afsc-gap-products/gapindex")
-#devtools::install_github("BenWilliams-NOAA/afscassess", force = TRUE)
-#devtools::install_github('r4ss/r4ss', force = TRUE)
+# devtools::install_github("BenWilliams-NOAA/afscassess", force = TRUE)
+
 library(gapindex)
 library(afscdata)
 library(afscassess)
@@ -46,85 +45,7 @@ species = "FSOL"
 ## you must be on the VPN for this to work, and it takes about 5 minutes
 ## this automates the AI interpolation for the biomass survey and outputs in in SS format
 afscdata::bsai_fhs(year)
-
-# reshape data ----
-## only need to do this if you have re-queried data
-
-## fishery catches ----
-
-## fishery age comps ----
-
-## fishery length comps ----
-
-afscassess::fish_length_comp(year, lenbins = len_bins,rec_age = 0)
-
-## survey comps ----
  
-
-## survey marginal ages (ghosted in model) ----
-
-
-
-
-# bottom trawl survey age comp
-afscassess::bts_age_comp(year = year,
-                         area = "goa",
-                         rec_age = rec_age,
-                         plus_age = plus_age,
-                         rmv_yrs = c(1984,1987))
-
-# fishery size comp expansion, adapted from afscassess::fish_length_comp
-## manually rename a file; lookup funs want "bts"
-file.rename(from=here::here(year, 'data','raw','bts_length_data.csv'),
-            to = here::here(year, 'data','raw','bsai_ts_length_data.csv'))
-file.rename(from=here::here(year, 'data','raw','bsai_ts_specimen_data.csv'),
-            to = here::here(year, 'data','raw','bsai_ts_length_specimen_data.csv'))
-# bottom trawl survey size comp (not fit to in model, used for size-age matrices)
-
-afscassess::bts_length_comp(year = year,
-                            area = "bsai",
-                            bysex = TRUE,
-                            lenbins = lengths)
-
- 
-# current size-age matrix
-afscassess::size_at_age(year = year,
-                        admb_home = admb_home,
-                        rec_age = rec_age,
-                        lenbins = lengths)
-
-# ageing error matrix
-afscassess::age_error(year = year, 
-                      reader_tester = "reader_tester.csv", 
-                      admb_home = admb_home, 
-                      species = species, 
-                      rec_age = rec_age, 
-                      plus_age = plus_age)
-
-## placeholder, re-shape things into SS format
-## note that the functions in afscdata to do this are still in dev 
-## and likely need further testing/customization to work well with all species.                      
-
-
-
-# concatenate dat file, for now writing it to output folder in data
-afscassess::concat_dat_pop(year = year,
-                           species = species,
-                           area = "goa",
-                           folder = "data/output",
-                           dat_name = dat_name,
-                           rec_age = rec_age,
-                           plus_age = plus_age,
-                           spawn_mo = 5)
-
-# write ctl file, for now writing it to output folder in data
-afscassess::write_ctl_pop(year = year,
-                          base_mdl_fldr = '2020.1-2021',
-                          mdl_name = "Model_1",
-                          ctl_name = dat_name,
-                          dat_name = dat_name,
-                          folder = "data/output")
-
 
 # run base model ----
 
