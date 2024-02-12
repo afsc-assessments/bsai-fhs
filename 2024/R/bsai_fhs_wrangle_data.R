@@ -6,6 +6,7 @@ require(dplyr)
 require(gapindex)
 
 ## connect for gapindex
+message('enter your AFSC credentials')
 sql_channel <- gapindex::get_connected()
 
 # Reformat Fishery Data (nothing new to dwnld)
@@ -74,13 +75,17 @@ ages <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), d
                                                                                                                                                                   age >= rec_age) %>% tidytable::group_by(year) %>% tidytable::tally(name = "age") %>% 
   tidytable::filter(age >= 50) %>% 
   tidytable::ungroup()
+
 flc0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_length_data.txt"), 
                      delim = ",", 
                      col_type = c(haul_join = "c", 
                                   port_join = "c")) %>% 
+  tidytable::mutate(n_h = length(unique(na.omit(haul_join))) + length(unique(na.omit(port_join))), .by = year) %>% 
   tidytable::mutate(tot = sum(frequency),                                                                                                                                                                                         length(unique(na.omit(port_join))), .by = year) %>% 
-  tidytable::summarise(n_s = mean(tot), n_h = mean(n_h), 
-                       length_tot = sum(frequency), .by = c(sex,year, length)) %>% 
+  tidytable::summarise(n_s = mean(tot), 
+                       n_h = mean(n_h), 
+                       length_tot = sum(frequency), 
+                       .by = c(sex,year, length)) %>% 
   tidytable::mutate(prop = length_tot/n_s) %>% tidytable::left_join(expand.grid(sex = unique(.$sex), 
                                                                                 year = unique(.$year), 
                                                                                 length = lenbins), .) %>% tidytable::replace_na(list(prop = 0)) %>% 
@@ -101,7 +106,7 @@ flc0 %>% filter(sex == 'F') %>%
          Gender = 3, 
          Part = 0, 
          Nsamp = n_h) %>%
-  select(Yr = year, Seas, FltSvy, Gender, Part, Ageerr, LbinLo, LbinHi, Nsamp, everything(), -sex, -n_s, -n_h) %>% 
+  select(Yr = year, Seas, FltSvy, Gender, Part, Nsamp, everything(), -sex, -n_s, -n_h) %>% 
   write.csv(., file = here::here(year,'data','output','fsh_len_comp_ss3.csv'), row.names = FALSE)
 
 message('reformatted and saved fishery length comp data to output/')
@@ -112,10 +117,19 @@ message('reformatted and saved fishery length comp data to output/')
 bts_sparse  <- read.csv(here::here(year,'data','raw','bsai_total_bts_biomass_data.csv'))  %>% 
   dplyr::group_by(year, survey) %>%
   dplyr::summarise(biomass= sum(total_biomass), ## to MT
-                   sd = sqrt(sum(biomass_var ))) %>%
+                   sd = sqrt(sum(biomass_var))/1000) %>%
+  tidyr::pivot_wider(names_from=survey, values_from=c(biomass, sd)) 
+
+names(production_biomass_subareaAI) <- names(production_biomass_subareaEBS) <- tolower(names(production_biomass_subareaAI))
+
+bts_sparse <- rbind(production_biomass_subareaAI, production_biomass_subareaEBS) %>%
+  dplyr::group_by(year, survey) %>%
+  dplyr::summarise(biomass= sum(biomass_mt), ## to MT
+                   sd = sqrt(sum(biomass_var))) %>%
   tidyr::pivot_wider(names_from=survey, values_from=c(biomass, sd)) 
 
 
+# names(bts_sparse)[c(3,5)] <- c('biomass_EBS','sd_EBS')
 z1 <- subset(bts_sparse, !is.na(biomass_AI))
 z2 <- subset(bts_sparse, is.na(biomass_AI))
 ## linear model to interpolate AI biomass & sd in off years
@@ -127,7 +141,7 @@ z2$sd <- as.numeric(predict(lm_var, newdata=z2))
 
 ## Survey Biomass: reformatting ----
 index <- rbind(z1,z2) %>% 
-  dplyr::group_by(YEAR) %>%
+  dplyr::group_by(year) %>%
   dplyr::summarize(biomass=round(biomass_AI+biomass_EBS,5),
                    variance=sum(sd_AI^2,sd_EBS^2,na.rm = TRUE),
                    .groups='drop') %>%
@@ -135,7 +149,7 @@ index <- rbind(z1,z2) %>%
   dplyr::mutate(se_log=round(sqrt(log(1+(variance/biomass)^2)),5)) %>%
   dplyr::select(-variance)
 
-SS_index <- data.frame(year=index$YEAR, seas=7, index=2, 
+SS_index <- data.frame(year=index$year, seas=7, index=2, 
                        obs=round(index$biomass,0), se_log=index$se_log)
 
 write.csv(x=SS_index, file= here(year,'data','output','srv_bio_ss3.csv'),
@@ -144,7 +158,81 @@ write.csv(x=SS_index, file= here(year,'data','output','srv_bio_ss3.csv'),
 message('reformatted and saved survey biomass data to output/')
 
 ## Download Survey Data from gapindex ----
+## Note: this assessment uses slightly different data sources for the composition vs biomass data.
+## The survey biomass data includes Bering Flounder and FHS as a complex from EBS Standard ("Bering Sea Shelf") and the NW,
+## combined in a linear model with the AI values. The AI is technically flathead only even though the species complex was originally queried.
+## whereas the comps (CAAL/lengths) are flathead sole only, from the standard area only.
+## That is why there are three steps under "Initial download": two to get the survey biomass data (AI and EBS),
+# and one for the compositions.
+
 ### Initial download ----
+#### survey biomass download, ebs ----
+production_data_forbio <- gapindex::get_data(
+  year_set = 1982:2023,
+  survey_set = "EBS",
+  spp_codes = data.frame(GROUP = 10129, SPECIES_CODE = 10130:10140),
+  pull_lengths = FALSE,
+  haul_type = 3,
+  abundance_haul = "Y",
+  sql_channel = sql_channel)
+
+production_cpue <- gapindex::calc_cpue(racebase_tables = production_data_forbio)
+production_biomass_stratum <-
+  gapindex::calc_biomass_stratum(racebase_tables = production_data_forbio,
+                                 cpue = production_cpue)
+
+# Aggregate Biomass to subareas and region
+production_biomass_subarea <-
+  gapindex::calc_biomass_subarea(racebase_tables = production_data_forbio,
+                                 biomass_strata = production_biomass_stratum)
+
+production_biomass_subarea_standard <- subset(x = production_biomass_subarea,
+                                              subset = AREA_ID == 99901, ## 99900 == EBS Standard + NW region, AREA_ID == 99901 for EBS Standard Region
+                                              select = c(YEAR, BIOMASS_MT, BIOMASS_VAR)) %>%
+  mutate(SURVEY = 'EBS')
+
+write.csv(production_biomass_subarea_standard, 
+          file = here::here(year, 'data','raw','gapindex_survey_biomass_ebs_standard.csv'),
+          row.names = FALSE)
+
+
+#### survey biomass download, ai ----
+production_data_forbio_ai <- gapindex::get_data(
+  year_set = 1982:2023,
+  survey_set = "AI", 
+  spp_codes = 10130, ## FHS only from AI (you can query the complex but nothing is returned)
+  pull_lengths = FALSE,
+  haul_type = 3,
+  abundance_haul = "Y",
+  sql_channel = sql_channel)
+
+production_cpue_ai <- gapindex::calc_cpue(racebase_tables = production_data_forbio_ai)
+
+production_biomass_stratum_ai <-
+  gapindex::calc_biomass_stratum(racebase_tables = production_data_forbio_ai,
+                                 cpue = production_cpue_ai)
+
+# Aggregate Biomass to subareas and region
+production_biomass_subarea <-
+  gapindex::calc_biomass_subarea(racebase_tables = production_data_forbio_ai,
+                                 biomass_strata = production_biomass_stratum_ai)  
+
+production_biomass_subarea_ai <- subset(x = production_biomass_subarea,
+                                              subset = AREA_ID == 99904, ## 99900 == EBS Standard + NW region, AREA_ID == 99901 for EBS Standard Region
+                                              select = c(YEAR, BIOMASS_MT, BIOMASS_VAR)) %>%
+  mutate(SURVEY = 'AI')
+
+
+
+write.csv(production_biomass_subarea_ai, 
+          file = here::here(year, 'data','raw','gapindex_survey_biomass_ai.csv'),
+          row.names = FALSE)
+
+
+
+
+
+#### survey comps dwnld ----
 production_data <- gapindex::get_data(
   year_set = 1982:2023,
   survey_set = "EBS",
@@ -227,6 +315,39 @@ production_data$size <- merge(production_data$size, production_data$haul[,c('HAU
 
 write.csv( production_data$size, file = here::here(year, 'data','raw','production_data_size.csv'), row.names = FALSE)
 write.csv( production_data$specimen, file = here::here(year, 'data','raw','production_data_specimen.csv'), row.names = FALSE)
+
+
+## Construct Survey Biomass Index ----
+### Linear Model ---- 
+
+index_raw <- rbind(production_biomass_subarea_standard, production_biomass_subarea_ai) %>%
+  tidyr::pivot_wider(names_from=SURVEY, 
+              values_from=c(BIOMASS_MT, BIOMASS_VAR)) %>%
+  mutate(sd_EBS=sqrt(BIOMASS_VAR_EBS ), 
+         sd_AI=sqrt(BIOMASS_VAR_AI)) %>%
+  select(year=YEAR, biomass_EBS = BIOMASS_MT_EBS, biomass_AI = BIOMASS_MT_AI, sd_EBS, sd_AI)
+
+## Do a linear regression to get missing AI years
+z1 <- subset(index_raw, !is.na(biomass_AI))
+z2 <- subset(index_raw, is.na(biomass_AI))
+lmbio <- lm(biomass_AI~biomass_EBS, data=z1)
+z2$biomass_AI <- as.numeric(predict(lmbio, newdata=z2))
+lmvar <- lm(sd_AI~sd_EBS, data=z1)
+z2$sd_AI <- as.numeric(predict(lmvar, newdata=z2))
+## Recombine and add together biomass and variances
+index <- rbind(z1,z2) %>% group_by(year) %>%
+  summarize(biomass=round(biomass_AI+biomass_EBS,5),
+            variance=sd_AI^2+sd_EBS^2,
+            .groups='drop') %>%
+  ## SE on log scale, which SS requires, is sqrt(log(1+CV^2))
+  mutate(se_log=round(sqrt(log(1+variance/biomass^2)),5)) %>%
+  select(-variance)
+
+### SS3 format ----
+SS_index <- data.frame(year=index$year, 
+                       seas=7, index=2, 
+                       obs= round(index$biomass), se_log=index$se_log)
+write.csv(x=SS_index, file=here::here(year,'data','output','srv_bio_ss3.csv'), row.names=FALSE)
 
 
 ## Reformat Survey CAALs ----
@@ -354,9 +475,58 @@ srvage0 %>%
 
 
 
-
-
-
+## deprecated ----
+### some old code to compare original & gapindex survey data
+# 
+# bts_sparse_og <- read.csv("C:/Users/maia.kapur/Work/assessments/bsai-fhs/2020/data/biomass_survey_ai.csv")   %>%
+#   mutate(sd = sqrt(BIOMASS_VAR)) %>%
+#   select(YEAR, biomass = TOTAL_BIOMASS, sd)
+# 
+# ## called using vignette
+# bts_sparse <- production_biomass_subarea_ai %>%
+#   mutate(sd = sqrt(BIOMASS_VAR)) %>%
+#   select(YEAR, biomass = BIOMASS_MT, sd)
+# ggplot(data = NULL) +
+# 
+#   geom_point(data = bts_sparse_og, position = position_jitter(w = 0.1, h = 0), aes(x = YEAR, y = biomass,
+#                                                                                    color = 'ai.biomass_total, 10130') ) +
+#   geom_point(data = bts_sparse, position = position_jitter(w = 0.1, h = 0), aes(x = YEAR, y = biomass ,
+#                                                                                 color = 'vignette, AI 10130')) +
+# 
+#   geom_errorbar(data = bts_sparse_og, width = 1, aes(x = YEAR, ymin = biomass - 1.96*sd,
+#                                                      ymax = biomass + 1.96*sd,
+#                                                      color = 'ai.biomass_total, 10130'), alpha = 0.2) +
+#   geom_errorbar(data = bts_sparse, width = 1, aes(x = YEAR, ymin = biomass - 1.96*sd,
+#                                                   ymax = biomass + 1.96*sd,
+#                                                   color = 'vignette, AI 10130')) +
+#   theme_minimal()+
+#   labs(x = 'Year', y = 'Biomass (t)', color = '', fill =  '') +
+#   theme(legend.position = 'top')
+# 
+# 
+# bts_sparse_og <- read.csv("C:/Users/maia.kapur/Work/assessments/bsai-fhs/2020/data/biomass_survey_ebs.csv")  %>%
+#   mutate(sd = sqrt(VARBIO)) %>%
+#   select(YEAR, biomass = BIOMASS, sd) 
+# ## called using vignette
+# bts_sparse <- production_biomass_subarea_standard %>%
+#   mutate(sd = sqrt(BIOMASS_VAR)) %>%
+#   select(YEAR, biomass = BIOMASS_MT, sd)
+# ggplot(data = NULL) +
+# 
+#   geom_point(data = bts_sparse_og, position = position_jitter(w = 0.1, h = 0), aes(x = YEAR, y = biomass,
+#                                                                                    color = 'haehnr.biomass_ebs_standard_grouped, complex') ) +
+#   geom_point(data = bts_sparse, position = position_jitter(w = 0.1, h = 0), aes(x = YEAR, y = biomass ,
+#                                                                                 color = 'vignette, complex')) +
+# 
+#   geom_errorbar(data = bts_sparse_og, width = 1, aes(x = YEAR, ymin = biomass - 1.96*sd,
+#                                                      ymax = biomass + 1.96*sd,
+#                                                      color = 'haehnr.biomass_ebs_standard_grouped, complex'), alpha = 0.2) +
+#   geom_errorbar(data = bts_sparse, width = 1, aes(x = YEAR, ymin = biomass - 1.96*sd,
+#                                                   ymax = biomass + 1.96*sd,
+#                                                   color = 'vignette, complex')) +
+#   theme_minimal()+
+#   labs(x = 'Year', y = 'Biomass (t)', color = '', fill =  '') +
+#   theme(legend.position = 'top')
 
 
 
