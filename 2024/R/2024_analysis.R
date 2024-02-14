@@ -3,9 +3,10 @@
 
 # load ----
 ## do NOT update odbc or connect() won't work
-devtools::install_github("afsc-assessments/afscdata", force = TRUE) 
+# devtools::install_github("afsc-assessments/afscdata", force = TRUE) 
 # devtools::install_github("afsc-gap-products/gapindex")
 # devtools::install_github("BenWilliams-NOAA/afscassess", force = TRUE)
+# devtools::install_github('r4ss/r4ss')
 
 library(gapindex)
 library(afscdata)
@@ -45,7 +46,8 @@ species = "FSOL"
 ## you must be on the VPN for this to work, and it takes about 5 minutes
 ## this automates the AI interpolation for the biomass survey and outputs in in SS format
 afscdata::bsai_fhs(year)
- 
+
+source(here::here(year,'r','bsai_fhs_wrangle_data.R'))
 
 # run base model ----
 
