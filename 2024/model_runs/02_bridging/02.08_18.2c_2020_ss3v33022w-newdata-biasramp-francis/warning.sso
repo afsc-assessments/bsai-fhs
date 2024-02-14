@@ -1,0 +1,5 @@
+Note 1 Information: Std_yrmax=-1 in starter, so no variance output for forecast quantities after endyr+1 
+Warning 1 : poor convergence in Fmsy, final dy/dy2= -0.249652
+Warning 2 : Fmsy.mey is close to max allowed; check for convergence 
+Note 2 Information: A revised protocol for the Fcast_yr specification is available and recommended.
+ 2 warnings  and 2 notes 
