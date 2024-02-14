@@ -40,7 +40,7 @@ SSplotData(mod18.2c_2020, subplots = 2)
 # Stock Synthesis Software Update 3.30.22 
 
 ```{r include = FALSE, echo = FALSE,  warning = FALSE, message = FALSE}
-mod18.2c_2020_v33022 <- SS_output(here::here(year,'model_runs','18.2c_2020_ss3v33022'), verbose = FALSE)
+mod18.2c_2020_v33022 <- SS_output(here::here(year,'model_runs','00_software_trans','18.2c_2020_ss3v33022'), verbose = FALSE)
 ss_compare <- SSsummarize(list(mod18.2c_2020,mod18.2c_2020_v33022))
 ```
 
@@ -92,7 +92,7 @@ Based on the above explorations, I am comfortable that moving to the latest SS3 
 The warning-free model is in `model_runs/18.2c_2020_ss3v33022w`. I use this warning-free model to do the data explorations in the next section.
 
 ```{r include = FALSE, message = FALSE, warning = FALSE}
-m18.2cv33022w <- SS_output(here::here(year,'model_runs','18.2c_2020_ss3v33022w'), verbose = FALSE)
+m18.2cv33022w <- SS_output(here::here(year,'model_runs','00_software_trans','18.2c_2020_ss3v33022w'), verbose = FALSE)
 SSplotSelex(m18.2cv33022w, fleets = 2, sexes = 1)
 ```
 
@@ -246,6 +246,7 @@ Both queries call from the `council.comprehensive_blend_ca` table. I ran the `af
 rbind( mod_2020$catch %>% select(Yr, Obs) %>%
          mutate(src = 'Old'),
        read.csv(here(year,'data','output','fsh_catch_ss3.csv')) %>% mutate(src = 'New') %>% select(Yr = year, Obs = catch_t, src) ) %>%
+  filter(Yr < year) %>%
   ggplot(., aes(x = Yr, y = Obs, col = src )) +
   geom_line() +
   scale_color_manual(values = c('blue','grey22'),
@@ -258,13 +259,13 @@ rbind( mod_2020$catch %>% select(Yr, Obs) %>%
 ## Fishery Length Compositions
 
 ```{r, include=FALSE, echo = FALSE, warning = FALSE}
-mod_2020_new_fsh_age_comps <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_fsh_age_comps'))
-mod_2020_new_fsh_len_comps <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_fsh_len_comps'))
+mod_2020_new_fsh_age_comps <- SS_output(here(year, 'model_runs','01_data_checks','18.2c_2020_ss3v33022w-new_fsh_age_comps'))
+mod_2020_new_fsh_len_comps <- SS_output(here(year, 'model_runs','01_data_checks','18.2c_2020_ss3v33022w-new_fsh_len_comps'))
 compsummary_1 <- SSsummarize(list(mod_2020,mod_2020_new_fsh_age_comps))
 compsummary_2 <- SSsummarize(list(mod_2020,mod_2020_new_fsh_len_comps))
 ```
 
-*I was unable to reproduce the fishery age- and len-comp routine* used for the older version of the model. For reproducibility purposes, I am going to move towards the `afscdata` approach, which requires about 10% of the code to run, and does not require multiple reads of the same data sources. Importantly, I tested Model 18.2c with *only* the age-comp or len-comp data (separately) changed to those available using my new approach and found the impact on derived quantities to be trivial.
+*I was unable to reproduce the fishery age- and len-comp routine* used for the older version of the model. For reproducibility purposes, I am going to move towards the `afscdata` approach, which requires about 10% of the code to run, and does not require multiple read-ins of the same data sources. Importantly, I tested Model 18.2c with *only* the age-comp or len-comp data (separately) changed to those available using my new approach and found the impact on derived quantities to be trivial.
 
 The current assessment passes the fishery length comp time series but only fits to data in years where there are not age-comp data (1977-1999, 2002-2003, 2008 and 2020). Note that the new data pull routine only gets values from 1988 onwards, so values before that are unchanged.
 
@@ -286,7 +287,7 @@ SSplotComps(mod_2020_new_fsh_len_comps, kind = 'LEN',fleets = 1,  subplots = 1, 
 
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
 SSplotComparisons(compsummary_2, 
-                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new length comp data'),
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new fsh length comp data'),
                   subplots = 2)
 ```
 
@@ -294,7 +295,7 @@ SSplotComparisons(compsummary_2,
 
 ```{r, include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
 SSplotComparisons(compsummary_2, 
-                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new length comp data'),
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new fsh length comp data'),
                   subplots = 12)
 ```
 
@@ -302,13 +303,13 @@ SSplotComparisons(compsummary_2,
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
 SSplotComparisons(compsummary_2, 
-                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new length comp data'),
+                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new fsh length comp data'),
                   subplots = 13)
 ```
 
 ### Input Sample Sizes, Fishery Length Data
 
-```{r, include=T, echo = FALSE, warning = FALSE, message= FALSE,fig.cap="The discrepancies between the number of hauls is more pronounced earlier in the time series; the afscdata() approach seems to have slightly higher values. This is likely due to filtration steps in the old code that I cannot test by hand. There are missing years in the 2000's because those data were not fit to (in lieu of age data)."}
+```{r, include=T, echo = FALSE, warning = FALSE, message= FALSE,fig.cap="The discrepancies between the number of hauls is more pronounced earlier in the time series; the afscdata() approach seems to have slightly higher values. This is likely due to filtration steps in the old code that I cannot test by hand. There are missing years in the 2000s because those data were not fit to (in lieu of age data)."}
 mod_2020$lendbase %>% mutate(src = 'Old') %>%
   bind_rows(mod_2020_new_fsh_len_comps$lendbase%>% mutate(src = 'New')) %>%
   filter(Fleet == 1)%>%
@@ -382,12 +383,12 @@ From the 2020 SAFE:
 
 > "This assessment used a single survey index of "total" *Hippoglossoides* spp. biomass that included the EBS “standard” survey areas and AI survey areas for the years 1982-2018. Survey biomass for *Hippoglossoides* spp. in the Aleutian Islands is very small as compared to that from the EBS shelf survey, and survey biomass for Bering flounder is very small as compared to that of flathead sole. A linear regression is used to estimate a relationship between EBS shelf *Hippoglossoides* spp. survey biomass estimates and AI survey biomass estimates; this relationship is used to estimate AI survey biomass in years when no AI survey occurred (by using the linear equation to find an AI biomass estimate in a particular year based on the EBS biomass estimate for that year)."
 
-Both Dr. Monnohan (per his notes) and I are not thrilled with this approach, since being model-based means that even historical datapoints can change with each new observation (assuming that the output of the lm is used to replace the survey biomass series wholesale, which would be statistically prudent). It's also odd to me that the survey biomass data include both congeners while the compositional data does not; though it's important to remember that Bering flounder constitutes about 1% of catches.
+Both Dr. Monnohan (per his notes) and I are not thrilled with this approach, since being model-based means that even historical datapoints can change with each new observation (assuming that the output of the lm is used to replace the survey biomass series wholesale, which would be statistically prudent). It's also odd to me that the survey biomass data include both congeners while the compositional data does not; though it's important to remember that Bering flounder constitutes about 1% of catches. Finally, SS3 is designed to handle multiple indices, so a sensitivity could be run where these are indeed treated as separate indices (though growth differences would need to be considered).
 
-I coded the linear model into the `afscdata::bsai_fhs` data extraction function and did *not* use the `afscassess::bts_biomass` function for further post-processing. The former function saves the Synthesis-formatted dataframe directly to `output/`. The resultant index is identical to what was used before.
+I confirmed that the raw values for the EBS Shelf and AI that came out of `gapindex` matched what was done previously (mean and variance); the resultant index (after the linear model) is identical to what was used before.
 
 ```{r, include=FALSE, echo = FALSE, warning = FALSE}
-mod_2020_new_srv_bio <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_biomass')) 
+mod_2020_new_srv_bio <- SS_output(here(year, 'model_runs','01_data_checks','18.2c_2020_ss3v33022w-new_srv_biomass')) 
 compsummary_b <- SSsummarize(list(mod_2020,mod_2020_new_srv_bio))
 ```
 
@@ -428,11 +429,11 @@ SSplotComparisons(compsummary_b,
 
 I went on a long journey to reproduce the survey compositional data, and came to the conclusion that it must be done using the material in the `gapindex` package, which is more faithful to what was provided in earlier years in the `HAEHNR` schema. My suspicion is that there is under-the-hood filtration and expansion that `afscdata` simply can't handle yet (at least for the BSAI), and going forward it is more sensible that we work with a tool that is maintained by the folks collecting the data. 
 
-A deep dive into these issues is undertaken in R/2024_survey_comp_deepdive.qmd, and the lessons learned led to the development of a standalone workup script that 1) pulls from `gapindex` and 2) munges the appropriate sub tables in to the SS3-style compositional data. This replaces the long and redundant set of code that was developed for 2020. For simplicity, the plots here simply illustrate that we were able to get identical datasets and derived quantities using the new methods.
+A deep dive into these issues is undertaken in the [Survey Comps Deepdive](https://afsc-assessments.github.io/bsai-fhs/2024_survey_comp_deepdive.html), and the lessons learned led to the development of a standalone workup script that 1) pulls from `gapindex` and 2) munges the appropriate sub tables in to the SS3-style compositional data (`R/bsai_fhs_wrangle_data.R`). This replaces the long and redundant set of code that was developed for 2020. For simplicity, the plots here simply illustrate that we were able to get identical datasets and derived quantities using the new methods.
 
 
 ```{r, include=FALSE, echo = FALSE, warning = FALSE}
-mod_2020_new_srv_caal <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_caal')) 
+mod_2020_new_srv_caal <- SS_output(here(year, 'model_runs','01_data_checks','18.2c_2020_ss3v33022w-new_srv_caal')) 
 compsummary_3 <- SSsummarize(list(mod_2020,mod_2020_new_srv_caal))
 ```
 
@@ -492,8 +493,7 @@ SSplotBiology(mod_2020_new_srv_caal,subplots = 1)
 The input sample sizes are slightly different in the new datapull (from `gapindex`)
 
 ```{r, include=FALSE, echo = FALSE, warning = FALSE}
-# mod_2020_new_srv_len <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_lengths'))
-mod_2020_new_srv_len <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_len'))
+mod_2020_new_srv_len <- SS_output(here(year, 'model_runs','01_data_checks','18.2c_2020_ss3v33022w-new_srv_len'))
 compsummary_4 <- SSsummarize(list(mod_2020,mod_2020_new_srv_len))
 ```
 
@@ -505,7 +505,7 @@ SSplotComps(mod_2020,fleets=2, subplots = 1, kind = 'LEN',
             datonly = TRUE, maxrows = 6,showsampsize = TRUE, showeffN = FALSE)
 ```
 
-#### Survey lengths using `afscdata`
+#### Survey lengths using `gapindex`
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="Only trivial differences in this historical data provided to the original assessment (previous tab) vs. those pulled using the gapindex package (shown here)." }
 SSplotComps(mod_2020_new_srv_len,fleets=2, subplots = 1, kind = 'LEN',
@@ -548,15 +548,17 @@ SSplotBiology(mod_2020_new_srv_len,subplots = 1)
 
 
 ## Survey Ages (ghosted)
-These aren't used in the model but I wanted to confirm the pull from `afscdata` looked reasonable. Annoyingly, the SS3 plots for ghosted values aren't callable and the zoom is wrong, but these are satisfactory.
+
+These aren't used in the model but I wanted to confirm the pull from `gapindex` looked reasonable. Annoyingly, the SS3 plots for ghosted values aren't callable and the zoom is wrong, but these are satisfactory.
+
+```{r, include=FALSE, echo = FALSE, warning = FALSE}
+mod_2020_new_srv_age <- SS_output(here(year, 'model_runs','01_data_checks','18.2c_2020_ss3v33022w-new_srv_age-ghost'))
+compsummary_5 <- SSsummarize(list(mod_2020,mod_2020_new_srv_age))
+```
 
 ::: panel-tabset
-### Ghosted Survey Ages from 18.c (2020)
-```{r, include=FALSE, echo = FALSE, warning = FALSE}
-mod_2020_new_srv_age <- SS_output(here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_ages_ghost'))
-compsummary_5 <- SSsummarize(list(mod_2020,mod_2020_new_srv_age))
 
-```
+### Ghosted Survey Ages from 18.c (2020)
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap= "Only trivial differences in this historical data provided to the original assessment (shown here) vs. those pulled using  the gapindex package (next tab)." }
 knitr::include_graphics(here::here(old_mdl_fldr,'plots','comp_gstagedat_flt2mkt0.png'))
@@ -565,8 +567,9 @@ knitr::include_graphics(here::here(old_mdl_fldr,'plots','comp_gstagedat_flt2mkt0
 ### Ghosted Survey Ages from `gapindex`
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap= "Only trivial differences in this historical data provided to the original assessment (previous tab) vs. those pulled using  the gapindex package (shown here)." }
-knitr::include_graphics(here::here(year, 'model_runs','18.2c_2020_ss3v33022w-new_srv_ages_ghost','plots','comp_gstagedat_flt2mkt0_page1.png'))
+knitr::include_graphics(here::here(year, 'model_runs','01_data_checks','18.2c_2020_ss3v33022w-new_srv_age-ghost','plots','comp_gstagedat_flt2mkt0_page1.png'))
 ```
+:::
 
 # Model Bridging
 
@@ -574,19 +577,88 @@ Importantly, the data updates conducted here are holistic, meaning that the enti
 
 ## Timeseries Prep
 
-Some initial steps are required to model dynamics through the present year. These are as follows: - end year - selex - forecasting file/doesn't matter
+Some initial steps are required to model dynamics through the present year. These are as follows: 
+-   In the `.dat` file set the `endyr` to 2024.
+-   In the `starter` file set the `max yr for sdreport outputs` to -1 (`endyr+1`)
+-   In the `.ctl` file move the `last year of main recdevs` to 2020
+-   Update the `last_yr_fullbias_adj_in_MPD` to 2019.8 (will tune later)
+-   Update the `first_recent_yr_nobias_adj_in_MPD` to 2020.3 (will tune later)
 
-## Adding Catches
+To make this section more concise I am simply going to show the comparison plots all at once.
 
-## Adding Survey Biomass
 
-## Adding Survey CAALs
+```{r, include=FALSE, echo = FALSE, warning = FALSE}
 
-## Adding Fishery Lengths
+llabs <- c('18.2c (2020)',
+           '+ catches',
+           '+ srv biomass',
+           '+ srv CAAL',
+           '+ srv length',
+           '+ fsh age',
+           '+ fsh len'
+           )
 
-## Adding Fishery Ages
+llabs2 = c('18.2c (2020)',
+           'Add All Data',
+           '+Bias Ramp & Francis Tuning (18.2c [2024])')
 
-## Marginal Survey Ages & Lengths (ghosted)
+mod02_00 <- SS_output(here(year, 'model_runs','02_bridging','02.00_18.2c_2020_ss3v33022w-catches'))
+mod02_01 <- SS_output(here(year, 'model_runs','02_bridging','02.01_18.2c_2020_ss3v33022w-catches-srvbio'))
+mod02_02 <- SS_output(here(year, 'model_runs','02_bridging','02.02_18.2c_2020_ss3v33022w-catches-srvbio-srvcaal'))
+mod02_03 <- SS_output(here(year, 'model_runs','02_bridging','02.03_18.2c_2020_ss3v33022w-catches-srvbio-srvcaal-srvlen'))
+mod02_04 <- SS_output(here(year, 'model_runs','02_bridging','02.04_18.2c_2020_ss3v33022wcatches-srvbio-srvcaal-srvlen-fshage'))
+# mod02_05 <- SS_output(here(year, 'model_runs','02_bridging','02.05_18.2c_2020_ss3v33022w-catches-srvbio-srvcaal-srvlen-fshage-fshlen'))
+mod02_06 <- SS_output(here(year, 'model_runs','02_bridging','02.06_18.2c_2020_ss3v33022w-catches-srvbio-srvcaal-srvlen-fshage-fshlen-srvage'))
+## end of data bridging
+
+## Tuning procedures: only did this once
+# mod02_07 <- SS_output(here::here(year, 'model_runs','02_bridging','02.07_18.2c_2020_ss3v33022w-newdata-biasramp'))
+
+## copy in mod02_07, set weights to 1 and run for Francis prep
+# mod02_08x <- SS_output(here(year, 'model_runs','02_bridging','02.08_18.2c_2020_ss3v33022w-newdata-biasramp-francis'))
+
+## do three rounds of Francis tuning on this model, then copy in the suggested tunings
+# r4ss::tune_comps(replist = mod02_08x, option = 'Francis', 
+#                  digits = 6, niters_tuning = 3, exe = 'ss',
+#                  write = TRUE, dir = here::here(year, 'model_runs','02_bridging','02.08_18.2c_2020_ss3v33022w-newdata-biasramp-francis'))
+# rm(mod02_08x)
+ 
+mod02_08 <- SS_output(here(year, 'model_runs','02_bridging','02.08_18.2c_2020_ss3v33022w-newdata-biasramp-francis'))
+
+compsummary_7 <- SSsummarize(list(mod_2020, mod02_00,
+                                  mod02_01, mod02_02,
+                                  mod02_03, mod02_04,
+                                  mod02_06)) ## last one has fish length and ghosted survey ages
+
+compsummary_8 <- SSsummarize(list(mod_2020,  
+                                  mod02_06,
+                                  mod02_08))  
+ 
+```
+
+## Data bridging (cumulative)
+
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+SSplotComparisons(compsummary_7, legendlabels = llabs, indexPlotEach = TRUE)
+```
+
+
+## Summary bridging
+Post data, I tuned the rec-dev ramp and did 3 iterations of Francis weighting from scratch. Will re-do this one last time once all the new data are in but this helps us check for consistency.
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+# SSplotComparisons(compsummary_8, 
+#                   legendlabels = llabs2, 
+#                   indexPlotEach = TRUE,
+#                   print = TRUE, 
+#                   plotdir = here::here(year, 'model_runs','02_bridging','02.08_18.2c_2020_ss3v33022w-newdata-biasramp-francis'))
+
+
+SSplotComparisons(compsummary_8, 
+                  legendlabels = llabs2, 
+                  indexPlotEach = TRUE,
+                  print = F)
+```
+
 
 # Bridged Operational Update Model, 18.2c (2024)
 
