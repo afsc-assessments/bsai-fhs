@@ -20,7 +20,7 @@ suppressWarnings(afscassess::clean_catch(year = year,
                                          fixed_catch = 'bsai_fhs_catch_1964_1994.csv'))
 
 ## reformat catches
-afscdata::catch_to_ss3(year, seas = 1, fleet = 1)
+afscdata::catch_to_ss3(year, seas = 1, fleet = 1, yld_rat = TRUE)
 
 message('reformatted and saved fishery catch data to output/')
 
@@ -94,10 +94,10 @@ flc0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_length_data.txt"),
   tidytable::pivot_wider(names_from = length, values_from = prop)
 
 
-flc0 %>% filter(sex == 'F') %>% 
+flc0 %>% filter(sex == 'F') %>% select(-SA_Index) %>%
   merge(., flc0 %>% 
           filter(sex == 'M') %>% 
-          select(-sex, -n_s,-n_h), 
+          select(-sex, -n_s,-n_h,-SA_Index), 
         by = 'year', all.y = FALSE) %>%
   arrange(year) %>%
   ## drop the years before 2000 since Lcomps are available
@@ -164,6 +164,9 @@ message('reformatted and saved survey biomass data to output/')
 ## whereas the comps (CAAL/lengths) are flathead sole only, from the standard area only.
 ## That is why there are three steps under "Initial download": two to get the survey biomass data (AI and EBS),
 # and one for the compositions.
+## In the future we might be able to get everything via a direct SQL call, but we're using
+## the R package this year because the vignette is the only place you can get age comp values
+## conditioned on the ALK from JUST the EBS -- what's on Oracle includes the NW region.
 
 ### Initial download ----
 #### survey biomass download, ebs ----
@@ -191,10 +194,13 @@ production_biomass_subarea_standard <- subset(x = production_biomass_subarea,
                                               select = c(YEAR, BIOMASS_MT, BIOMASS_VAR)) %>%
   mutate(SURVEY = 'EBS')
 
+
+
 write.csv(production_biomass_subarea_standard, 
           file = here::here(year, 'data','raw','gapindex_survey_biomass_ebs_standard.csv'),
           row.names = FALSE)
 
+message('saved ebs survey biomass data to raw/')
 
 #### survey biomass download, ai ----
 production_data_forbio_ai <- gapindex::get_data(
@@ -227,12 +233,9 @@ production_biomass_subarea_ai <- subset(x = production_biomass_subarea,
 write.csv(production_biomass_subarea_ai, 
           file = here::here(year, 'data','raw','gapindex_survey_biomass_ai.csv'),
           row.names = FALSE)
+message('saved ai survey biomass data to raw/')
 
-
-
-
-
-#### survey comps dwnld ----
+#### survey comps download ----
 production_data <- gapindex::get_data(
   year_set = 1982:2023,
   survey_set = "EBS",
@@ -252,8 +255,9 @@ production_data$specimen <-  subset(x = production_data$specimen, subset = HAULJ
 production_data$strata <- subset(x = production_data$strata, subset = !(STRATUM %in% c(82, 90)))
 
 ## Remove subareas associated with the EBS + NW region
-## these are not in the standard pull to being with
-production_data$subarea <- subset(x = production_data$subarea, subset = !(AREA_ID %in% c(7, 8, 9, 100, 200, 300, 99900)))
+## these are not in the standard pull to begin with
+production_data$subarea <- subset(x = production_data$subarea, 
+                                  subset = !(AREA_ID %in% c(7, 8, 9, 100, 200, 300, 99900)))
 save(production_data, file = here::here(year, 'data','raw','gapindex_production_data.rdata'))
 message('saved cleaned gapindex production_data to raw/')
 
@@ -290,7 +294,6 @@ production_agecomp_stratum <-
     alk = production_alk,
     size_comp = production_sizecomp_stratum)
 
-
 ## Aggregate `production_agecomp_stratum` to subareas and regions
 production_agecomp_region <-  gapindex::calc_agecomp_region(
   racebase_tables = production_data,
@@ -301,21 +304,21 @@ names(x = production_agecomp_stratum$age_comp)[
   names(x = production_agecomp_stratum$age_comp) == "STRATUM"] <- "AREA_ID"
 
 production_agecomp <- rbind(production_agecomp_region,
-                            production_agecomp_stratum$age_comp[, names(x = production_agecomp_region)]) %>%
-  left_join(., production_data$specimen, by = c('YEAR','SEX','AGE','LENGTH','CRUISE'))
+                            production_agecomp_stratum$age_comp[, names(x = production_agecomp_region)]) #%>%
+  # left_join(., production_data$specimen, by = c('YEAR','SEX','AGE','LENGTH','CRUISE'))
 
 
 ## Convert CRUISE to YEAR
 production_data$specimen$YEAR <- floor(x = production_data$specimen$CRUISE / 100)
 production_data$size$YEAR <- floor(x = production_data$size$CRUISE / 100)
-production_data$size <- merge(production_data$size, production_data$haul[,c('HAULJOIN','CRUISE')], by = 'HAULJOIN') %>%
+production_data$size <- merge(production_data$size, production_data$haul[,c('HAULJOIN','CRUISE')], 
+                              by = 'HAULJOIN') %>%
   dplyr::mutate(YEAR = floor(x = CRUISE / 100))
 
 ## save these 
-
 write.csv( production_data$size, file = here::here(year, 'data','raw','production_data_size.csv'), row.names = FALSE)
 write.csv( production_data$specimen, file = here::here(year, 'data','raw','production_data_specimen.csv'), row.names = FALSE)
-
+message('saved raw production_data compositions to raw/')
 
 ## Construct Survey Biomass Index ----
 ### Linear Model ---- 
@@ -357,36 +360,82 @@ nsamp_age <- aggregate(HAULJOIN ~ YEAR,
                        FUN = function(x) length(x = unique(x = x)))
 write.csv(nsamp_age, file = here::here(year, 'data','raw','nsamp_age.csv'), row.names = FALSE)
 
-caal <- production_agecomp %>% 
-  select(-SURVEY, - SURVEY_DEFINITION_ID, -AREA_ID, -POPULATION_COUNT ) %>%
-  filter(!is.na(AGE) & AGE>0 & !is.na(LENGTH_MM_MEAN) & SEX!=3) %>%
-  mutate(AGE = ifelse(AGE > plus_age,plus_age,AGE)) %>%
-  mutate(
-    length_grp = cut(round(LENGTH_MM_MEAN/10,0) ,
-                     breaks = seq(6,58,2),
-                     right = FALSE,
-                     labels = FALSE),
-    length_bin_use = seq(6,58,2)[length_grp]) %>%
-  group_by(YEAR, SEX, AGE, length_bin_use) %>%
-  summarise(Num_Fish = n(), .groups='drop') %>% 
-  arrange(AGE) %>%
-  group_by(SEX, YEAR, length_bin_use) %>%
-  mutate(Nsamp=sum(Num_Fish)) %>%
+# caal <- production_agecomp %>%
+#   select(-SURVEY, - SURVEY_DEFINITION_ID, -AREA_ID, -POPULATION_COUNT ) %>%
+#   filter(!is.na(AGE) & AGE>0 & !is.na(LENGTH_MM_MEAN) & SEX!=3) %>%
+#   mutate(AGE = ifelse(AGE > plus_age,plus_age,AGE)) %>%
+#   mutate(
+#     length_grp = cut(round(LENGTH_MM_MEAN/10,0) ,
+#                      breaks = seq(6,58,2),
+#                      right = FALSE,
+#                      labels = FALSE),
+#     length_bin_use = seq(6,58,2)[length_grp]) %>%
+# 
+#   group_by(YEAR, SEX, AGE, length_bin_use) %>%
+#   summarise(Num_Fish = n(), .groups='drop') %>% 
+#   arrange(AGE) %>%
+#   group_by(SEX, YEAR, length_bin_use) %>%
+#   mutate(Nsamp=sum(Num_Fish)) %>%
+#   # tidytable::left_join(expand.grid(SEX = unique(.$SEX),
+#   #                                  YEAR = unique(.$YEAR),
+#   #                                  length_bin_use = seq(6,58,2),
+#   #                                  AGE = 1:plus_age), .) %>%
+#   tidyr::pivot_wider(names_from=AGE, values_from=Num_Fish,
+#                      names_prefix='a', values_fill=0) %>% replace(is.na(.), 0) 
+# 
+# SS_caal_survey <-
+#   data.frame(year=caal$YEAR, Month=7, Fleet=2,
+#              sex=ifelse(caal$SEX==1,2,1), ## SS sex is reversed
+#              Part=0, Ageerr=1,
+#              Lbin_lo=caal$length_bin_use, Lbin_hi=caal$length_bin_use,
+#              Nsamp=caal$Nsamp,
+#              ## Double up b/c SS needs dummy columns
+#              caal[,-(1:4)], caal[,-(1:4)]) %>%
+#   arrange(sex, year, Lbin_lo)
+# 
+# write.csv(SS_caal_survey, file = here::here(year,'data','output','srv_caal_ss3-gapindex.csv'), 
+#           row.names = FALSE)
+
+
+
+caal00 <-   production_data$specimen %>%
+  ## filter out bering flounder and unsexed
+  filter(!is.na(AGE) & !is.na(LENGTH) & SEX != 3 & AGE > 0 & SPECIES_CODE == 10130 ) %>%
+  ## deal with plus groups
+  mutate(YEAR =  floor(x = CRUISE / 100),
+         SEX = ifelse(SEX == 1, 'males','females'), 
+         AGE = ifelse(AGE  >= 21, 21, AGE ),
+         LENGTH_MM  = ifelse(LENGTH   < 60, 60.5,LENGTH ),
+         LENGTH_MM = ifelse(LENGTH   >= 580, 580, LENGTH ))  %>%
+  mutate( length_grp0 = cut(round(LENGTH_MM /10,0),
+                            right = F,
+                            breaks =  mod_2020$lbinspop))  %>%
+  ## make integer-based length bin
+  tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>% 
+  mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%
+  group_by(YEAR, SEX, AGE, LENGTH_BIN) %>%
+  ## calculate number of samples in each age-length bin (Obs)
+  summarize(Num_Fish=length(SPECIMENID), .groups='drop') %>%
+  arrange(AGE, SEX) %>%
+  ## calculate the number of samples in each length bin (inputN)
+  group_by(SEX, YEAR, LENGTH_BIN) %>%
+  mutate(value=sum(Num_Fish)) 
+
+## reshape to ss3 format
+caal0 <- caal00 %>% ## raw number of individuals
   tidyr::pivot_wider(names_from=AGE, values_from=Num_Fish,
-                     names_prefix='a', values_fill=0)
+                     names_prefix='a', values_fill=0) %>%
+  arrange(YEAR, SEX, LENGTH_BIN)
 
-SS_caal_survey <-
-  data.frame(year=caal$YEAR, Month=7, Fleet=2,
-             sex=ifelse(caal$SEX==1,2,1), ## SS sex is reversed
-             Part=0, Ageerr=1,
-             Lbin_lo=caal$length_bin_use, Lbin_hi=caal$length_bin_use,
-             Nsamp=caal$Nsamp,
-             ## Double up b/c SS needs dummy columns
-             caal[,-(1:4)], caal[,-(1:4)]) %>%
-  arrange(sex, year, Lbin_lo)
+bind_cols(caal0,caal0[,-(1:4)]) %>%
+  mutate(Seas = 7, Fleet = 2, SEX = ifelse(SEX == 'males',2,1),
+         Part = 0, Ageerr = 1) %>%  
+  select(Yr = YEAR, Seas, Fleet, Sex =SEX, Part, Ageerr, Lbin_lo = LENGTH_BIN,
+         Lbin_hi = LENGTH_BIN, Nsamp=value,everything()) %>%
+  write.csv(., file = here::here(year,'data','output','srv_caal_ss3-gapindex.csv'), 
+            row.names = FALSE)
 
-write.csv(SS_caal_survey, file = here::here(year,'data','output','srv_caal_ss3-gapindex.csv'), row.names = FALSE)
-message("Saved survey CAAL data in ", here::here(year,'data','output','srv_caal_ss3-gapindex.csv'))
+message('saved survey CAAL data to output/')
 
 ## Reformat Survey Lengths ----
 nsamp_len <- aggregate(HAULJOIN ~ YEAR,
@@ -395,80 +444,153 @@ nsamp_len <- aggregate(HAULJOIN ~ YEAR,
 
 write.csv(nsamp_len, file = here::here(year, 'data','raw','nsamp_len.csv'), row.names = FALSE)
 
+# ss_len_survey <- production_sizecomp_stratum %>%
+#   filter(!is.na(LENGTH_MM) & SEX != 3) %>%
+#   mutate(
+#     length_grp = cut(round(LENGTH_MM/10,0) ,
+#                      breaks = seq(6,58,2),
+#                      right = FALSE,
+#                      labels = FALSE),
+#     length_bin_use = seq(6,58,2)[length_grp]) %>%
+#   group_by(YEAR, SEX, length_bin_use) %>%
+#   summarise(Num_Fish = n(), .groups='drop') %>%
+#   mutate(tot = sum(Num_Fish), .by = c('YEAR','SEX')) %>%
+#   mutate(freq = Num_Fish/tot) %>%
+#   select(-Num_Fish, -tot) %>%
+#   tidytable::left_join(expand.grid(SEX = unique(.$SEX),
+#                                    YEAR = unique(.$YEAR),
+#                                    length_bin_use = lengths), .) %>%
+#   tidytable::replace_na(list(freq = 0)) %>% 
+#   tidytable::pivot_wider(names_from = length_bin_use, values_from = freq, values_fill = 0,
+#                          names_prefix = 'l') %>%
+#   left_join(., nsamp_len, by = 'YEAR') %>%
+#   mutate(Yr = YEAR, Seas = 7, Fleet=2,
+#          Sex = SEX, Part = 0, 
+#          Nsamp = HAULJOIN) %>%
+#   select(Yr, Seas, Fleet, Sex, Part,  Nsamp, 3:26) %>%
+#   bind_cols(., select(., 7:30)) 
+# 
+# 
+# write.csv(ss_len_survey, file = here::here(year,'data','output','srv_len_ss3-gapindex.csv'), 
+#           row.names = FALSE)
+survlen <- production_sizecomp_stratum %>% 
+  filter(SEX != 3) %>%
+  mutate(SEX = ifelse(SEX == 1, 'males','females'),
+         LENGTH_MM  = ifelse(LENGTH_MM < 60, 60.5,LENGTH_MM),
+         LENGTH_MM = ifelse(LENGTH_MM >= 580, 580, LENGTH_MM))  %>%
+  mutate( length_grp0 = cut(round(LENGTH_MM/10,0),
+                            right = F,
+                            breaks =  c(seq(6,40,2),seq(43,61,3))))  %>%
+  tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>% 
+  mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%
+  select(-first, -second) %>%
+  group_by(YEAR, LENGTH_BIN, SEX) %>%
+  summarise(value = sum(POPULATION_COUNT))   %>%  
+  ungroup()%>%
+  mutate(tot = sum(value), .by = c(YEAR)) %>%
+  mutate(freq = value/tot) 
+srvlen0 <- survlen %>%
+  tidyr::pivot_wider(names_from = LENGTH_BIN, values_from = freq, id_cols = c(YEAR, SEX), values_fill = 0) %>%
+  mutate(SEX = ifelse(SEX == 'males',2,1)) %>%
+  merge(., nsamp_len, by = 'YEAR')
 
 
+srvlen0 %>% 
+  filter(SEX == 1) %>% 
+  merge(., srvlen0 %>% 
+          filter(SEX == 2) %>% 
+          select(-SEX, -HAULJOIN), 
+        by = c('YEAR'), all.y = FALSE) %>%
+  mutate(Seas = 7, FltSvy = 2, Gender = 3, Part = 0,) %>%
+  select(Yr = YEAR, Seas, FltSvy, Gender, Part, Nsamp=HAULJOIN, everything(),
+         -SEX) %>%
+  arrange(Yr) %>%
+   write.csv(., file = here::here(year,'data','output','srv_len_ss3-gapindex.csv'), 
+       row.names = FALSE)
+  
 
-production_sizecomp_stratum %>%
-  filter(!is.na(LENGTH_MM) & SEX != 3) %>%
-  mutate(
-    length_grp = cut(round(LENGTH_MM/10,0) ,
-                     breaks = seq(6,58,2),
-                     right = FALSE,
-                     labels = FALSE),
-    length_bin_use = seq(6,58,2)[length_grp]) %>%
-  group_by(YEAR, SEX, length_bin_use) %>%
-  summarise(Num_Fish = n(), .groups='drop') %>%
-  mutate(tot = sum(Num_Fish), .by = c('YEAR','SEX')) %>%
-  mutate(freq = Num_Fish/tot) %>%
-  select(-Num_Fish, -tot) %>%
-  tidytable::left_join(expand.grid(SEX = unique(.$SEX),
-                                   YEAR = unique(.$YEAR),
-                                   length_bin_use = lengths), .) %>%
-  tidytable::replace_na(list(freq = 0)) %>%
-  # tidytable::mutate(AA_Index = 1, n_s = mean(n_s, na.rm = T),
-  #                   n_h = mean(n_h, na.rm = T), .by = year) %>%
-  # tidytable::select(-age_tot) %>%
-  tidytable::pivot_wider(names_from = length_bin_use, values_from = freq, values_fill = 0) %>%
-  left_join(., nsamp_len, by = 'YEAR') %>%
-  mutate(Yr = YEAR, Seas = 7, Fleet=2,
-         Sex = SEX, Part = 0, 
-         Nsamp = HAULJOIN) %>%
-  select(Yr, Seas, Fleet, Sex, Part,  Nsamp, 5:58) %>%
-  bind_cols(., select(., 10:30)) %>%
-  filter(!is.na(Lbin_lo)) %>%
-  arrange(Yr, Sex, Lbin_lo) 
+message('saved survey length comp data to output/')
 
 ## Reformat Survey Ages (ghost) ----
 
-tmp <- read.csv(here::here(year, 'data','raw','bsai_ts_length_specimen_data.csv'))  %>%
-  filter(sex != 3 & !is.na(age) & !is.na(length) & age > 0 & age<plus_age, species_code == 10130) %>%
-  mutate(
-    # sex = ifelse(sex == 1,2,1),  ## SS sex is inverse of this dataset
-    length_grp = cut(round(length/10,0) ,
-                     breaks = seq(0,60,2),
-                     right = FALSE,
-                     labels = FALSE),
-    length_bin_use = seq(0,60,2)[length_grp])
-inputN_total <- tmp %>%
-  group_by(year,sex) %>%
-  dplyr::summarise(Nsamp = n())
-inputN_h <- tmp %>% 
-  group_by(year, sex) %>% 
-  summarise(n_h = length(unique(hauljoin)))
+survage <- production_agecomp %>% 
+  filter(SEX != 3 & AGE > 0) %>%
+  mutate(SEX = ifelse(SEX == 1, 'males','females'), 
+         AGE = ifelse(AGE  >= 21, 21, AGE ),
+         LENGTH_MM  = ifelse(LENGTH_MM_MEAN  < 60, 60.5,LENGTH_MM_MEAN ),
+         LENGTH_MM = ifelse(LENGTH_MM_MEAN  >= 580, 580, LENGTH_MM_MEAN ))  %>%
+  mutate( length_grp0 = cut(round(LENGTH_MM_MEAN /10,0),
+                            right = F,
+                            breaks =  c(seq(6,40,2),seq(43,61,3))))  %>%
+  tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>% 
+  mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%
+  select(-first, -second) %>% 
+  summarise(value = sum(POPULATION_COUNT), .by = c(YEAR,AGE,SEX))   %>%  
+  mutate(tot = sum(value), .by = c(YEAR)) %>%
+  mutate(freq = value/tot) 
 
-srvage0 <- tmp %>% 
-  group_by(year, sex, age) %>%
-  summarise(n_combo = n()) %>%
-  ungroup()%>%
-  left_join(., inputN_total, by = c('year','sex')) %>%
-  mutate(freq = n_combo/Nsamp) %>%
-  select(-n_combo) %>%
-  tidyr::pivot_wider(names_from = age, values_from = freq, values_fill = 0, names_expand = TRUE) 
+srvage0 <- survage %>%
+  mutate(AGE = as.numeric(AGE)) %>%
+  tidyr::pivot_wider(names_from = AGE, values_from = freq, id_cols = c(YEAR, SEX), values_fill = 0) %>%
+  mutate(SEX = ifelse(SEX == 'males',2,1)) %>%
+  merge(., nsamp_age, by = 'YEAR') %>%
+  select(YEAR, SEX, HAULJOIN, paste0(1:21)) ## ensure correct order
 
-## note: cole had these all set to nsamp = 200
+
 srvage0 %>% 
-  filter(sex == 1) %>% 
+  filter(SEX == 1) %>% 
   merge(., srvage0 %>% 
-          filter(sex == 2) %>% 
-          select(-sex, -Nsamp), 
-        by = c('year'), all.y = FALSE) %>%
-  filter(year %in%  unique(mod_2020$condbase$Yr)) %>%
-  arrange(year) %>%
-  mutate(Seas = 7, FltSvy = -2, Gender = 3, Part = 0, Ageerr = 1, Lbin_lo = -1,
-         Lbin_hi = -1) %>%
-  select(year, Seas, FltSvy, Gender, Part, Ageerr, Lbin_lo, Lbin_hi, Nsamp, everything(),
-         -sex) %>%
-  write.csv(., file = here::here(year,'data','output','srv_age_ghost_ss3.csv'), row.names = FALSE)
+          filter(SEX == 2) %>% 
+          select(-SEX, -HAULJOIN), 
+        by = c('YEAR'), all.y = FALSE) %>%
+  mutate(Seas = 7, FltSvy = -2, Gender = 3, Part = 0,Ageerr = 1, Lbin_lo = -1) %>%
+  select(Yr = YEAR, Seas, FltSvy, Gender, Part, Ageerr, Lbin_lo = Lbin_lo, Lbin_hi = Lbin_lo, Nsamp=HAULJOIN, everything(),
+         -SEX) %>%
+  arrange(Yr) %>%
+write.csv(., file = here::here(year,'data','output','srv_age_ss3-gapindex-ghost.csv'), 
+          row.names = FALSE)
+
+message('saved survey marginal ages (ghosted) to output/')
+
+# tmp <- read.csv(here::here(year, 'data','raw','bsai_ts_length_specimen_data.csv'))  %>%
+#   filter(sex != 3 & !is.na(age) & !is.na(length) & age > 0 & age<plus_age, species_code == 10130) %>%
+#   mutate(
+#     # sex = ifelse(sex == 1,2,1),  ## SS sex is inverse of this dataset
+#     length_grp = cut(round(length/10,0) ,
+#                      breaks = seq(0,60,2),
+#                      right = FALSE,
+#                      labels = FALSE),
+#     length_bin_use = seq(0,60,2)[length_grp])
+# inputN_total <- tmp %>%
+#   group_by(year,sex) %>%
+#   dplyr::summarise(Nsamp = n())
+# inputN_h <- tmp %>% 
+#   group_by(year, sex) %>% 
+#   summarise(n_h = length(unique(hauljoin)))
+# 
+# srvage0 <- tmp %>% 
+#   group_by(year, sex, age) %>%
+#   summarise(n_combo = n()) %>%
+#   ungroup()%>%
+#   left_join(., inputN_total, by = c('year','sex')) %>%
+#   mutate(freq = n_combo/Nsamp) %>%
+#   select(-n_combo) %>%
+#   tidyr::pivot_wider(names_from = age, values_from = freq, values_fill = 0, names_expand = TRUE) 
+# 
+# ## note: cole had these all set to nsamp = 200
+# srvage0 %>% 
+#   filter(sex == 1) %>% 
+#   merge(., srvage0 %>% 
+#           filter(sex == 2) %>% 
+#           select(-sex, -Nsamp), 
+#         by = c('year'), all.y = FALSE) %>%
+#   filter(year %in%  unique(mod_2020$condbase$Yr)) %>%
+#   arrange(year) %>%
+#   mutate(Seas = 7, FltSvy = -2, Gender = 3, Part = 0, Ageerr = 1, Lbin_lo = -1,
+#          Lbin_hi = -1) %>%
+#   select(year, Seas, FltSvy, Gender, Part, Ageerr, Lbin_lo, Lbin_hi, Nsamp, everything(),
+#          -sex) %>%
+#   write.csv(., file = here::here(year,'data','output','srv_age_ghost_ss3.csv'), row.names = FALSE)
 
 
 
