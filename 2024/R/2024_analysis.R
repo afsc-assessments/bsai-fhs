@@ -3,6 +3,7 @@
 
 # load ----
 ## do NOT update odbc or connect() won't work
+## need odbc v 1.3.5 https://github.com/r-dbi/odbc/archive/refs/tags/v1.3.5.tar.gz
 # devtools::install_github("afsc-assessments/afscdata", force = TRUE) 
 # devtools::install_github("afsc-gap-products/gapindex")
 # devtools::install_github("BenWilliams-NOAA/afscassess", force = TRUE)
