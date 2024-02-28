@@ -177,10 +177,10 @@
 #
 # Input variance adjustments factors: 
 #_Data_type	Fleet	Value
-    4	1	0.075927	#_Variance_adjustment_list1
-    4	2	0.337005	#_Variance_adjustment_list2
-    5	1	0.080969	#_Variance_adjustment_list3
-    5	2	0.265753	#_Variance_adjustment_list4
+    4	1	0.079732	#_Variance_adjustment_list1
+    4	2	0.359831	#_Variance_adjustment_list2
+    5	1	0.086647	#_Variance_adjustment_list3
+    5	2	0.272054	#_Variance_adjustment_list4
 -9999	0	       0	#_terminator               
 #
 10 #_maxlambdaphase
