@@ -63,55 +63,66 @@ fac0 %>% filter(sex == 'F') %>%
   mutate(Seas = 7, FltSvy = ifelse(year < 2000, -1, 1), Gender = 3, 
          Part = 0, Ageerr = 1, LbinLo = -1, LbinHi = -1, Nsamp = n_h) %>%
   select(Yr = year, Seas, FltSvy, Gender, Part, Ageerr, LbinLo, LbinHi, Nsamp, everything(), -sex, -n_s, -n_h, -AA_Index) %>%
-  write.csv(., file = here::here(year,'data','output','fsh_age_comp_ss3.csv'), row.names = FALSE)
+  write.csv(., file = here::here(year,'data','output','fsh_age_ss3.csv'), row.names = FALSE)
 
 message('reformatted and saved fishery age comp data to output/')
 
 
 #Fishery Lengths ----
+## downloads and formats everything
+source(here::here(year,'r','old_fishery_lcomp_routine.R'))
 
-ages <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), delim = ",", col_type = c(join_key = "c", 
-                                                                                                         haul_join = "c", port_join = "c")) %>% tidytable::filter(!is.na(age), 
-                                                                                                                                                                  age >= rec_age) %>% tidytable::group_by(year) %>% tidytable::tally(name = "age") %>% 
-  tidytable::filter(age >= 50) %>% 
-  tidytable::ungroup()
-
-flc0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_length_data.txt"), 
-                     delim = ",", 
-                     col_type = c(haul_join = "c", 
-                                  port_join = "c")) %>% 
-  tidytable::mutate(n_h = length(unique(na.omit(haul_join))) + length(unique(na.omit(port_join))), .by = year) %>% 
-  tidytable::mutate(tot = sum(frequency),                                                                                                                                                                                         length(unique(na.omit(port_join))), .by = year) %>% 
-  tidytable::summarise(n_s = mean(tot), 
-                       n_h = mean(n_h), 
-                       length_tot = sum(frequency), 
-                       .by = c(sex,year, length)) %>% 
-  tidytable::mutate(prop = length_tot/n_s) %>% tidytable::left_join(expand.grid(sex = unique(.$sex), 
-                                                                                year = unique(.$year), 
-                                                                                length = lenbins), .) %>% tidytable::replace_na(list(prop = 0)) %>% 
-  tidytable::mutate(SA_Index = 1, n_s = mean(n_s, na.rm = T), 
-                    n_h = mean(n_h, na.rm = T), .by = year) %>% tidytable::select(-length_tot) %>% 
-  tidytable::pivot_wider(names_from = length, values_from = prop)
-
-
-flc0 %>% filter(sex == 'F') %>% select(-SA_Index) %>%
-  merge(., flc0 %>% 
-          filter(sex == 'M') %>% 
-          select(-sex, -n_s,-n_h,-SA_Index), 
-        by = 'year', all.y = FALSE) %>%
-  arrange(year) %>%
-  ## drop the years before 2000 since Lcomps are available
-  mutate(Seas = 7, 
-         FltSvy = ifelse(year %in% unique(fac0$year[which(fac0$year >= 2000)]), -1, 1),  
-         Gender = 3, 
-         Part = 0, 
-         Nsamp = n_h) %>%
-  select(Yr = year, Seas, FltSvy, Gender, Part, Nsamp, everything(), -sex, -n_s, -n_h) %>% 
-  write.csv(., file = here::here(year,'data','output','fsh_len_comp_ss3.csv'), row.names = FALSE)
+# ages <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), 
+#                      delim = ",", col_type = c(join_key = "c", 
+#                                                haul_join = "c", port_join = "c")) %>% 
+#   tidytable::filter(!is.na(age))
+#   # tidytable::ungroup()
+# 
+# flc0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_length_data.txt"), 
+#                      delim = ",", 
+#                      col_type = c(haul_join = "c", 
+#                                   port_join = "c")) %>% 
+#   filter(sex != 'U') %>%
+#   
+#   tidytable::mutate(n_h = length(unique(na.omit(haul_join))) + 
+#                       length(unique(na.omit(port_join))), 
+#                     .by = year) %>% 
+#   tidytable::mutate(tot = sum(frequency)) %>%
+#   length(unique(na.omit(port_join))), .by = year) %>% 
+#   tidytable::summarise(n_s = mean(tot), 
+#                        n_h = mean(n_h), 
+#                        length_tot = sum(frequency), 
+#                        .by = c(sex,year, LENGTH_BIN)) %>% 
+#   tidytable::mutate(prop = length_tot/n_s) %>% 
+#   tidytable::left_join(expand.grid(sex = unique(.$sex), 
+#                                    year = unique(.$year), 
+#                                    length = unique(.$LENGTH_BIN)), .) %>% 
+#   tidytable::replace_na(list(prop = 0)) %>% 
+#   tidytable::mutate(SA_Index = 1, 
+#                     n_s = mean(n_s, na.rm = T), 
+#                     n_h = mean(n_h, na.rm = T), .by = year) %>% 
+#   tidytable::select(-length_tot) %>% 
+#   tidytable::pivot_wider(names_from = LENGTH_BIN, values_from = prop) 
+# 
+# 
+# flc0 %>% filter(sex == 'F') %>% select(-SA_Index) %>%
+#   merge(., flc0 %>% 
+#           filter(sex == 'M') %>% 
+#           select(-sex, -n_s,-n_h,-SA_Index), 
+#         by = 'year', all.y = FALSE) %>%
+#   arrange(year) %>%
+#   ## drop the years before 2000 since Lcomps are available
+#   mutate(Seas = 7, 
+#          FltSvy = ifelse(year %in% unique(fac0$year[which(fac0$year >= 2000)]), -1, 1),  
+#          Gender = 3, 
+#          Part = 0, 
+#          Nsamp = n_h) %>%
+#   select(Yr = year, Seas, FltSvy, Gender, Part, Nsamp, everything(), -sex, -n_s, -n_h) %>% 
+#  # write.csv(., file = here::here(year,'data','output','fsh_len_comp_ss3.csv'), row.names = FALSE)
 
 message('reformatted and saved fishery length comp data to output/')
 
-# Survey Data
+# Survey Data----
 ## Survey Biomass: interpolation ----
 
 bts_sparse  <- read.csv(here::here(year,'data','raw','bsai_total_bts_biomass_data.csv'))  %>% 
@@ -224,8 +235,8 @@ production_biomass_subarea <-
                                  biomass_strata = production_biomass_stratum_ai)  
 
 production_biomass_subarea_ai <- subset(x = production_biomass_subarea,
-                                              subset = AREA_ID == 99904, ## 99900 == EBS Standard + NW region, AREA_ID == 99901 for EBS Standard Region
-                                              select = c(YEAR, BIOMASS_MT, BIOMASS_VAR)) %>%
+                                        subset = AREA_ID == 99904, ## 99900 == EBS Standard + NW region, AREA_ID == 99901 for EBS Standard Region
+                                        select = c(YEAR, BIOMASS_MT, BIOMASS_VAR)) %>%
   mutate(SURVEY = 'AI')
 
 
@@ -305,7 +316,7 @@ names(x = production_agecomp_stratum$age_comp)[
 
 production_agecomp <- rbind(production_agecomp_region,
                             production_agecomp_stratum$age_comp[, names(x = production_agecomp_region)]) #%>%
-  # left_join(., production_data$specimen, by = c('YEAR','SEX','AGE','LENGTH','CRUISE'))
+# left_join(., production_data$specimen, by = c('YEAR','SEX','AGE','LENGTH','CRUISE'))
 
 
 ## Convert CRUISE to YEAR
@@ -325,7 +336,7 @@ message('saved raw production_data compositions to raw/')
 
 index_raw <- rbind(production_biomass_subarea_standard, production_biomass_subarea_ai) %>%
   tidyr::pivot_wider(names_from=SURVEY, 
-              values_from=c(BIOMASS_MT, BIOMASS_VAR)) %>%
+                     values_from=c(BIOMASS_MT, BIOMASS_VAR)) %>%
   mutate(sd_EBS=sqrt(BIOMASS_VAR_EBS ), 
          sd_AI=sqrt(BIOMASS_VAR_AI)) %>%
   select(year=YEAR, biomass_EBS = BIOMASS_MT_EBS, biomass_AI = BIOMASS_MT_AI, sd_EBS, sd_AI)
@@ -505,9 +516,9 @@ srvlen0 %>%
   select(Yr = YEAR, Seas, FltSvy, Gender, Part, Nsamp=HAULJOIN, everything(),
          -SEX) %>%
   arrange(Yr) %>%
-   write.csv(., file = here::here(year,'data','output','srv_len_ss3-gapindex.csv'), 
-       row.names = FALSE)
-  
+  write.csv(., file = here::here(year,'data','output','srv_len_ss3-gapindex.csv'), 
+            row.names = FALSE)
+
 
 message('saved survey length comp data to output/')
 
@@ -547,8 +558,8 @@ srvage0 %>%
   select(Yr = YEAR, Seas, FltSvy, Gender, Part, Ageerr, Lbin_lo = Lbin_lo, Lbin_hi = Lbin_lo, Nsamp=HAULJOIN, everything(),
          -SEX) %>%
   arrange(Yr) %>%
-write.csv(., file = here::here(year,'data','output','srv_age_ss3-gapindex-ghost.csv'), 
-          row.names = FALSE)
+  write.csv(., file = here::here(year,'data','output','srv_age_ss3-gapindex-ghost.csv'), 
+            row.names = FALSE)
 
 message('saved survey marginal ages (ghosted) to output/')
 
