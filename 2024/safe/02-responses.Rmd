@@ -1,0 +1,19 @@
+## Responses to SSC and Plan Team Comments on Assessments in General
+
+> "The SSC requests that all authors fill out the risk table in 2019…" (SSC December 2018)  
+
+We provide a risk table in the Harvest Recommendations section. After completing this exercise, we do not recommend ABC be reduced below maximum permissible ABC. 
+
+## Responses to SSC and Plan Team Comments Specific to this Assessment
+
+>*1. Continue exploration of environmental drivers of FHS stock distribution and behavior, as average summer bottom temperature appears inadequate (SSC, December 2018)*
+
+This is out of scope for the present assessment, and might be addressed for the next Full assessment (2028).
+
+>*2. Investigate data from the NBS for Bering Flounder (SSC, December 2018)*
+
+Lee to investigate.
+
+>*3. Consider separately modeling the pelagic trawl fishery with its own selectivity curve (Plan Team, November 2020)*
+
+This request does not seem sensible for this stock, as there is not a pelagic trawl fishery for BSAI Flathead sole. This comment will be removed from future SAFE reports.

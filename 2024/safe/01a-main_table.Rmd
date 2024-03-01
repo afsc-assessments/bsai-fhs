@@ -1,0 +1,24 @@
+```{r}
+## load template
+data <- safe::tier3 %>% data.frame()
+
+## copied these values from the recent harvest projection
+# https://apps-afsc.fisheries.noaa.gov/Plan_Team/2022/GOApop.pdf
+safe_2022 <- read.csv(here::here(year,'safe','goa_pop_2023','static_tables','safe_2022.csv'), header = FALSE) %>%
+  select(-1)
+
+## load base safe
+safe0 <- read.csv(here::here(year,'mgmt','2020.1-2023','processed','exec_summ.csv')) %>% 
+  t()  %>% 
+  data.frame() %>%
+  bind_cols(safe_2022,.) %>% 
+  as.data.frame() 
+
+## round & clean up values
+safe0[9:11,] <-  sapply(safe0[9:11,],  FUN = function(x) format(round(as.numeric(x), 2), nsmall = 2))
+safe0[c(4:8,12:14),] <- sapply(safe0[c(4:8,12:14),],  FUN = function(x) prettyNum(x,big.mark=','))
+data[1:13,2:5] <- safe0[2:14,]
+safe::main_table(data, year, tier=3, c1, c2, c3)  %>% 
+  flextable::fontsize(size = 9, part = "all")
+  
+```

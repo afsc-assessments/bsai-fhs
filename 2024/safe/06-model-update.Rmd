@@ -1,0 +1,180 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# Analytical approach
+
+> Operational Update: The data description for Flathead sole-Bering
+> flounder has been truncated to highlight relevant details and changes
+> made for this cycle. The reader is referred to the last full
+> assessment [@Monnahan2020] for the entirety of this section.
+
+## General Model Structure
+
+The model structure used for this Operational Update is unchanged from
+2020. The POP assessment is a two-sex, age-structured statistical
+catch-at-age model in Stock Synthesis (SS3, @methot_stock_2013). The
+assessment model was transitioned from version `3.30.16` to the latest
+version of SS3 available as of January 2024 (`3.30.22`). No detectable
+change in derived quantities nor likelihoods occured as a result of this
+software change.
+
+## Description of Base Model
+
+Given staffing limitations, this model is an Operational Update. The
+configuration matches the accepted model from 2020, with updated data. A
+full revision to the modeling framework is anticipated in the next cycle
+(2028). There are no alternative models presented here.
+
+## Parameters Estimated Outside the Assessment Model {#parest}
+
+The survey catchability, time- and age-invariant natural mortality for
+females and males, variability of recruitment ($\sigma_r$), the
+parameters of the maturity ogive, the ageing error matrix, and the
+weight-length relationship were estimated outside the assessment model.
+The survey catchability parameter was fixed at 1.0. The natural
+mortality rates were set to 0.2 for both sexes, and $\sigma_r$ was equal
+to 0.5, consistent with previous assessments. The maturity ogive for
+flathead sole followed an age-based logistic curve where age at 50%
+maturity was 9.7 and age at 95% maturity was 12.8. The ageing error
+matrix was taken directly from the Stock Synthesis model used in
+assessments prior to 2004 (Spencer et al., 2004). A length–weight
+relationship of the form $W = aL^b$ was fit to survey data from
+1982-2016 for males and females combined, with parameter estimates a =
+0.00298 and b = 3.327 (weight in g, length in cm).
+
+A comparison of these values is as follows:
+
+| Symbol, Description                                                                                | 2020 Value       | Updated Value |
+|------------------------|------------------------|------------------------|
+| $w_\infty$, asymptotic weight                                                                      | 901 g            | 899 g         |
+| $k$, weight-at-age growth rate                                                                     | 0.2 $kg yr^{-1}$ | unchanged     |
+| $t_0$, age at weight zero                                                                          | -0.37            | -0.38         |
+| $a$, $b$, slope and intercept of linear relationship between sd(length at age) and age, post 1980s | -0.02, 2.18      | -0.02, 2.17   |
+
+An exploratory model was run wherein the 2021 size-at-age probability
+matrix for 1980-present was used instead of the updated matrix;
+estimated female spawning biomass and total (2+ biomass) for `r year+1`
+varied by less than
+`r max(c(round(100*(227991-227630)/227991,2),round(100*(649941-649010)/649941,2)))`%.
+Therefore, updating the length and age data from the 2023 trawl survey
+had minimal impact on model estimates of biomass.
+
+## Parameters Estimated Inside the Assessment Model
+
+The parameters estimated conditionally inside the assessment model are
+listed in the table below.
+
+| Parameter                            | Symbol                              | Number |
+|----------------------------|--------------------------|------------------|
+| log(mean recruitment)                | $\mu_r$                             | 1      |
+| Recruitment variability              | $\sigma_r$                          | 1      |
+| Spawner-per-recruit reference points | $F_{35\%}$, $F_{40\%}$, $F_{100\%}$ | 3      |
+| Recruitment deviations               | $\epsilon_y^r$                      | 89     |
+| Average fishing mortality            | $\mu_f$                             | 1      |
+| Fishing mortality deviations         | $\epsilon_y^f$                      | 63     |
+| Fishery selectivity coefficients     | $s_a^f$                             | 6      |
+| Survey selectivity coefficients      | $s_a^t$                             | 2      |
+| Maturity-at-age coefficients         | $\hat m_a$                          | 2      |
+| Total                                |                                     | 170    |
+
+: Parameters estimated within the assessment model.
+
+### Recruitment
+
+The log of unfished recruitment (R0), log-scale recruitment deviations
+for an early period (1963-1972) and a main period (1973-2016) were
+estimated. A 1:1 sex ratio is assumed.
+
+### Growth
+
+Sex-specific growth parameters (Lamax=21+, Lamin=3, k, CV of
+length-at-age at age 3, CV of length-at-age at age 21+) were estimated
+inside the assessment model.
+
+### Selectivity and fishing mortality
+
+Survey selectivity parameters were estimated using age-based,
+sex-specific, asymptotic curves that were time-invariant and are listed
+in the table below. The double-normal curve was used to easily allow
+previous and future explorations of alternative survey selectivity
+forms. Here the double-normal curve is constrained to mimic a logistic
+shape because there was no evidence for dome-shaped survey selectivity.
+
+Fishery selectivity parameters for logistic, length-based, sex-specific
+curves were estimated (the parameters for each curve were the length at
+50% selectivity to the fishery and slope of the selectivity curve).
+Separate fishery selectivity curves were estimated for 2 distinct time
+periods (1964-1987 and 1988-present).
+
+Finally, annual fishing mortality rates were estimated (1964-2020).
+
+| Double-normal selectivity parameters | Survey                      |
+|--------------------------------------|-----------------------------|
+| Peak: beginning age for the          |                             |
+| plateau                              | estimated                   |
+| Width: width of plateau              | set to 12                   |
+| Ascending width (log space)          | estimated                   |
+| Descending width (log                |                             |
+| space)                               | set to 3                    |
+| Initial: selectivity at              |                             |
+| smallest age bin                     | set to 0                    |
+| Final: selectivity at                |                             |
+| largest age bin                      | Follows shape of descending |
+| limb                                 |                             |
+| Male Peak Offset                     | estimated                   |
+| Male ascending width offset          |                             |
+| (log space)                          | estimated                   |
+| Male descending width                |                             |
+| offset (log space)                   | set to 1                    |
+| Male "Final"                         |                             |
+| offset (transformation required)     | set to 1                    |
+| Male apical selectivity              | set to 1                    |
+
+: Treatment of selectivity parameters
+
+
+### Objective Function
+
+Parameter estimates were obtained by minimizing the overall sum of a weighted set of negative log-likelihood components derived from fits to the model data described above and a set of penalty functions used to improve model convergence and impose various constraints @methot_stock_2013. Fits to observed annual fishery size and age compositions, as well as survey biomass estimates and size and age compositions were included among the set of likelihood components. A likelihood component based on recruitment deviations from the mean was also included. Penalties were imposed to achieve good fits to annual fishery catches (biomass) and the assumed historical fishery catch. The functions used are described in more detail in Methot and Wetzel (2013) and in Appendix B of McGilliard et al. (2018).
+
+
+<!-- Fishery and survey selectivity are age-based. Fishery selectivity is -->
+
+<!-- time-blocked into four periods, corresponding with large-scale changes in the fishery and management structure (Table @ref(tab:mgmtmeasures)). The period from 1961-1976 is asymptotic -->
+
+<!-- (via a two-parameter logistic curve), and the three periods from 1977 onwards are each -->
+
+<!-- dome-shaped (via an averaged logistic gamma for the second block, and a -->
+
+<!-- gamma function for the third and fourth blocks, with two estimated parameters for each block). Bottom trawl survey -->
+
+<!-- selectivity is estimated to be asymptotic with a two-parameter logistic curve. -->
+
+<!-- Maturity-at-age is conditionally estimated within the assessment -->
+
+<!-- following the method presented in Hulson et al. (2011). Parameter -->
+
+<!-- estimates for maturity-at-age are obtained by fitting two datasets -->
+
+<!-- collected on female POP maturity from Lunsford (1999) and Conrath and -->
+
+<!-- Knoth (2013). Parameters for the logistic function describing -->
+
+<!-- maturity-at-age are estimated conditionally within the model so that -->
+
+<!-- uncertainty in model results (e.g., ABC) can be linked to uncertainty in -->
+
+maturity parameter estimates.
+
+# Model Uncertainty {#modeluncertainty}
+
+Evaluation of model uncertainty is obtained through a Markov Chain Monte
+Carlo (MCMC) algorithm [@gelman_markov_1996]. The chain length of the
+MCMC was 10,000,000 and was thinned to one iteration out of every 2,000.
+We omit the first 2,000,000 iterations to allow for a burn-in period. We
+use these MCMC methods to provide further evaluation of uncertainty in
+the results below including 95% credible intervals for some parameters
+(computed as the 5th and 95th percentiles of the MCMC samples).
