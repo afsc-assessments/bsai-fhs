@@ -1,4 +1,8 @@
-## bsai_fishery_data_to_ss3
+## Format BSAI FHS data for SS3
+## This script is meant to be source()d from 2024_analysis.R
+## It does involve a live call to the gapindex package, which requires a connection to the AFSC Oracle database.
+## Otherwise, it assumes you have already run afscdata::bsai_fhs() and saved the fishery catch & comp data to the data/raw folder.
+## The script will output the formatted data to the data/output folder.
 ## maia.kapur@noaa.gov
 ## Jan 2024
 
