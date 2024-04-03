@@ -3,12 +3,12 @@
 data <- safe::tier3 %>% data.frame()
 
 ## copied these values from the recent harvest projection
-# https://apps-afsc.fisheries.noaa.gov/Plan_Team/2022/GOApop.pdf
-safe_2022 <- read.csv(here::here(year,'safe','goa_pop_2023','static_tables','safe_2022.csv'), header = FALSE) %>%
+## and confirmed ABCs matched federal register
+safe_2023 <- read.csv(here::here(year,'safe','static_tables','safe_2023.csv'), header = FALSE) %>%
   select(-1)
 
-## load base safe
-safe0 <- read.csv(here::here(year,'mgmt','2020.1-2023','processed','exec_summ.csv')) %>% 
+## load base safe values, made using fAK_SCENARIOS.R
+safe0 <- read.csv(here::here(year,'mgmt',model,'processed','exec_summ.csv')) %>% 
   t()  %>% 
   data.frame() %>%
   bind_cols(safe_2022,.) %>% 
