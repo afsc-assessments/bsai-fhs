@@ -17,8 +17,3 @@ For the `r year+1` fishery, we recommend the maximum allowable ABC of `r prettyN
 ```
  
 
-```{r, child= "01b-apportionment.Rmd", eval = T}
-
-```
-
- 
