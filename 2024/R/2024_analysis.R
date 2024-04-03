@@ -57,7 +57,7 @@ source(here::here(year,'r','bsai_fhs_wrangle_data.R'))
 ## NOT DOING THIS FOR AN UPDATE
 
 # run projections ----
-## takes less than one minute; only do this if model and/or projected catches change 
+## takes less than one minute; only run this if model and/or projected catches change 
 
 # setwd(here::here(year,'model_runs','03b_projection'))
 # shell('spm')
