@@ -53,7 +53,35 @@ source(here::here(year,'r','bsai_fhs_wrangle_data.R'))
 ## NOT DOING THIS FOR AN UPDATE
 
 # run projections ----
-## AWAITING PROJ SUBGROUP PROGRESS
+## takes about ~10 minutes; only do this if model and/or projected catches change
+# source(here::here(year,"R","do_ak_scenarios.R"))
+
+rec_table1 <-
+  read.table(here::here(year,'model_runs','03b_projection','percentdb.out')) %>%
+  as.data.frame(stringsAsFactors=FALSE) %>%
+  transmute(scenario=as.numeric(V2), year=as.numeric(V3), metric=V4,
+            value=as.numeric(V5)) %>%
+  filter(year %in% (year+1:2) & scenario==1 &
+           metric %in% c('SSBMean','SSBFofl', 'SSBFabc', 'SSBF100', 'Fofl', 'Fabc')) %>%
+  arrange(year, metric) %>%
+  tidyr::pivot_wider(names_from=year, values_from=value)
+rec_table1[3:6,3:4] <- rec_table1[3:6,3:4]
+
+rec_table2 <-
+  read.table(here('projection','alt2_proj.out'), header=TRUE) %>%
+  filter(Year %in% (year+1:2)) %>%
+  pivot_longer(cols=c(-Stock, -Year), names_to='metric', values_to='value') %>%
+  pivot_wider(names_from=Year, values_from=value)
+rec_table1$scenario <- rec_table2$Stock <- NULL
+rec_table2[,2:3] <- rec_table2[,2:3]
+rec_table <- bind_rows(rec_table1, rec_table2)
+
+## change order to match SAFE format & magnitudes
+rec_table <-rec_table[c(11,6,3,4,5,2,1,1,9,8,8),] 
+
+# rec_table[c(1:5,9:11),2:3] <-formatC(rec_table[c(1:5,9:11),2:3] , format="d", big.mark=",") 
+write.csv(rec_table, file = here::here('projection','rec_table.csv'), row.names=FALSE)
+
 
 # process results ----
 
