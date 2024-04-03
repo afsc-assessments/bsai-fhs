@@ -39,6 +39,10 @@ prev_mdl_fldr = "18.2c_2020"
 # query data ----
 ## you must be on the VPN (West) for this to work, and it takes about 5 minutes
 ## this automates the AI interpolation for the biomass survey and outputs in in SS format
+
+## run this if you haven't yet
+# afscdata::setup_folders()
+
 afscdata::bsai_fhs(year)
 source(here::here(year,'r','bsai_fhs_wrangle_data.R'))
 
@@ -53,9 +57,10 @@ source(here::here(year,'r','bsai_fhs_wrangle_data.R'))
 ## NOT DOING THIS FOR AN UPDATE
 
 # run projections ----
-## takes about ~10 minutes; only do this if model and/or projected catches change
-# source(here::here(year,"R","do_ak_scenarios.R"))
-## use spm from github; run down whether the values are doubled for b100/b40/b35?
+## takes less than one minute; only do this if model and/or projected catches change 
+
+# setwd(here::here(year,'model_runs','03b_projection'))
+# shell('spm')
 
 rec_table1 <-
   read.table(here::here(year,'model_runs','03b_projection','percentdb.out')) %>%
