@@ -68,7 +68,7 @@ library(dplyr)
 species = params$species
 year = 2024
 date = 'October 22, 2024'
-model = '18.2c-2024'
+model = '18.2c_2024'
 end_proj = year + 15
 
 ## read in exec summ and assign derived quants
