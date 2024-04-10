@@ -79,50 +79,6 @@ source(here::here(year,'r','old_fishery_lcomp_routine.R'))
 message('reformatted and saved fishery length comp data to output/')
 
 # Survey Data----
-## Survey Biomass: interpolation ----
-
-# bts_sparse  <- read.csv(here::here(year,'data','raw','bsai_total_bts_biomass_data.csv'))  %>% 
-#   dplyr::group_by(year, survey) %>%
-#   dplyr::summarise(biomass= sum(total_biomass), ## to MT
-#                    sd = sqrt(sum(biomass_var))/1000) %>%
-#   tidyr::pivot_wider(names_from=survey, values_from=c(biomass, sd)) 
-
-# names(production_biomass_subareaAI) <- names(production_biomass_subareaEBS) <- tolower(names(production_biomass_subareaAI))
-
-# bts_sparse <- rbind(production_biomass_subareaAI, production_biomass_subareaEBS) %>%
-#   dplyr::group_by(year, survey) %>%
-#   dplyr::summarise(biomass= sum(biomass_mt), ## to MT
-#                    sd = sqrt(sum(biomass_var))) %>%
-#   tidyr::pivot_wider(names_from=survey, values_from=c(biomass, sd)) 
-
-
-# # names(bts_sparse)[c(3,5)] <- c('biomass_EBS','sd_EBS')
-# z1 <- subset(bts_sparse, !is.na(biomass_AI))
-# z2 <- subset(bts_sparse, is.na(biomass_AI))
-# ## linear model to interpolate AI biomass & sd in off years
-# lm_bio <-lm(biomass_AI~biomass_EBS, data = z1)
-# lm_var <- lm(sd_AI~sd_EBS, data = z1)
-# ## backfill all AI values
-# z2$biomass_AI <- as.numeric(predict(lm_bio, newdata=z2))
-# z2$sd <- as.numeric(predict(lm_var, newdata=z2))
-
-# ## Survey Biomass: reformatting ----
-# index <- rbind(z1,z2) %>% 
-#   dplyr::group_by(year) %>%
-#   dplyr::summarize(biomass=round(biomass_AI+biomass_EBS,5),
-#                    variance=sum(sd_AI^2,sd_EBS^2,na.rm = TRUE),
-#                    .groups='drop') %>%
-#   ## SE on log scale, which SS requires, is sqrt(log(1+CV^2))
-#   dplyr::mutate(se_log=round(sqrt(log(1+(variance/biomass)^2)),5)) %>%
-#   dplyr::select(-variance)
-
-# SS_index <- data.frame(year=index$year, seas=7, index=2, 
-#                        obs=round(index$biomass,0), se_log=index$se_log)
-
-# write.csv(x=SS_index, file= here(year,'data','output','srv_bio_ss3.csv'),
-#           row.names=FALSE)
-
-# message('reformatted and saved survey biomass data to output/')
 
 ## Download Survey Data from gapindex ----
 ## Note: this assessment uses slightly different data sources for the composition vs biomass data.
