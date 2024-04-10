@@ -327,36 +327,7 @@ nsamp_len <- aggregate(HAULJOIN ~ YEAR,
                        FUN = function(x) length(x = unique(x = x)))
 
 write.csv(nsamp_len, file = here::here(year, 'data','raw','nsamp_len.csv'), row.names = FALSE)
-
-# ss_len_survey <- production_sizecomp_stratum %>%
-#   filter(!is.na(LENGTH_MM) & SEX != 3) %>%
-#   mutate(
-#     length_grp = cut(round(LENGTH_MM/10,0) ,
-#                      breaks = seq(6,58,2),
-#                      right = FALSE,
-#                      labels = FALSE),
-#     length_bin_use = seq(6,58,2)[length_grp]) %>%
-#   group_by(YEAR, SEX, length_bin_use) %>%
-#   summarise(Num_Fish = n(), .groups='drop') %>%
-#   mutate(tot = sum(Num_Fish), .by = c('YEAR','SEX')) %>%
-#   mutate(freq = Num_Fish/tot) %>%
-#   select(-Num_Fish, -tot) %>%
-#   tidytable::left_join(expand.grid(SEX = unique(.$SEX),
-#                                    YEAR = unique(.$YEAR),
-#                                    length_bin_use = lengths), .) %>%
-#   tidytable::replace_na(list(freq = 0)) %>% 
-#   tidytable::pivot_wider(names_from = length_bin_use, values_from = freq, values_fill = 0,
-#                          names_prefix = 'l') %>%
-#   left_join(., nsamp_len, by = 'YEAR') %>%
-#   mutate(Yr = YEAR, Seas = 7, Fleet=2,
-#          Sex = SEX, Part = 0, 
-#          Nsamp = HAULJOIN) %>%
-#   select(Yr, Seas, Fleet, Sex, Part,  Nsamp, 3:26) %>%
-#   bind_cols(., select(., 7:30)) 
-# 
-# 
-# write.csv(ss_len_survey, file = here::here(year,'data','output','srv_len_ss3-gapindex.csv'), 
-#           row.names = FALSE)
+ 
 survlen <- production_sizecomp_stratum %>% 
   filter(SEX != 3) %>%
   mutate(SEX = ifelse(SEX == 1, 'males','females'),
