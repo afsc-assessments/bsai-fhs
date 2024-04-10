@@ -281,45 +281,7 @@ nsamp_age <- aggregate(HAULJOIN ~ YEAR,
                        data = production_data$specimen,
                        FUN = function(x) length(x = unique(x = x)))
 write.csv(nsamp_age, file = here::here(year, 'data','raw','nsamp_age.csv'), row.names = FALSE)
-
-# caal <- production_agecomp %>%
-#   select(-SURVEY, - SURVEY_DEFINITION_ID, -AREA_ID, -POPULATION_COUNT ) %>%
-#   filter(!is.na(AGE) & AGE>0 & !is.na(LENGTH_MM_MEAN) & SEX!=3) %>%
-#   mutate(AGE = ifelse(AGE > plus_age,plus_age,AGE)) %>%
-#   mutate(
-#     length_grp = cut(round(LENGTH_MM_MEAN/10,0) ,
-#                      breaks = seq(6,58,2),
-#                      right = FALSE,
-#                      labels = FALSE),
-#     length_bin_use = seq(6,58,2)[length_grp]) %>%
-# 
-#   group_by(YEAR, SEX, AGE, length_bin_use) %>%
-#   summarise(Num_Fish = n(), .groups='drop') %>% 
-#   arrange(AGE) %>%
-#   group_by(SEX, YEAR, length_bin_use) %>%
-#   mutate(Nsamp=sum(Num_Fish)) %>%
-#   # tidytable::left_join(expand.grid(SEX = unique(.$SEX),
-#   #                                  YEAR = unique(.$YEAR),
-#   #                                  length_bin_use = seq(6,58,2),
-#   #                                  AGE = 1:plus_age), .) %>%
-#   tidyr::pivot_wider(names_from=AGE, values_from=Num_Fish,
-#                      names_prefix='a', values_fill=0) %>% replace(is.na(.), 0) 
-# 
-# SS_caal_survey <-
-#   data.frame(year=caal$YEAR, Month=7, Fleet=2,
-#              sex=ifelse(caal$SEX==1,2,1), ## SS sex is reversed
-#              Part=0, Ageerr=1,
-#              Lbin_lo=caal$length_bin_use, Lbin_hi=caal$length_bin_use,
-#              Nsamp=caal$Nsamp,
-#              ## Double up b/c SS needs dummy columns
-#              caal[,-(1:4)], caal[,-(1:4)]) %>%
-#   arrange(sex, year, Lbin_lo)
-# 
-# write.csv(SS_caal_survey, file = here::here(year,'data','output','srv_caal_ss3-gapindex.csv'), 
-#           row.names = FALSE)
-
-
-
+ 
 caal00 <-   production_data$specimen %>%
   ## filter out bering flounder and unsexed
   filter(!is.na(AGE) & !is.na(LENGTH) & SEX != 3 & AGE > 0 & SPECIES_CODE == 10130 ) %>%
