@@ -45,11 +45,7 @@ prev_mdl_fldr = "18.2c_2020"
 
 afscdata::bsai_fhs(year)
 source(here::here(year,'r','bsai_fhs_wrangle_data.R'))
-
-# run base model ----
-## you will need to manually add the data to the DAT
-## file in curr_mdl_fldr 
-
+ 
 # run retrospective ----
 ## NOT DOING THIS FOR AN UPDATE
 
@@ -59,8 +55,45 @@ source(here::here(year,'r','bsai_fhs_wrangle_data.R'))
 # run projections ----
 ## takes less than one minute; only run this if model and/or projected catches change 
 
-# setwd(here::here(year,'model_runs','03b_projection'))
-# shell('spm')
+lapply(list.files(here::here(year,'r',"proj_functions/"), full.names = T, pattern = ".r$"),  source) 
+
+# Write proj files ----
+
+mod <- SS_output(here::here(year,'mgmt',curr_mdl_fldr), verbose = F)
+## passed to write_proj function
+NSEX=2						# number of sexes used in assessment model
+Nfishery=1					# number of fisheries(fleets) #This was set equal to 2
+fleets=1					# fleet index number (associated with commercial fishery)
+rec_age=3					# assumed age at recruitment
+max_age=21					# maximum age in model
+NAGE=length(rec_age:max_age)			# number of ages
+FY=1964 					# first year used to subset SSB, per memo this is always 1977, 1964 for consistency
+rec_FY=1964					# first year used to subset recruitment
+rec_LY_decrement=0				# value subtracted from assessment final year to subset recruitment vector
+spawn_month=1					# spawning month
+Fratios=1            				# Proportion F per fishery
+#passed to write_proj_spcat
+ct_yrs=3			#Number of future catch years given to projection model
+## passed to setup function
+nsims=1000			# number of projection model simulations
+nproj=14			# number of projection years ALSO USED BY get_proj_res
+## passed to get_proj_res
+spp="BSAI_flathead"
+
+## this will give you the general values, but mightn't be perfectly formatted
+## simply paste the right values into projection_data.dat
+## and ensure the catches are specified in spm.dat
+write_proj(dir=here::here(year,'model_runs','03b_projection'),
+           # sdir =x,
+           data_file="projection_data_dump.dat",
+           data= mod,
+           NSEX=NSEX, NAGE=NAGE, Nfishery=Nfishery,
+           fleets=fleets, rec_age=rec_age, max_age=max_age, FY=FY,
+           rec_FY=rec_FY, rec_LY_decrement=rec_LY_decrement,
+           spawn_month=spawn_month, Fratios=Fratios)
+
+setwd(here::here(year,'model_runs','03b_projection'))
+shell('spm')
 
 rec_table1 <-
   read.table(here::here(year,'model_runs','03b_projection','percentdb.out')) %>%
@@ -96,7 +129,7 @@ write.csv(rec_table, file = here::here(year,'model_runs','03b_projection',paste0
 
 # process results ----
 
-# create figures ----
+# misc figures ----
 
 
 ## catch with inset
