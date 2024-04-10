@@ -5,3 +5,5 @@
 *psv
 *plots/
 *dep
+.Rhistory
+.RData
