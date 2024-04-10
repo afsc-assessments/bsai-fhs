@@ -17,9 +17,8 @@ username_AKFIN <- showPrompt(title="Username", message="Enter your AKFIN usernam
 password_AKFIN <- askForPassword(prompt="Enter your AKFIN password:")
 AKFIN <- odbcConnect("AKFIN",username_AKFIN,password_AKFIN,  believeNRows = FALSE)
 
-
-source("C:/USERS/MAIA.KAPUR/WORK/ASSESSMENTS/NEWSBSS/FUNCTIONS/BIN_LEN_DATA.R")
-source("C:/USERS/MAIA.KAPUR/WORK/ASSESSMENTS/NEWSBSS/FUNCTIONS/BIN_AGE_DATA.R")
+source(here::here(year,'R','BIN_LEN_DATA.R'))
+source(here::here(year,'R','BIN_AGE_DATA.R'))
 ## Flathead sole only = 103, Rex = 105, Dover = 107, Bering flounder = 145, GT = 102, Deepsea sole = 110
 ## Setup options for flathead sole in BSAI
 final_year <- 2024
