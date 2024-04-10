@@ -76,54 +76,6 @@ message('reformatted and saved fishery age comp data to output/')
 ## downloads and formats everything
 source(here::here(year,'r','old_fishery_lcomp_routine.R'))
 
-# ages <- vroom::vroom(here::here(year, "data", "raw", "fsh_specimen_data.txt"), 
-#                      delim = ",", col_type = c(join_key = "c", 
-#                                                haul_join = "c", port_join = "c")) %>% 
-#   tidytable::filter(!is.na(age))
-#   # tidytable::ungroup()
-# 
-# flc0 <- vroom::vroom(here::here(year, "data", "raw", "fsh_length_data.txt"), 
-#                      delim = ",", 
-#                      col_type = c(haul_join = "c", 
-#                                   port_join = "c")) %>% 
-#   filter(sex != 'U') %>%
-#   
-#   tidytable::mutate(n_h = length(unique(na.omit(haul_join))) + 
-#                       length(unique(na.omit(port_join))), 
-#                     .by = year) %>% 
-#   tidytable::mutate(tot = sum(frequency)) %>%
-#   length(unique(na.omit(port_join))), .by = year) %>% 
-#   tidytable::summarise(n_s = mean(tot), 
-#                        n_h = mean(n_h), 
-#                        length_tot = sum(frequency), 
-#                        .by = c(sex,year, LENGTH_BIN)) %>% 
-#   tidytable::mutate(prop = length_tot/n_s) %>% 
-#   tidytable::left_join(expand.grid(sex = unique(.$sex), 
-#                                    year = unique(.$year), 
-#                                    length = unique(.$LENGTH_BIN)), .) %>% 
-#   tidytable::replace_na(list(prop = 0)) %>% 
-#   tidytable::mutate(SA_Index = 1, 
-#                     n_s = mean(n_s, na.rm = T), 
-#                     n_h = mean(n_h, na.rm = T), .by = year) %>% 
-#   tidytable::select(-length_tot) %>% 
-#   tidytable::pivot_wider(names_from = LENGTH_BIN, values_from = prop) 
-# 
-# 
-# flc0 %>% filter(sex == 'F') %>% select(-SA_Index) %>%
-#   merge(., flc0 %>% 
-#           filter(sex == 'M') %>% 
-#           select(-sex, -n_s,-n_h,-SA_Index), 
-#         by = 'year', all.y = FALSE) %>%
-#   arrange(year) %>%
-#   ## drop the years before 2000 since Lcomps are available
-#   mutate(Seas = 7, 
-#          FltSvy = ifelse(year %in% unique(fac0$year[which(fac0$year >= 2000)]), -1, 1),  
-#          Gender = 3, 
-#          Part = 0, 
-#          Nsamp = n_h) %>%
-#   select(Yr = year, Seas, FltSvy, Gender, Part, Nsamp, everything(), -sex, -n_s, -n_h) %>% 
-#  # write.csv(., file = here::here(year,'data','output','fsh_len_comp_ss3.csv'), row.names = FALSE)
-
 message('reformatted and saved fishery length comp data to output/')
 
 # Survey Data----
