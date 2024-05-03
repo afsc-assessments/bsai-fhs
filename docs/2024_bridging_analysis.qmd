@@ -102,7 +102,7 @@ SSplotSelex(m18.2cv33022w, fleets = 2, sexes = 1)
 
 This section of the script assumes that one has already downloaded and formatted the data one plans to use in the assesssment. To avoid separate scripts doing the same thing, I'm completing that step in `R/2024_analysis.R`, with a `source()` call to `R/bsai_fhs_wrangle_data`. I wrote some functions for the `afscdata` and `afscassess` packages that reshape those data frames into the SS3 format, which is also accomplished in that script.
 
-Bering Flounder is *not* included in the compositional data; Dr. Monnahan caught and corrected this issue in 2020. The total survey biomass and catches do include both species.
+Bering Flounder is *not* included in the compositional data.
 
 ### Age-Read triaging
 
@@ -584,8 +584,8 @@ Some initial steps are required to model dynamics through the present year. Thes
 -   In the `.dat` file set the `endyr` to 2024.
 -   In the `starter` file set the `max yr for sdreport outputs` to -1 (`endyr+1`)
 -   In the `.ctl` file move the `last year of main recdevs` to 2020
--   Update the `last_yr_fullbias_adj_in_MPD` to 2019.8 (will tune later)
--   Update the `first_recent_yr_nobias_adj_in_MPD` to 2020.3 (will tune later)
+-   In the `.ctl` file update the `last_yr_fullbias_adj_in_MPD` to 2019.8 (will tune later)
+-   In the `.ctl` file update the `first_recent_yr_nobias_adj_in_MPD` to 2020.3 (will tune later)
 
 To make this section more concise I am simply going to show the comparison plots all at once.
 
