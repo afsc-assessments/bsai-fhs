@@ -53,7 +53,7 @@ Model 18.2c (2020) had generic warnings about the `recr_dist` method, poor $F_{M
 ```{r include = TRUE, echo = FALSE,  warning = FALSE, message = FALSE}
 names(ss_compare$likelihoods)[c(1,2)] <- c('Model 18.2c (2020)', 'Model 18.2c (2020) - software transition')
 ss_compare$likelihoods[c(1:7,11),]
-SSplotComparisons(ss_compare, print = T, plotdir = here('docs','ss_version_bridge'), legendlabels = names(ss_compare$likelihoods)[c(1,2)], col = colvec)
+# SSplotComparisons(ss_compare, print = T, plotdir = here('docs','ss_version_bridge'), legendlabels = names(ss_compare$likelihoods)[c(1,2)], col = colvec)
 ```
 
 ::: panel-tabset
@@ -102,7 +102,7 @@ SSplotSelex(m18.2cv33022w, fleets = 2, sexes = 1)
 
 This section of the script assumes that one has already downloaded and formatted the data one plans to use in the assesssment. To avoid separate scripts doing the same thing, I'm completing that step in `R/2024_analysis.R`, with a `source()` call to `R/bsai_fhs_wrangle_data`. I wrote some functions for the `afscdata` and `afscassess` packages that reshape those data frames into the SS3 format, which is also accomplished in that script.
 
-Bering Flounder is *not* included in the compositional data.
+Bering Flounder is *not* included in the compositional data (consistent with the 2020 assessment).
 
 ### Age-Read triaging
 
@@ -110,7 +110,7 @@ Bering Flounder is *not* included in the compositional data.
 
 The two alternatives in this situation were to 1) disregard the fishery age-comps from 2022 & 2023 for this assessment, and devote all reading effort to the survey or 2) find a compromise (split) among the two fleets and years that doesn't amount to simply adding noise to the model.
 
-The figures below illustrate simulated composition data at varying levels of age-reads which I generated to determine the best way forward. We evaluated the resultant datasets based on how distinct they appeared from the full dataset. Our findings were as follows:
+The figures below illustrate simulated composition data at varying levels of age-reads which I generated to determine the best way forward. We evaluated the resultant datasets based on how distinct they appeared from the full dataset. This is highly rough & dirty. The approach did not account for haul/tow resampling, potential changes in the dynamics, nor impacts on the assessment. Our findings were as follows:
 
 -   Simply splitting the 750 otoliths evenly across years & fleets (187 reads each) results in a mis-represented plus group for the survey.
 -   Based on the data weights in the 2020 model, and the fact that survey CAALs are used to inform growth, it's intuitively preferable to assign more otolith reads to the survey data. This could range from completely ignoring the fishery data for these years to forming some sort of compromise among the datasets.
@@ -145,6 +145,7 @@ otodat <- read.csv(here::here(year,'data','user_input','otolith_reads_vs_aged.cs
 ```
 
 ### Simulated Fishery Ages
+
 
 ```{r eval = TRUE, echo = FALSE, include = TRUE, message = FALSE, warning = FALSE, fig.cap = "Experimental visualization of simulated fishery age-comp data using fewer otolith reads."}
 ## visualize the comps data with fewer samples
