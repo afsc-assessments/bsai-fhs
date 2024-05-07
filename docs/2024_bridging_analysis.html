@@ -92,6 +92,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#data-exploration" id="toc-data-exploration" class="nav-link" data-scroll-target="#data-exploration">Data Exploration</a>
   <ul class="collapse">
   <li><a href="#big-picture-data-notes" id="toc-big-picture-data-notes" class="nav-link" data-scroll-target="#big-picture-data-notes">Big-Picture Data Notes</a></li>
+  <li><a href="#age-read-triaging" id="toc-age-read-triaging" class="nav-link" data-scroll-target="#age-read-triaging">Age-Read triaging</a></li>
   <li><a href="#fishery-catches" id="toc-fishery-catches" class="nav-link" data-scroll-target="#fishery-catches">Fishery Catches</a></li>
   <li><a href="#fishery-length-compositions" id="toc-fishery-length-compositions" class="nav-link" data-scroll-target="#fishery-length-compositions">Fishery Length Compositions</a></li>
   <li><a href="#fishery-age-compositions" id="toc-fishery-age-compositions" class="nav-link" data-scroll-target="#fishery-age-compositions">Fishery Age Compositions</a></li>
@@ -246,8 +247,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="big-picture-data-notes">Big-Picture Data Notes</h2>
 <p>This section of the script assumes that one has already downloaded and formatted the data one plans to use in the assesssment. To avoid separate scripts doing the same thing, I’m completing that step in <code>R/2024_analysis.R</code>, with a <code>source()</code> call to <code>R/bsai_fhs_wrangle_data</code>. I wrote some functions for the <code>afscdata</code> and <code>afscassess</code> packages that reshape those data frames into the SS3 format, which is also accomplished in that script.</p>
 <p>Bering Flounder is <em>not</em> included in the compositional data (consistent with the 2020 assessment).</p>
-<section id="age-read-triaging" class="level3">
-<h3 class="anchored" data-anchor-id="age-read-triaging">Age-Read triaging</h3>
+</section>
+<section id="age-read-triaging" class="level2">
+<h2 class="anchored" data-anchor-id="age-read-triaging">Age-Read triaging</h2>
 <p><strong>Due to staffing issues</strong> we had to reduce the number of otoliths read for all sources in years 2022 and 2023. After consulting with the Age &amp; Growth team, they indicated they could read a <em>total</em> of about 750 BSAI FHS otoliths this year. This is a considerable reduction (~75%) given that normally we have about 600-800 otoliths for each source (survey and fishery) for each year. We normally read every collected otolith from each source, so there are not historical ratios to use for guidance.</p>
 <p>The two alternatives in this situation were to 1) disregard the fishery age-comps from 2022 &amp; 2023 for this assessment, and devote all reading effort to the survey or 2) find a compromise (split) among the two fleets and years that doesn’t amount to simply adding noise to the model.</p>
 <p>The figures below illustrate simulated composition data at varying levels of age-reads which I generated to determine the best way forward. We evaluated the resultant datasets based on how distinct they appeared from the full dataset. This is highly rough &amp; dirty. The approach did not account for haul/tow resampling, potential changes in the dynamics, nor impacts on the assessment. Our findings were as follows:</p>
@@ -258,15 +260,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>A compromise between these two approaches, shown in blue below, where the survey gets 225 age-reads per year, and the fishery gets 175 age-reads per year, result in satisfactory compositions for the survey but risk missing young fish from the fishery.</li>
 </ul>
 <p>After considering these results, Dr.&nbsp;Kapur decided in January 2024 to go with the very first option and <strong>assign all available reader time to the survey</strong>, with the understanding that a) the A&amp;G program could finish reading the leftover fishery otoliths for future assessment years, and b) we don’t expect these simulated datasets to have a strong influence on the terminal derived quantities given that recruitment deviations are set to zero for the last three years.</p>
+<p>J. Short then requested I provide a spreadsheet with the sampling routine to get to the ~375 otoliths per year, stating:</p>
+<blockquote class="blockquote">
+<p>You would think that a “random sample” would be a simple thing and mean the same to everyone, but it isn’t and it doesn’t. As you can imagine samples are not evenly distributed and can vary by sex and area. Also the surveys change sampling methods and it isn’t always apparent which one was used. That is why as a policy I insist that the age requestors do the sample selection. It would take me less time to do a random sample of 375 specimens than it would take to write this email but I believe it is worth ensuring we are on the same page. Attached is the specimen data for 2022 and 2023 EBS shelf flathead. Please indicate which ones you would like aged and send it back then I can get it ready for the age readers.</p>
+</blockquote>
+<p>I loaded that spreadsheet and did some EDA. The survey team was instructed to collect otoliths randomly by haul. Reassured by the following tables and figures, I did a simple random sample of the spreadsheet <em>for each year separately</em> without replacement and with no weights applied using <code>sample_n()</code>.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Otolith Collections thru Time</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Simulated Fishery Ages</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Simulated Survey Ages</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Otolith Collections thru Time</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Number of Otoliths by Area</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Mean Length of Collected Otoliths by Area</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">Percent Female Otoliths by Area</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false" href="">Simulated Fishery Ages</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-6" role="tab" aria-controls="tabset-2-6" aria-selected="false" href="">Simulated Survey Ages</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Historical numbers of Bering Sea otoliths collected and read, by source. Survey collections from the AI remain unread. There is variation in the proportion of collected fishery otoliths that were read through time. The survey has consistently read nearly all collected otoliths. The red bars are the proposed number of age-reads for 2022 and 2023 data.</figcaption>
 </figure>
 </div>
@@ -278,8 +285,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Experimental visualization of simulated fishery age-comp data using fewer otolith reads.</figcaption>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">The spatial distribution and coverage look reasonably even across years.</figcaption>
 </figure>
 </div>
 </div>
@@ -290,7 +297,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">There might be some older/larger fish further inshore but I am not seeing anything alarming.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  collection_year   `1`   `2`
+            &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+1            2022 0.428 0.572
+2            2023 0.472 0.528</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-2-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-5-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Experimental visualization of simulated fishery age-comp data using fewer otolith reads.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-6-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Experimental visualization of simulated survey age-comp data using fewer otolith reads. These are simulated using marginal age comp data from females in 2019.</figcaption>
 </figure>
 </div>
@@ -299,7 +341,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-</section>
 </section>
 <section id="fishery-catches" class="level2">
 <h2 class="anchored" data-anchor-id="fishery-catches">Fishery Catches</h2>
@@ -321,7 +362,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight squashing of observations towards older ages; the input sample sizes are essentially unchanged.</figcaption>
 </figure>
 </div>
@@ -333,7 +374,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight squashing of observations towards older ages; the input sample sizes are essentially unchanged.</figcaption>
 </figure>
 </div>
@@ -361,7 +402,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">The discrepancies between the number of hauls is more pronounced earlier in the time series; the afscdata() approach seems to have slightly higher values. This is likely due to filtration steps in the old code that I cannot test by hand. There are missing years in the 2000s because those data were not fit to (in lieu of age data).</figcaption>
 </figure>
 </div>
@@ -383,7 +424,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight squashing of observations towards older ages; the input sample sizes are essentially unchanged.</figcaption>
 </figure>
 </div>
@@ -395,7 +436,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">By manual inspection of the values and data plots, the outcomes are very similar, but not identical. It appears there is a slight squashing of observations towards older ages; the input sample sizes are essentially unchanged.</figcaption>
 </figure>
 </div>
@@ -466,7 +507,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package.</figcaption>
 </figure>
 </div>
@@ -474,7 +515,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-30-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-34-2.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package.</figcaption>
 </figure>
 </div>
@@ -482,7 +523,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-30-3.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-34-3.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package.</figcaption>
 </figure>
 </div>
@@ -490,7 +531,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-30-4.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-34-4.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package.</figcaption>
 </figure>
 </div>
@@ -502,7 +543,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
@@ -510,7 +551,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-31-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-35-2.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
@@ -518,7 +559,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-31-3.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-35-3.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
@@ -526,7 +567,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-31-4.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-35-4.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
@@ -552,7 +593,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="tabset-6-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-6-tab">
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" style="width:150.0%"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" style="width:150.0%"></p>
 </div>
 </div>
 </div>
@@ -571,7 +612,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package (next tab).</figcaption>
 </figure>
 </div>
@@ -579,7 +620,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-37-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-41-2.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (shown here) vs.&nbsp;those pulled using the gapindex package (next tab).</figcaption>
 </figure>
 </div>
@@ -591,7 +632,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
@@ -599,7 +640,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-38-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-42-2.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Only trivial differences in this historical data provided to the original assessment (previous tab) vs.&nbsp;those pulled using the gapindex package (shown here).</figcaption>
 </figure>
 </div>
@@ -625,7 +666,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="tabset-7-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-6-tab">
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid" width="672"></p>
+<p><img src="2024_bridging_analysis_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -677,24 +718,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="data-bridging-cumulative" class="level2">
 <h2 class="anchored" data-anchor-id="data-bridging-cumulative">Data bridging (cumulative)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SSplotComparisons</span>(compsummary_7, <span class="at">legendlabels =</span> llabs, <span class="at">indexPlotEach =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SSplotComparisons</span>(compsummary_7, <span class="at">legendlabels =</span> llabs, <span class="at">indexPlotEach =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="summary-bridging" class="level2">
 <h2 class="anchored" data-anchor-id="summary-bridging">Summary bridging</h2>
 <p>Post data, I tuned the rec-dev ramp and did 3 iterations of Francis weighting from scratch. Will re-do this one last time once all the new data are in but this helps us check for consistency.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SSplotComparisons(compsummary_8,</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                   legendlabels = llabs2,</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                   indexPlotEach = TRUE,</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                   print = TRUE,</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                   plotdir = here::here(year, 'model_runs','02_bridging','02.08_18.2c_2020_ss3v33022w-newdata-biasramp-francis'))</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">SSplotComparisons</span>(compsummary_8, </span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">legendlabels =</span> llabs2, </span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">indexPlotEach =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">print =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SSplotComparisons(compsummary_8,</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                   legendlabels = llabs2,</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                   indexPlotEach = TRUE,</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                   print = TRUE,</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                   plotdir = here::here(year, 'model_runs','02_bridging','02.08_18.2c_2020_ss3v33022w-newdata-biasramp-francis'))</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">SSplotComparisons</span>(compsummary_8, </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">legendlabels =</span> llabs2, </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">indexPlotEach =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">print =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>

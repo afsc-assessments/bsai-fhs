@@ -104,7 +104,7 @@ This section of the script assumes that one has already downloaded and formatted
 
 Bering Flounder is *not* included in the compositional data (consistent with the 2020 assessment).
 
-### Age-Read triaging
+## Age-Read triaging
 
 **Due to staffing issues** we had to reduce the number of otoliths read for all sources in years 2022 and 2023. After consulting with the Age & Growth team, they indicated they could read a *total* of about 750 BSAI FHS otoliths this year. This is a considerable reduction (\~75%) given that normally we have about 600-800 otoliths for each source (survey and fishery) for each year. We normally read every collected otolith from each source, so there are not historical ratios to use for guidance.
 
@@ -119,8 +119,33 @@ The figures below illustrate simulated composition data at varying levels of age
 
 After considering these results, Dr. Kapur decided in January 2024 to go with the very first option and **assign all available reader time to the survey**, with the understanding that a) the A&G program could finish reading the leftover fishery otoliths for future assessment years, and b) we don't expect these simulated datasets to have a strong influence on the terminal derived quantities given that recruitment deviations are set to zero for the last three years.
 
+J. Short then requested I provide a spreadsheet with the sampling routine to get to the ~375 otoliths per year, stating: 
+
+> You would think that a "random sample" would be a simple thing and mean the same to everyone, but it
+isn't and it doesn't. As you can imagine samples are not evenly distributed and can vary by sex and area. Also the surveys change sampling methods and it isn't always apparent which one was used. That is why as a policy I insist that the age requestors do the sample selection. It would take me less time to do a random sample of 375 specimens than it would take to write this email but I believe it is worth ensuring we are on the same page. Attached is the specimen data for 2022 and 2023 EBS shelf flathead. Please indicate which ones you would like aged and send it back then I can get it ready for the age readers. 
+
+I loaded that spreadsheet and did some EDA. The survey team was instructed to collect otoliths randomly by haul. Reassured by the following tables and figures, I did a simple random sample of the spreadsheet *for each year separately* without replacement and with no weights applied using `sample_n()`. 
+
+```{r eval = TRUE, echo = FALSE, include = TRUE, message = FALSE, warning = FALSE}
+## Emailed as .xlsx from Jon on 06 May 2024
+oto_coll <-  read.csv(here::here(year,'data','user_input','2022 and 2023 EBS shelf flathead sole Kapur.csv'))
+usa <- map_data("world") %>%
+  filter(long  > -180 & long < -140, lat > 50 & lat < 75 ) 
+oto_coll_sp <- oto_coll %>%
+  mutate(lat2 = round(latitude),
+         # lon2 = ifelse(round(longitude) < 0, round(longitude)*-1,round(longitude)) 
+         lon2 = round(longitude)) %>%
+  group_by(lat2, lon2,collection_year) %>%
+  summarise(n=n(), mean_length = mean(length), percent_fem = sum(sex == 1)/n ) 
+
+# oto_coll_22 <- filter(oto_coll, collection_year == 2022) %>% sample_n(., size = 375, replace = FALSE)
+# oto_coll_23 <- filter(oto_coll, collection_year == 2023) %>% sample_n(., size = 375, replace = FALSE)
+# write.csv(bind_rows(oto_coll_22,oto_coll_23), file =  here::here(year,'data','user_input','BSAI FHS 2022-2023 EBS Survey Otolith Subsampling_05072024.csv'), row.names = FALSE)
+```
 
 ::: panel-tabset
+
+
 ### Otolith Collections thru Time
 
 ```{r eval = TRUE, echo = FALSE, include = TRUE, message = FALSE, warning = FALSE, fig.cap = "Historical numbers of Bering Sea otoliths collected and read, by source. Survey collections from the AI remain unread. There is variation in the proportion of collected fishery otoliths that were read through time. The survey has consistently read nearly all collected otoliths. The red bars are the proposed number of age-reads for 2022 and 2023 data."}
@@ -142,6 +167,42 @@ otodat <- read.csv(here::here(year,'data','user_input','otolith_reads_vs_aged.cs
   facet_grid(source~.)+
           geom_bar(data = subset(otodat, Year>2021 & variable == 'Aged'),position = 'stack', stat = 'identity', width = 1, fill = 'red', color = 'red') 
 
+```
+
+### Number of Otoliths by Area
+```{r eval = TRUE, echo = FALSE, include = TRUE, message = FALSE, warning = FALSE, fig.cap = "The spatial distribution and coverage look reasonably even across years. "}
+ggplot(data = usa) +
+  geom_point(data =oto_coll_sp,alpha = 0.5,
+             aes(x = lon2, y = lat2, size = n, color = factor(collection_year))) +
+  scale_color_manual(values = c('dodgerblue4','goldenrod'))+
+  geom_polygon(data = usa, aes(x = long, y = lat, group = group),   fill = 'black')+
+  labs(color = 'Collection Year', size = 'Number Otoliths Collected') +
+  facet_wrap(~collection_year)
+```
+### Mean Length of Collected Otoliths by Area
+```{r eval = TRUE, echo = FALSE, include = TRUE, message = FALSE, warning = FALSE, fig.cap = "There might be some older/larger fish further inshore but I am not seeing anything alarming."}
+ggplot(data = usa) +
+  geom_point(data =oto_coll_sp,alpha = 0.5,
+             aes(x = lon2, y = lat2, size = mean_length, color = factor(collection_year))) +
+  scale_color_manual(values = c('dodgerblue4','goldenrod'))+
+  geom_polygon(data = usa, aes(x = long, y = lat, group = group),   fill = 'black')+
+  labs(color = 'Collection Year', size = 'Mean Length, cm') +
+  facet_wrap(~collection_year)
+```
+
+### Percent Female Otoliths by Area
+```{r eval = TRUE, echo = FALSE, include = TRUE, message = FALSE, warning = FALSE, fig.cap = "The average sex ratio in the collections is not alarmingly different year to year."}
+oto_sexr <- oto_coll %>% 
+    filter(sex!=3) %>% 
+  mutate(total = n(), .by = c(collection_year,haul)) %>%
+  mutate(freq = 1/total)  
+
+oto_sexr %>% 
+    summarise(total = n(), .by = c(collection_year,sex)) %>%
+  mutate(totaly = sum(total),.by = collection_year) %>%
+  mutate(proportion = round(total/totaly,3)) %>%
+  select(collection_year,sex, proportion) %>%
+  tidyr::pivot_wider(names_from = sex, values_from = proportion, id_cols = collection_year)
 ```
 
 ### Simulated Fishery Ages
