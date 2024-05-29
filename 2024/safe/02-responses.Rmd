@@ -8,11 +8,11 @@ We provide a risk table in the Harvest Recommendations section. After completing
 
 >*1. Continue exploration of environmental drivers of FHS stock distribution and behavior, as average summer bottom temperature appears inadequate (SSC, December 2018)*
 
-This is out of scope for the present assessment, and might be addressed for the next Full assessment (2028).
+This is out of scope for the present assessment, but might be addressed for the next Full assessment (2028).
 
 >*2. Investigate data from the NBS for Bering Flounder (SSC, December 2018)*
 
-Lee to investigate.
+**LEE CRONIN-FINE TO INVESTIGATE AND FILL IN TEXT HERE.**
 
 >*3. Consider separately modeling the pelagic trawl fishery with its own selectivity curve (Plan Team, November 2020)*
 
