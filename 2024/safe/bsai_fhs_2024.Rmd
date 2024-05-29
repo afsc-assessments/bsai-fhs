@@ -77,8 +77,8 @@ ofl_24 = execsumm[1,'ofl']
 b35_24 =  execsumm[1,'sb35']  # aka MSST
 ssb_24 <- execsumm[1,'ssb_proj'] # current s biomass
 tb_24 <- execsumm[1,'tb_proj'] # total biomass
-abc_22 <- 36196; abc_22p <- prettyNum(abc_22,big.mark=',') ## 2022 model's ABC for 2024
-abc_24 <- execsumm[1,'abc'] ## this year's ABC for 2024 
+abc_23 <- 68203; abc_22p <- prettyNum(abc_23,big.mark=',') ## 2023 model's ABC for 2025 FROM FEDERAL REGISTER 
+abc_25 <- execsumm[1,'abc'] ## this year's ABC for 2025 
 yld_rat <- read.csv(here::here(year,'data','output','yld_rat.csv')) ## ratio is 2023 expansion; yld is 3 yr catch/tac avg
 
 ## catch in 2022
