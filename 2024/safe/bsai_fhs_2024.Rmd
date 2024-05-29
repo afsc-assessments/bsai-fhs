@@ -67,12 +67,12 @@ library(dplyr)
 # globals
 species = params$species
 year = 2024
-date = 'October 22, 2024'
+date = 'October XX, 2024'
 model = '18.2c_2024'
 end_proj = year + 15
 
 ## read in exec summ and assign derived quants
-execsumm <-  read.csv(here::here(year,'mgmt',model,'processed','exec_summ.csv'))
+execsumm <-  read.csv(here::here(year,'model_runs', '03b_projection','2024-04-03-exec_summ.csv'))
 ofl_24 = execsumm[1,'ofl'] 
 b35_24 =  execsumm[1,'sb35']  # aka MSST
 ssb_24 <- execsumm[1,'ssb_proj'] # current s biomass
