@@ -73,10 +73,10 @@ end_proj = year + 15
 
 ## read in exec summ and assign derived quants
 execsumm <-  read.csv(here::here(year,'model_runs', '03b_projection','2024-04-03-exec_summ.csv'))
-ofl_24 = execsumm[1,'ofl'] 
-b35_24 =  execsumm[1,'sb35']  # aka MSST
-ssb_24 <- execsumm[1,'ssb_proj'] # current s biomass
-tb_24 <- execsumm[1,'tb_proj'] # total biomass
+ofl_25 = execsumm[1,'ofl'] 
+b35_25 =  execsumm[1,'sb35']  # aka MSST
+ssb_25 <- execsumm[1,'ssb_proj'] # current s biomass
+tb_25 <- execsumm[1,'tb_proj'] # total biomass
 abc_23 <- 68203; abc_22p <- prettyNum(abc_23,big.mark=',') ## 2023 model's ABC for 2025 FROM FEDERAL REGISTER 
 abc_25 <- execsumm[1,'abc'] ## this year's ABC for 2025 
 yld_rat <- read.csv(here::here(year,'data','output','yld_rat.csv')) ## ratio is 2023 expansion; yld is 3 yr catch/tac avg
