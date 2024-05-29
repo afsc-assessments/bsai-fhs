@@ -12,7 +12,7 @@ safe0 <- read.csv(here::here(year,'model_runs','03b_projection', '2024-04-03-exe
   data.frame() %>%
   bind_cols(safe_2023[4:14,],.) %>%
   select(V1, everything(),-metric) %>% 
-  as_data_frame() %>%
+  as.data.frame() %>%
   rbind(data.frame(V1 = c('M', 'Tier'), V2 = c(0.2,'3a'),V3 = c(0.2,'3a'),X2025 = c(0.2,'3a'),X2026 = c(0.2,'3a')),.) %>%
   select(-1)
 
