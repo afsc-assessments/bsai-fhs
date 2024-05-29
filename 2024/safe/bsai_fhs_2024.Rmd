@@ -81,7 +81,7 @@ tb_25 <- execsumm[1,1] # surrent total biomass
 abc_23 <- 68203; abc_22p <- prettyNum(abc_23,big.mark=',') ## 2023 model's ABC for 2025 FROM FEDERAL REGISTER 
 abc_25 <- execsumm[10,1] ## this year's ABC for 2025 
 
-## catch in 2023 (final observation)
+## catch in 2023, y-1 (in model)
 c0 <- mod_sum$catch %>% filter(Yr == 2023) %>% select(Obs) %>% as.numeric()
 
 ## catches used in projection            
@@ -96,20 +96,6 @@ c1 <- pcatch[1] # estimated catch in current year
 c2 <- pcatch[2] # proj catch year + 1
 c3 <- pcatch[3] # proj catch year + 2
 
-## read in rema and apportionment stuff
-load(here::here(year, 'mgmt',model,'apport','2023-09-16-rema_output.rdata')) ## apport_out
-rema_props <- apport_out$proportion_biomass_by_strata
-
-
-
-
-## load three relevant tables to env(abc_apport, abc_apport_wyax, ofl_apport)
-invisible(lapply(list.files(here::here(year, 'mgmt',model,'processed'),pattern = '_apport',full.names = TRUE), 
-       FUN = function(x){
-         y <- read.csv(x) 
-         assign(x=gsub('.csv','',basename(x)), value  =y, envir = .GlobalEnv);rm(y);rm(x)
-       }
-))
 ```
  
 ```{r, child="01-summary.Rmd", eval = T}
