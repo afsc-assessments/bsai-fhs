@@ -68,8 +68,10 @@ fleets=1					# fleet index number (associated with commercial fishery)
 rec_age=3					# assumed age at recruitment
 max_age=21					# maximum age in model
 NAGE=length(rec_age:max_age)			# number of ages
+# FY=1964 					# first year used to subset SSB, per memo this is always 1977 but was 1964 in prev assessments
+# rec_FY=1964					# first year used to subset recruitment, per memo this is always 1977 but was 1964 in prev assessments
 FY=1964 					# first year used to subset SSB, per memo this is always 1977, 1964 for consistency
-rec_FY=1964					# first year used to subset recruitment
+rec_FY=1977					# first year used to subset recruitment
 rec_LY_decrement=0				# value subtracted from assessment final year to subset recruitment vector
 spawn_month=1					# spawning month
 Fratios=1            				# Proportion F per fishery
@@ -86,8 +88,8 @@ spp="BSAI_flathead"
 ## and ensure the catches are specified in spm.dat
 write_proj(dir=here::here(year,'model_runs','03b_projection'),
            # sdir =x,
-           data_file="projection_data_dump.dat",
-           data= mod,
+           data_file=paste0(Sys.Date(),"-projection_data.dat"),
+           data= mod18.2c_2024,
            NSEX=NSEX, NAGE=NAGE, Nfishery=Nfishery,
            fleets=fleets, rec_age=rec_age, max_age=max_age, FY=FY,
            rec_FY=rec_FY, rec_LY_decrement=rec_LY_decrement,
