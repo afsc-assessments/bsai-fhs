@@ -73,7 +73,7 @@ mod18.2c_2024 <- r4ss::SS_output(here::here(year,'mgmt',model), verbose = FALSE)
 end_proj <- year + 15
 
 ## read in exec summ and assign derived quants
-execsumm <-  read.csv(here::here(year,'model_runs','03b_projection','2024-04-03-exec_summ.csv'))[,2:3]
+execsumm <-  read.csv(here::here(year,'model_runs','03b_projection','2024-05-29-exec_summ.csv'))[,2:3]
 ofl_25 <- round(execsumm[9,1])
 b35_25 <-  execsumm[5,1]  # aka MSST or biomass at ofl
 ssb_25 <- execsumm[2,1] # current spawning biomass
