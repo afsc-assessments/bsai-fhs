@@ -12,23 +12,40 @@ The following table summarizes the data used for this assessment.
 
 ```{r}
 
-data.frame(Source = c(rep("NMFS Groundfish survey", 2),
-                      rep("U.S. trawl fishery", 3)),
-           Data = c("Survey biomass",
-                    "Age composition",
-                    "Catch",
-                    "Age composition",
-                    "Length composition"),
-           Years = c("1990-1999 (triennial), 2001-2023 (biennial)",
-                     "1990, 1993, 1996, 1999, 2003, 2005, 2007, 2009, 2011, 2013, 2015, 2017, 2019, 2021",
-                     "1961-2023",
-                     "1990, 1998-2002, 2004, 2005, 2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022",
-                     "1963-1977, 1991-1997"))  %>% 
+data.frame(Source = c(rep("NMFS Aleutian Islands Groundfish Trawl Survey", 1),
+                      rep("NMFS Bering Sea Shelf Groundfish Survey (standard survey area only; excludes survey strata 70, 81, 82, 90, 140, 150, and 160)", 3),
+                      rep("U.S. trawl fisheries",3),
+                      "Foreign trawl fisheries in the BSAI"),
+           Data = c("Survey biomass (linear regression used to combine BS shelf survey estimates with AI survey estimates for a single survey biomass index)",
+                    "Survey biomass (linear regression used to combine BS shelf survey estimates with AI survey estimates for a single survey biomass index)                        ",
+                    "Conditional age-at-length composition", 
+                    "Marginal length composition",
+                    "Catch (pelagic and non-pelagic trawl in the Bering Sea and Aleutian Islands; a very small amount of catch is taken with hook and line and is included in the total catch biomass)",
+                    "Marginal age composition (Bering Sea only; non-pelagic trawl only)",
+                    "Marginal length composition (Bering Sea only; non-pelagic trawl only)",
+                    "Catch (Bering Sea and Aleutian Islands; trawl)"),
+           Species = c("Flathead only; no Bering flounder were caught in the Aleutian Islands",
+                       "Flathead sole and Bering flounder combined",
+                       "Flathead sole only", 
+                       "Flathead sole only",
+                       "Flathead sole and Bering flounder combined",
+                       "Flathead sole only",
+                       "Flathead sole only",
+                       "Flathead sole and Bering flounder combined"),
+           Years = c("1983, 1986, 1991-2000 (triennial), 2002-2006 (biennial), 2010-2022 (biennial)",
+                     "1982-2019, 2021-2023 (except 2020)",
+                     "1982, 1985, 1992-1995, 1999-2019, 2021", 
+                    "1982-2019, 2021-2023 (except 2020)",
+                    "1963-2024",
+                    "2000, 2001, 2004-2007,2009-2021",
+                    "1977-1999, 2002-2003, 2008, 2020-2023",
+                    "1964-1987"))  %>% 
   flextable::flextable() %>% 
-    flextable::width(j = ~ Source, width = 1) %>% 
-    flextable::width(j = ~ Data, width = 1.5) %>% 
-   flextable::width(j = ~ Years, width = 4) %>% 
-   flextable::merge_v(j = 1) %>% 
+  flextable::width(j = ~ Source, width = 1) %>% 
+  flextable::width(j = ~ Species, width = 1.5) %>% 
+  flextable::width(j = ~ Data, width = 1.5) %>% 
+  flextable::width(j = ~ Years, width = 4) %>% 
+  flextable::merge_v(j = 1) %>% 
   flextable::font(fontname = "Times", part = "all") %>% 
   flextable::fontsize(size = 10) %>% 
   flextable::theme_vanilla() %>% 
