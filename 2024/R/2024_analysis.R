@@ -60,7 +60,7 @@ lapply(list.files(here::here(year,'r',"proj_functions/"), full.names = T, patter
 
 # Write proj files ----
 
-mod <- SS_output(here::here(year,'mgmt',curr_mdl_fldr), verbose = F)
+mod18.2c_2024 <- SS_output(here::here(year,'mgmt',curr_mdl_fldr), verbose = F)
 ## passed to write_proj function
 NSEX=2						# number of sexes used in assessment model
 Nfishery=1					# number of fisheries(fleets) #This was set equal to 2
