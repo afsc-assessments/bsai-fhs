@@ -84,8 +84,10 @@ nproj=14			# number of projection years ALSO USED BY get_proj_res
 spp="BSAI_flathead"
 
 ## this will give you the general values, but mightn't be perfectly formatted
-## simply paste the right values into projection_data.dat
-## and ensure the catches are specified in spm.dat
+## YOU WILL NEED TO paste the right values into projection_data.dat
+## if you get an indexing error there is probably a duplication of the recruitment info
+## towards the bottom; just delete it
+## and ensure the catches are specified in spm.dat before re-running the projections
 write_proj(dir=here::here(year,'model_runs','03b_projection'),
            # sdir =x,
            data_file=paste0(Sys.Date(),"-projection_data.dat"),
@@ -96,7 +98,7 @@ write_proj(dir=here::here(year,'model_runs','03b_projection'),
            spawn_month=spawn_month, Fratios=Fratios)
 
 setwd(here::here(year,'model_runs','03b_projection'))
-shell('spm')
+shell('spm') ## this will give an "error code" even though it ran
 
 rec_table1 <-
   read.table(here::here(year,'model_runs','03b_projection','percentdb.out')) %>%
@@ -127,7 +129,8 @@ rec_table[3:5,2:3]<-rec_table[3:5,2:3]/2
 rec_table <-rec_table[c(12,6,3,4,5,2,1,1,10,9,9),] 
 
 # rec_table[c(1:5,9:11),2:3] <-formatC(rec_table[c(1:5,9:11),2:3] , format="d", big.mark=",") 
-write.csv(rec_table, file = here::here(year,'model_runs','03b_projection',paste0(Sys.Date(),'-exec_summ.csv')), row.names=FALSE)
+write.csv(rec_table, 
+          file = here::here(year,'model_runs','03b_projection',paste0(Sys.Date(),'-exec_summ.csv')), row.names=FALSE)
 
 
 # process results ----
