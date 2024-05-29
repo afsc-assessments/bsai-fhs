@@ -65,21 +65,21 @@ library(safe)
 library(here)
 library(dplyr)
 # globals
-species = params$species
-year = 2024
-date = 'October XX, 2024'
-model = '18.2c_2024'
-end_proj = year + 15
+species <- params$species
+year <- 2024
+date <- 'October XX, 2024'
+model <- '18.2c_2024'
+mod_sum <- r4ss::SS_output(here::here(year,'mgmt',model), verbose = FALSE)
+end_proj <- year + 15
 
 ## read in exec summ and assign derived quants
 execsumm <-  read.csv(here::here(year,'model_runs','03b_projection','2024-04-03-exec_summ.csv'))
-rownames(execsumm) <- execsumm$metric
 ofl_25 <- execsumm[9,1] 
 b35_25 <-  execsumm[5,1]  # aka MSST or biomass at ofl
 ssb_25 <- execsumm[2,1] # current spawning biomass
 tb_25 <- execsumm[1,1] # surrent total biomass
 abc_23 <- 68203; abc_22p <- prettyNum(abc_23,big.mark=',') ## 2023 model's ABC for 2025 FROM FEDERAL REGISTER 
-abc_25 <- execsumm[1,'ABC'] ## this year's ABC for 2025 
+abc_25 <- execsumm[10,1] ## this year's ABC for 2025 
 
 ## catch in 2022
 c0 <- round(as.numeric(strsplit(readLines(here::here(year,'mgmt',model,'goa_pop_2023.dat'))[47]," ")[[1]][62]))
