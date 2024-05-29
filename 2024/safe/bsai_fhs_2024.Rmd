@@ -81,15 +81,16 @@ tb_25 <- execsumm[1,1] # surrent total biomass
 abc_23 <- 68203; abc_22p <- prettyNum(abc_23,big.mark=',') ## 2023 model's ABC for 2025 FROM FEDERAL REGISTER 
 abc_25 <- execsumm[10,1] ## this year's ABC for 2025 
 
-## catch in 2022
-c0 <- round(as.numeric(strsplit(readLines(here::here(year,'mgmt',model,'goa_pop_2023.dat'))[47]," ")[[1]][62]))
-            
-pcatch <- readLines(here::here(year,'mgmt',model,'proj','model','data','goa_pop_spcat.dat'))[16:18] %>%
-  strsplit(.,'\t') %>% 
+## catch in 2023 (final observation)
+c0 <- mod_sum$catch %>% filter(Yr == 2023) %>% select(Obs) %>% as.numeric()
+
+## catches used in projection            
+pcatch <- readLines(here::here(year,'model_runs','03b_projection','spm.dat'))[54:56] %>%
+  strsplit(.,'\t') %>% ## split at tabs
   unlist() %>%
-  strsplit(.,'\\#') %>%
+  strsplit(.,' +') %>% ## split at spaces 
   unlist()
-pcatch<- round(as.numeric(pcatch[c(2,5,8)]))
+pcatch<- round(as.numeric(pcatch[c(2,4,6)]))
 
 c1 <- pcatch[1] # estimated catch in current year
 c2 <- pcatch[2] # proj catch year + 1
