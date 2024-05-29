@@ -245,14 +245,17 @@ message('saved raw production_data compositions to raw/')
 ## Construct Survey Biomass Index ----
 ### Linear Model ---- 
 
-index_raw <- rbind(production_biomass_subarea_standard, production_biomass_subarea_ai) %>%
+index_raw <- rbind(production_biomass_subarea_standard, 
+                   production_biomass_subarea_ai) %>%
   tidyr::pivot_wider(names_from=SURVEY, 
                      values_from=c(BIOMASS_MT, BIOMASS_VAR)) %>%
-  mutate(sd_EBS=sqrt(BIOMASS_VAR_EBS ), 
+  mutate(sd_EBS=sqrt(BIOMASS_VAR_EBS_SHELF), 
          sd_AI=sqrt(BIOMASS_VAR_AI)) %>%
-  select(year=YEAR, biomass_EBS = BIOMASS_MT_EBS, biomass_AI = BIOMASS_MT_AI, sd_EBS, sd_AI)
+  select(year=YEAR, biomass_EBS = BIOMASS_MT_EBS_SHELF, biomass_AI = BIOMASS_MT_AI, sd_EBS, sd_AI)
 
 ## Do a linear regression to get missing AI years
+## note that we only interpolate in years with at least one survey,
+## thus 2020 will be empty no matter what.
 z1 <- subset(index_raw, !is.na(biomass_AI))
 z2 <- subset(index_raw, is.na(biomass_AI))
 lmbio <- lm(biomass_AI~biomass_EBS, data=z1)
