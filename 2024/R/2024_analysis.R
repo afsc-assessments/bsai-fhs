@@ -59,7 +59,7 @@ source(here::here(year,'r','bsai_fhs_wrangle_data.R'))
 lapply(list.files(here::here(year,'r',"proj_functions/"), full.names = T, pattern = ".r$"),  source) 
 
 # Write proj files ----
-
+#* projection_data.dat ----
 mod18.2c_2024 <- SS_output(here::here(year,'mgmt',curr_mdl_fldr), verbose = F)
 ## passed to write_proj function
 NSEX=2						# number of sexes used in assessment model
@@ -96,6 +96,52 @@ write_proj(dir=here::here(year,'model_runs','03b_projection'),
            fleets=fleets, rec_age=rec_age, max_age=max_age, FY=FY,
            rec_FY=rec_FY, rec_LY_decrement=rec_LY_decrement,
            spawn_month=spawn_month, Fratios=Fratios)
+
+#* future catches for spm.dat ----
+## the latest data are available at: https://www.fisheries.noaa.gov/alaska/commercial-fishing/fisheries-catch-and-landings-reports-alaska#bsai-groundfish
+## scroll to BSAI Groundfish > catches by week > click on 2024 
+weekly_catch_files <- list.files(here::here(year,'data','raw','weekly_catches'), 
+                             full.names=TRUE)
+test <- lapply(1:length(weekly_catch_files), function(i){
+  skip <- grep('ACCOUNT.NAME', readLines(weekly_catch_files[i]))-1
+  data.frame(read.table(weekly_catch_files[i], skip=skip, header=TRUE, sep=',',
+                        stringsAsFactors=FALSE))
+})
+weekly_catches <- do.call(rbind, test)
+names(weekly_catches) <- c('species', 'date', 'catch')
+weekly_catches <- weekly_catches %>%
+  ## No species for Bering flounder, probably in FHS already
+  filter(grepl("Flathead", x=species)) %>%
+  mutate(date=lubridate::mdy(date), 
+         week=lubridate::week(date),  
+         year=lubridate::year(date))
+## catch so far this year
+catch_this_year <- weekly_catches %>% 
+  filter(year==this_year) %>%
+  pull(catch) %>% 
+  sum
+## average catch last five years
+average_catch <- weekly_catches %>% 
+  filter(year %in% (this_year-5):this_year) %>%
+  summarise(total_catch = sum(catch), .by = year) %>%
+  summarise(mean(total_catch)) %>%
+  as.numeric()
+
+## Get average catch between now and end of year for previous 5 years
+catch_to_add <- weekly_catches %>% 
+  filter(year>=this_year-5 & week > lubridate::week(lubridate::today())) %>%
+  group_by(year) %>% 
+  summarize(catch=sum(catch), .groups='drop') %>%
+  pull(catch) %>% mean
+message("Predicted ", this_year, " catch= ", round(catch_this_year+ catch_to_add,0)) ##9272
+
+## what to paste into bottom of spm.dat 
+catch_proj <- cbind(year = c(this_year+(0:2)),
+                    catch = c(round(catch_this_year+catch_to_add),
+                              round(average_catch),
+                              round(average_catch)))
+
+
 
 setwd(here::here(year,'model_runs','03b_projection'))
 shell('spm') ## this will give an "error code" even though it ran
