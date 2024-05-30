@@ -70,7 +70,7 @@ round(tail(SS_catch))
 ## For projection model need to predict total catches in this
 ## year. Use weekly catches from from previous years to get
 ## proportion of catch by week to estimate terminal year catch.
-##
+
 files <- list.files('data/weekly_catches/', full.names=TRUE)
 test <- lapply(1:length(files), function(i){
   skip <- grep('ACCOUNT.NAME', readLines(files[i]))-1
