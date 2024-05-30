@@ -144,7 +144,7 @@ catch_proj <- cbind(year = c(this_year+(0:2)),
 
 
 setwd(here::here(year,'model_runs','03b_projection'))
-shell('spm') ## this will give an "error code" even though it ran
+shell('spm') ## so long as you see "finished simulations..." you can ignore error
 
 rec_table1 <-
   read.table(here::here(year,'model_runs','03b_projection','percentdb.out')) %>%
