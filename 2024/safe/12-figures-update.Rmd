@@ -2,36 +2,37 @@
 
 # Figures
 
-```{r catch, fig.cap="Observed catches for POP for the entire time series (main figure) and since 1995 (inset).", eval = TRUE}
-knitr::include_graphics(here::here(year, 'mgmt', model, "figs",'catch_timeseries.png'))
+```{r catch, fig.cap="Observed catches for BSAI FHS.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "catch2 landings stacked.png"))
 ```
 
 ```{r survey, fig.cap="BS/AI Combined Trawl Survey observed biomass estimates with 95% sampling error confidence intervals for BSAI FHS (black points and vertical bars). Model expectations are shown in blue", eval = TRUE, out.width = "95%", out.height="80%"}
 knitr::include_graphics(here::here(mod_path,"plots", "index2_cpuefit_Survey.png"))
 ```
 
-```{r fishagecomps, fig.cap="Observed (colored bars) and predicted (black points) fishery age compositions for BSAI FHS.", eval = TRUE}
-knitr::include_graphics(here::here(mod_path,"plots", "comp_agefit__agregatted_across_time.png"))
+```{r fishagecomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery age compositions for BSAI FHS.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "comp_agefit__aggregated_across_time.png"))
 ```
 
-```{r fishlengthcomps, fig.cap="Observed (colored bars) and predicted (black points) fishery length (cm) compositions for BSAI FHS.", eval = TRUE}
-knitr::include_graphics(here::here(year,'mgmt', model, "figs", "fsh_length_comp.png"))
+```{r lengthcomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery and survey length (cm) compositions for BSAI FHS.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "comp_lenfit__aggregated_across_time.png"))
 ```
 
 ```{r survagecomps, fig.cap="Observed (colored bars) and predicted (black points) groundfish bottom trawl survey age compositions for BSAI FHS.", eval = TRUE}
-knitr::include_graphics(here::here(year,'mgmt', model, "figs", "srv_age_comp.png"))
+knitr::include_graphics(here::here(mod_path, "plots", "placeholder.jpg"))
 ```
 
 ```{r hists, fig.cap="Histograms (blue) of estimated posterior distributions and medians (vertical dashed lines) of key parameters derived from MCMC for BSAI FHS.", eval = TRUE}
-knitr::include_graphics(here::here(year,'mgmt', model, "figs", "hists_redux.png"))
+knitr::include_graphics(here::here(mod_path, "plots", "placeholder.jpg"))
 ```
 
 ```{r biofreccompare, fig.cap="Comparison of recruitment, fishing mortality rates, spawning and total biomass for the 2023 Update model (blue) and 2021 Full model (grey). The shaded ribbon represents the 95% quantile obtained via MCMC; Age-2 recruits and F rates were not included in the MCMC analysis in 2021, so those figures show the mean estimates only.", eval = TRUE}
-knitr::include_graphics(here::here(year,'mgmt', model, "figs", "bio_f_rec_compare.png"))
+knitr::include_graphics(here::here(mod_path, "plots", "placeholder.jpg"))
+
 ```
 
-```{r recdevs, fig.cap="Time series of recruitment deviations, 1975-2023, from the 2023 base model (blue) and 2021 base model (grey), with 95% intervals obtained via MCMC.", eval = TRUE}
-knitr::include_graphics(here::here(year,'mgmt', model, "figs", "recdevs.png"))
+```{r recdevs, fig.cap="Time series of recruitment deviations, from the 2024 base model (blue) and 2021 base model (grey), with 95% intervals.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "compare12_recdevs_uncertainty.png"))
 ```
 
 ```{r selex, fig.cap="Estimated selectivity curves, maturity-at-age and weight-at-age for BSAI FHS.", eval = TRUE}
