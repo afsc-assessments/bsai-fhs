@@ -72,12 +72,16 @@ model <- '18.2c_2024'
 mod18.2c_2024 <- r4ss::SS_output(here::here(year,'mgmt',model), verbose = FALSE)
 end_proj <- year + 15
 
-## read in exec summ and assign derived quants
+## read in exec summ and assign derived quants; these get populated in doc
 execsumm <-  read.csv(here::here(year,'model_runs','03b_projection','2024-05-30-exec_summ.csv'))[,2:3]
-ofl_25 <- round(execsumm[9,1])
+ofl_25 <- round(execsumm[9,1]) ## ofl in mt
+Fofl_25 <- round(execsumm[6,1],2)
+Fabc_25 <- round(execsumm[7,1],2)
+b0_25 <- round(execsumm[3,1]) ## unfished ssb, invariant across time
+b40_25 <- execsumm[4,1] ## biomass at abc
 b35_25 <-  execsumm[5,1]  # aka MSST or biomass at ofl
-ssb_25 <- execsumm[2,1] # current spawning biomass
-tb_25 <- execsumm[1,1] # surrent total biomass
+ssb_25 <- execsumm[2,1] # 2025 spawning biomass
+tb_25 <- execsumm[1,1] # 2025 total biomass
 abc_23 <- 68203; abc_23p <- prettyNum(abc_23,big.mark=',') ## 2023 model's ABC for 2025 FROM FEDERAL REGISTER 
 abc_25 <- round(execsumm[10,1]) ## this year's ABC for 2025 
 
