@@ -180,7 +180,19 @@ write.csv(rec_table,
 
 
 # process results ----
-
+#* re-create SS-plots ----
+##  ensure this folder gets named "plots/" or lookup won't work
+model <- '18.2c_2024'
+mod_path <- here::here(year,'mgmt',model)
+mod18.2c_2024 <- r4ss::SS_output(mod_path, verbose = FALSE)
+SS_plots(mod18.2c_2024)
+#* re-create comparison plots ----
+## will save these in the plots/ folder made above
+mod18.2c_2020 <- r4ss::SS_output(here::here(year,'mgmt','18.2c_2020'), verbose = FALSE)
+SSplotComparisons(SSsummarize(biglist = list(mod18.2c_2020,mod18.2c_2024)),
+                  legendlabels = c('2020 Model', '2024 Model'),
+                  col = c('grey22','blue'),
+                  png = TRUE, plotdir = here::here(mod_path,'plots'))
 # misc figures ----
 
 
