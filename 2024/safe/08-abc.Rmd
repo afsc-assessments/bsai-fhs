@@ -185,7 +185,7 @@ There have been no recent changes to spatial distribution of catch, percent of T
 
 #### Overfishing 
 
-The official catch estimate for the most recent complete year (`r year-1`) is `r prettyNum(c0,big.mark=",")` t. This is less than the `r year-1` OFL of `r prettyNum(45580,big.mark=",")` t. *The stock is not subject to overfishing.*
+The official catch estimate for the most recent complete year (`r year-1`) is `r prettyNum(c0,big.mark=",")` t. This is less than the `r year-1` OFL of `r prettyNum(82699,big.mark=",")` t. *The stock is not subject to overfishing.*
 
 #### Overfished (Harvest Scenario 6)
 
