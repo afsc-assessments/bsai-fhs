@@ -179,26 +179,6 @@ There have been no recent changes to spatial distribution of catch, percent of T
  
 *We do not recommend a reduction in ABC because the retrospective pattern in this assessment indicates an increasing population abundance, and the population is well above $B_{40\%}$.* We acknowledge that the current assessment model does not appropriately explain these dynamics at present.
 
-### Area Allocation of Harvests {#apportionment}
-
-#### Overview
-
-Apportionment of ABC and OFL among regulatory areas uses the random effects model ("REMA" version `0.1.0`) developed by Sullivan et. al. (2022); these estimates are then subdivided further to account for closed areas in the Eastern Gulf.  The Eastern Gulf is comprised of two sub-areas for apportionment purposes: the area west of $140^{\circ}W$ longitude ("West Yakutat") and the area east and southeast of $140^{\circ}W$ longitude ("East Yakutat and Southeast Outside", or "SEO"). Amendment 41 prohibited trawling in the latter area, so we re-calculate apportionment for the Eastern Gulf to consider the ratio of biomass both within and outside of the closed area. The Groundfish Plan Team recommended use of a weighted average so apportionment values do not change too dramatically with each new survey observation.
-
-The workflow to calculate allocation is as follows:
-
-  1. Apply the `REMA` model to estimate random effects parameters that control the variation of estimated biomass across years and areas, and is fit to the trawl survey biomass estimates (with associated variance) for the Western, Central, and Eastern GOA. The REMA model fits the survey data in each area well, except for the terminal value in the Eastern GOA, which is under-fit (see figure below). That observation is far outside the previous time series for that region, and the uncertainty is higher than previously observed. Both the observations and predictions indicate that most biomass is in the Central Gulf; biomass has decreased in the Central and Western Gulf, and increased in the Eastern Gulf. The estimated apportionment among areas have changed accordingly: `r round(100*subset(rema_props, year == 2023)[5],1)`% for the Western area (down from 6.8% in 2021), `r round(100*subset(rema_props, year == 2023)[3],1)`% for the Central area (down from 80.5% in 2021), and `r round(100*subset(rema_props, year == 2023)[4],1)`% for the Eastern area (up from 12.7% in 2021). 
-  
-These apportionment percentages correspond to recommended `r year+1` ABCs of `r prettyNum(appo0[1,'WGOA'],big.mark = ',')` t for the Western area, `r prettyNum(appo0[1,'CGOA'],big.mark = ',')` t for the Central area, and `r prettyNum(sum(appo0[1,c('EGOA_wyak', 'EGOA_seo')]),big.mark = ',')` t for the Eastern area.
-
-```{r fig.cap="Observed survey biomass with 95% confidence intervals (black points and error bars), and estimated fits from the REMA model with 95% confidence intervals (gold lines and ribbon) for three areas of the Gulf of Alaska.", eval = TRUE, out.width="80%",out.height="60%"}
-knitr::include_graphics(here::here(year,'mgmt',model,'apport','rema_outs_redux.png'))
-```
- 
-  2. Obtain the biomass ratios in the Eastern GOA between the open and closed areas (W. Yakutat versus E. Yakutat/SEO) from the last three calendar years (These ratios are provided by the survey program and are accessed via AKFIN). Using these values, first calculate a 4:6:9 weighted average of the mean ($\mu_w$) and upper limit of the 95% confidence interval ($\sigma_w$) for the W. Yakutat biomass ratio (assigning greater weight to more recent surveys). Then calculate a total ratio for use in apportionment via $\mu_w = 2 \sqrt{\sigma_w}$. The ratio for `r year+1` using survey observations from `r paste0(seq(year-4,year,2),collapse = ', ')` is 0.22, down from the ratio of 0.29 used in `r year-2`.  
-  
-Applying the biomass ratio to the `r year+1` [ABC](#oflabc) for the Eastern Gulf results in an ABC apportionment of `r prettyNum(appo0[1,'EGOA_wyak'],big.mark = ',')` t to the W. Yakutat area, with `r prettyNum(appo0[1,'EGOA_seo'],big.mark = ',')` t unharvested in the E. Yakutat/SEO. The `r year+1` OFL for POP, where $F_{OFL}$ = $F_{35\%}$=0.12), is `r prettyNum(appo0[3,'total'],big.mark = ',')`. Using the same approach as for ABCs, the `r year+1` OFL for the Western Gulf, Central Gulf, and W. Yakutat^[In 2012, the Plan Team and SSC recommended combined OFLs for the Western, Central, and West Yakutat areas (W/C/WYK) because the original rationale of an overfished stock no longer applied. However, because of concerns over stock structure, the OFL for SEO remained separate to ensure this unharvested OFL was not utilized in another area. The Council adopted these recommendations.] is `r prettyNum(appo0[3,'WGOA'],big.mark = ',')` t and `r prettyNum(appo0[3,'EGOA_seo'],big.mark = ',')` t in the Southeast/Outside area. 
-
 ### Status Determination
 
 > The status definitions under the MSFCMA have been truncated from this report. 
