@@ -6,23 +6,23 @@
 knitr::include_graphics(here::here(year, 'mgmt', model, "figs",'catch_timeseries.png'))
 ```
 
-```{r survey, fig.cap="NMFS Groundfish Survey observed biomass estimates with 95% sampling error confidence intervals for GOA POP (grey points and vertical bars). Model estimates are shown in black.", eval = TRUE, out.width = "95%", out.height="80%"}
-knitr::include_graphics(here::here(year,'mgmt', model, "figs", "srv1_biomass.png"))
+```{r survey, fig.cap="BS/AI Combined Trawl Survey observed biomass estimates with 95% sampling error confidence intervals for BSAI FHS (black points and vertical bars). Model expectations are shown in blue", eval = TRUE, out.width = "95%", out.height="80%"}
+knitr::include_graphics(here::here(mod_path,"plots", "index2_cpuefit_Survey.png"))
 ```
 
-```{r fishagecomps, fig.cap="Observed (colored bars) and predicted (black points) fishery age compositions for GOA POP.", eval = TRUE}
-knitr::include_graphics(here::here(year,'mgmt', model, "figs", "fsh_age_comp.png"))
+```{r fishagecomps, fig.cap="Observed (colored bars) and predicted (black points) fishery age compositions for BSAI FHS.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "comp_agefit__agregatted_across_time.png"))
 ```
 
-```{r fishlengthcomps, fig.cap="Observed (colored bars) and predicted (black points) fishery length (cm) compositions for GOA POP.", eval = TRUE}
+```{r fishlengthcomps, fig.cap="Observed (colored bars) and predicted (black points) fishery length (cm) compositions for BSAI FHS.", eval = TRUE}
 knitr::include_graphics(here::here(year,'mgmt', model, "figs", "fsh_length_comp.png"))
 ```
 
-```{r survagecomps, fig.cap="Observed (colored bars) and predicted (black points) groundfish bottom trawl survey age compositions for GOA POP.", eval = TRUE}
+```{r survagecomps, fig.cap="Observed (colored bars) and predicted (black points) groundfish bottom trawl survey age compositions for BSAI FHS.", eval = TRUE}
 knitr::include_graphics(here::here(year,'mgmt', model, "figs", "srv_age_comp.png"))
 ```
 
-```{r hists, fig.cap="Histograms (blue) of estimated posterior distributions and medians (vertical dashed lines) of key parameters derived from MCMC for GOA POP.", eval = TRUE}
+```{r hists, fig.cap="Histograms (blue) of estimated posterior distributions and medians (vertical dashed lines) of key parameters derived from MCMC for BSAI FHS.", eval = TRUE}
 knitr::include_graphics(here::here(year,'mgmt', model, "figs", "hists_redux.png"))
 ```
 
@@ -34,7 +34,7 @@ knitr::include_graphics(here::here(year,'mgmt', model, "figs", "bio_f_rec_compar
 knitr::include_graphics(here::here(year,'mgmt', model, "figs", "recdevs.png"))
 ```
 
-```{r selex, fig.cap="Estimated selectivity curves, maturity-at-age and weight-at-age for GOA POP.", eval = TRUE}
+```{r selex, fig.cap="Estimated selectivity curves, maturity-at-age and weight-at-age for BSAI FHS.", eval = TRUE}
 knitr::include_graphics(here::here(year,'mgmt', model, "figs", "selex_mat.png"))
 ```
 
