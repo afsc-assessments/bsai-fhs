@@ -187,6 +187,7 @@ model <- '18.2c_2024'
 mod_path <- here::here(year,'mgmt',model)
 mod18.2c_2024 <- r4ss::SS_output(mod_path, verbose = FALSE)
 SS_plots(mod18.2c_2024)
+
 #* re-create comparison plots ----
 ## will save these in the plots/ folder made above
 mod18.2c_2020 <- r4ss::SS_output(here::here(year,'mgmt','18.2c_2020'), verbose = FALSE)
@@ -194,7 +195,66 @@ SSplotComparisons(SSsummarize(biglist = list(mod18.2c_2020,mod18.2c_2024)),
                   legendlabels = c('2020 Model', '2024 Model'),
                   col = c('grey22','blue'),
                   png = TRUE, plotdir = here::here(mod_path,'plots'))
+
 # misc figures ----
+#* phase-plane plot ----
+## take all reference values from Proj, noting that refs to "ofl" correspond to "b35" therein
+ 
+## use proj values as denominators
+rec_table1 <-
+  read.table(here::here(year,'model_runs','03b_projection','percentdb.out')) %>%
+  as.data.frame(stringsAsFactors=FALSE) %>%
+  transmute(scenario=as.numeric(V2), year=as.numeric(V3), metric=V4,
+            value=as.numeric(V5)) %>%
+  filter(year %in% (this_year:(this_year+2)) & scenario==1 
+         &  metric %in% c('SSBMean','SSBFofl', 'SSBFabc', 'SSBF100', 'Fofl', 'Fabc', 'F_Mean')
+  ) %>%
+  arrange(year, metric) %>%
+  tidyr::pivot_wider(names_from=year, values_from=value)
+
+b35 <- as.numeric(subset(rec_table1, metric == 'SSBFofl')[,'2025']) ## in mt
+f35 <- as.numeric(subset(rec_table1, metric == 'Fofl')[,'2025'] )
+b100 <- as.numeric(subset(rec_table1, metric == 'SSBF100')[,'2025']) ## in mt
+
+pp_dat <- mod18.2c_2024$timeseries %>% 
+  dplyr::select(Yr, SpawnBio, Fy = `F:_1`) %>%
+  filter(Yr > 1977  ) %>%
+  mutate(SB_B35 = SpawnBio/(b35), F_F35 = Fy/f35, type = 'aa') %>%
+  arrange(., Yr)
+
+## fill in yr, spawnbio, fy, b/b35, f/f35, type for proj years
+## note that SS3 auto-populates yr 2025 but we want to overwrite it with proj outputs.
+
+pp_dat[pp_dat$Yr == 2025,] <- c(2025, 
+                              as.numeric(subset(rec_table1, metric == 'SSBMean')[,'2025']),
+                              as.numeric(subset(rec_table1, metric == 'F_Mean')[,'2025']),
+                              as.numeric(subset(rec_table1, metric == 'SSBMean')[,'2025']/b35),
+                              as.numeric(subset(rec_table1, metric == 'F_Mean')[,'2025']/f35),
+                              'aa') 
+
+pp_dat <- bind_rows(pp_dat, c('Yr' = 2026, 
+                            "SpawnBio" = as.numeric( subset(rec_table1, metric == 'SSBMean')[,'2026']),
+                            'Fy' = as.numeric(subset(rec_table1, metric == 'F_Mean')[,'2026']),
+                            "SB_B35"= as.numeric(subset(rec_table1, metric == 'SSBMean')[,'2026']/b35),
+                            "F_F35"= as.numeric(subset(rec_table1, metric == 'F_Mean')[,'2026']/f35),
+                            'type'= 'aa')) 
+
+ggplot(data = pp_dat, aes(x = as.numeric(SB_B35), y = as.numeric(F_F35))) +
+  geom_path(color = 'grey44', lwd = 0.75, aes(group = type)) +
+  geom_point(data = subset(pp_dat, Yr == 1978), color = 'black', shape=5) +
+  geom_point(data = subset(pp_dat, Yr > 2024), color = 'seagreen4') +
+  scale_x_continuous(limits = c(0,3.5)) +
+  scale_y_continuous(limits = c(0,1.5)) +
+  geom_hline(yintercept = 1, col = 'grey88') +  geom_vline(xintercept = 1, col = 'grey88') +
+  geom_segment(data = NULL, aes(x =0.4/0.35,  y = 1,xend =3.5, yend = 1), color = 'red') + ## OFL plateau
+  geom_segment(data = NULL, aes(x =0.05,  y = 0,xend =0.4/0.35, yend = 1), color = 'red') + ## OFL ramp
+  geom_segment(data = NULL, aes(x = 0.4/0.35,  y = 0.8,xend =3.5, yend = 0.8), color = 'red', linetype = 'dotted') + ## ABC  plateau
+  geom_segment(data = NULL, aes(x = 0.05,  y = 0,xend =0.4/0.35, yend = 0.8), color = 'red', linetype = 'dotted') + ## ABC  ramp
+  labs(x = expression('Spawning Biomass/B'[35]*"%"),y = expression('F/F'[35]*"%"))
+
+ggsave(last_plot(),
+       file = here::here(year,'safe','figs','phase_plane.png'),
+       width = 5, height = 5, dpi = 400)
 
 
 ## catch with inset
