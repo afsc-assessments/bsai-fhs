@@ -41,10 +41,5 @@ knitr::include_graphics(here::here(year,'mgmt', model, "figs", "selex_mat.png"))
 
 
 ```{r spr, fig.cap="Time series of estimated fishing mortality versus estimated spawning stock biomass (phase-plane plot), including applicable OFL and maximum FABC definitions for the stock, including 2 years of projected values. Target levels correspond to B35% and F35% for author recommended model.", eval = TRUE}
-knitr::include_graphics(here::here(year,'mgmt', model, "figs", "phase_plane.png"))
+knitr::include_graphics(here::here(mod_path,"plots","phase_plane.png"))
 ```
-
-```{r retrospective, fig.cap="Retrospective peels of estimated female spawning biomass for the past 10 years from the recommended model with 95% credible intervals derived from MCMC (top), and the percent difference in female spawning biomass from the recommended model in the terminal year with 95% credible intervals from MCMC.", eval = TRUE}
-knitr::include_graphics(here::here(year,'mgmt', model, "figs", "retro.png"))
-```
-
