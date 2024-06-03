@@ -240,16 +240,16 @@ pp_dat <- bind_rows(pp_dat, c('Yr' = 2026,
                             'type'= 'aa')) 
 
 ggplot(data = pp_dat, aes(x = as.numeric(SB_B35), y = as.numeric(F_F35))) +
-  geom_path(color = 'grey44', lwd = 0.75, aes(group = type)) +
-  geom_point(data = subset(pp_dat, Yr == 1978), color = 'black', shape=5) +
-  geom_point(data = subset(pp_dat, Yr > 2024), color = 'seagreen4') +
-  scale_x_continuous(limits = c(0,3.5)) +
-  scale_y_continuous(limits = c(0,1.5)) +
   geom_hline(yintercept = 1, col = 'grey88') +  geom_vline(xintercept = 1, col = 'grey88') +
   geom_segment(data = NULL, aes(x =0.4/0.35,  y = 1,xend =3.5, yend = 1), color = 'red') + ## OFL plateau
   geom_segment(data = NULL, aes(x =0.05,  y = 0,xend =0.4/0.35, yend = 1), color = 'red') + ## OFL ramp
   geom_segment(data = NULL, aes(x = 0.4/0.35,  y = 0.8,xend =3.5, yend = 0.8), color = 'red', linetype = 'dotted') + ## ABC  plateau
   geom_segment(data = NULL, aes(x = 0.05,  y = 0,xend =0.4/0.35, yend = 0.8), color = 'red', linetype = 'dotted') + ## ABC  ramp
+  geom_path(color = 'grey44', lwd = 0.75, aes(group = type)) +
+  geom_point(data = subset(pp_dat, Yr == 1978), color = 'black', shape=5) +
+  geom_point(data = subset(pp_dat, Yr > 2024), color = 'seagreen4') +
+  scale_x_continuous(limits = c(0,3.5)) +
+  scale_y_continuous(limits = c(0,1.5)) +
   labs(x = expression('Spawning Biomass/B'[35]*"%"),y = expression('F/F'[35]*"%"))
 
 ggsave(last_plot(),
