@@ -61,7 +61,8 @@ lapply(list.files(here::here(year,'r',"proj_functions/"), full.names = T, patter
 # Write proj files ----
 #* projection_data.dat ----
 mod18.2c_2024 <- SS_output(here::here(year,'mgmt',curr_mdl_fldr), verbose = F)
-## passed to write_proj function
+
+## passed to write_projection_data_spm function
 NSEX=2						# number of sexes used in assessment model
 Nfishery=1					# number of fisheries(fleets) #This was set equal to 2
 fleets=1					# fleet index number (associated with commercial fishery)
@@ -88,7 +89,7 @@ spp="BSAI_flathead"
 ## if you get an indexing error there is probably a duplication of the recruitment info
 ## towards the bottom; just delete it
 ## and ensure the catches are specified in spm.dat before re-running the projections
-write_proj(dir=here::here(year,'model_runs','03b_projection'),
+write_projection_data_spm(dir=here::here(year,'model_runs','03b_projection'),
            # sdir =x,
            data_file=paste0(Sys.Date(),"-projection_data.dat"),
            data= mod18.2c_2024,
