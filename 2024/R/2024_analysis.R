@@ -253,7 +253,7 @@ ggplot(data = pp_dat, aes(x = as.numeric(SB_B35), y = as.numeric(F_F35))) +
   labs(x = expression('Spawning Biomass/B'[35]*"%"),y = expression('F/F'[35]*"%"))
 
 ggsave(last_plot(),
-       file = here::here(year,'safe','figs','phase_plane.png'),
+       file =here::here(year,'mgmt', model, "plots", 'phase_plane.png'),
        width = 5, height = 5, dpi = 400)
 
 
