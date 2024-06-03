@@ -38,7 +38,7 @@ write_projection_data_spm <-function(dir="foo",
   ## F rate
   T1<-noquote(paste(mean(data$sprseries$sum_Apical_F[data$sprseries$Yr>Y5 &
                                                        data$sprseries$Yr<=LY]),
-                    "# 5 year average F ",sep=""))
+                    " # 5 year average F ",sep=""))
   write(T1,paste(write_file),append = T)
   
   T1<-noquote("1 # Author f")
@@ -205,7 +205,7 @@ write_projection_data_spm <-function(dir="foo",
     T1<-noquote(paste("# Recruitment age ",rec_age,"+ ", rec_FY,"-",rec_LY,sep=""))
     write(T1,paste(write_file),append = T)
     print("Writing number of recruits")
-    write(round(Rec_1,1),paste(write_file),append = T,ncolumns =  45)
+    write(round(Rec_1,1),paste(write_file),append = T,ncolumns =  999)
     
     
   }
@@ -213,8 +213,8 @@ write_projection_data_spm <-function(dir="foo",
   T1<-noquote(paste("# SSB ", FY,"-",LY,sep=""))
   write(T1,paste(write_file),append = T)
   print("Writing SSB")
-  if(spp!="EBS_Pcod") write(as.numeric(data$sprseries$SSB[data$sprseries$Yr<=LY&data$sprseries$Yr>=FY]),paste(write_file),append = T,ncolumns =  45)
-  if(spp=="EBS_Pcod") write(as.numeric(data$sprseries$SSB[data$sprseries$Yr<=LY&data$sprseries$Yr>=FY])/2,paste(write_file),append = T,ncolumns =  45)
+  if(spp!="EBS_Pcod") write(as.numeric(data$sprseries$SSB[data$sprseries$Yr<=LY&data$sprseries$Yr>=FY]),paste(write_file),append = T,ncolumns =  999)
+  if(spp=="EBS_Pcod") write(as.numeric(data$sprseries$SSB[data$sprseries$Yr<=LY&data$sprseries$Yr>=FY])/2,paste(write_file),append = T,ncolumns =  999)
   # file.copy(write_file, file.path(dir, sdir),overwrite=TRUE)
   print("Be sure to copy & paste values from dated file into projection_data.dat \n")
 }
