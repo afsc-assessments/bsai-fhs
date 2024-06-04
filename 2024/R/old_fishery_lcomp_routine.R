@@ -9,12 +9,23 @@ library(ggplot2)
 
 ## setup ----
 ## must be on VPN WEST
-username_AFSC <- showPrompt(title="Username", message="Enter your AFSC username:", default="")
-password_AFSC <- askForPassword(prompt="Enter your AFSC password:")
+# username_AFSC <- showPrompt(title="Username", message="Enter your AFSC username:", default="")
+# password_AFSC <- askForPassword(prompt="Enter your AFSC password:")
+# AFSC <- odbcConnect("AFSC",username_AFSC,password_AFSC,  believeNRows = FALSE)
+# 
+# username_AKFIN <- showPrompt(title="Username", message="Enter your AKFIN username:", default="")
+# password_AKFIN <- askForPassword(prompt="Enter your AKFIN password:")
+# AKFIN <- odbcConnect("AKFIN",username_AKFIN,password_AKFIN,  believeNRows = FALSE)
+
+library(keyring)
+database_nam <- 'afsc'
+username_AFSC <- key_list(database_nam)$username
+password_AFSC <- key_get(database_nam, keyring::key_list(database_nam)$username)
 AFSC <- odbcConnect("AFSC",username_AFSC,password_AFSC,  believeNRows = FALSE)
 
-username_AKFIN <- showPrompt(title="Username", message="Enter your AKFIN username:", default="")
-password_AKFIN <- askForPassword(prompt="Enter your AKFIN password:")
+database_nam <- 'akfin'
+username_AKFIN <- key_list(database_nam)$username
+password_AKFIN <- key_get(database_nam, keyring::key_list(database_nam)$username)
 AKFIN <- odbcConnect("AKFIN",username_AKFIN,password_AKFIN,  believeNRows = FALSE)
 
 source(here::here(year,'R','BIN_LEN_DATA.R'))

@@ -20,8 +20,7 @@ sql_channel <- gapindex::get_connected()
 ## which are used for in-year and next-two-year catches, respectively
 suppressWarnings(afscassess::clean_catch(year = year, 
                                          species = species, 
-                                         TAC = TAC,
-                                         fixed_catch = 'bsai_fhs_catch_1964_1994.csv'))
+                                         TAC = TAC))
 
 ## reformat catches
 afscdata::catch_to_ss3(year, seas = 1, fleet = 1, yld_rat = TRUE)
@@ -249,9 +248,9 @@ index_raw <- rbind(production_biomass_subarea_standard,
                    production_biomass_subarea_ai) %>%
   tidyr::pivot_wider(names_from=SURVEY, 
                      values_from=c(BIOMASS_MT, BIOMASS_VAR)) %>%
-  mutate(sd_EBS=sqrt(BIOMASS_VAR_EBS_SHELF), 
+  mutate(sd_EBS=sqrt(BIOMASS_VAR_EBS), 
          sd_AI=sqrt(BIOMASS_VAR_AI)) %>%
-  select(year=YEAR, biomass_EBS = BIOMASS_MT_EBS_SHELF, biomass_AI = BIOMASS_MT_AI, sd_EBS, sd_AI)
+  select(year=YEAR, biomass_EBS = BIOMASS_MT_EBS, biomass_AI = BIOMASS_MT_AI, sd_EBS, sd_AI)
 
 ## Do a linear regression to get missing AI years
 ## note that we only interpolate in years with at least one survey,
@@ -285,6 +284,10 @@ nsamp_age <- aggregate(HAULJOIN ~ YEAR,
                        FUN = function(x) length(x = unique(x = x)))
 write.csv(nsamp_age, file = here::here(year, 'data','raw','nsamp_age.csv'), row.names = FALSE)
  
+
+## The length bins
+lbins <- c(seq(from = 6, to = 40, by = 2),seq(from = 43, to = 58, by = 3))
+
 caal00 <-   production_data$specimen %>%
   ## filter out bering flounder and unsexed
   filter(!is.na(AGE) & !is.na(LENGTH) & SEX != 3 & AGE > 0 & SPECIES_CODE == 10130 ) %>%
@@ -296,7 +299,7 @@ caal00 <-   production_data$specimen %>%
          LENGTH_MM = ifelse(LENGTH   >= 580, 580, LENGTH ))  %>%
   mutate( length_grp0 = cut(round(LENGTH_MM /10,0),
                             right = F,
-                            breaks =  mod_2020$lbinspop))  %>%
+                            breaks =  lbins))  %>%
   ## make integer-based length bin
   tidyr::separate(length_grp0, c("first", "second"), sep = ",") %>% 
   mutate(LENGTH_BIN = as.numeric(substr(first,2,nchar(first)))) %>%

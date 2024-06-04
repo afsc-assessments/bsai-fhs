@@ -46,6 +46,59 @@ prev_mdl_fldr = "18.2c_2020"
 
 afscdata::bsai_fhs(year)
 source(here::here(year,'r','bsai_fhs_wrangle_data.R'))
+
+#* future catches to the end of the current year for spm.dat and SS ----
+## MAKE SURE TO UPDATE THE CURRENT YEAR CATCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+## You will need to manually obtain this data and put it the following folder 'current_year/data/raw/weekly_catches'
+## You will have to manually create the weekly catches folder in raw if it is not there.
+## You will have to manually download all the weekly catch files from the current year to the current year - 5, if they are not already in the weekly_catches file 
+## the latest data are available at: https://www.fisheries.noaa.gov/alaska/commercial-fishing/fisheries-catch-and-landings-reports-alaska#bsai-groundfish
+## scroll to BSAI Groundfish > catches by week > click on 2024 
+weekly_catch_files <- list.files(here::here(year,'data','raw','weekly_catches'), 
+                                 full.names=TRUE)
+test <- lapply(1:length(weekly_catch_files), function(i){
+  skip <- grep('ACCOUNT.NAME', readLines(weekly_catch_files[i]))-1
+  data.frame(read.table(weekly_catch_files[i], skip=skip, header=TRUE, sep=',',
+                        stringsAsFactors=FALSE))
+})
+weekly_catches <- do.call(rbind, test)
+names(weekly_catches) <- c('species', 'date', 'catch')
+weekly_catches <- weekly_catches %>%
+  ## No species for Bering flounder, probably in FHS already
+  filter(grepl("Flathead", x=species)) %>%
+  mutate(date=lubridate::mdy(date), 
+         week=lubridate::week(date),  
+         year=lubridate::year(date))
+this_year <- year
+## catch so far this year
+catch_this_year <- weekly_catches %>% 
+  filter(year==this_year) %>%
+  pull(catch) %>% 
+  sum
+## average catch last five years
+average_catch <- weekly_catches %>% 
+  filter(year %in% (this_year-5):this_year) %>%
+  summarise(total_catch = sum(catch), .by = year) %>%
+  summarise(mean(total_catch)) %>%
+  as.numeric()
+
+## Get average catch between now and end of year for previous 5 years
+catch_to_add <- weekly_catches %>% 
+  filter(year>=this_year-5 & week > lubridate::week(lubridate::today())) %>%
+  group_by(year) %>% 
+  summarize(catch=sum(catch), .groups='drop') %>%
+  pull(catch) %>% mean
+message("Predicted ", this_year, " catch= ", round(catch_this_year+ catch_to_add,0)) ##9272
+
+## what to paste into bottom of spm.dat 
+catch_proj <- cbind(year = c(this_year+(0:2)),
+                    catch = c(round(catch_this_year+catch_to_add),
+                              round(average_catch),
+                              round(average_catch)))
+
+
+# run Stock Synthesis ----
+## You will need to do this manually outside of R. Manually copy the pulled data into the SS files and Run SS.
  
 # run retrospective ----
 ## NOT DOING THIS FOR AN UPDATE
