@@ -79,7 +79,8 @@ listed in the table below.
 
 The log of unfished recruitment ($R_0$), log-scale recruitment deviations
 for an early period ` r (with(subset(mod18.2c_2024$recruit,era=='Early'),paste0(range(Yr), collapse = '-')))` and a main period (`r with(subset(mod18.2c_2024$recruit,era=='Main'),paste0(range(Yr), collapse = '-'))`) were
-estimated. A 1:1 sex ratio is assumed.
+estimated. A 1:1 sex ratio is assumed. The age-0 recruitment was fixed to equal mean recruitment for the most recent four years because too few flathead sole are observed at ages 0-3 to estimate recruitment reliably.. 
+
 
 ### Growth
 
