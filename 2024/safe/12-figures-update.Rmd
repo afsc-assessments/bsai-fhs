@@ -22,21 +22,20 @@ knitr::include_graphics(here::here(mod_path,"plots", "comp_lenfit__aggregated_ac
 knitr::include_graphics(here::here(mod_path, "plots", "placeholder.jpg"))
 ```
 
-```{r hists, fig.cap="Histograms (blue) of estimated posterior distributions and medians (vertical dashed lines) of key parameters derived from MCMC for BSAI FHS.", eval = TRUE}
-knitr::include_graphics(here::here(mod_path, "plots", "placeholder.jpg"))
-```
 
-```{r biofreccompare, fig.cap="Comparison of recruitment, fishing mortality rates, spawning and total biomass for the 2023 Update model (blue) and 2021 Full model (grey). The shaded ribbon represents the 95% quantile obtained via MCMC; Age-2 recruits and F rates were not included in the MCMC analysis in 2021, so those figures show the mean estimates only.", eval = TRUE}
-knitr::include_graphics(here::here(mod_path, "plots", "placeholder.jpg"))
-
+```{r biofreccompare, fig.cap="Comparison of spawning biomass, fishing mortality rates, and recruitment for the 2024 Update model (blue) and 2020 Full model (grey). The shaded ribbon represents the 95% quantile.", eval = TRUE}
+filepaths <- list.files(here::here(mod_path, "plots"), pattern = 'compare', full.names = TRUE)
+knitr::include_graphics(filepaths[c(12,18,2)])
 ```
 
 ```{r recdevs, fig.cap="Time series of recruitment deviations, from the 2024 base model (blue) and 2021 base model (grey), with 95% intervals.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "compare12_recdevs_uncertainty.png"))
 ```
 
-```{r selex, fig.cap="Estimated selectivity curves, maturity-at-age and weight-at-age for BSAI FHS.", eval = TRUE}
-knitr::include_graphics(here::here(year,'mgmt', model, "figs", "selex_mat.png"))
+```{r selex, fig.cap="Estimated terminal length- or age-based selectivity curves, and female maturity-at-age for BSAI FHS.", eval = TRUE}
+knitr::include_graphics(c(here::here(mod_path, "plots", "sel01_len_flt1.png"),
+                          here::here(mod_path, "plots", "sel01_age_flt2.png"),
+                          here::here(mod_path, "plots", "bio6_maturity.png")))
 ```
 
 
