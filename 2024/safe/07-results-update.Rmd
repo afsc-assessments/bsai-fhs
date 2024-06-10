@@ -2,13 +2,13 @@
 
 > Operational Update: This section has been condensed to follow the newest guidelines for "Operational Update Assessments" to the best of the Authors' ability. A minimal set of figures and tables are provided here; links to electronic files for supplementary data (e.g., numbers-at-age from the base model) are included in-text.
 
-The model used in this assessment is the same as the model accepted in 2020 (`Model 18.2c-2020`) with updated data and parameter priors. Model 18.2c-2020 with data updated through 2024 generally results in reasonable fits to the data, estimates biologically plausible parameters, and produces consistent patterns in abundance compared to previous assessments. 
+The model used in this assessment is the same as the model accepted in 2020 (`r old_model_name`) with updated data and parameter priors. Model `r old_model_name` with data updated through `year` generally results in reasonable fits to the data, estimates biologically plausible parameters, and produces consistent patterns in abundance compared to previous assessments. 
 
 ## Model Evaluation
 
 ### Residual Analysis and Convergence Criteria
 
-The model achieved convergence as defined by an invertible Hessian matrix and a low maximum gradient component (less than`1e-4`) that was acheived using the `hess_step` function in ADMB. Time-series plots of observed and predicted values, and the time-series of recruitment deviations, did not suggest unusual residual patterns, or different behavior than in previous assessments. The uncertainty around parameter estimates (obtained via MCMC, see below) and related derived quantities were in line with previous models.
+The model achieved convergence as defined by an invertible Hessian matrix and a low maximum gradient component (less than`1e-4`) that was achieved using the `hess_step` function in ADMB. Time-series plots of observed and predicted values, and the time-series of recruitment deviations, did not suggest unusual residual patterns, or different behavior than in previous assessments. The uncertainty around parameter estimates (obtained via MCMC, see below) and related derived quantities were in line with previous models.
 
 ### Parameter Estimates and Parameter Uncertainty 
 
@@ -42,11 +42,9 @@ Recruitment (as measured by age-2 fish) for POP is highly variable and large rec
 
 POP do not seem to exhibit a stock-recruitment relationship because large recruitment has occurred during periods of high and low biomass (Figure \@ref(fig:biofreccompare) and Table \@ref(tab:timeseriest)). The POP model does not specify an explicit stock-recruitment relationship. The average annual recruitment (in numbers) spawned after 1976 is estimated to be `r prettyNum(round(exp(4.449),0), big.mark = ',')` million.
 
-### Retrospective and Historical Analysis
+### Comparison to Previous Model
 
-A within-model retrospective analysis of the recommended model was conducted for the last 10 years of the time series by dropping data one year at a time. The revised Mohn’s “rho” statistic in female spawning biomass was -0.153 (slightly smaller than the 2021 value of -0.16), and the trajectories and uncertainty intervals from MCMC for 2021 and 2023 are nearly identical (Figure \@ref(fig:retrospective)). Across retrospective peels, SSB estimates have usually increased with the addition of new survey observations and the increases have been large (up to 30%), which is sensible given the large and uncertain survey biomass observations from the trawl survey since 2013. The 2023 SSB trajectory does not exhibit as dramatic of an increase from the 2021 nor 2022 retrospective peels, despite the addition of a new survey observation, likely due to the high uncertainty in that terminal estimate (Figure \@ref(fig:survey)).
-
-A historical comparison of key derived quantities from the base model and the most recent full assessment is shown in Figure \@ref(fig:biofreccompare).  Parameter estimates and likelihood functions have remained similar to the 2021 model, and the MCMC-derived 95% credible intervals of the 2023 parameter estimates encompass the 2021 medians (Figure \@ref(fig:biofreccompare) and Tables \@ref(tab:parposteriorst) and \@ref(tab:resultscompare)).
+A comparison of key derived quantities from the base model and the most recent full assessment is shown in Figure \@ref(fig:biofreccompare).  Parameter estimates and likelihood functions have remained similar to the 2020 model, and the 95% credible intervals of the current parameter estimates encompass the 2020 medians (Figure \@ref(fig:biofreccompare) and Tables \@ref(tab:parposteriorst) and \@ref(tab:resultscompare)).
 
 
 
