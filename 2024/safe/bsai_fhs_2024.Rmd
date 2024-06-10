@@ -69,6 +69,8 @@ species <- params$species
 year <- 2024
 date <- 'October XX, 2024'
 model <- '18.2c_2024'
+model_name <- "Model 18.2c (2024)"
+old_model_name <- "Model 18.2c (2020)"
 mod_path <- here::here(year,'mgmt',model)
 mod18.2c_2024 <- r4ss::SS_output(mod_path, verbose = FALSE)
 end_proj <- year + 15
