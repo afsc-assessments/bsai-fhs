@@ -6,15 +6,12 @@ editor_options:
  
 ## Harvest recommendations
 
-> Operational Update: The description of Amendment 56 specifications for POP and details regarding the development of the Risk Table have been truncated to provide minimal background and highlight relevant updates or changes made for this cycle. The reader is referred to the last full assessment [@Hulson2021] for the entirety of this section, including details on the projection approach.
+> Operational Update: This section been truncated to provide minimal background and highlight relevant updates or changes made for this cycle. The reader is referred to the last full assessment [@Monnahan2020] for the entirety of this section, including details on the projection approach.
 
 
 ### Amendment 56 Reference Points
 
-POP in the GOA are managed under Tier 3 of Amendment 56. It is assumed that the equilibrium level of recruitment is equal to the average of age-2 recruitments between 1979 and `r year-2` (i.e., the 1977-`r year-4` year classes). The most recent two years of recruitment are not included in the projection due to lack of data that would support these recruitment estimates. This definition of equilibrium recruitment is used to estimate the  $B_{40}$ reference point. Other useful biomass reference points which can be calculated using this assumption are $B_{100}$ and $B_{35}$, defined analogously to $B_{40}$.
-
-Female spawning biomass for `r year+1` is estimated at `r prettyNum(ssb_25,big.mark =',')` t.  This is above  $B_{40}$=`r prettyNum(b40_25,big.mark =',')` t. Under Amendment 56, Tier 3, the maximum permissible fishing mortality for ABC is $F_{40}$ and fishing mortality for OFL is $F_{35}$. The `r year+1` estimates of biomass-based reference points, and the resultant ABC and OFL based on the fishing mortality rates are:
-
+This stock complex is managed under Tier 3a of Amendment 56. The following table shows the reference points calculated for the `r year` assessment.
 
 | Reference Point | Description                                                                                                                                                | Value   |
 |------------------------|------------------------|------------------------|
@@ -22,13 +19,15 @@ Female spawning biomass for `r year+1` is estimated at `r prettyNum(ssb_25,big.m
 | $B_{40\%}$       | 40% of the equilibrium spawning biomass that would be obtained in the absence of fishing                                                                   | `r prettyNum(b40_25,big.mark =',')` t |
 | $B_{35\%}$       | 35% of the equilibrium spawning biomass that would be obtained in the absence of fishing                                                                   | `r prettyNum(b35_25,big.mark =',')` t |
 | $F_{40\%}$       | The fishing mortality rate that reduces the equilibrium level of spawning per recruit to 40% of the level that would be obtained in the absence of fishing | `r prettyNum(Fabc_25,big.mark =',')`    |
-| ABC             | Yield at $F_{40\%}$ in 2024                                                                                                                                       | `r prettyNum(abc_25,big.mark =',')` t |
+| ABC             | Yield at $F_{40\%}$ in `r year+1`                                                                                                                                      | `r prettyNum(abc_25,big.mark =',')` t |
 | $F_{35\%}$       | The fishing mortality rate that reduces the equilibrium level of spawning per recruit to 35% of the level that would be obtained in the absence of fishing |`r prettyNum(Fofl_25,big.mark =',')`    |
-| OFL             | Yield at $F_{35\%}$  in 2024 | `r prettyNum(ofl_25,big.mark =',')` t  |
+| OFL             | Yield at $F_{35\%}$  in `r year+1` | `r prettyNum(ofl_25,big.mark =',')` t  |
 
 ### Specification of OFL and Maximum Permissible ABC {#oflabc}
 
 #### Standard Harvest Scenarios (Harvest Projections) {#harvestprojections}
+
+**UPDATE THIS SECTION GIVEN PROJ TEAM GUIDANCE**
 
 A standard set of projections is required for each stock managed under Tier 3 of Amendment 56. Five of the seven standard scenarios support the alternative harvest strategies analyzed in the Alaska Groundfish Harvest Specifications Final Environmental Impact Statement. They are as follows (“max$F_{ABC}$” refers to the maximum permissible value of $F_{ABC}$ under Amendment 56):
 
@@ -51,15 +50,13 @@ Two other scenarios are needed to satisfy the MSFCMA’s requirement to determin
 
 #### How Future Catches are Specified for Scenario 2 (Author's F) {#authorsF}
 
-> The method for specifying catches in years `r year` to `r year+2` has not changed from the 2021 assessment. 
+> The method for specifying catches in years `r year` to `r year+2` has not changed from the 2020 assessment. 
 
 For Scenario 2 (*Author's F*); we use pre-specified catches to increase accuracy of short-term projections in fisheries where the catch is usually less than the ABC. We specify `r year` catches as the most current observed catches plus the typical landings through the present date through the end of the calendar year, and the catches for years `r year+1` and `r year+2` as the average catch from `r year-5` to `r year-1`, which is `r prettyNum(c2,big.mark=',')` t.
 
 Projected catches, spawning biomass, and fishing mortality rates corresponding to the alternative harvest scenarios over a 13-year period are shown in Tables \@ref(tab:projectionsCatches) through \@ref(tab:projectionsF).
  
 ## Risk Table and ABC recommendation {#risktable}
-
-The SSC in its December 2018 minutes recommended that all assessment authors use the risk table when determining whether to recommend an ABC lower than the maximum permissible.
 
 The risk table scoring for POP has not changed since 2021, with the exception that the 2021 SSC requested that the number of Risk Table categories (i.e., levels of concern) be reduced from four to three. Per leadership instruction in 2023, we have consolidated what were previously categories 2 and 3 ("substantially increased" and "major concern" into a single category, "increased/major concern"). This impacts the first two considerations, which were rated a level 2 in the 2021 Assessment.
 
