@@ -5,7 +5,7 @@ params:
   species_complex: "no"
   area: "Bering Sea and Aleutian Islands"
   tier: 3
-author: "Maia S. Kapur, Cronin-Fine, L."
+author: "Maia S. Kapur, Lee Cronin-Fine"
 date: "November 2024"
 
 # don't do anything below this line unless you are cool with the consequences
@@ -50,9 +50,7 @@ if(params$species_complex=="no"){
    title = paste0(params$chapter, ". Assessment of the ", tools::toTitleCase(params$species), " Stock in the ", params$area)
   } else {
     title = paste0(params$chapter, ". Assessment of the ", tools::toTitleCase(params$species), " Stock Complex in the ", params$area)  
-  }
-
-
+  } 
 ```
 
 ---
