@@ -303,7 +303,13 @@ ggplot(data = pp_dat, aes(x = as.numeric(SB_B35), y = as.numeric(F_F35))) +
   geom_segment(data = NULL, aes(x = 0.05,  y = 0,xend =0.4/0.35, yend = 0.8), color = 'red', linetype = 'dotted') + ## ABC  ramp
   geom_path(color = 'grey44', lwd = 0.75, aes(group = type)) +
   geom_point(data = subset(pp_dat, Yr == 1978), color = 'black', shape=5) +
+  geom_point(data = subset(pp_dat, Yr == 2024), color = 'black', shape=16) +
   geom_point(data = subset(pp_dat, Yr > 2024), color = 'seagreen4') +
+  
+  ## year labels for high F years
+  geom_text(data = subset(pp_dat, Yr %in% c(1978,1990,2008, 2024:2026)),
+            vjust = c(-1,-1,-1,2,2,2),
+            size = 2, aes(label = substr(Yr,3,4))) +
   scale_x_continuous(limits = c(0,3.5)) +
   scale_y_continuous(limits = c(0,1.5)) +
   labs(x = expression('Spawning Biomass/B'[35]*"%"),y = expression('F/F'[35]*"%"))

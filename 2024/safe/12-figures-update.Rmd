@@ -39,6 +39,6 @@ knitr::include_graphics(c(here::here(mod_path, "plots", "sel01_len_flt1.png"),
 ```
 
 
-```{r spr, fig.cap="Time series of estimated fishing mortality versus estimated spawning stock biomass (phase-plane plot), including applicable OFL and maximum FABC definitions for the stock, including 2 years of projected values. Target levels correspond to B35% and F35% for author recommended model.", eval = TRUE}
+```{r spr, fig.cap="Time series of estimated fishing mortality versus estimated spawning stock biomass (phase-plane plot) for 1978-2026, including applicable OFL and maximum FABC definitions for the stock, including 2 years of projected values. Target levels correspond to B35% and F35% for author recommended model.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots","phase_plane.png"))
 ```
