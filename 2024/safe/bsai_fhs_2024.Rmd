@@ -72,7 +72,7 @@ model <- '18.2c_2024'
 model_name <- "Model 18.2c (2024)"
 old_model_name <- "Model 18.2c (2020)"
 mod_path <- here::here(year,'mgmt',model)
-mod18.2c_2024 <- r4ss::SS_output(mod_path, verbose = FALSE)
+mod18.2c_2024 <- r4ss::SS_output(mod_path, verbose = FALSE, warn = FALSE, printstats = FALSE, hidewarn = TRUE)
 names(mod18.2c_2024$timeseries)[23] <- "F1" ## overwrite so inline works
 end_proj <- year + 15
 
