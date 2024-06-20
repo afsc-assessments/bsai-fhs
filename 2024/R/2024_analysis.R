@@ -27,7 +27,7 @@ library(rema)
 
 
 # globals ----
-year = 2024
+year <- this_year <-  2024
 rec_age = 0 ## this is default for SS3
 plus_age = 21
 ages = rec_age:plus_age
