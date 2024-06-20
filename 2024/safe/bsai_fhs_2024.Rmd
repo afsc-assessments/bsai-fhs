@@ -151,11 +151,5 @@ c3 <- pcatch[3] # proj catch year + 2
 
 ```{r, child="12-figures-update.Rmd", eval = T}
 ```
-
-```{r, child="15-append_cie.Rmd", eval = T}
-```
-
-```{r, child="16-append_eqs.Rmd", eval = T}
-```
-
+ 
 
