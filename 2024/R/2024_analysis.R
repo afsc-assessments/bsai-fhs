@@ -256,28 +256,18 @@ SSplotComparisons(SSsummarize(biglist = list(mod18.2c_2020,mod18.2c_2024)),
 #* selectivity and maturity composite ----
  
 ## first make the custom selex plots if needed
+png(here::here(mod_path,"plots","selex_maturity.png"), 
+    8, height =5, unit = 'in', res = 420) 
 
-par(mfrow=c(1,))
+par(mfrow=c(2,2), mar = c(0,0,1,1))
 SSplotSelex(mod18.2c_2024, fleets  = 1,
-            subplots = 3, print = TRUE,
-            plotdir = here::here(mod_path, "plots", "sel01_len_flt1.png"))
-SSplotSelex(mod18.2c_2024, fleets  = 1,
-            subplots = 2, print = TRUE,
-            plotdir = here::here(mod_path, "plots", "sel01_len_flt1.png"))
-
-
+            subplots = 3) 
+ 
 SSplotSelex(mod18.2c_2024, fleets  = 2,
-            subplots = 2, print = TRUE,
-            plotdir = here::here(mod_path, "plots", "sel01_age_flt2.png"))
+            subplots =2, agefactors = 'Asel' ) 
 
-filepaths = list(here::here(mod_path, "plots", "sel01_len_flt1.png"),
-                 here::here(mod_path, "plots", "sel01_age_flt2.png"),
-                 here::here(mod_path, "plots", "bio6_maturity.png"))
-png(here::here(mod_path,"plots","selex_maturity.png"), width = 12, height =8, unit = 'in', res = 420) 
-rl = lapply(filepaths, png::readPNG)
-gl = lapply(rl, grid::rasterGrob)
-gridExtra::grid.arrange(grobs=gl,ncol = 3) 
-dev.off()
+SSplotBiology(mod18.2c_2024, subplots = 6)
+graphics.off()
 
  
 knitr::include_graphics(c(,
