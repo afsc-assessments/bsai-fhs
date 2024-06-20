@@ -268,12 +268,7 @@ SSplotSelex(mod18.2c_2024, fleets  = 2,
 
 SSplotBiology(mod18.2c_2024, subplots = 6)
 graphics.off()
-
  
-knitr::include_graphics(c(,
-,
-))
-
 #* biofreccompare.png ----
 ## comparison of spbio, recruitment, f traj 
 ## list all comparison plots made above
@@ -283,8 +278,8 @@ filepaths <- list.files(here::here(mod_path, "plots"),
 ## wrangle the three into a new image
 png(here::here(mod_path,"plots","bio_f_rec.png"), width = 12, height =8, unit = 'in', res = 420) 
 rl = lapply(filepaths[c(12,18,2)], png::readPNG)
-gl = lapply(rl, grid::rasterGrob)
-gridExtra::grid.arrange(grobs=gl,ncol = 3) 
+gl = lapply(rl, grid::rasterGrob) 
+gridExtra::grid.arrange(grobs=gl,ncol = 1) 
 dev.off()
 #* phase-plane plot ----
 ## take all reference values from Proj, noting that refs to "ofl" correspond to "b35" therein
