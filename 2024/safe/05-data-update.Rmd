@@ -3,6 +3,7 @@ editor_options:
   markdown: 
     wrap: sentence
 ---
+\newpage
 
 # Data
 
@@ -44,7 +45,7 @@ data.frame(Source = c(rep("NMFS Aleutian Islands Groundfish Trawl Survey", 1),
   flextable::width(j = ~ Source, width = 1) %>% 
   flextable::width(j = ~ Species, width = 1.5) %>% 
   flextable::width(j = ~ Data, width = 1.5) %>% 
-  flextable::width(j = ~ Years, width = 4) %>% 
+  flextable::width(j = ~ Years, width = 2.5) %>% 
   flextable::merge_v(j = 1) %>% 
   flextable::font(fontname = "Times", part = "all") %>% 
   flextable::fontsize(size = 10) %>% 
