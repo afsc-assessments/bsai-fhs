@@ -1,5 +1,5 @@
 Alternative 1 Catch
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 80441.8 
 Year 
 2024 14334 
@@ -19,7 +19,7 @@ Year
 2038 78079.1 
 
 Alternative 1 ABCs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 72013.7 
@@ -39,7 +39,7 @@ Year
 2038 78079.1 
 
 Alternative 1 TACs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024  NA 
@@ -59,7 +59,7 @@ Year
 2038 78079.1 
 
 Alternative 1 Sp_Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 196753 
 Year 
 2024 187263 
@@ -79,7 +79,7 @@ Year
 2038 205146 
 
 Alternative 1 Fishing Mortality
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.346385 
 Year 
 2024 0.0616851 
@@ -99,7 +99,7 @@ Year
 2038 0.307373 
 
 Alternative 1 Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 776997 
@@ -119,7 +119,7 @@ Year
 2038 1.03349e+06 
 
 Alternative 1 Implied SPR rate 
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.4 
 Year 
 2024 0.791481 
@@ -138,12 +138,12 @@ Year
 2037 0.435298 
 2038 0.433599 
 
-  Model_Proj.dat 
+  2024-06-03-projection_data.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.10359 
 AvgAgeYr2038 68.9436 
 Alternative 2 Catch
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 80441.8 
 Year 
 2024 14334 
@@ -163,7 +163,7 @@ Year
 2038 78079.1 
 
 Alternative 2 ABCs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 72013.7 
@@ -183,7 +183,7 @@ Year
 2038 78079.1 
 
 Alternative 2 TACs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024  NA 
@@ -203,7 +203,7 @@ Year
 2038 78079.1 
 
 Alternative 2 Sp_Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 196753 
 Year 
 2024 187263 
@@ -223,7 +223,7 @@ Year
 2038 205146 
 
 Alternative 2 Fishing Mortality
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.346385 
 Year 
 2024 0.0616851 
@@ -243,7 +243,7 @@ Year
 2038 0.307373 
 
 Alternative 2 Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 776997 
@@ -263,7 +263,7 @@ Year
 2038 1.03349e+06 
 
 Alternative 2 Implied SPR rate 
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.4 
 Year 
 2024 0.791481 
@@ -282,12 +282,12 @@ Year
 2037 0.435298 
 2038 0.433599 
 
-  Model_Proj.dat 
+  2024-06-03-projection_data.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.10359 
 AvgAgeYr2038 68.9436 
 Alternative 3 Catch
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 80441.8 
 Year 
 2024 14334 
@@ -307,7 +307,7 @@ Year
 2038 21896.4 
 
 Alternative 3 ABCs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 72013.7 
@@ -327,7 +327,7 @@ Year
 2038 134150 
 
 Alternative 3 TACs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024  NA 
@@ -347,7 +347,7 @@ Year
 2038 21896.4 
 
 Alternative 3 Sp_Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 196753 
 Year 
 2024 187263 
@@ -367,7 +367,7 @@ Year
 2038 352714 
 
 Alternative 3 Fishing Mortality
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.346385 
 Year 
 2024 0.0616851 
@@ -387,7 +387,7 @@ Year
 2038 0.0526297 
 
 Alternative 3 Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 776997 
@@ -407,7 +407,7 @@ Year
 2038 1.31538e+06 
 
 Alternative 3 Implied SPR rate 
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.4 
 Year 
 2024 0.791481 
@@ -426,12 +426,12 @@ Year
 2037 0.816488 
 2038 0.816488 
 
-  Model_Proj.dat 
+  2024-06-03-projection_data.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.10359 
 AvgAgeYr2038 75.884 
 Alternative 4 Catch
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 80441.8 
 Year 
 2024 14334 
@@ -451,7 +451,7 @@ Year
 2038 30444.9 
 
 Alternative 4 ABCs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 72013.7 
@@ -471,7 +471,7 @@ Year
 2038 126446 
 
 Alternative 4 TACs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024  NA 
@@ -491,7 +491,7 @@ Year
 2038 30444.9 
 
 Alternative 4 Sp_Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 196753 
 Year 
 2024 187263 
@@ -511,7 +511,7 @@ Year
 2038 330326 
 
 Alternative 4 Fishing Mortality
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.346385 
 Year 
 2024 0.0616851 
@@ -531,7 +531,7 @@ Year
 2038 0.0780274 
 
 Alternative 4 Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 776997 
@@ -551,7 +551,7 @@ Year
 2038 1.27548e+06 
 
 Alternative 4 Implied SPR rate 
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.4 
 Year 
 2024 0.791481 
@@ -570,12 +570,12 @@ Year
 2037 0.75 
 2038 0.75 
 
-  Model_Proj.dat 
+  2024-06-03-projection_data.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.10359 
 AvgAgeYr2038 74.9474 
 Alternative 5 Catch
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 80441.8 
 Year 
 2024 14334 
@@ -595,7 +595,7 @@ Year
 2038  NA 
 
 Alternative 5 ABCs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 72013.7 
@@ -615,7 +615,7 @@ Year
 2038 152679 
 
 Alternative 5 TACs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024  NA 
@@ -635,7 +635,7 @@ Year
 2038  NA 
 
 Alternative 5 Sp_Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 196753 
 Year 
 2024 187263 
@@ -655,7 +655,7 @@ Year
 2038 408520 
 
 Alternative 5 Fishing Mortality
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.346385 
 Year 
 2024 0.0616851 
@@ -675,7 +675,7 @@ Year
 2038  NA 
 
 Alternative 5 Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 776997 
@@ -695,7 +695,7 @@ Year
 2038 1.41181e+06 
 
 Alternative 5 Implied SPR rate 
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.4 
 Year 
 2024 0.791481 
@@ -714,12 +714,12 @@ Year
 2037 1 
 2038 1 
 
-  Model_Proj.dat 
+  2024-06-03-projection_data.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.10359 
 AvgAgeYr2038 78.0792 
 Alternative 6 Catch
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 80441.8 
 Year 
 2024 14334 
@@ -739,7 +739,7 @@ Year
 2038 84706.1 
 
 Alternative 6 ABCs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 72013.7 
@@ -759,7 +759,7 @@ Year
 2038 69814.4 
 
 Alternative 6 TACs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024  NA 
@@ -779,7 +779,7 @@ Year
 2038 84706.1 
 
 Alternative 6 Sp_Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 196753 
 Year 
 2024 187263 
@@ -799,7 +799,7 @@ Year
 2038 187523 
 
 Alternative 6 Fishing Mortality
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.346385 
 Year 
 2024 0.0616851 
@@ -819,7 +819,7 @@ Year
 2038 0.361118 
 
 Alternative 6 Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 776997 
@@ -839,7 +839,7 @@ Year
 2038 995667 
 
 Alternative 6 Implied SPR rate 
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.4 
 Year 
 2024 0.791481 
@@ -858,12 +858,12 @@ Year
 2037 0.396322 
 2038 0.39517 
 
-  Model_Proj.dat 
+  2024-06-03-projection_data.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.10359 
 AvgAgeYr2038 66.7276 
 Alternative 7 Catch
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 80441.8 
 Year 
 2024 14334 
@@ -878,17 +878,17 @@ Year
 2033 68799.3 
 2034 75366.8 
 2035 79957.2 
-2036 82814.6 
+2036 82814.7 
 2037 84221 
 2038 84679.5 
 
 Alternative 7 ABCs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 72013.7 
 2025 79580.9 
-2026 70788.4 
+2026 70788.5 
 2027 60389.8 
 2028 49615.6 
 2029 43742.2 
@@ -903,7 +903,7 @@ Year
 2038 69792.3 
 
 Alternative 7 TACs
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024  NA 
@@ -918,12 +918,12 @@ Year
 2033 68799.3 
 2034 75366.8 
 2035 79957.2 
-2036 82814.6 
+2036 82814.7 
 2037 84221 
 2038 84679.5 
 
 Alternative 7 Sp_Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 196753 
 Year 
 2024 187263 
@@ -943,7 +943,7 @@ Year
 2038 187471 
 
 Alternative 7 Fishing Mortality
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.346385 
 Year 
 2024 0.0616851 
@@ -963,7 +963,7 @@ Year
 2038 0.361053 
 
 Alternative 7 Biomass
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 
 Year 
 2024 776997 
@@ -983,7 +983,7 @@ Year
 2038 995587 
 
 Alternative 7 Implied SPR rate 
-     Model_Proj.dat 
+     2024-06-03-projection_data.dat 
 Equil_Fabc 0.4 
 Year 
 2024 0.791481 
@@ -1002,7 +1002,7 @@ Year
 2037 0.396387 
 2038 0.395219 
 
-  Model_Proj.dat 
+  2024-06-03-projection_data.dat 
 EquilAvgAgeF0  5.39324 
 EquilAvgAgeFabc  4.10359 
 AvgAgeYr2038 66.9337 
