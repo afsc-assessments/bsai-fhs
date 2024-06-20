@@ -1,4 +1,4 @@
-\newpage 
+ 
 
 # Figures
 
@@ -6,48 +6,59 @@
 knitr::include_graphics(here::here(mod_path,"plots", "data_plot2.png"))
 ```
 
-\newpage 
+ 
 
 ```{r catch, fig.cap="Observed catches for BSAI FHS.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "catch2 landings stacked.png"))
 ```
 
-\newpage 
+ 
 
-```{r survey, fig.cap="BS/AI Combined Trawl Survey observed biomass estimates with 95% sampling error confidence intervals for BSAI FHS (black points and vertical bars). Model expectations are shown in blue", eval = TRUE, out.width = "95%", out.height="80%"}
+```{r survey, fig.cap="BS/AI Combined Trawl Survey observed biomass estimates with 95% sampling error confidence intervals for BSAI FHS (black points and vertical bars). Model expectations are shown in blue.", eval = TRUE, out.width = "95%", out.height="80%"}
 knitr::include_graphics(here::here(mod_path,"plots", "index2_cpuefit_Survey.png"))
 ```
-\newpage 
+ 
 
 ```{r fishagecomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery age compositions for BSAI FHS.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "comp_agefit__aggregated_across_time.png"))
 ```
 
-\newpage 
+ 
 
 ```{r lengthcomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery and survey length (cm) compositions for BSAI FHS. Note that many years of the Fishery length composition data are not included in the joint likelihood (in lieu of age compositions).", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "comp_lenfit__aggregated_across_time.png"))
 ```
-\newpage 
+ 
 
+(ref:caalcap) Observed and expected mean age-at-length for both females and males with 90% intervals about observed age-at-length (left panels) and observed and expected standard deviation in age-at-length (right panels) for `r model_name` for years
 
-```{r survagecomps, fig.cap="Observed (colored bars) and predicted (black points) groundfish bottom trawl survey age compositions for BSAI FHS.", eval = TRUE}
-knitr::include_graphics(here::here(mod_path, "plots", "placeholder.jpg"))
+```{r caalfit1, fig.cap="(ref:caalcap) 2009-2012 (1 of 3).", out.height="75%", eval = T}
+knitr::include_graphics(here::here(mod_path, "plots", "comp_condAALfit_Andre_plotsflt2mkt0_page5.png"))
 ```
-\newpage 
+
+```{r caalfit2, fig.cap="(ref:caalcap) 2013-2016 (2 of 3).", out.height="75%", eval = T}
+knitr::include_graphics(here::here(mod_path, "plots", "comp_condAALfit_Andre_plotsflt2mkt0_page6.png"))
+```
+
+```{r caalfit3, fig.cap="(ref:caalcap) 2017-2021 (3 of 3).", out.height="75%", eval = T}
+knitr::include_graphics(here::here(mod_path, "plots", "comp_condAALfit_Andre_plotsflt2mkt0_page7.png"))
+```
+ 
+ 
+ 
 
 
 
 ```{r biofreccompare, fig.cap="Comparison of spawning biomass, fishing mortality rates, and recruitment for the 2024 Update model (blue) and 2020 Full model (grey). The shaded ribbon represents the 95% quantile.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "bio_f_rec.png"))
 ```
-\newpage 
+ 
 
 
 ```{r recdevs, fig.cap="Time series of recruitment deviations, from the 2024 base model (blue) and 2021 base model (grey), with 95% intervals.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "compare12_recdevs_uncertainty.png"))
 ```
-\newpage 
+ 
 
 ```{r selex, fig.cap="Estimated length- or age-based selectivity curves, and female maturity-at-age for BSAI FHS.", eval = TRUE}
 knitr::include_graphics(c(here::here(mod_path, "plots", "selex_maturity.png")))
