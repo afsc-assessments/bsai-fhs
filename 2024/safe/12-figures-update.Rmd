@@ -1,6 +1,10 @@
 \newpage 
 
 # Figures
+```{r data, fig.cap="Data included in this update assessment.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "data_plot2.png"))
+```
+
 
 ```{r catch, fig.cap="Observed catches for BSAI FHS.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "catch2 landings stacked.png"))
@@ -14,7 +18,7 @@ knitr::include_graphics(here::here(mod_path,"plots", "index2_cpuefit_Survey.png"
 knitr::include_graphics(here::here(mod_path,"plots", "comp_agefit__aggregated_across_time.png"))
 ```
 
-```{r lengthcomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery and survey length (cm) compositions for BSAI FHS.", eval = TRUE}
+```{r lengthcomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery and survey length (cm) compositions for BSAI FHS. Note that many years of the Fishery length composition data are not included in the joint likelihood (in lieu of age compositions).", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "comp_lenfit__aggregated_across_time.png"))
 ```
 
