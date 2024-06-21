@@ -16,6 +16,7 @@ library(afscassess)
 library(r4ss)
 library(dplyr)
 library(here)
+library(purrr)
 library(ggplot2)
 theme_set(afscassess::theme_report())
 
@@ -34,7 +35,7 @@ ages = rec_age:plus_age
 lengths = c(seq(6,40,2),seq(43,58,3))
 TAC = c(25000, 25000, 35500) # 2021, 2022, 2023
 species = "FSOL"
-curr_mdl_fldr = "18.2c_2024"
+curr_mdl_fldr = "18.2c_2024-lcf2"
 prev_mdl_fldr = "18.2c_2020" 
 
 # query data ----
@@ -89,16 +90,16 @@ catch_to_add <- weekly_catches %>%
   summarize(catch=sum(catch), .groups='drop') %>%
   pull(catch) %>% mean
 message("Predicted ", this_year, " catch= ", round(catch_this_year+ catch_to_add,0)) ##9272
-
-## what to paste into bottom of spm.dat 
-catch_proj <- cbind(year = c(this_year+(0:2)),
-                    catch = c(round(catch_this_year+catch_to_add),
-                              round(average_catch),
-                              round(average_catch)))
+stop("update the ss .dat file with the newly pulled data and past the Predicted catch into ss .dat file as well.")
 
 
 # run Stock Synthesis ----
 ## You will need to do this manually outside of R. Manually copy the pulled data into the SS files and Run SS.
+## Make sure to copy the current year catch into SS!!!!!!!!!!!!!!! when you do the final run!!!!!!!!!!!!!!!!!!!!
+## make sure to run "hess_step" to minimize the gradient. Might need a "-" before.
+## ss
+## -hess_step
+
  
 # run retrospective ----
 ## NOT DOING THIS FOR AN UPDATE
@@ -109,7 +110,10 @@ catch_proj <- cbind(year = c(this_year+(0:2)),
 # run projections ----
 ## takes less than one minute; only run this if model and/or projected catches change 
 
-lapply(list.files(here::here(year,'r',"proj_functions/"), full.names = T, pattern = ".r$"),  source) 
+# Read in the functions in year/R/proj_functions folder
+# lapply(list.files(here::here(year,'r',"proj_functions/"), full.names = T, pattern = ".r$"),  source) 
+foos <- list.files(here::here(year,'r',"proj_functions/"))[grep(".R",list.files(here::here(year,'r',"proj_functions/")))]
+walk(foos, ~source(here::here(year,'r',"proj_functions/",.x)))
 
 # Write proj files ----
 #* projection_data.dat ----
@@ -138,10 +142,11 @@ nproj=14			# number of projection years ALSO USED BY get_proj_res
 spp="BSAI_flathead"
 
 ## this will give you the general values, but mightn't be perfectly formatted
-## YOU WILL NEED TO paste the right values into projection_data.dat
+## YOU WILL NEED TO paste the right values into projection_data.dat in the "year/Model_runs/03b_projection" folder
 ## if you get an indexing error there is probably a duplication of the recruitment info
 ## towards the bottom; just delete it
 ## and ensure the catches are specified in spm.dat before re-running the projections
+## Lee: this function is located in the "R/proj_functions". You might need to source this 
 write_projection_data_spm(dir=here::here(year,'model_runs','03b_projection'),
            # sdir =x,
            data_file=paste0(Sys.Date(),"-projection_data.dat"),
@@ -151,50 +156,11 @@ write_projection_data_spm(dir=here::here(year,'model_runs','03b_projection'),
            rec_FY=rec_FY, rec_LY_decrement=rec_LY_decrement,
            spawn_month=spawn_month, Fratios=Fratios)
 
-#* future catches for spm.dat ----
-## the latest data are available at: https://www.fisheries.noaa.gov/alaska/commercial-fishing/fisheries-catch-and-landings-reports-alaska#bsai-groundfish
-## scroll to BSAI Groundfish > catches by week > click on 2024 
-weekly_catch_files <- list.files(here::here(year,'data','raw','weekly_catches'), 
-                             full.names=TRUE)
-test <- lapply(1:length(weekly_catch_files), function(i){
-  skip <- grep('ACCOUNT.NAME', readLines(weekly_catch_files[i]))-1
-  data.frame(read.table(weekly_catch_files[i], skip=skip, header=TRUE, sep=',',
-                        stringsAsFactors=FALSE))
-})
-weekly_catches <- do.call(rbind, test)
-names(weekly_catches) <- c('species', 'date', 'catch')
-weekly_catches <- weekly_catches %>%
-  ## No species for Bering flounder, probably in FHS already
-  filter(grepl("Flathead", x=species)) %>%
-  mutate(date=lubridate::mdy(date), 
-         week=lubridate::week(date),  
-         year=lubridate::year(date))
-## catch so far this year
-catch_this_year <- weekly_catches %>% 
-  filter(year==this_year) %>%
-  pull(catch) %>% 
-  sum
-## average catch last five years
-average_catch <- weekly_catches %>% 
-  filter(year %in% (this_year-5):this_year) %>%
-  summarise(total_catch = sum(catch), .by = year) %>%
-  summarise(mean(total_catch)) %>%
-  as.numeric()
-
-## Get average catch between now and end of year for previous 5 years
-catch_to_add <- weekly_catches %>% 
-  filter(year>=this_year-5 & week > lubridate::week(lubridate::today())) %>%
-  group_by(year) %>% 
-  summarize(catch=sum(catch), .groups='drop') %>%
-  pull(catch) %>% mean
-message("Predicted ", this_year, " catch= ", round(catch_this_year+ catch_to_add,0)) ##9272
-
 ## what to paste into bottom of spm.dat 
 catch_proj <- cbind(year = c(this_year+(0:2)),
                     catch = c(round(catch_this_year+catch_to_add),
                               round(average_catch),
                               round(average_catch)))
-
 
 
 setwd(here::here(year,'model_runs','03b_projection'))
@@ -250,7 +216,7 @@ mod18.2c_2020 <- r4ss::SS_output(here::here(year,'mgmt','18.2c_2020'), verbose =
 SSplotComparisons(SSsummarize(biglist = list(mod18.2c_2020,mod18.2c_2024)),
                   legendlabels = c('2020 Model', '2024 Model'),
                   col = c('grey22','blue'),
-                  png = TRUE, plotdir = here::here(mod_path,'plots'))
+                  png = TRUE, plotdir = here::here(mod_path,'plots','compare'))
 
 # misc figures ----
 #* phase-plane plot ----
@@ -318,7 +284,7 @@ ggsave(last_plot(),
        file =here::here(year,'mgmt', model, "plots", 'phase_plane.png'),
        width = 5, height = 5, dpi = 400)
 
-
+AAA
 ## catch with inset
 catch <- read.csv(here(year,'data','output','fsh_catch.csv')) %>% 
 mutate(catch = catch/1000)

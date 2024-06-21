@@ -23,7 +23,7 @@ suppressWarnings(afscassess::clean_catch(year = year,
                                          TAC = TAC))
 
 ## reformat catches
-afscdata::catch_to_ss3(year, seas = 1, fleet = 1, yld_rat = TRUE)
+afscdata::catch_to_ss3(year, seas = 1, fleet = 1, yld_rat = F) # yld_rat should be FALSE
 
 message('reformatted and saved fishery catch data to output/')
 
