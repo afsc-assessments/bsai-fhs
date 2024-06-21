@@ -25,25 +25,24 @@ flextable::regulartable(catch) %>%
 
 \pagebreak
 
-```{r fishlengthcompst}
-
-# 
-# flextable::regulartable(read.csv(here::here(year, 'data','output','fsh_length_comp.csv')) %>% 
-#                           select(-n_s, -SA_Index) %>%
-#                           dplyr::filter(year > 1972) %>%
-#                           reshape2::melt(id = c('year','n_h')) %>%
-#                           dplyr::mutate('Length (cm)' = as.numeric(gsub('X','',variable) ) ) %>%
-#                           # select(year,n_h,length) %>% 
-#                           tidyr::pivot_wider(
-#                             id_cols = 'Length (cm)',
-#                             names_from = c(year,n_h),
-#                             names_glue = "{year} ({n_h})",
-#                             values_from = value)) %>%
-#   flextable::set_caption("Fishery length frequency data for POP in the GOA for the most recent 10 complete years used in the model. Input sample sizes (square root of nominal sample size scaled with a maximum of 100) are in parentheses.") %>%
-#   flextable::colformat_double(j = 2:11,digits = 3) %>%
-#   flextable::compose(i = 30, j = 1, flextable::as_paragraph('45+')) %>%
-#   flextable::font(fontname = "Times New Roman", part = "all") %>% 
-#   flextable::fontsize(size = 11, part = "all")
+```{r fishlengthcompst} 
+flextable::regulartable(mod18.2c_2024$lendbase %>%
+  filter(Fleet ==1 & sex == 1 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==1]))) %>%
+    mutate(n_h = mean(effN), .by = 'Year')
+                          select(Yr, effN,Bin, Obs ) %>% 
+                          reshape2::melt(id = c('Yr', 'effN')) %>%
+                          dplyr::mutate('Length (cm)' = as.numeric(variable) ) %>%
+                          # select(year,n_h,length) %>%
+                          tidyr::pivot_wider(
+                            id_cols = 'Length (cm)',
+                            names_from = c(Yr,effN),
+                            names_glue = "{Yr} ({effN})",
+                            values_from = value) %>%
+  flextable::set_caption("Fishery length frequency data for POP in the GOA for the most recent 10 complete years used in the model. Input sample sizes (square root of nominal sample size scaled with a maximum of 100) are in parentheses.") %>%
+  flextable::colformat_double(j = 2:11,digits = 3) %>%
+  flextable::compose(i = 30, j = 1, flextable::as_paragraph('45+')) %>%
+  flextable::font(fontname = "Times New Roman", part = "all") %>%
+  flextable::fontsize(size = 11, part = "all")
 
 ```
 
