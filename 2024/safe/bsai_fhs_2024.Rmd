@@ -5,7 +5,7 @@ params:
   species_complex: "no"
   area: "Bering Sea and Aleutian Islands"
   tier: 3
-author: "Maia S. Kapur, Cronin-Fine, L."
+author: "Maia S. Kapur, Lee Cronin-Fine"
 date: "November 2024"
 
 # don't do anything below this line unless you are cool with the consequences
@@ -45,14 +45,12 @@ x = 1
 sprintf("Figure %s. " , paste0(params$chapter, '.',x))
 ```
 
-```{r}
+```{r, include=FALSE, echo = FALSE}
 if(params$species_complex=="no"){
    title = paste0(params$chapter, ". Assessment of the ", tools::toTitleCase(params$species), " Stock in the ", params$area)
   } else {
     title = paste0(params$chapter, ". Assessment of the ", tools::toTitleCase(params$species), " Stock Complex in the ", params$area)  
-  }
-
-
+  } 
 ```
 
 ---
@@ -72,7 +70,7 @@ model <- '18.2c_2024'
 model_name <- "Model 18.2c (2024)"
 old_model_name <- "Model 18.2c (2020)"
 mod_path <- here::here(year,'mgmt',model)
-mod18.2c_2024 <- r4ss::SS_output(mod_path, verbose = FALSE)
+mod18.2c_2024 <- r4ss::SS_output(mod_path, verbose = FALSE, warn = FALSE, printstats = FALSE, hidewarn = TRUE)
 names(mod18.2c_2024$timeseries)[23] <- "F1" ## overwrite so inline works
 end_proj <- year + 15
 
@@ -151,11 +149,5 @@ c3 <- pcatch[3] # proj catch year + 2
 
 ```{r, child="12-figures-update.Rmd", eval = T}
 ```
-
-```{r, child="15-append_cie.Rmd", eval = T}
-```
-
-```{r, child="16-append_eqs.Rmd", eval = T}
-```
-
+ 
 

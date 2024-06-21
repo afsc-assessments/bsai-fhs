@@ -219,6 +219,34 @@ SSplotComparisons(SSsummarize(biglist = list(mod18.2c_2020,mod18.2c_2024)),
                   png = TRUE, plotdir = here::here(mod_path,'plots','compare'))
 
 # misc figures ----
+#* selectivity and maturity composite ----
+ 
+## first make the custom selex plots if needed
+png(here::here(mod_path,"plots","selex_maturity.png"), 
+    8, height =5, unit = 'in', res = 420) 
+
+par(mfrow=c(2,2), mar = c(0,0,1,1))
+SSplotSelex(mod18.2c_2024, fleets  = 1,
+            subplots = 3) 
+ 
+SSplotSelex(mod18.2c_2024, fleets  = 2,
+            subplots =2, agefactors = 'Asel' ) 
+
+SSplotBiology(mod18.2c_2024, subplots = 6)
+graphics.off()
+ 
+#* biofreccompare.png ----
+## comparison of spbio, recruitment, f traj 
+## list all comparison plots made above
+filepaths <- list.files(here::here(mod_path, "plots"), 
+                        pattern = 'compare', full.names = TRUE)
+
+## wrangle the three into a new image
+png(here::here(mod_path,"plots","bio_f_rec.png"), width = 12, height =8, unit = 'in', res = 420) 
+rl = lapply(filepaths[c(12,18,2)], png::readPNG)
+gl = lapply(rl, grid::rasterGrob) 
+gridExtra::grid.arrange(grobs=gl,ncol = 1) 
+dev.off()
 #* phase-plane plot ----
 ## take all reference values from Proj, noting that refs to "ofl" correspond to "b35" therein
  

@@ -3,13 +3,13 @@
 # Tables
 
 ```{r commcatch}
-# catch <- read.csv(here::here(year,'safe','static_tables','catch_abc_quota.csv'))
-# catch[,2:4] <- round(catch[,2:4],0)
-# catch$Year<-as.character(catch$Year)
-# flextable::regulartable(catch) %>%
-#   flextable::set_caption("UPDATE ME NMFS AKRO BLEND/Catch Accounting System via AKFIN database.")%>%
-#   flextable::font(fontname = "Times New Roman", part = "all") %>% 
-#   flextable::fontsize(size = 11, part = "all")
+catch <- read.csv(here::here(year,'safe','static_tables','catch_abc_quota.csv'))
+catch[,2:4] <- round(catch[,2:4],0)
+catch$Year<-as.character(catch$Year)
+flextable::regulartable(catch) %>%
+  flextable::set_caption("Total catch, ABC, OFL, TAC, and associated management measures for BSAI FHS. The Total column are the catches used in the model. Catch at age and length are provided in separate tables. Catch Accounting System via AKFIN database.")%>%
+  flextable::font(fontname = "Times New Roman", part = "all") %>%
+  flextable::fontsize(size = 11, part = "all")
 ```
 
 \pagebreak
