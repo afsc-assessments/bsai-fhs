@@ -35,7 +35,7 @@ flextable::regulartable(mod18.2c_2024$lendbase %>%
 
 \pagebreak
 
-```{r fishlengthcompstF} 
+```{r fishlengthcompstM} 
 flextable::regulartable(mod18.2c_2024$lendbase %>%
   filter(Fleet ==1 & sex == 2 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==1]))) %>%
     mutate(effN = round(effN,1),
@@ -56,24 +56,44 @@ flextable::regulartable(mod18.2c_2024$lendbase %>%
 
 \pagebreak
 
-```{r fishagecompst}
-# flextable::regulartable(read.csv(here::here(year, 'data','output','fsh_age_comp.csv')) %>% 
-#                           mutate(n_h = floor(sqrt(n_s))) %>% 
-#                           select(-n_s, -AA_Index) %>%
-#                           dplyr::filter(year > 2004) %>%
-#                           reshape2::melt(id = c('year','n_h')) %>%
-#                           dplyr::mutate('Age (yr)' = as.numeric(gsub('X','',variable) ) ) %>%
-#                           # select(year,n_h,length) %>% 
-#                           tidyr::pivot_wider(
-#                             id_cols = 'Age (yr)',
-#                             names_from = c(year,n_h),
-#                             names_glue = "{year} ({n_h})",
-#                             values_from = value)) %>%
-#   flextable::set_caption("Fishery age frequency data for POP in the GOA for the most recent 10 complete years used in the model. Input sample sizes (square root of nominal sample size) are in parentheses.") %>%
-#   flextable::colformat_double(j = 2:11,digits = 3) %>% 
-#   flextable::compose(i = 24, j = 1, flextable::as_paragraph('25+')) %>%
-#   flextable::font(fontname = "Times New Roman", part = "all") %>% 
-#   flextable::fontsize(size = 11, part = "all") 
+```{r fishagecompstM}
+flextable::regulartable(mod18.2c_2024$agedbase %>%
+  filter(Fleet ==1 & sex == 1 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
+    mutate(effN = round(effN,1),
+           Obs = round(Obs, 4)) %>%
+                          select(Yr, effN,'Age' = Bin, Obs ) %>%  
+                          tidyr::pivot_wider(
+                            id_cols = 'Age',
+                            names_from = c(Yr,effN),
+                            names_glue = "{Yr} ({effN})",
+                            values_from = Obs)) %>%
+  flextable::set_caption("Fishery age frequency data for female BSAI FHS since 2000 used in the model. Input sample sizes are in parentheses.") %>%
+  flextable::colformat_double(j = 2:17,digits = 4) %>%
+  flextable::compose(i = 21, j = 1, flextable::as_paragraph('21+')) %>%
+  flextable::font(fontname = "Times New Roman", part = "all") %>%
+  flextable::fontsize(size = 11, part = "all")
+
+```
+\pagebreak
+
+```{r fishagecompstM}
+
+flextable::regulartable(mod18.2c_2024$agedbase %>%
+  filter(Fleet ==1 & sex == 2 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
+    mutate(effN = round(effN,1),
+           Obs = round(Obs, 4)) %>%
+                          select(Yr, effN,'Age' = Bin, Obs ) %>%  
+                          tidyr::pivot_wider(
+                            id_cols = 'Age',
+                            names_from = c(Yr,effN),
+                            names_glue = "{Yr} ({effN})",
+                            values_from = Obs)) %>%
+  flextable::set_caption("Fishery age frequency data for male BSAI FHS since 2000 used in the model. Input sample sizes are in parentheses.") %>%
+  flextable::colformat_double(j = 2:17,digits = 4) %>%
+  flextable::compose(i = 21, j = 1, flextable::as_paragraph('21+')) %>%
+  flextable::font(fontname = "Times New Roman", part = "all") %>%
+  flextable::fontsize(size = 11, part = "all")
+
 ```
 
 \pagebreak
