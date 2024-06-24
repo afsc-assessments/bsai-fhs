@@ -58,7 +58,7 @@ flextable::regulartable(mod18.2c_2024$lendbase %>%
 
 ```{r fishagecompstM}
 flextable::regulartable(mod18.2c_2024$agedbase %>%
-  filter(Fleet ==1 & sex == 1 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
+  filter(Fleet ==1 & sex == 1 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostagedbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
     mutate(effN = round(effN,1),
            Obs = round(Obs, 4)) %>%
                           select(Yr, effN,'Age' = Bin, Obs ) %>%  
@@ -78,7 +78,7 @@ flextable::regulartable(mod18.2c_2024$agedbase %>%
 
 ```{r fishagecompstM}
 flextable::regulartable(mod18.2c_2024$agedbase %>%
-  filter(Fleet ==1 & sex == 2 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
+  filter(Fleet ==1 & sex == 2 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostagedbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
     mutate(effN = round(effN,1),
            Obs = round(Obs, 4)) %>%
                           select(Yr, effN,'Age' = Bin, Obs ) %>%  
@@ -109,6 +109,26 @@ flextable::regulartable(mod18.2c_2024$cpue %>%
 
 \pagebreak
 
+```{r survlengthcompsF} 
+flextable::regulartable(mod18.2c_2024$lendbase %>%
+  filter(Fleet == 2 & sex == 1 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==2]))) %>%
+    mutate(effN = round(effN,1),
+           Obs = round(Obs, 4)) %>%
+                          select(Yr, effN,'Length (cm)' = Bin, Obs ) %>%  
+                          tidyr::pivot_wider(
+                            id_cols = 'Length (cm)',
+                            names_from = c(Yr,effN),
+                            names_glue = "{Yr} ({effN})",
+                            values_from = Obs)) %>%
+  flextable::set_caption("Survey length frequency data for female BSAI FHS since 2000 used in the model. Input sample sizes are in parentheses.") %>%
+  flextable::colformat_double(j = 2:7,digits = 4) %>%
+  flextable::compose(i = 24, j = 1, flextable::as_paragraph('58+')) %>%
+  flextable::font(fontname = "Times New Roman", part = "all") %>%
+  flextable::fontsize(size = 11, part = "all")
+
+```
+
+\pagebreak
 \pagebreak
 
 ```{r parposteriorst}
