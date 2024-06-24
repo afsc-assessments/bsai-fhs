@@ -14,17 +14,6 @@ flextable::regulartable(catch) %>%
 
 \pagebreak
 
-```{r mgmtmeasures}
-# flextable::regulartable(read.csv(here::here(year,'safe','static_tables','mgmt_measures.csv'))) %>%  
-#   flextable::set_caption("UPDATE ME") %>%
-#   flextable::set_header_labels(Catch..t. = 'Catch (t)', ABC= 'ABC (t)', OFL = 'OFL (t)', TAC = 'TAC (t)', Management.Measures = 'Management Measures')%>%
-#   flextable::font(fontname = "Times New Roman", part = "all") %>% 
-#   flextable::fontsize(size = 11, part = "all") %>%
-#   flextable::width(j = 5, width = 3, unit = 'in')
-```
-
-\pagebreak
-
 ```{r fishlengthcompst} 
 flextable::regulartable(mod18.2c_2024$lendbase %>%
   filter(Fleet ==1 & sex == 1 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==1]))) %>%
