@@ -77,7 +77,6 @@ flextable::regulartable(mod18.2c_2024$agedbase %>%
 \pagebreak
 
 ```{r fishagecompstM}
-
 flextable::regulartable(mod18.2c_2024$agedbase %>%
   filter(Fleet ==1 & sex == 2 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
     mutate(effN = round(effN,1),
@@ -93,20 +92,19 @@ flextable::regulartable(mod18.2c_2024$agedbase %>%
   flextable::compose(i = 21, j = 1, flextable::as_paragraph('21+')) %>%
   flextable::font(fontname = "Times New Roman", part = "all") %>%
   flextable::fontsize(size = 11, part = "all")
-
 ```
 
 \pagebreak
 
 ```{r survobs}
-# flextable::regulartable(read.csv(here::here(year, 'data','output','goa_total_bts_biomass.csv')) %>% 
-#                           dplyr::mutate(cv = se/biomass, year = as.character(year)) %>%
-#                           dplyr::select(Year = year, 'Biomass (t)' = biomass, CV = cv)) %>%
-#   flextable::set_caption("Biomass estimates (t) with coefficient of variation (CV) for gulf-wide total biomass for POP in the GOA from trawl surveys after 1990. The 2001 survey did not sample the eastern GOA (the Yakutat and Southeastern areas). Substitute estimates of biomass for the Yakutat and Southeastern areas were obtained by averaging the biomass estimates for POP in these areas in the 1993, 1996, and 1999 surveys, that portion of the variance was obtained by using a weighted average of the three prior surveys’ variance.") %>%
-#     flextable::colformat_double(j = 3, digits = 2) %>%
-#     flextable::colformat_double(j = 2, big.mark =',') %>%
-#   flextable::font(fontname = "Times New Roman", part = "all") %>% 
-#   flextable::fontsize(size = 11, part = "all") 
+flextable::regulartable(mod18.2c_2024$cpue %>%
+                          dplyr::mutate( Year = as.character(Yr)) %>%
+                          dplyr::select(Year, 'Biomass (t)' = Obs, SE)) %>%
+  flextable::set_caption("Survey biomass estimates (t) with standard error (SE) for BSAI FHS.") %>%
+    flextable::colformat_double(j = 3, digits = 2) %>%
+    flextable::colformat_double(j = 2, big.mark =',') %>%
+  flextable::font(fontname = "Times New Roman", part = "all") %>%
+  flextable::fontsize(size = 11, part = "all")
 ```
 
 \pagebreak
