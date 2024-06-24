@@ -109,28 +109,6 @@ flextable::regulartable(mod18.2c_2024$cpue %>%
 
 \pagebreak
 
-```{r survagecompst}
-# flextable::regulartable(read.csv(here::here(year, 'data','output','goa_bts_age_comp.csv')) %>% 
-#                           mutate(n_h = floor(sqrt(n_s))) %>% 
-#                           select(-n_s, -AA_Index) %>%
-#                           dplyr::filter(year > 2002) %>%
-#                           reshape2::melt(id = c('year','n_h')) %>%
-#                           dplyr::mutate('Age (yr)' = as.numeric(gsub('X','',variable) ) ) %>%
-#                           # select(year,n_h,length) %>% 
-#                           tidyr::pivot_wider(
-#                             id_cols = 'Age (yr)',
-#                             names_from = c(year,n_h),
-#                             names_glue = "{year} ({n_h})",
-#                             values_from = value)) %>%
-#   flextable::set_caption("Survey age frequency data for POP in the GOA for the most recent 10 complete years used in the model. Input sample sizes (square root of nominal sample size) are in parentheses.") %>%
-#   flextable::colformat_double(j = 2:11,digits = 3) %>%
-#   flextable::compose(i = 24, j = 1, flextable::as_paragraph('25+')) %>%
-#   flextable::font(fontname = "Times New Roman", part = "all") %>% 
-#   flextable::fontsize(size = 11, part = "all")  
-
-```
- 
- 
 \pagebreak
 
 ```{r parposteriorst}
