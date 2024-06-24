@@ -3,11 +3,11 @@
 # Tables
 
 ```{r commcatch}
-catch <- read.csv(here::here(year,'safe','static_tables','catch_abc_quota.csv'))
-catch[,2:4] <- round(catch[,2:4],0)
+catch <- read.csv(here::here(year,'safe','static_tables','catch_abc_tac_ofl_mgmt.csv'))
+# catch[,2:4] <- round(catch[,2:4],0)
 catch$Year<-as.character(catch$Year)
 flextable::regulartable(catch) %>%
-  flextable::set_caption("Total catch, ABC, OFL, TAC, and associated management measures for BSAI FHS. The Total column are the catches used in the model. Catch at age and length are provided in separate tables. Catch Accounting System via AKFIN database.")%>%
+  flextable::set_caption("Total catch, ABC, Final TAC, OFL, and associated management measures for BSAI FHS since 2007. The Total column are the catches used in the assessment and projection model. Catch at age and length are provided in separate tables. Catch Accounting System via AKFIN database.")%>%
   flextable::font(fontname = "Times New Roman", part = "all") %>%
   flextable::fontsize(size = 11, part = "all")
 ```

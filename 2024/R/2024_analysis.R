@@ -764,8 +764,49 @@ dev.off()
 
 # create tables ----
 #* catch/abc/tac----
-## dwnld values from 
 
+## this option only gives values 2007+
+## dwnld values from AKFIN, bind to total catches and management measures (static table)
+# akfin <- afscdata::connect(db = 'akfin')
+# abc0 <- afscdata::sql_run(database = akfin, 
+#                           query = "SELECT * FROM AKR.V_CAS_TAC") %>%
+#   filter(FMP_AREA_CODE == 'BSAI' & 
+#            grepl('Flathead|Flounder',SPECIES_GROUP_LABEL)) %>%
+#   select(YEAR,ACCEPTABLE_BIOLOGICAL_CATCH, FINAL_TAC, OVERFISHING_LEVEL) %>%
+#   arrange(YEAR)
+
+## read in file from M Callahan
+abc0 <- t(read.csv(here::here(year, 'data', 'raw','bsai_fhs_harvest_specs_1986.csv'))) %>%
+  data.frame()
+names(abc0)[1] <- 'value'
+abc0$YEAR <- rep(2024:1986, each = 5)
+abc0$variable <- stringr::str_extract(rownames(abc0), "^[^.]*")
+abc0 <- abc0 %>% 
+  filter(!(variable %in% c('CDQ','iTAC'))) %>%
+  tidyr::pivot_wider(id_cols = 'YEAR', names_from = 'variable',
+                      values_from = 'value')
+
+## merge with observed catches & management measures
+abc1 <- merge(abc0, mod18.2c_2024$catch[,c('Yr','Obs')], 
+              by.x = 'YEAR', by.y = 'Yr') %>%
+  merge(.,read.csv(here::here(year,'safe',
+                              'static_tables','mgmt_measures.csv'))[,c('Year','Management.Measures')],
+        by.x = 'YEAR', by.y = 'Year') %>%
+  select(Year = YEAR, Total = Obs, ABC,
+         TAC , OFL, 'Management Measures'= Management.Measures) %>%
+  arrange(Year)
+
+## overwrite final year of catches with value from PROJ
+pcatch <- readLines(here::here(year,'model_runs','03b_projection','spm.dat'))[54:56] %>%
+  strsplit(.,'\t') %>% ## split at tabs
+  unlist() %>%
+  strsplit(.,' +') %>% ## split at spaces 
+  unlist()
+pcatch<- round(as.numeric(pcatch[c(2,4,6)]))
+abc1$Total[abc1$Year==year] <- pcatch[2]
+
+write.csv(abc1,here::here(year,'safe','static_tables','catch_abc_tac_ofl_mgmt.csv'),
+          row.names = FALSE)
 
 ## NAA as a separate file
 mrep <- readLines(here::here(year, 'mgmt',model,paste0(modname,'.rep')))
