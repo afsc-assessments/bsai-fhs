@@ -28,7 +28,7 @@ configuration matches the accepted model from 2020, with updated data. A
 full revision to the modeling framework is anticipated in the next cycle
 (2028). There are no alternative models presented here.
 
-A total of XX parameters were estimated inside the assessment model, YY of which were annual recruitment deviations. A description of the treatment of all model parameters (fixed and estimated), their maximum likelihood estimates, and uncertainty intervals are provided in Table \@ref(tab:parposteriorst).
+A total of `r nrow(mod18.2c_2024$parameters)` parameters were estimated inside the assessment model, `r mod18.2c_2024$parameters %>% filter(grepl('Recr', mod18.2c_2024$parameters$Label)) %>% nrow()` of which were annual recruitment deviations. A description of the treatment of all model parameters (fixed and estimated), their maximum likelihood estimates, and uncertainty intervals are provided in Table \@ref(tab:parposteriorst).
 
 ## Parameters Estimated Outside the Assessment Model {#parest}
 
