@@ -8,11 +8,8 @@ catch$Year<-as.character(catch$Year)
 flextable::regulartable(catch) %>%
   flextable::set_caption("Total catch, ABC, Final TAC, OFL, and associated management measures for BSAI FHS since 2007. The Total column are the catches used in the assessment and projection model. Catch at age and length are provided in separate tables. Catch Accounting System via AKFIN database.")%>%
   flextable::font(fontname = "Times New Roman", part = "all") %>%
-  flextable::fontsize(size = 11, part = "all") %>% flextable::set_header_labels( values = c('Year',
-                                             'Total Catch (t)',
-                                             'ABC',
-                                             'TAC',
-                                             'OFL','Management Measures')) 
+  flextable::fontsize(size = 11, part = "all") %>% flextable::set_header_labels( values = c('Year',  'Total Catch (t)',    'ABC',  'TAC',  'OFL','Management Measures')) %>%
+     flextable::width(j = 6, width = 2.5, unit = 'in') 
 ```
 
 \pagebreak
