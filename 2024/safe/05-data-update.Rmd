@@ -57,7 +57,7 @@ data.frame(Source = c(rep("NMFS Aleutian Islands Groundfish Trawl Survey", 1),
 
 ## Fishery
 
-Catches as used in the model are shown in Table \@ref(tab:commcatch); discards are not used in the model. Fishery-dependent compositional data (catch-at-length and catch-at-age, and associated input sample sizes) are shown in Tables \@ref(tab:fishlengthcompst) and \@ref(tab:fishagecompst), respectively.
+Catches as used in the model are shown in Table \@ref(tab:commcatch); discards are not used in the model. Fishery-dependent compositional data (catch-at-length and catch-at-age, and associated input sample sizes) are shown in Tables \@ref(tab:fishlengthcompstF) through \@ref(tab:fishagecompstM).
 
 ## Survey
 

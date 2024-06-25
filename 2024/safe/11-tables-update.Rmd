@@ -56,7 +56,7 @@ flextable::regulartable(mod18.2c_2024$lendbase %>%
 
 \pagebreak
 
-```{r fishagecompstM}
+```{r fishagecompstF}
 flextable::regulartable(mod18.2c_2024$agedbase %>%
                           filter(Fleet ==1 & sex == 1 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostagedbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
                           mutate(effN = round(effN,1),
