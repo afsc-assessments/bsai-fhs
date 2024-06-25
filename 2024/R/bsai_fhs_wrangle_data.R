@@ -370,6 +370,10 @@ srvlen_save <- srvlen0 %>%
   arrange(Yr) #%>%
   
 ## sanity check that the order is right (females then males)
+## compare to raw-ish production data
+survlen %>% filter(SEX == 'females' & YEAR == 1984 & LENGTH_BIN ==8)
+survlen %>% filter(SEX == 'males' & YEAR == 1984 & LENGTH_BIN ==8)
+## compare to wrangled file
 (srvlen0 %>% filter(SEX==1 & YEAR == 1984))[,'8'] ## bin 8 females
 (srvlen0 %>% filter(SEX==2 & YEAR == 1984))[,'8'] ## bin 8 males
 (srvlen_save %>% filter(Yr == 1984))[,c('8.x','8.y')]
