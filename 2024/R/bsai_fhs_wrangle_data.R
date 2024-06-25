@@ -356,7 +356,9 @@ srvlen0 <- survlen %>%
   merge(., nsamp_len, by = 'YEAR')
 
 
-srvlen0 %>% 
+
+
+srvlen_save <- srvlen0 %>% 
   filter(SEX == 1) %>% 
   merge(., srvlen0 %>% 
           filter(SEX == 2) %>% 
@@ -365,8 +367,14 @@ srvlen0 %>%
   mutate(Seas = 7, FltSvy = 2, Gender = 3, Part = 0,) %>%
   select(Yr = YEAR, Seas, FltSvy, Gender, Part, Nsamp=HAULJOIN, everything(),
          -SEX) %>%
-  arrange(Yr) %>%
-  write.csv(., file = here::here(year,'data','output','srv_len_ss3-gapindex.csv'), 
+  arrange(Yr) #%>%
+  
+## sanity check that the order is right (females then males)
+(srvlen0 %>% filter(SEX==1 & YEAR == 1984))[,'8'] ## bin 8 females
+(srvlen0 %>% filter(SEX==2 & YEAR == 1984))[,'8'] ## bin 8 males
+(srvlen_save %>% filter(Yr == 1984))[,c('8.x','8.y')]
+
+write.csv(srvlen_save, file = here::here(year,'data','output','srv_len_ss3-gapindex.csv'), 
             row.names = FALSE)
 
 
