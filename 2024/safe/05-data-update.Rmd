@@ -61,5 +61,5 @@ Catches as used in the model are shown in Table \@ref(tab:commcatch); discards a
 
 ## Survey
 
-Survey biomass estimates and associated sampling variability (annual CVs) are shown in Table \@ref(tab:survobs). Survey compositional data (survey conditional ages-at-length, and associated input sample sizes) are shown in Table \@ref(tab:survagecompst). 
+Survey biomass estimates and associated sampling variability (annual CVs) are shown in Table \@ref(tab:survobs). Survey compositional data (survey conditional ages-at-length, and associated input sample sizes) are shown in Tables \@ref(tab:survagecompstF) and \@ref(tab:survagecompstM). 
  

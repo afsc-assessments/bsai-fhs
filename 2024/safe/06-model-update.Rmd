@@ -28,6 +28,8 @@ configuration matches the accepted model from 2020, with updated data. A
 full revision to the modeling framework is anticipated in the next cycle
 (2028). There are no alternative models presented here.
 
+A total of XX parameters were estimated inside the assessment model, YY of which were annual recruitment deviations. A description of the treatment of all model parameters (fixed and estimated), their maximum likelihood estimates, and uncertainty intervals are provided in Table \@ref(tab:parposteriorst).
+
 ## Parameters Estimated Outside the Assessment Model {#parest}
 
 The survey catchability, time- and age-invariant natural mortality for
@@ -57,23 +59,7 @@ A comparison of these values is as follows:
 
 ## Parameters Estimated Inside the Assessment Model
 
-The parameters estimated conditionally inside the assessment model are
-listed in the table below.
 
-| Parameter                            | Symbol                              | Number |
-|----------------------------|--------------------------|------------------|
-| log(mean recruitment)                | $\mu_r$                             | 1      |
-| Recruitment variability              | $\sigma_r$                          | 1      |
-| Spawner-per-recruit reference points | $F_{35\%}$, $F_{40\%}$, $F_{100\%}$ | 3      |
-| Recruitment deviations               | $\epsilon_y^r$                      | 89     |
-| Average fishing mortality            | $\mu_f$                             | 1      |
-| Fishing mortality deviations         | $\epsilon_y^f$                      | 63     |
-| Fishery selectivity coefficients     | $s_a^f$                             | 6      |
-| Survey selectivity coefficients      | $s_a^t$                             | 2      |
-| Maturity-at-age coefficients         | $\hat m_a$                          | 2      |
-| Total                                |                                     | 170    |
-
-: Parameters estimated within the assessment model.
 
 ### Recruitment
 
