@@ -96,28 +96,5 @@ periods (1964-1987 and 1988-present).
 
 Finally, annual fishing mortality rates were estimated (`r paste0(mod18.2c_2024$startyr,'-',mod18.2c_2024$endyr)`).
 
-| Double-normal selectivity parameters | Treatment for Survey        |
-|--------------------------------------|-----------------------------|
-| Peak: beginning age for the          |                             |
-| plateau                              | *estimated*                  |
-| Width: width of plateau              | set to 12                   |
-| Ascending width (log space)          | *estimated*                    |
-| Descending width (log                |                             |
-| space)                               | set to 3                    |
-| Initial: selectivity at              |                             |
-| smallest age bin                     | set to 0                    |
-| Final: selectivity at                |                             |
-| largest age bin                      | Follows shape of descending |
-| limb                                 |*estimated* |
-| Male Peak Offset                     | *estimated*                    |
-| Male ascending width offset          |                             |
-| (log space)                          | *estimated*                    |
-| Male descending width                |                             |
-| offset (log space)                   | set to 1                    |
-| Male "Final"                         |                             |
-| offset (transformation required)     | set to 1                    |
-| Male apical selectivity              | set to 1                    |
-
-: Treatment of age-based selectivity parameters for the survey. The fishery uses age-based logistic selectivity.
  
  
