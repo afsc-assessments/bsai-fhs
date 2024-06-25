@@ -173,9 +173,15 @@ flextable::flextable(
            Interval = ifelse(Interval0== 'NA-NA','',Interval0),
            'Fixed/Estimated' = ifelse(Phase<0,'Fixed','Estimated')) %>%
     select( Purpose, Label,  'Fixed/Estimated',MLE ,  Interval))  %>%
-  flextable::colformat_double(j = 4, digits = 3) %>%
-  # flextable::width(j = 1, width = 2.5, unit = 'in') %>%
-  #   flextable::set_header_labels( values = c('Estimated parameter','2.5% Interval','Median','97.5% Interval')) %>%
+  # flextable::colformat_double(j = 4, digits = 3) %>%
+   flextable::width(j = 1, width = 2.5, unit = 'in') %>%
+  flextable::width(j = 2, width = 0.5, unit = 'in') %>%
+    flextable::width(j = 5, width = 1, unit = 'in') %>%
+    flextable::set_header_labels( values = c('Purpose',
+                                             'Estimated parameter',
+                                             'Treatment',
+                                             'MLE',
+                                             '95% Interval')) %>%
       flextable::set_caption("All parameters from the base model, with 95% credible intervals.") %>%
     flextable::font(fontname = "Times New Roman", part = "all") %>%
     flextable::fontsize(size = 11, part = "all")

@@ -49,8 +49,6 @@ relationship of the form $W = aL^b$ was fit to survey data from
 
 ## Parameters Estimated Inside the Assessment Model
 
-
-
 ### Recruitment
 
 The log of unfished recruitment ($R_0$), log-scale recruitment deviations
