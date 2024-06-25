@@ -47,16 +47,6 @@ relationship of the form $W = aL^b$ was fit to survey data from
 1982-2016 for males and females combined, with parameter estimates a =
 0.00298 and b = 3.327 (weight in g, length in cm).
 
-A comparison of these values is as follows:
-
-| Symbol, Description                                                                                | 2020 Value       | Updated Value |
-|------------------------|------------------------|------------------------|
-| $w_\infty$, asymptotic weight                                                                      | 901 g            | 899 g         |
-| $k$, weight-at-age growth rate                                                                     | 0.2 $kg yr^{-1}$ | unchanged     |
-| $t_0$, age at weight zero                                                                          | -0.37            | -0.38         |
-| $a$, $b$, slope and intercept of linear relationship between sd(length at age) and age, post 1980s | -0.02, 2.18      | -0.02, 2.17   |
-
-
 ## Parameters Estimated Inside the Assessment Model
 
 
