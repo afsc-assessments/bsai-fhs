@@ -23,7 +23,7 @@ software change (see externally-linked document [here](https://afsc-assessments.
 
 ## Description of Base Model
 
-This model is an Operational Update. The
+> This model is an Operational Update. The
 configuration matches the accepted model from 2020, with updated data. A
 full revision to the modeling framework is anticipated in the next cycle
 (2028). There are no alternative models presented here.
@@ -42,7 +42,7 @@ to 0.5, consistent with previous assessments. The maturity ogive for
 flathead sole followed an age-based logistic curve where age at 50%
 maturity was 9.7 and age at 95% maturity was 12.8. The ageing error
 matrix was taken directly from the Stock Synthesis model used in
-assessments prior to 2004 (Spencer et al., 2004). A length–weight
+assessments prior to 2004 [@Spencer2004]. A length–weight
 relationship of the form $W = aL^b$ was fit to survey data from
 1982-2016 for males and females combined, with parameter estimates a =
 0.00298 and b = 3.327 (weight in g, length in cm).
