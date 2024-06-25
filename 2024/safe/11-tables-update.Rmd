@@ -192,9 +192,6 @@ flextable::flextable(
 
 ```{r timeseriest}
 
-# (Results) Tier 1-3: Time series w/ associated uncertainty confidence bounds of: total biom,  1+, SB/ spawning output, stock depletion, and fishing mortality (include ests for projection yr) **- render from SS3**stimated recruitment time series with the avg of year classes spawned after 1976
-  
-
 totbio <- mod18.2c_2024$timeseries %>%
   mutate(Label2 = 'TotBio',
          value = prettyNum(Bio_smry, big.mark = ',',digits = 3),
