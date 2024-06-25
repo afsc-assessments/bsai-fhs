@@ -16,9 +16,9 @@ flextable::regulartable(catch) %>%
 
 ```{r fishlengthcompstF} 
 flextable::regulartable(mod18.2c_2024$lendbase %>%
-  filter(Fleet ==1 & sex == 1 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==1]))) %>%
-    mutate(effN = round(effN,1),
-           Obs = round(Obs, 4)) %>%
+                          filter(Fleet ==1 & sex == 1 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==1]))) %>%
+                          mutate(effN = round(effN,1),
+                                 Obs = round(Obs, 4)) %>%
                           select(Yr, effN,'Length (cm)' = Bin, Obs ) %>%  
                           tidyr::pivot_wider(
                             id_cols = 'Length (cm)',
@@ -37,9 +37,9 @@ flextable::regulartable(mod18.2c_2024$lendbase %>%
 
 ```{r fishlengthcompstM} 
 flextable::regulartable(mod18.2c_2024$lendbase %>%
-  filter(Fleet ==1 & sex == 2 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==1]))) %>%
-    mutate(effN = round(effN,1),
-           Obs = round(Obs, 4)) %>%
+                          filter(Fleet ==1 & sex == 2 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==1]))) %>%
+                          mutate(effN = round(effN,1),
+                                 Obs = round(Obs, 4)) %>%
                           select(Yr, effN,'Length (cm)' = Bin, Obs ) %>%  
                           tidyr::pivot_wider(
                             id_cols = 'Length (cm)',
@@ -58,9 +58,9 @@ flextable::regulartable(mod18.2c_2024$lendbase %>%
 
 ```{r fishagecompstM}
 flextable::regulartable(mod18.2c_2024$agedbase %>%
-  filter(Fleet ==1 & sex == 1 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostagedbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
-    mutate(effN = round(effN,1),
-           Obs = round(Obs, 4)) %>%
+                          filter(Fleet ==1 & sex == 1 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostagedbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
+                          mutate(effN = round(effN,1),
+                                 Obs = round(Obs, 4)) %>%
                           select(Yr, effN,'Age' = Bin, Obs ) %>%  
                           tidyr::pivot_wider(
                             id_cols = 'Age',
@@ -78,9 +78,9 @@ flextable::regulartable(mod18.2c_2024$agedbase %>%
 
 ```{r fishagecompstM}
 flextable::regulartable(mod18.2c_2024$agedbase %>%
-  filter(Fleet ==1 & sex == 2 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostagedbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
-    mutate(effN = round(effN,1),
-           Obs = round(Obs, 4)) %>%
+                          filter(Fleet ==1 & sex == 2 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostagedbase$Yr[mod18.2c_2024$ghostagedbase$Fleet==1]))) %>%
+                          mutate(effN = round(effN,1),
+                                 Obs = round(Obs, 4)) %>%
                           select(Yr, effN,'Age' = Bin, Obs ) %>%  
                           tidyr::pivot_wider(
                             id_cols = 'Age',
@@ -101,8 +101,8 @@ flextable::regulartable(mod18.2c_2024$cpue %>%
                           dplyr::mutate( Year = as.character(Yr)) %>%
                           dplyr::select(Year, 'Biomass (t)' = Obs, SE)) %>%
   flextable::set_caption("Survey biomass estimates (t) with standard error (SE) for BSAI FHS.") %>%
-    flextable::colformat_double(j = 3, digits = 2) %>%
-    flextable::colformat_double(j = 2, big.mark =',') %>%
+  flextable::colformat_double(j = 3, digits = 2) %>%
+  flextable::colformat_double(j = 2, big.mark =',') %>%
   flextable::font(fontname = "Times New Roman", part = "all") %>%
   flextable::fontsize(size = 11, part = "all")
 ```
@@ -111,9 +111,9 @@ flextable::regulartable(mod18.2c_2024$cpue %>%
 
 ```{r survlengthcompsF} 
 flextable::regulartable(mod18.2c_2024$lendbase %>%
-  filter(Fleet == 2 & sex == 1 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==2]))) %>%
-    mutate(effN = round(effN,1),
-           Obs = round(Obs, 4)) %>%
+                          filter(Fleet == 2 & sex == 1 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==2]))) %>%
+                          mutate(effN = round(effN,1),
+                                 Obs = round(Obs, 4)) %>%
                           select(Yr, effN,'Length (cm)' = Bin, Obs ) %>%  
                           tidyr::pivot_wider(
                             id_cols = 'Length (cm)',
@@ -127,15 +127,15 @@ flextable::regulartable(mod18.2c_2024$lendbase %>%
   flextable::fontsize(size = 11, part = "all")
 
 ```
- 
+
 \pagebreak
 
 
 ```{r survlengthcompsM} 
 flextable::regulartable(mod18.2c_2024$lendbase %>%
-  filter(Fleet == 2 & sex == 2 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==2]))) %>%
-    mutate(effN = round(effN,1),
-           Obs = round(Obs, 4)) %>%
+                          filter(Fleet == 2 & sex == 2 & Yr > 2000 & !(Yr %in% unique(mod18.2c_2024$ghostlendbase$Yr[mod18.2c_2024$ghostlendbase$Fleet==2]))) %>%
+                          mutate(effN = round(effN,1),
+                                 Obs = round(Obs, 4)) %>%
                           select(Yr, effN,'Length (cm)' = Bin, Obs ) %>%  
                           tidyr::pivot_wider(
                             id_cols = 'Length (cm)',
@@ -149,52 +149,94 @@ flextable::regulartable(mod18.2c_2024$lendbase %>%
   flextable::fontsize(size = 11, part = "all")
 
 ```
- 
+
 \pagebreak
 
 ```{r parposteriorst}
-# flextable::flextable(read.csv(here::here(year, 'mgmt', model,'processed','parameter_summary.csv')) %>% select(-variable)) %>%
-#   flextable::colformat_double(j = 2:4, digits = 3) %>%
-#   flextable::width(j = 1, width = 2.5, unit = 'in') %>%
-#   flextable::set_header_labels( values = c('Estimated parameter','2.5% Interval','Median','97.5% Interval')) %>%
-#     flextable::set_caption("Estimated parameters from the base model, with 95% credible intervals derived via MCMC. The MLE for sigma R is 0.764 and is fixed for MCMC analyses.") %>%
-#   flextable::font(fontname = "Times New Roman", part = "all") %>% 
-#   flextable::fontsize(size = 11, part = "all")  
+
+flextable::flextable(
+  mod18.2c_2024$parameters %>%
+    filter(!(grepl('RecrDev', Label))) %>%
+    select(Label, Value, Parm_StDev, Phase) %>%
+    mutate('Purpose' = c(rep('Growth, Mortality and Maturity',20),
+                         rep('Recruitment',7),
+                         rep("Initial Conditions and Scale",4),
+                         rep("Fishery Size Selectivity",5),
+                         rep("Survey Age Selectivity",6),
+                         rep("Survey Age Selectivity (Male Offset)",5),
+                         rep("Fishery Size Selectivity (Time Blocking)",4)),
+           
+           lci= prettyNum(Value-1.96*Parm_StDev, big.mark = ',', digits = 3),
+           uci = prettyNum(Value+1.96*Parm_StDev, big.mark = ',', digits = 3),
+           MLE = prettyNum(Value, big.mark = ',', digits = 3),
+           Interval0 = paste(lci,uci, sep = '-'),
+           Interval = ifelse(Interval0== 'NA-NA','',Interval0),
+           'Fixed/Estimated' = ifelse(Phase<0,'Fixed','Estimated')) %>%
+    select( Purpose, Label,  'Fixed/Estimated',MLE ,  Interval))  %>%
+  flextable::colformat_double(j = 4, digits = 3) %>%
+  # flextable::width(j = 1, width = 2.5, unit = 'in') %>%
+  #   flextable::set_header_labels( values = c('Estimated parameter','2.5% Interval','Median','97.5% Interval')) %>%
+      flextable::set_caption("All parameters from the base model, with 95% credible intervals.") %>%
+    flextable::font(fontname = "Times New Roman", part = "all") %>%
+    flextable::fontsize(size = 11, part = "all")
 ```
 
 \pagebreak
 
 
 ```{r timeseriest}
-# flextable::regulartable(read.csv(here::here(year, 'mgmt',model,'processed','mceval_summary.csv')) %>%
-#                           dplyr::mutate(year = as.character(year), median = ifelse(median<1,signif(median,2),round(median,0))) %>%
-#                           dplyr::mutate(lower = ifelse(lower<1,signif(lower,2),round(lower,0))) %>%
-#                           dplyr::mutate(upper = ifelse(upper<1,signif(upper,2),round(upper,0))) %>%
-#                           dplyr::mutate(value = paste0(prettyNum(median, big.mark = ',')," (",
-#                                                        prettyNum(lower, big.mark = ','),
-#                                                        ", ",
-#                                                        prettyNum(upper, big.mark = ','),")")) %>%
-#                           
-#                           dplyr::filter(variable %in% c('Frate','tot_biom','spawn_biom', 'spawn_biom_proj','tot_biom_proj', 'age2_recruits') & year < 2025) %>%
-#                           dplyr::mutate(variable = gsub('_proj','',variable)) %>%
-#                           dplyr::select(year, variable, value) %>%
-#                           tidyr::pivot_wider(id_cols = year, names_from = variable, values_from = value)) %>%
-#   flextable::set_caption("Estimated time series of fully-selected fishing mortality rate, age 2+ Recruitment, female spawning biomass, and total biomass (2+) for POP in the GOA. Values shown are the median and 95% credible intervals (parentheses) from the MCMC estimated posterior distribution.") %>%
-#   flextable::set_header_labels(values = c('Year',
-#                                           'Fully Selected F', 
-#                                           'Age 2+ Recruits (millions)',
-#                                           'SSB (kt)',
-#                                           'Total 2+ Biomass (kt)')) %>%
-#   flextable::width(j = c(2,5), width = 1.5, unit = 'in') %>%
-#   flextable::width(j = c(3), width = 1.75, unit = 'in') %>%
-#   flextable::width(j = 4, width = 1.25, unit = 'in') %>%
-#   # flextable::width(j = 1, width = 0.25, unit = 'in') %>%
-#   flextable::font(fontname = "Times New Roman", part = "all") %>% 
-#   flextable::fontsize(size = 9, part = "all")  
+
+# (Results) Tier 1-3: Time series w/ associated uncertainty confidence bounds of: total biom,  1+, SB/ spawning output, stock depletion, and fishing mortality (include ests for projection yr) **- render from SS3**stimated recruitment time series with the avg of year classes spawned after 1976
+  
+
+totbio <-
+recruitment <- mod18.2c_2024$recruit %>%
+  mutate(Label2 = 'Recruitment',
+     lci= prettyNum(ifelse(pred_recr-exp(dev)*pred_recr<0,0, pred_recr-exp(dev)*pred_recr), big.mark = ',', digits = 3),
+         uci = prettyNum(pred_recr+exp(dev)*pred_recr, big.mark = ',', digits = 3),
+         MLE = prettyNum(pred_recr, big.mark = ',', digits = 3),
+         Interval0 = paste(lci,uci, sep = '-'),
+         Interval = ifelse(Interval0== 'NA-NA','',Interval0),
+         value = paste0(MLE, " (", Interval,")")) %>%
+   select(Year=Yr, Label=Label2, value)%>%
+  tidyr::pivot_wider(id_cols = c(Year), names_from = Label, values_from = value)
+
+timeseries <- mod18.2c_2024$derived_quants  %>%
+                          
+  mutate(Label2 = stringr::str_extract(Label, "^[^_]*"),
+         Year = stringr::str_extract(Label,  "(?<=\\_).*"),
+         lci= prettyNum(Value-1.96*StdDev , big.mark = ',', digits = 3),
+         uci = prettyNum(Value+1.96*StdDev , big.mark = ',', digits = 3),
+         MLE = prettyNum(Value, big.mark = ',', digits = 3),
+         Interval0 = paste(lci,uci, sep = '-'),
+         Interval = ifelse(Interval0== 'NA-NA','',Interval0),
+         value = paste0(MLE, " (", Interval,")")) %>%
+  select(Year, Label=Label2, value) %>%
+  filter(Label %in% c('SSB','Bratio','F')) %>%
+  tidyr::pivot_wider(id_cols = c(Year), names_from = Label, values_from = value) %>%
+  merge(., recruitment, by = 'Year')
+
+flextable::regulartable(timeseries) %>%
+  flextable::set_caption("Estimated time series of female spawning biomass, and total biomass,  fully-selected fishing mortality rate, age 0 Recruitment, for BSAI FHS. Values shown are the median and 95% confidence intervals (parentheses).") %>%
+  flextable::set_header_labels(values = c('Year',
+                                          'SSB (kt)',
+                                          'Fully Selected F',
+                                          'Age 2+ Recruits (millions)',
+                                          
+                                          'Total 2+ Biomass (kt)')) %>%
+  flextable::width(j = c(2,5), width = 1.5, unit = 'in') %>%
+  flextable::width(j = c(3), width = 1.75, unit = 'in') %>%
+  flextable::width(j = 4, width = 1.25, unit = 'in') %>%
+  # flextable::width(j = 1, width = 0.25, unit = 'in') %>%
+  flextable::font(fontname = "Times New Roman", part = "all") %>%
+  flextable::fontsize(size = 9, part = "all")
 ```
+
 \pagebreak
- 
+
 ```{r resultscompare}
+
+# (Results) Tier 1-3: Estimated recruitment time series with the avg of year classes spawned after 1976  **- render from SS3**
 # read.csv(here::here(year, 'mgmt', model,'processed','parameter_summary.csv')) %>%
 #   mutate(src = '2023 Model')%>%
 #   merge(.,read.csv(here::here(year, 'base','processed','parameter_summary.csv')) %>%
