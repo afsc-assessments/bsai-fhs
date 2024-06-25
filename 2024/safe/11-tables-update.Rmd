@@ -195,7 +195,13 @@ flextable::flextable(
 # (Results) Tier 1-3: Time series w/ associated uncertainty confidence bounds of: total biom,  1+, SB/ spawning output, stock depletion, and fishing mortality (include ests for projection yr) **- render from SS3**stimated recruitment time series with the avg of year classes spawned after 1976
   
 
-totbio <-
+totbio <- mod18.2c_2024$timeseries %>%
+  mutate(Label2 = 'TotBio',
+         value = prettyNum(Bio_smry, big.mark = ',',digits = 3),
+         Interval = '')%>%
+   select(Year=Yr, Label=Label2, value)%>%
+  tidyr::pivot_wider(id_cols = c(Year), names_from = Label, values_from = value)
+  
 recruitment <- mod18.2c_2024$recruit %>%
   mutate(Label2 = 'Recruitment',
      lci= prettyNum(ifelse(pred_recr-exp(dev)*pred_recr<0,0, pred_recr-exp(dev)*pred_recr), big.mark = ',', digits = 3),
@@ -220,19 +226,21 @@ timeseries <- mod18.2c_2024$derived_quants  %>%
   select(Year, Label=Label2, value) %>%
   filter(Label %in% c('SSB','Bratio','F')) %>%
   tidyr::pivot_wider(id_cols = c(Year), names_from = Label, values_from = value) %>%
-  merge(., recruitment, by = 'Year')
+  merge(., recruitment, by = 'Year') %>%
+  merge(totbio, by = 'Year')
 
-flextable::regulartable(timeseries) %>%
-  flextable::set_caption("Estimated time series of female spawning biomass, and total biomass,  fully-selected fishing mortality rate, age 0 Recruitment, for BSAI FHS. Values shown are the median and 95% confidence intervals (parentheses).") %>%
+flextable::regulartable(timeseries %>%
+                          select(Year, SSB, TotBio, Bratio, 'F', Recruitment)) %>%
+  flextable::set_caption("Estimated time series of female spawning biomass, total biomass,  fully-selected fishing mortality rate, age 0 Recruitment, for BSAI FHS. Values shown are the median and 95% confidence intervals (parentheses); these are not available for total biomass.") %>%
   flextable::set_header_labels(values = c('Year',
-                                          'SSB (kt)',
+                                          'Spawning Biomss (kt)',
+                                          'Total (3+) Biomass (kt)',
+                                          'Stock Depletion',
                                           'Fully Selected F',
-                                          'Age 2+ Recruits (millions)',
-                                          
-                                          'Total 2+ Biomass (kt)')) %>%
-  flextable::width(j = c(2,5), width = 1.5, unit = 'in') %>%
-  flextable::width(j = c(3), width = 1.75, unit = 'in') %>%
-  flextable::width(j = 4, width = 1.25, unit = 'in') %>%
+                                          'Age 0 Recruits (millions)')) %>%
+  flextable::width(j = c(2,5:6), width = 1.75, unit = 'in') %>%
+  flextable::width(j = c(4), width = 1.5, unit = 'in') %>%
+  flextable::width(j = 3, width = 1, unit = 'in') %>%
   # flextable::width(j = 1, width = 0.25, unit = 'in') %>%
   flextable::font(fontname = "Times New Roman", part = "all") %>%
   flextable::fontsize(size = 9, part = "all")
