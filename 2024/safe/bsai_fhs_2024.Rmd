@@ -144,7 +144,7 @@ c3 <- pcatch[3] # proj catch year + 2
 ```{r, child="11a-auxiliaryfiles.Rmd", eval = T}
 ```
 
-```{r, child="11-tables-update.Rmd", eval = T}
+```{r, child="11-tables-update.Rmd", eval = F}
 ```
 
 ```{r, child="12-figures-update.Rmd", eval = T}

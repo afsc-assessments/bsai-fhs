@@ -416,8 +416,8 @@ srvage0 %>%
           filter(SEX == 2) %>% 
           select(-SEX, -HAULJOIN), 
         by = c('YEAR'), all.y = FALSE) %>%
-  mutate(Seas = 7, FltSvy = -2, Gender = 3, Part = 0,Ageerr = 1, Lbin_lo = -1) %>%
-  select(Yr = YEAR, Seas, FltSvy, Gender, Part, Ageerr, Lbin_lo = Lbin_lo, Lbin_hi = Lbin_lo, Nsamp=HAULJOIN, everything(),
+  mutate(Seas = 7, FltSvy = -2, Gender = 3, Part = 0,Ageerr = 1, Lbin_lo = -1, Lbin_hi = -1) %>%
+  select(Yr = YEAR, Seas, FltSvy, Gender, Part, Ageerr, Lbin_lo = Lbin_lo, Lbin_hi = Lbin_hi, Nsamp=HAULJOIN, everything(),
          -SEX) %>%
   arrange(Yr) %>%
   write.csv(., file = here::here(year,'data','output','srv_age_ss3-gapindex-ghost.csv'), 
