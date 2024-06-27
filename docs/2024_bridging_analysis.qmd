@@ -720,7 +720,7 @@ To make this section more concise I am simply going to show the comparison plots
  
 ```
 
-## Data bridging (cumulative)
+## Data bridging (cumulative by data type)
 ::: panel-tabset
 ## Spawning Biomass
 ```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
@@ -751,22 +751,47 @@ knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare10_r
 
 ## Summary of bridging
 Post data, I tuned the rec-dev ramp and did 3 iterations of Francis weighting from scratch. Will re-do this one last time once all the new data are in but this helps us check for consistency.
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
-# SSplotComparisons(compsummary_8,
-#                   legendlabels = llabs2,
-#                   indexPlotEach = TRUE,
-#                   print = TRUE,
-#                   plotdir = here::here(year, 'model_runs','02_bridging','02.08_18.2c_2020_ss3v33022w-newdata-biasramp-francis'))
 
+::: panel-tabset
 
-# SSplotComparisons(compsummary_8, 
-#                   legendlabels = llabs2, 
-#                   indexPlotEach = TRUE,
-#                   print = F)
-
-
-
+## Updated Francis Weights
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE, fig.cap = 'New (top) and old (bottom) bias ramp}
+data.frame(Fleet = rep(c('Fishery','Survey'),2),
+      Type = c('Length','Length','Age','CAAL'),
+     'Previous_Value' = c(0.064561,0.337024,0.116532,0.284172),
+      Updated_Value = c(0.079732,0.359831,0.086647,0.272054))
 ```
+## Updated Bias Correction Ramp
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE, fig.cap = 'New (top) and old (bottom) bias ramp}
+knitr::include_graphics(here::here('docs','2024','02_bridge-summary','recruit_fit_bias_adjust_NEW.png'))
+knitr::include_graphics(here::here('docs','2024','02_bridge-summary','recruit_fit_bias_adjust_OLD.png'))
+```
+
+
+## Spawning Biomass
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare2_spawnbio_uncertainty.png'))
+```
+## Biomass Ratio
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare4_Bratio_uncertainty.png'))
+```
+
+## Fishing Mortality
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare8_Fvalue_uncertainty.png'))
+```
+
+## Survey Fits
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare13_indices.png'))
+```
+
+## Recruitment
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare10_recruits_uncertainty.png'))
+```
+:::
 
 
 # Bridged Operational Update Model, 18.2c (2024)
