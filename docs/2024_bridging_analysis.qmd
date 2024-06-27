@@ -653,7 +653,7 @@ Some initial steps are required to model dynamics through the present year. Thes
 -   In the `.dat` file set the `endyr` to 2024.
 -   In the `starter` file set the `max yr for sdreport outputs` to -1 (`endyr+1`)
 -   In the `.ctl` file move the `last year of main recdevs` to 2020
--   In the `.ctl` file update the `last_yr_fullbias_adj_in_MPD` to 2019.8 (will tune later)
+-   In the `.ctl` file update the `last_yr_fullbias_adj_in_MPD` to 2019.8 (will tune later in this document)
 -   In the `.ctl` file update the `first_recent_yr_nobias_adj_in_MPD` to 2020.3 (will tune later)
 
 To make this section more concise I am simply going to show the comparison plots all at once.
@@ -728,26 +728,26 @@ To make this section more concise I am simply going to show the comparison plots
 ## Data bridging (cumulative by data type)
 ::: panel-tabset
 ## Spawning Biomass
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare2_spawnbio_uncertainty.png'))
 ```
 ## Biomass Ratio
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare4_Bratio_uncertainty.png'))
 ```
 
 ## Fishing Mortality
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare8_Fvalue_uncertainty.png'))
 ```
 
 ## Survey Fits
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare13_indices.png'))
 ```
 
 ## Recruitment
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare10_recruits_uncertainty.png'))
 ```
 :::
@@ -767,7 +767,7 @@ data.frame(Fleet = rep(c('Fishery','Survey'),2),
       Updated_Value = c(0.079732,0.359831,0.086647,0.272054))
 ```
 ## Updated Bias Correction Ramp
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE, fig.cap = "New (top) and old (bottom) bias ramp"}
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap = "New (top) and old (bottom) bias ramp"}
 
 knitr::include_graphics(here::here('docs','2024','02_bridge-summary','recruit_fit_bias_adjust_NEW.png'))
 knitr::include_graphics(here::here('docs','2024','02_bridge-summary','recruit_fit_bias_adjust_OLD.png'))
@@ -775,26 +775,26 @@ knitr::include_graphics(here::here('docs','2024','02_bridge-summary','recruit_fi
 
 
 ## Spawning Biomass
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare2_spawnbio_uncertainty.png'))
 ```
 ## Biomass Ratio
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare4_Bratio_uncertainty.png'))
 ```
 
 ## Fishing Mortality
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare8_Fvalue_uncertainty.png'))
 ```
 
 ## Survey Fits
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare13_indices.png'))
 ```
 
 ## Recruitment
-```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare10_recruits_uncertainty.png'))
 ```
 :::
@@ -802,4 +802,4 @@ knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare10_
 
 # Bridged Operational Update Model, 18.2c (2024)
 
-This is model 18.2c (2024) and represents an "operational update"; the model structure has not been modified, and only the input data have been revised to reflect the current database. Additional explorations with this model that extend beyond the scope of an "operational update" are provided in `2024_sensitivity_analysis.qmd`.
+This is model 18.2c (2024) and represents an "operational update"; the model structure has not been modified, and only the input data have been revised to reflect the current database.
