@@ -562,6 +562,12 @@ The input sample sizes are slightly different in the new datapull (from `gapinde
 ```{r, include=FALSE, echo = FALSE, warning = FALSE}
 mod_2020_new_srv_len <- SS_output(here::here(year, 'model_runs','01_data_checks','18.2c_2020_ss3v33022w-new_srv_len'))
 compsummary_4 <- SSsummarize(list(mod_2020,mod_2020_new_srv_len))
+
+# SSplotComparisons(compsummary_4,
+#                    legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new survey length data'),
+#                   indexPlotEach = TRUE,
+#                   print = TRUE,
+#                    plotdir = here::here( 'docs','2024','01_srv-len'))
 ```
 
 ::: panel-tabset
@@ -583,25 +589,19 @@ SSplotComps(mod_2020_new_srv_len,fleets=2, subplots = 1, kind = 'LEN',
 #### Spawning Biomass, old vs new survey lengths
 
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in derived quantities."}
-SSplotComparisons(compsummary_4, 
-                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new survey length data'),
-                  subplots = 2)
+knitr::include_graphics(here::here('docs','2024','01_srv-len','compare2_spawnbio_uncertainty.png'))
 ```
 
 #### Recruitment Time Series, new survey lengths
 
 ```{r, include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in recruitment deviations."}
-SSplotComparisons(compsummary_4, 
-                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new survey length data'),
-                  subplots = 12)
+knitr::include_graphics(here::here('docs','2024','01_srv-len','compare12_recdevs_uncertainty.png'))
 ```
 
 #### Survey Fits, old vs new survey lengths
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
-SSplotComparisons(compsummary_4, 
-                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new survey lengths'),
-                  subplots = 13)
+knitr::include_graphics(here::here('docs','2024','01_srv-len','compare13_indices.png'))
 ```
 
 #### Growth Curves, old vs new survey lengths
@@ -664,7 +664,6 @@ To make this section more concise I am simply going to show the comparison plots
 #            '+ fsh age',
 #            '+ fsh len'
 #            )
-# 
 # llabs2 = c('18.2c (2020)',
 #            'Add All Data',
 #            '+Bias Ramp & Francis Tuning (18.2c [2024])')
@@ -676,7 +675,7 @@ To make this section more concise I am simply going to show the comparison plots
 # mod02_04 <- SS_output(here::here(year, 'model_runs','02_bridging','02.04_18.2c_2020_ss3v33022wcatches-srvbio-srvcaal-srvlen-fshage'))
 # # mod02_05 <- SS_output(here::here(year, 'model_runs','02_bridging','02.05_18.2c_2020_ss3v33022w-catches-srvbio-srvcaal-srvlen-fshage-fshlen'))
 # mod02_06 <- SS_output(here::here(year, 'model_runs','02_bridging','02.06_18.2c_2020_ss3v33022w-catches-srvbio-srvcaal-srvlen-fshage-fshlen-srvage'))
-# ## end of data bridging
+## end of data bridging
 # 
 # ## Tuning procedures: only did this once
 # # mod02_07 <- SS_output(here::here(year, 'model_runs','02_bridging','02.07_18.2c_2020_ss3v33022w-newdata-biasramp'))
@@ -691,44 +690,63 @@ To make this section more concise I am simply going to show the comparison plots
 # # rm(mod02_08x)
 #  
 # mod02_08 <- SS_output(here::here(year, 'model_runs','02_bridging','02.08_18.2c_2020_ss3v33022w-newdata-biasramp-francis'))
-# 
-# # mod02_08l <- SS_output(here::here(year, 'model_runs','02_bridging','02.09_18.2c_2020_ss3v33022w-newdata-biasramp-francis-lambdafsh'))
-# # 
-# # mod02_08of <- SS_output(here::here(year, 'model_runs','02_bridging','02.10_18.2c_2020_ss3v33022w-newdata-biasramp-francis-oldfshlen'))
-# # 
-# # mod02_08ofg <- SS_output(here::here(year, 'model_runs','02_bridging','02.11_18.2c_2020_ss3v33022w-newdata-biasramp-francis-oldfshlenghost'))
-# 
+
+# mod02_08l <- SS_output(here::here(year, 'model_runs','02_bridging','02.09_18.2c_2020_ss3v33022w-newdata-biasramp-francis-lambdafsh'))
+#
+# mod02_08of <- SS_output(here::here(year, 'model_runs','02_bridging','02.10_18.2c_2020_ss3v33022w-newdata-biasramp-francis-oldfshlen'))
+#
+# mod02_08ofg <- SS_output(here::here(year, 'model_runs','02_bridging','02.11_18.2c_2020_ss3v33022w-newdata-biasramp-francis-oldfshlenghost'))
+
 # compsummary_7 <- SSsummarize(list(mod_2020, mod02_00,
 #                                   mod02_01, mod02_02,
 #                                   mod02_03, mod02_04,
 #                                   mod02_06)) ## last one has fish length and ghosted survey ages
-# 
-# compsummary_8 <- SSsummarize(list(mod_2020,  
-#                                   mod02_06,
-#                                   mod02_08))  
 
-# compsummary_9 <- SSsummarize(list(mod_2020,  
+# SSplotComparisons(compsummary_7, legendlabels = llabs, indexPlotEach = TRUE,
+#                   print = TRUE,
+# plotdir = here::here('docs','2024','02_data-bridging) )
+
+
+# compsummary_8 <- SSsummarize(list(mod_2020,
+#                                   mod02_06,
+#                                   mod02_08))
+
+# SSplotComparisons(compsummary_8, legendlabels = llabs2, indexPlotEach = TRUE,
+#                   print = TRUE,
+# plotdir = here::here('docs','2024','02_bridge-summary') )
+# compsummary_9 <- SSsummarize(list(mod_2020,
 #                                   mod02_08,
-#                                   mod02_08l))  
+#                                   mod02_08l))
  
 ```
 
 ## Data bridging (cumulative)
-
+::: panel-tabset
+## Spawning Biomass
 ```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
-# SSplotComparisons(compsummary_7, legendlabels = llabs, indexPlotEach = TRUE,
-#                   print = TRUE,
-# plotdir = here::here(year, 'model_runs','02_bridging','02.06_18.2c_2020_ss3v33022w-catches-srvbio-srvcaal-srvlen-fshage-fshlen-srvage') )
-
-# filepaths <- list.files(here::here(year, 'model_runs','02_bridging','02.06_18.2c_2020_ss3v33022w-catches-srvbio-srvcaal-srvlen-fshage-fshlen-srvage') ,   pattern = 'compare', full.names = TRUE)
-# 
-# ## wrangle the three into a new image
-# png(here::here(mod_path,"plots","bio_f_rec.png"), width = 12, height =8, unit = 'in', res = 420) 
-# rl = lapply(filepaths[c(12,18,2)], png::readPNG)
-# gl = lapply(rl, grid::rasterGrob) 
-# gridExtra::grid.arrange(grobs=gl,ncol = 1) 
-# dev.off()
+knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare2_spawnbio_uncertainty.png'))
 ```
+## Biomass Ratio
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare4_Bratio_uncertainty.png'))
+```
+
+## Fishing Mortality
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare8_Fvalue_uncertainty.png'))
+```
+
+## Survey Fits
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare13_indices.png'))
+```
+
+## Recruitment
+```{r,  include=T, eval = TRUE, echo = TRUE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare10_recruits_uncertainty.png'))
+```
+:::
+
 
 
 ## Summary of bridging
