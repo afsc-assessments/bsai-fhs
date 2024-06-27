@@ -177,7 +177,7 @@ flextable::flextable(
     select( Purpose, Label,  'Fixed/Estimated',MLE ,  Interval))  %>%
   # flextable::colformat_double(j = 4, digits = 3) %>%
   flextable::width(j = 1, width = 2.5, unit = 'in') %>%
-  flextable::width(j = 2, width = 0.5, unit = 'in') %>%
+  flextable::width(j = 2, width = 1, unit = 'in') %>%
   flextable::width(j = 5, width = 1, unit = 'in') %>%
   flextable::set_header_labels( values = c('Purpose',
                                            'Estimated parameter',
@@ -237,9 +237,9 @@ flextable::regulartable(timeseries %>%
                                           'Stock Depletion',
                                           'Fully Selected F',
                                           'Age 0 Recruits (millions)')) %>%
-  flextable::width(j = c(2,5:6), width = 1.75, unit = 'in') %>%
-  flextable::width(j = c(4), width = 1.5, unit = 'in') %>%
-  flextable::width(j = 3, width = 1, unit = 'in') %>%
+  # flextable::width(j = c(2,5:6), width = 1.75, unit = 'in') %>%
+  # flextable::width(j = c(4), width = 1.5, unit = 'in') %>%
+  # flextable::width(j = 3, width = 1, unit = 'in') %>%
   # flextable::width(j = 1, width = 0.25, unit = 'in') %>%
   flextable::font(fontname = "Times New Roman", part = "all") %>%
   flextable::fontsize(size = 9, part = "all")

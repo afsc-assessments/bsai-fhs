@@ -19,7 +19,7 @@ catch-at-age model in Stock Synthesis (SS3, @methot_stock_2013). The
 assessment model was transitioned from version `3.30.16` to the latest
 version of SS3 available as of January 2024 (`3.30.22`). No detectable
 changes in derived quantities nor likelihoods occurred as a result of this
-software change (see externally-linked document [here](https://afsc-assessments.github.io/bsai-fhs/2024_bridging_analysis.html#stock-synthesis-software-update-3.30.22) for more details).
+software change. After all data were added to the model, we updated the Francis (2011) compositional data weights to account for the effects on effective sample size of potential time-varying processes that were not explicitly taken into account in the model structure. For more details, see externally-linked document [here](https://afsc-assessments.github.io/bsai-fhs/2024_bridging_analysis.html).
 
 ## Description of Base Model
 

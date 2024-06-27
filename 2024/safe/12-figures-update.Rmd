@@ -19,17 +19,14 @@ knitr::include_graphics(here::here(mod_path,"plots", "index2_cpuefit_Survey.png"
 ```
  
 
-```{r fishagecomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery age compositions for BSAI FHS.", eval = TRUE}
+```{r fishagecomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery age compositions for BSAI FHS, aggregated through time.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "comp_agefit__aggregated_across_time.png"))
 ```
 
- 
-
-```{r lengthcomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery and survey length (cm) compositions for BSAI FHS. Note that many years of the Fishery length composition data are not included in the joint likelihood (in lieu of age compositions).", eval = TRUE}
+```{r lengthcomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery and survey length (cm) compositions for BSAI FHS, aggregated through time. Note that many years of the Fishery length composition data are not included in the joint likelihood (in lieu of age compositions).", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "comp_lenfit__aggregated_across_time.png"))
 ```
  
-
 (ref:caalcap) Observed and expected mean age-at-length for both females and males with 90% intervals about observed age-at-length (left panels) and observed and expected standard deviation in age-at-length (right panels) for `r model_name` for years
 
 ```{r caalfit1, fig.cap="(ref:caalcap) 2009-2012 (1 of 3).", out.height="75%", eval = T}

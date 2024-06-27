@@ -35,8 +35,6 @@ csl: "fishfish.csl"
 This report may be cited as:
 Kapur, M.S., Cronin-Fine, L. 2024. Assessment of the flathead sole-Bering flounder stock complex in the Bering Sea and Aleutian Islands. North Pacific Fishery Management Council, Anchorage, AK. Available from https://www.npfmc.org/library/safe-reports/
   
-
-
 ```{r setup, include=FALSE, echo = FALSE}
 # remotes::install_github("crsh/rmdfiltr")
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.pos = "!h", out.extra = "")

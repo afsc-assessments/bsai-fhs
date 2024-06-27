@@ -41,7 +41,6 @@ Flathead sole do not seem to exhibit a stock-recruitment relationship because la
 
 ### Comparison to Previous Model
 
-A comparison of key derived quantities from the base model and the most recent full assessment is shown in Figure \@ref(fig:biofreccompare).  Parameter estimates and likelihood functions have remained similar to `r old_model_name`, and the 95% credible intervals of the current parameter estimates encompass the `r old_model_name` medians (Figure \@ref(fig:biofreccompare) and Tables \@ref(tab:parposteriorst) and \@ref(tab:resultscompare)).
-
+A comparison of key derived quantities from the base model and the most recent full assessment is shown in Figure \@ref(fig:biofreccompare).  Parameter estimates and likelihood functions have remained similar to `r old_model_name`.
 
 
