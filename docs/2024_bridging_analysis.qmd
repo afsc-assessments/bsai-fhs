@@ -803,3 +803,5 @@ knitr::include_graphics(here::here('docs','2024','02_bridge-summary','compare10_
 # Bridged Operational Update Model, 18.2c (2024)
 
 This is model 18.2c (2024) and represents an "operational update"; the model structure has not been modified, and only the input data have been revised to reflect the current database.
+
+It appears that the recent upswing is actually not due to the survey biomass observations (though they are consistent with the predictions); rather, the high recruitment event estimated in ~2018 is driving stock increases. This is evident in the 2024 model that has only catches.
