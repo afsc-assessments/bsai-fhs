@@ -104,7 +104,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#model-bridging" id="toc-model-bridging" class="nav-link" data-scroll-target="#model-bridging">Model Bridging</a>
   <ul class="collapse">
   <li><a href="#timeseries-prep" id="toc-timeseries-prep" class="nav-link" data-scroll-target="#timeseries-prep">Timeseries Prep</a></li>
-  <li><a href="#data-bridging-cumulative" id="toc-data-bridging-cumulative" class="nav-link" data-scroll-target="#data-bridging-cumulative">Data bridging (cumulative)</a></li>
+  <li><a href="#data-bridging-cumulative-by-data-type" id="toc-data-bridging-cumulative-by-data-type" class="nav-link" data-scroll-target="#data-bridging-cumulative-by-data-type">Data bridging (cumulative by data type)</a></li>
   <li><a href="#summary-of-bridging" id="toc-summary-of-bridging" class="nav-link" data-scroll-target="#summary-of-bridging">Summary of bridging</a></li>
   </ul></li>
   <li><a href="#bridged-operational-update-model-18.2c-2024" id="toc-bridged-operational-update-model-18.2c-2024" class="nav-link" data-scroll-target="#bridged-operational-update-model-18.2c-2024">Bridged Operational Update Model, 18.2c (2024)</a></li>
@@ -520,18 +520,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Spawning Biomass, old vs new survey biomass data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">Recruitment Time Series, old vs new survey biomass data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Survey Fits, old vs new survey biomass data</a></li></ul>
 <div class="tab-content">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
-
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024/01_srv-bio/compare2_spawnbio_uncertainty.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">No change in derived quantities.</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
-
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024/01_srv-bio/compare10_recruits_uncertainty.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">No change in recruitment deviations.</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </div>
 <div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>showing uncertainty for all models</code></pre>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024/01_srv-bio/compare13_indices.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">Survey input data are identical and fits are the same.</figcaption>
+</figure>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>subplot 13: index fits</code></pre>
 </div>
 </div>
 </div>
@@ -620,18 +640,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
-
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024/01_srv-caal/compare2_spawnbio_uncertainty.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">No change in derived quantities.</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </div>
 <div id="tabset-6-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-4-tab">
-
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024/01_srv-caal/compare12_recdevs_uncertainty.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">No change in recruitment deviations.</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </div>
 <div id="tabset-6-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-5-tab">
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>showing uncertainty for all models</code></pre>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024/01_srv-caal/compare13_indices.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial.</figcaption>
+</figure>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>subplot 13: index fits</code></pre>
 </div>
 </div>
 </div>
@@ -693,18 +733,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
-
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024/01_srv-len/compare2_spawnbio_uncertainty.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">No change in derived quantities.</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </div>
 <div id="tabset-7-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-4-tab">
-
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024/01_srv-len/compare12_recdevs_uncertainty.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">No change in recruitment deviations.</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </div>
 <div id="tabset-7-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-5-tab">
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>showing uncertainty for all models</code></pre>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024/01_srv-len/compare13_indices.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial.</figcaption>
+</figure>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>subplot 13: index fits</code></pre>
 </div>
 </div>
 </div>
@@ -760,38 +820,134 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Some initial steps are required to model dynamics through the present year. These are as follows: - In the <code>.dat</code> file set the <code>endyr</code> to 2024. - In the <code>starter</code> file set the <code>max yr for sdreport outputs</code> to -1 (<code>endyr+1</code>) - In the <code>.ctl</code> file move the <code>last year of main recdevs</code> to 2020 - In the <code>.ctl</code> file update the <code>last_yr_fullbias_adj_in_MPD</code> to 2019.8 (will tune later) - In the <code>.ctl</code> file update the <code>first_recent_yr_nobias_adj_in_MPD</code> to 2020.3 (will tune later)</p>
 <p>To make this section more concise I am simply going to show the comparison plots all at once.</p>
 </section>
-<section id="data-bridging-cumulative" class="level2">
-<h2 class="anchored" data-anchor-id="data-bridging-cumulative">Data bridging (cumulative)</h2>
+<section id="data-bridging-cumulative-by-data-type" class="level2">
+<h2 class="anchored" data-anchor-id="data-bridging-cumulative-by-data-type">Data bridging (cumulative by data type)</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true" href="">Spawning Biomass</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false" href="">Biomass Ratio</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-3" role="tab" aria-controls="tabset-9-3" aria-selected="false" href="">Fishing Mortality</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-4" role="tab" aria-controls="tabset-9-4" aria-selected="false" href="">Survey Fits</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-5" role="tab" aria-controls="tabset-9-5" aria-selected="false" href="">Recruitment</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SSplotComparisons(compsummary_7, legendlabels = llabs, indexPlotEach = TRUE,</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                   print = TRUE,</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plotdir = here::here(year, 'model_runs','02_bridging','02.06_18.2c_2020_ss3v33022w-catches-srvbio-srvcaal-srvlen-fshage-fshlen-srvage') )</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># filepaths &lt;- list.files(here::here(year, 'model_runs','02_bridging','02.06_18.2c_2020_ss3v33022w-catches-srvbio-srvcaal-srvlen-fshage-fshlen-srvage') ,   pattern = 'compare', full.names = TRUE)</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ## wrangle the three into a new image</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># png(here::here(mod_path,"plots","bio_f_rec.png"), width = 12, height =8, unit = 'in', res = 420) </span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># rl = lapply(filepaths[c(12,18,2)], png::readPNG)</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># gl = lapply(rl, grid::rasterGrob) </span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># gridExtra::grid.arrange(grobs=gl,ncol = 1) </span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># dev.off()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_data-bridging'</span>,<span class="st">'compare2_spawnbio_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="2024/02_data-bridging/compare2_spawnbio_uncertainty.png" class="img-fluid" width="975"></p>
+</div>
+</div>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_data-bridging'</span>,<span class="st">'compare4_Bratio_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="2024/02_data-bridging/compare4_Bratio_uncertainty.png" class="img-fluid" width="975"></p>
+</div>
+</div>
+</div>
+<div id="tabset-9-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_data-bridging'</span>,<span class="st">'compare8_Fvalue_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="2024/02_data-bridging/compare8_Fvalue_uncertainty.png" class="img-fluid" width="975"></p>
+</div>
+</div>
+</div>
+<div id="tabset-9-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-4-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_data-bridging'</span>,<span class="st">'compare13_indices.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="2024/02_data-bridging/compare13_indices.png" class="img-fluid" width="975"></p>
+</div>
+</div>
+</div>
+<div id="tabset-9-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-5-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_data-bridging'</span>,<span class="st">'compare10_recruits_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="2024/02_data-bridging/compare10_recruits_uncertainty.png" class="img-fluid" width="975"></p>
+</div>
+</div>
+</div>
+</div>
 </div>
 </section>
 <section id="summary-of-bridging" class="level2">
 <h2 class="anchored" data-anchor-id="summary-of-bridging">Summary of bridging</h2>
 <p>Post data, I tuned the rec-dev ramp and did 3 iterations of Francis weighting from scratch. Will re-do this one last time once all the new data are in but this helps us check for consistency.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true" href="">Updated Francis Weights</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false" href="">Updated Bias Correction Ramp</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-3" role="tab" aria-controls="tabset-10-3" aria-selected="false" href="">Spawning Biomass</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-4" role="tab" aria-controls="tabset-10-4" aria-selected="false" href="">Biomass Ratio</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-5" role="tab" aria-controls="tabset-10-5" aria-selected="false" href="">Fishing Mortality</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-6" role="tab" aria-controls="tabset-10-6" aria-selected="false" href="">Survey Fits</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-7" role="tab" aria-controls="tabset-10-7" aria-selected="false" href="">Recruitment</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SSplotComparisons(compsummary_8,</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                   legendlabels = llabs2,</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                   indexPlotEach = TRUE,</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                   print = TRUE,</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                   plotdir = here::here(year, 'model_runs','02_bridging','02.08_18.2c_2020_ss3v33022w-newdata-biasramp-francis'))</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># SSplotComparisons(compsummary_8, </span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#                   legendlabels = llabs2, </span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#                   indexPlotEach = TRUE,</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#                   print = F)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Fleet   Type Previous_Value Updated_Value
+1 Fishery Length       0.064561      0.079732
+2  Survey Length       0.337024      0.359831
+3 Fishery    Age       0.116532      0.086647
+4  Survey   CAAL       0.284172      0.272054</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'recruit_fit_bias_adjust_NEW.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024/02_bridge-summary/recruit_fit_bias_adjust_NEW.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">New (top) and old (bottom) bias ramp</figcaption>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'recruit_fit_bias_adjust_OLD.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024/02_bridge-summary/recruit_fit_bias_adjust_OLD.png" class="img-fluid figure-img" width="975"></p>
+<figcaption class="figure-caption">New (top) and old (bottom) bias ramp</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-10-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'compare2_spawnbio_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="2024/02_bridge-summary/compare2_spawnbio_uncertainty.png" class="img-fluid" width="975"></p>
+</div>
+</div>
+</div>
+<div id="tabset-10-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-4-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'compare4_Bratio_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="2024/02_bridge-summary/compare4_Bratio_uncertainty.png" class="img-fluid" width="975"></p>
+</div>
+</div>
+</div>
+<div id="tabset-10-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-5-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'compare8_Fvalue_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="2024/02_bridge-summary/compare8_Fvalue_uncertainty.png" class="img-fluid" width="975"></p>
+</div>
+</div>
+</div>
+<div id="tabset-10-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-6-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'compare13_indices.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="2024/02_bridge-summary/compare13_indices.png" class="img-fluid" width="975"></p>
+</div>
+</div>
+</div>
+<div id="tabset-10-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-7-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'compare10_recruits_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="2024/02_bridge-summary/compare10_recruits_uncertainty.png" class="img-fluid" width="975"></p>
+</div>
+</div>
+</div>
+</div>
 </div>
 </section>
 </section>
