@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -817,7 +783,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Importantly, the data updates conducted here are holistic, meaning that the entire time series of data for each component (where available) is replaced with what is currently available in the AKFIN database. A comparison between the data used in the last assessment and the latest version of that dataset is provided for each component above. The model that includes each change is named in the relevant header; these are hosted under <code>model_runs/</code>.</p>
 <section id="timeseries-prep" class="level2">
 <h2 class="anchored" data-anchor-id="timeseries-prep">Timeseries Prep</h2>
-<p>Some initial steps are required to model dynamics through the present year. These are as follows: - In the <code>.dat</code> file set the <code>endyr</code> to 2024. - In the <code>starter</code> file set the <code>max yr for sdreport outputs</code> to -1 (<code>endyr+1</code>) - In the <code>.ctl</code> file move the <code>last year of main recdevs</code> to 2020 - In the <code>.ctl</code> file update the <code>last_yr_fullbias_adj_in_MPD</code> to 2019.8 (will tune later) - In the <code>.ctl</code> file update the <code>first_recent_yr_nobias_adj_in_MPD</code> to 2020.3 (will tune later)</p>
+<p>Some initial steps are required to model dynamics through the present year. These are as follows: - In the <code>.dat</code> file set the <code>endyr</code> to 2024. - In the <code>starter</code> file set the <code>max yr for sdreport outputs</code> to -1 (<code>endyr+1</code>) - In the <code>.ctl</code> file move the <code>last year of main recdevs</code> to 2020 - In the <code>.ctl</code> file update the <code>last_yr_fullbias_adj_in_MPD</code> to 2019.8 (will tune later in this document) - In the <code>.ctl</code> file update the <code>first_recent_yr_nobias_adj_in_MPD</code> to 2020.3 (will tune later)</p>
 <p>To make this section more concise I am simply going to show the comparison plots all at once.</p>
 </section>
 <section id="data-bridging-cumulative-by-data-type" class="level2">
@@ -827,7 +793,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="tab-content">
 <div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_data-bridging'</span>,<span class="st">'compare2_spawnbio_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="2024/02_data-bridging/compare2_spawnbio_uncertainty.png" class="img-fluid" width="975"></p>
 </div>
@@ -835,7 +800,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_data-bridging'</span>,<span class="st">'compare4_Bratio_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="2024/02_data-bridging/compare4_Bratio_uncertainty.png" class="img-fluid" width="975"></p>
 </div>
@@ -843,7 +807,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-9-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-3-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_data-bridging'</span>,<span class="st">'compare8_Fvalue_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="2024/02_data-bridging/compare8_Fvalue_uncertainty.png" class="img-fluid" width="975"></p>
 </div>
@@ -851,7 +814,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-9-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-4-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_data-bridging'</span>,<span class="st">'compare13_indices.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="2024/02_data-bridging/compare13_indices.png" class="img-fluid" width="975"></p>
 </div>
@@ -859,7 +821,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-9-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-5-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_data-bridging'</span>,<span class="st">'compare10_recruits_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="2024/02_data-bridging/compare10_recruits_uncertainty.png" class="img-fluid" width="975"></p>
 </div>
@@ -887,7 +848,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'recruit_fit_bias_adjust_NEW.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -896,7 +856,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'recruit_fit_bias_adjust_OLD.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -909,7 +868,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-10-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-3-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'compare2_spawnbio_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="2024/02_bridge-summary/compare2_spawnbio_uncertainty.png" class="img-fluid" width="975"></p>
 </div>
@@ -917,7 +875,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-10-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-4-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'compare4_Bratio_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="2024/02_bridge-summary/compare4_Bratio_uncertainty.png" class="img-fluid" width="975"></p>
 </div>
@@ -925,7 +882,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-10-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-5-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'compare8_Fvalue_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="2024/02_bridge-summary/compare8_Fvalue_uncertainty.png" class="img-fluid" width="975"></p>
 </div>
@@ -933,7 +889,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-10-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-6-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'compare13_indices.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="2024/02_bridge-summary/compare13_indices.png" class="img-fluid" width="975"></p>
 </div>
@@ -941,7 +896,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-10-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-7-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'docs'</span>,<span class="st">'2024'</span>,<span class="st">'02_bridge-summary'</span>,<span class="st">'compare10_recruits_uncertainty.png'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="2024/02_bridge-summary/compare10_recruits_uncertainty.png" class="img-fluid" width="975"></p>
 </div>
@@ -953,7 +907,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="bridged-operational-update-model-18.2c-2024" class="level1">
 <h1>Bridged Operational Update Model, 18.2c (2024)</h1>
-<p>This is model 18.2c (2024) and represents an “operational update”; the model structure has not been modified, and only the input data have been revised to reflect the current database. Additional explorations with this model that extend beyond the scope of an “operational update” are provided in <code>2024_sensitivity_analysis.qmd</code>.</p>
+<p>This is model 18.2c (2024) and represents an “operational update”; the model structure has not been modified, and only the input data have been revised to reflect the current database.</p>
+<p>It appears that the recent upswing is actually not due to the survey biomass observations (though they are consistent with the predictions); rather, the high recruitment event estimated in ~2018 is driving stock increases. This is evident in the 2024 model that has only catches.</p>
 </section>
 
 </main>

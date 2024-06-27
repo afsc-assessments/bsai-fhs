@@ -24,7 +24,7 @@ mod18.2c_2020 <- mod_2020 <- SS_output(old_mdl_fldr, verbose = FALSE)
 
 # Overview
 
-This electronic document describes the analyses undertaken to bridge the last "full" assessment of BSAI Flathead Sole (Monnahan, 2020) into the latest Stock Synthesis (SS3) software version, as well as explorations of sequential inclusion of recent data.
+This electronic document describes the analyses undertaken to bridge the last "full" assessment of BSAI Flathead Sole (Monnahan, 2020) into the latest Stock Synthesis (SS3) software version, as well as explorations of sequential inclusion of recent data. *Note* that the author was unable to complete this document before the addition of 2022/2023 survey age data, which were not available in June 2024. Therefore the bridging exercise and conclusions made do not include them (they are included in the model submitted for management).
 
 The general workflow was as follows:
 
