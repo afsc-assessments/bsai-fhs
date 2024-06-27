@@ -460,6 +460,13 @@ I confirmed that the raw values for the EBS Shelf and AI that came out of `gapin
 ```{r, include=FALSE, echo = FALSE, warning = FALSE}
 mod_2020_new_srv_bio <- SS_output(here::here(year, 'model_runs','01_data_checks','18.2c_2020_ss3v33022w-new_srv_biomass')) 
 compsummary_b <- SSsummarize(list(mod_2020,mod_2020_new_srv_bio))
+
+# SSplotComparisons(compsummary_b, 
+#                    legendlabels = c('Model 18.2c (2020)',
+#                                    'Model 18.2c (2020) with new survey biomass data'),
+#                   indexPlotEach = TRUE,
+#                   print = TRUE,
+#                    plotdir = here::here(year, 'model_runs','01_data_checks','18.2c_2020_ss3v33022w-new_srv_biomass'))
 ```
 
 ::: panel-tabset
@@ -467,28 +474,18 @@ compsummary_b <- SSsummarize(list(mod_2020,mod_2020_new_srv_bio))
 #### Spawning Biomass, old vs new survey biomass data
 
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in derived quantities."}
-SSplotComparisons(compsummary_b, 
-                  legendlabels = c('Model 18.2c (2020)',
-                                   'Model 18.2c (2020) with new survey biomass data'),
-                  subplots = 2)
+knitr::include_graphics(here::here('docs','2024','01_srv-bio','compare2_spawnbio_uncertainty.png'))
 ```
 
 #### Recruitment Time Series, old vs new survey biomass data
 ```{r, include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in recruitment deviations."}
-SSplotComparisons(compsummary_b, 
-                  legendlabels = c('Model 18.2c (2020)',
-                                   'Model 18.2c (2020) with new survey biomass data'),
-                  subplots = 12)
+knitr::include_graphics(here::here('docs','2024','01_srv-bio','compare10_recruits_uncertainty.png'))
 ```
 
 #### Survey Fits, old vs new survey biomass data
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="Survey input data are identical and fits are the same."}
-SSplotComparisons(compsummary_b, 
-                  indexPlotEach = TRUE,
-                  legendlabels = c('Model 18.2c (2020)',
-                                   'Model 18.2c (2020) with new survey biomass data'),
-                  subplots = 13)
+knitr::include_graphics(here::here('docs','2024','01_srv-bio','compare13_indices.png'))
 ```
 :::
 
@@ -505,6 +502,13 @@ A deep dive into these issues is undertaken in the [Survey Comps Deepdive](https
 ```{r, include=FALSE, echo = FALSE, warning = FALSE}
 mod_2020_new_srv_caal <- SS_output(here::here(year, 'model_runs','01_data_checks','18.2c_2020_ss3v33022w-new_srv_caal')) 
 compsummary_3 <- SSsummarize(list(mod_2020,mod_2020_new_srv_caal))
+
+# SSplotComparisons(compsummary_3,
+#                    legendlabels = c('Model 18.2c (2020)',
+#                                    'Model 18.2c (2020) with new CAAL data'),
+#                   indexPlotEach = TRUE,
+#                   print = TRUE,
+#                    plotdir = here::here( 'docs','2024','01_srv-caal'))
 ```
 
 
@@ -527,26 +531,19 @@ SSplotComps(mod_2020_new_srv_caal,fleets=2, subplots = 3, kind = 'cond',
 #### Spawning Biomass, old vs new survey CAAL data
 
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in derived quantities."}
-SSplotComparisons(compsummary_3, 
-                  legendlabels = c('Model 18.2c (2020)',
-                                   'Model 18.2c (2020) with new CAAL data'),
-                  subplots = 2)
+knitr::include_graphics(here::here('docs','2024','01_srv-caal','compare2_spawnbio_uncertainty.png'))
 ```
 
 #### Recruitment Time Series, new survey CAAL data
 
 ```{r, include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, fig.cap="No change in recruitment deviations."}
-SSplotComparisons(compsummary_3, 
-                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new CAAL data'),
-                  subplots = 12)
+knitr::include_graphics(here::here('docs','2024','01_srv-caal','compare12_recdevs_uncertainty.png'))
 ```
 
 #### Survey Fits, old vs new survey CAAL data
 
 ```{r, include=T, echo = FALSE, warning = FALSE, fig.cap="The impact of the new age comps on model quantities, including spawning biomass and recruitment (and associated uncertainty) and survey fits, when passed to Model 18.2c, is trivial."}
-SSplotComparisons(compsummary_3, 
-                  legendlabels = c('Model 18.2c (2020)','Model 18.2c (2020) with new CAAL data'),
-                  subplots = 13)
+knitr::include_graphics(here::here('docs','2024','01_srv-caal','compare13_indices.png'))
 ```
 
 #### Growth Curves, old vs new survey CAAL data
