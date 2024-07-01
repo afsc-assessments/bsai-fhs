@@ -58,15 +58,17 @@ Projected catches, spawning biomass, and fishing mortality rates corresponding t
  
 ## Risk Table and ABC recommendation {#risktable}
 
-The risk table scoring for POP has not changed since 2021, with the exception that the 2021 SSC requested that the number of Risk Table categories (i.e., levels of concern) be reduced from four to three. Per leadership instruction in 2023, we have consolidated what were previously categories 2 and 3 ("substantially increased" and "major concern" into a single category, "increased/major concern"). This impacts the first two considerations, which were rated a level 2 in the 2021 Assessment.
+**CONFIRM THAT WE DO NOT NEED TO INCLUDE THE RISK TABLE DEFINITIONS AND EXAMPLE TEXT**
+
+The risk table scoring for BSAI FHS has not changed since 2020, with the exception that the SSC requested that the number of Risk Table categories (i.e., levels of concern) be reduced from four to three. Per leadership instruction in 2023, we have consolidated what were previously categories 2 and 3 ("substantially increased" and "major concern" into a single category, "increased/major concern"). This does not affect any of the category scores, which were and are level 1.
 
 ```{r}
 l1 = "Level 1: No concern"
 l2 = "Level 2: Major concern"
 l3 = "Level 3: Extreme concern" 
 require(flextable)
-data.frame(assess = l2,
-           pop = l2,
+data.frame(assess = l1,
+           pop = l1,
            enviro = l1,
            fish = l1) %>% 
   flextable() %>% 
@@ -87,28 +89,31 @@ data.frame(assess = l2,
 An abridged summary of the considerations that led to this determination for each category follows.
 
 ### Assessment considerations {#assessmentconsiderations}
-
-The GOA POP assessment model exhibits a strong negative retrospective pattern (spawning biomass continues to increase with new data), though this effect was less pronounced in the 2023, likely due to high uncertainty in the observed survey biomass. This is driven by ongoing increases in the trawl survey biomass, which have been consistently under-estimated since 2013, and may be suggestive of model misspecification. 
-
-
-*This results in a Level 2 assessment considerations rating, a major concern.*
+Overall, the model fits all the data sets very well. Both the survey index, and survey and fishery composition data show no concerning patterns. All parameters were well estimated, without any convergence issues. Adding the new data had a minimal impact on estimated parameters and management quantities, corroborating the general stability of the model found in previous assessments. There was also no meaningful retrospective pattern. 
+*We therefore conclude there are no increased concerns and set this consideration at level 1.*
 
 ### Population dynamics considerations
-
-The model estimates above-average recruitment events in the last three decades to account for the increasing survey biomass observations (Figures 10.\@ref(fig:survey), 10.\@ref(fig:biofreccompare) and 10.\@ref(fig:recdevs)).  The estimated recruitment events are still insufficient to satisfactorily fit the recent survey data; these increases are not observed in the early time series nor are they typical for an ecosystem that is warming (with the exception of sablefish). 
-
-The unusual trend of rapid increases in stock size and recruitment estimates *results in a Level 2  population dynamics rating, a major concern.*
+The spawning stock biomass has been above target for the entire time period for which there are data. It is projected to increase into the near future (based on Scenario 4 projection above) as there have been larger than average cohorts over the past 5 years that will mature. This is already borne out in the estimated age 3+ biomass (Figure \@ref(fig:biofreccompare)) and  and index (Figure \@ref(fig:survey)), both of which show a general increase since 2015. *Since we have no increased concerns we set the concern level to 1.*
 
 ### Environmental/Ecosystem considerations
- This year, the GOA ecosystem was characterized by moderate thermal conditions, mixed trends for zooplankton abundance, moderate predation, and increased competition for zooplankton prey resources. The warmer surface waters predicted for 2024 may be favorable for POP larval survival. 
-Ecosystem: While optimal temperatures for POP life stages are not known, it is reasonable to expect that the 2023 average ocean temperatures at depth on the shelf edge (for adults) and surface temperatures (for larvae) were adequate for POP.  POP are semi-demersal/pelagic, outer shelf and continental slope (150-420 m depths) dwellers as adults, with a pelagic then inshore benthic juvenile stage (age 1 to 3) in the Gulf of Alaska (GOA) (Carlson and Haight 1976, Love et al. 2002, Rooper and Bolt 2005, Rooper et al. 2007, NPFMC 2010). There is evidence that POP are being observed higher in the water column, potentially a result of an expanding population. As warm spring temperatures are favorable for larval survival (Doyle 2009), cooler spring to above average summer temperatures  varying from 5.8°C (WGOA Bottom Trawl Survey, O’Leary 2023) to 10.5°C (Icy Strait, SEAK, Fergusson 2023) were cooler than optimal, but not considered detrimental. While optimal temperatures are not known for adults, there is no indication of concern given bottom temperatures along the shelf edge in the GOA cooled to average in 2023 (AFSC longline survey: Siwicke 2023). Surface temperatures are predicted to warm in late winter/early spring of 2024, in alignment with El Niño conditions (Bond 2023). These warmer surface temperatures in April/May (larval release) may be favorable for larval survival. As it takes time for warm surface waters to extend to depth, shelf bottom temperatures are not expected to warm in the spring. 
 
-Prey: Planktivorous foraging conditions were average to below average across the GOA in 2023. The primary prey of the adult POP include calanoid copepods, euphausiids, myctophids, and miscellaneous prey in the GOA (Byerly 2001, Yang 2000, Yang 2003). POP body condition increased to average in 2023 after below average condition (i.e. lower weights at length) since 2015 (Bottom Trawl Survey, O’Leary, 2023b). The timing of this declining trend matches the time frame of increasing POP population since the 2014-2016 marine heatwave and could be explained by prey availability and competition within an expanding population. Zooplankton biomass in the WGOA progressed from below average in the spring (lower calanoid copepod biomass and higher euphausiid biomass) to improved conditions in the summer (above average biomass of large calanoid copepods and euphausiids, but continued lower small copepod biomass; Shelikof St., Kimmel 2023, and Seward Line, Hopcroft 2023). Summer planktivorous foraging conditions were somewhat improved with above average large calanoid copepod and euphausiid biomass, but continued lower small copepod biomass (Shelikof, Kimmel 2023). Eastern GOA inside waters had below average total zooplankton biomass, although euphuasiids were above average here as in the western GOA. Planktivorous seabird reproductive success, an indicator of zooplankton availability and nutritional quality, was approximately average south of Kodiak (Chowiet Isl.), and in the central GOA (Middleton Island on shelf edge off Seward) (Drummond 2023, Whelan 2023), and above average in the EGOA (St. Lazaria Isl.).
+**UPDATE FOR 2024**
 
-Predators & Competitors: Predation pressure is considered moderate and competition may have increased in 2023. Predators of juvenile POP include Pacific halibut, arrowtooth flounder, seabirds, rockfish, salmon, and lingcod (Moss 2016). Predators of adults include Pacific halibut, sablefish, and sperm whales (Moss 2016). Halibut and arrowtooth flounder populations remain low relative to previous levels, and, in general, there is no cause to suspect increased predation pressure on larval or adult demersal shelf rockfish. Potential competitors include large returns of pink salmon (Whitehouse, 2023, Vulstek, 2023), a relatively large and increasing population of walleye pollock, other POP as the population continues to increase, and continued large year classes of juvenile sablefish. POP are being found shallower in the water column, increasing their habitat overlap and potential competition for zooplankton prey with walleye pollock. 
 
-The most recent data available *result in a Level 1 ecosystem rating, no apparent concerns.*
- 
+*Environmental processes*: Following two years of physical oceanographic perturbations, the eastern Bering Sea experienced a return to near-normal climatic conditions in 2020. Summer bottom temperatures and spatial extent of the cold pool were average based on the ROMS hindcast model and observations from the 2020 Dyson cruise. However, summer sea surface temperatures through August were above average in the southern and northern Bering Sea, similar to those observed in 2019 (Siddon, 2020). 
+
+Based on the OSCURS model, the 2020 springtime drift pattern was mixed, with an early period of favorable winds consistent with eastward drift followed by a period of unfavorable winds consistent with westward drift (Cooper and Wilderbuer, 2020). This drift pattern appears consistent with years when below-average recruitment occurred for flathead sole (FHS). 
+
+*Prey*: The 2020 springtime drift pattern likely retained FHS larvae over the southern middle domain (Cooper and Widerbuer, 2020). In that region, the 2020 spring bloom timing occurred about a week earlier than the long-term mean while production was below the long-term mean (Nielsen et al., 2020). Depending on the spatial and temporal overlap between larvae and available primary production, this can result in a match or mismatch with favorable feeding conditions. Prey resources for adult FHS and Bering flounder include brittle stars (echinoderms), polychaetes, and crustaceans as well as juvenile walleye pollock. Trends in the abundance of motile epifauna remained above the long-term mean in 2019, although decreased 10% from 2018 (Whitehouse, 2019). This indicates sufficient prey availability for adult FHS over the southern Bering Sea shelf. Recent years of pollock recruitment were low, but the 2018 year class appears strong (as age-1 in 2019 assessment; Ianelli et al., 2019), therefore juvenile pollock may have been an available prey resource for FHS and Bering flounder. 
+
+In 2019, FHS condition (as measured by weighted length-weight residuals) was near the historical average over the SEBS shelf with positive residuals over the southern portion of the bottom trawl survey area (strata 10, 30, and 50) and negative residuals over the northwest region (strata 40 and 40) (Rohan and Laman, 2020). 
+
+*Predators*: Predators of FHS include Pacific Cod, pollock, arrowtooth flounder, Greenland turbot, and halibut. In terms of predation pressure on FHS, we focus on biomass trends over the southern Bering Sea shelf. The biomass within the apex predator guild (including Pacific cod, arrowtooth flounder, Greenland turbot, and halibut) increased slightly (2%) from 2018 to 2019 and remains at the long term mean (Whitehouse, 2019). Pacific cod and arrowtooth flounder are the biomass-dominant components of the guild. Pacific cod biomass has decreased since 2015 and is below its long term mean. In 2019, the biomass of Pacific cod in the standard bottom trawl survey area increased slightly (2%) while the abundance increased dramatically (112%) from 2018. This indicates strong recruitment of age-1 fish. Depending on the eventual year class strength of the 2018 Pacific cod cohort, this could present increased predation risk to FHS in the future. arrowtooth flounder biomass increased 13% from 2018 to 2019.
+
+The biomass of pelagic foragers, dominated by pollock, increased from 2018 to 2019, but remains below the long term mean (Whitehouse, 2019). However, the biomass of pollock increased 75% from 2018 and indicates movement of adult pollock into the region that could present predation risk to FHS (Ianelli et al., 2019). 
+Competitors for FHS prey resources include other benthic foragers, like northern rock sole and yellowfin sole. The trend in biomass of the benthic foragers guild has been declining since approximately 2010 and remained below the long term mean in 2019 (Whitehouse, 2019), suggesting a reduction in prey competition that is supported by the positive length-weight residuals over the southern shelf (strata 10, 30, and 50).
+*Together, the most recent data available suggest there are no apparent ecosystem concerns, although predation pressure may be rising – level 1.*
+
 
 #### References for Environmental & Ecosystem Considerations
 
