@@ -89,7 +89,8 @@ data.frame(assess = l1,
 An abridged summary of the considerations that led to this determination for each category follows.
 
 ### Assessment considerations {#assessmentconsiderations}
-Overall, the model fits all the data sets very well. Both the survey index, and survey and fishery composition data show no concerning patterns. All parameters were well estimated, without any convergence issues. Adding the new data had a minimal impact on estimated parameters and management quantities, corroborating the general stability of the model found in previous assessments. There was also no meaningful retrospective pattern. 
+
+Overall, the model fits all the data sets very well. Both the survey index, and survey and fishery composition data show no concerning patterns. All parameters were well estimated, without any convergence issues. Adding the new data had a minimal impact on estimated parameters and management quantities, corroborating the general stability of the model found in previous assessments. 
 *We therefore conclude there are no increased concerns and set this consideration at level 1.*
 
 ### Population dynamics considerations
