@@ -100,7 +100,44 @@ c1 <- pcatch[1] # estimated catch in current year
 c2 <- pcatch[2] # proj catch year + 1
 c3 <- pcatch[3] # proj catch year + 2
 
+# Best F (for SARA files & stock status section) ----
+# Use this year's model to recalculate the F for the previous year 
+## that would have produced the specified OFL for the previous year
+# provide naa, waa, etc from terminal year of model - can rip from Proj
+projdat <- readLines(here::here(year,'model_runs','03b_projection', "projection_data.dat"))
+ages <- 1:as.numeric(unlist(strsplit(projdat[grep("number of ages", projdat)]," "))[1])
+naa_f <-  as.numeric(unlist(strsplit(projdat[29]," "))[ages])
+naa_m <- as.numeric(unlist(strsplit(projdat[30]," "))[ages])
+waa_f <- as.numeric(unlist(strsplit(projdat[23]," "))[ages])  ## fishery WAA
+waa_m <- as.numeric(unlist(strsplit(projdat[24]," "))[ages])
+saa_f <- waa_f <- as.numeric(unlist(strsplit(projdat[26]," "))[ages])
+saa_m <- waa_f <- as.numeric(unlist(strsplit(projdat[27]," "))[ages])
+mort <-  as.numeric(unlist(strsplit(projdat[14]," "))[ages])
+
+ofl_23_23 <- 48161 ## last model's OFL for last year (2023 model for 2023 https://www.npfmc.org/wp-content/PDFdocuments/SAFE/2023/GOAflathead.pdf)
+afscassess::best_f(data = data.frame(age = ages, 
+                                     naa1 = naa_f,
+                                     naa2 = naa_m,
+                                     waa1 = waa_f,
+                                     waa2 = waa_m,
+                                     saa1 = saa_f,
+                                     saa2 = saa_m),
+                   m = mort, m2 = mort,
+                   type = 3, ## two sex, one year
+                   f_ratio= NULL, ## only one gear
+                   last_ofl = ofl_23_23, 
+                   last_f = 0.1
+                   ) %>%
+  strsplit(., " ") %>%
+  unlist() %>%
+  last(.) %>%
+  as.numeric() %>%
+  round(.,3) -> f_best
 ```
+
+ 
+ 
+ 
  
 ```{r, child="01-summary.Rmd", eval = T}
 ```

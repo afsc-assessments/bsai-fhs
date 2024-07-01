@@ -116,12 +116,9 @@ Competitors for FHS prey resources include other benthic foragers, like northern
 *Together, the most recent data available suggest there are no apparent ecosystem concerns, although predation pressure may be rising – level 1.*
 
 
- 
-
-
 ### Fishery performance
 
-There is no ESP for this stock complex, but we note that the fishery has consistently caught only a small fraction of the ABC (average 16% over last 5 years). We did not examine CPUE trends nor spatial patterns of fishing. There are no changes in the duration of fishing openings. *Altogether, we see no cause for concern and give this consideration a level 1 as well.* 
+There is no ESP for this stock complex, but we note that the fishery has consistently caught only a small fraction of the ABC (averaging less than 20% over the last five years). We did not examine CPUE trends nor spatial patterns of fishing. There are no changes in the duration of fishing openings. *Altogether, we see no cause for concern and give this consideration a level 1 as well.* 
  
 ### Risk Table Summary and ABC recommendation
 
@@ -133,13 +130,24 @@ There is no ESP for this stock complex, but we note that the fishery has consist
 
 #### Overfishing 
 
+The stock is not being subjected to overfishing, because the catch in 2019 (15,858 t) is less than the 2019 OFL (80,918 t). 
+
+
 The official catch estimate for the most recent complete year (`r year-1`) is `r prettyNum(c0,big.mark=",")` t. This is less than the `r year-1` OFL of `r prettyNum(82699,big.mark=",")` t. *The stock is not subject to overfishing.*
 
 #### Overfished (Harvest Scenario 6)
 
+The results of scenarios 6 and 7 above indicate that the stock is not overfished and is not approaching an overfished condition. 
+
+
 The minimum stock size threshold (MSST) for POP is given by the $B_{35\%}$ which is `r prettyNum(b35_25,big.mark=",")` in `r year`. The estimated stock spawning biomass in `r year` is nearly double the MSST at `r prettyNum(ssb_25,big.mark=",")`. *The stock is not overfished*.
 
 #### Approaching Overfished (Harvest Scenario 7)
+
+With regard to assessing the current stock level, the expected stock size in the current year of scenario 6 is 146,307 t, which is higher than B35% (71,280 t), so the stock is not currently overfished. The expected spawning stock size in the year 2033 of scenario 7 (76,046 t) is greater than B35%; thus, the stock is not approaching an overfished condition.
+ 
+The F that would have produced a catch for `r year-1` equal to the `r year-1` OFL for `r year-1` (`r prettyNum(ofl_23_23, big.mark = ',')`) was `r f_best`.
+
 
 The mean estimated stock spawning biomass in `r year+2` is above the MSST. *The stock is not approaching an overfished state*.
 
