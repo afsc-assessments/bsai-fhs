@@ -199,6 +199,28 @@ write.csv(rec_table,
           file = here::here(year,'model_runs','03b_projection',paste0(Sys.Date(),'-exec_summ.csv')), row.names=FALSE)
 
 
+# render proj tables ----
+## I'm still not sure whether these three tables ( 13-year projected: catches, spawning biomass, and fishing mortality rates corresponding to the alternative harvest scenarios
+## ) will be required, but generating them here in case they are.
+
+proj_scenario0 <- read.table(here::here(year,'model_runs','03b_projection','percentdb.out')) %>%
+  filter(V4 %in% c("SSBMean","F_Mean","CMean")) %>%
+  mutate(V5 = ifelse(V4 != 'F_Mean',round(V5,0),round(V5,3))) %>% ## convert to tons
+  tidyr::pivot_wider(names_from =c(V2), 
+                     names_prefix = 'Scenario ',
+                     values_from = V5, id_cols = c(V3,V4))
+
+proj_scenario0 %>%
+  filter(V4 == 'CMean') %>% select(Year = V3,  everything(),-V4) %>%
+  write.csv(.,here::here(year,'model_runs','03b_projection','proj_CMean.csv'),row.names = FALSE)
+proj_scenario0 %>%
+  filter(V4 == 'SSBMean') %>% select(Year = V3,  everything(),-V4)%>%
+  write.csv(.,here::here(year,'model_runs','03b_projection','proj_SSBMean.csv'),row.names = FALSE)
+proj_scenario0 %>%
+  filter(V4 == 'F_Mean') %>% select(Year = V3,  everything(),-V4)%>%
+  write.csv(.,here::here(year,'model_runs','03b_projection','proj_F_Mean.csv'),row.names = FALSE)  
+
+
 # process results ----
 model <- '18.2c_2024'
 mod_path <- here::here(year,'mgmt',model)
