@@ -94,12 +94,12 @@ Overall, the model fits all the data sets very well. Both the survey index, and 
 *We therefore conclude there are no increased concerns and set this consideration at level 1.*
 
 ### Population dynamics considerations
-The spawning stock biomass has been above target for the entire time period for which there are data. It is projected to increase into the near future (based on Scenario 4 projection above) as there have been larger than average cohorts over the past 5 years that will mature. This is already borne out in the estimated age 3+ biomass (Figure \@ref(fig:biofreccompare)) and  and index (Figure \@ref(fig:survey)), both of which show a general increase since 2015. *Since we have no increased concerns we set the concern level to 1.*
+
+The spawning stock biomass has been above target for the entire time period for which there are data. It is projected to increase into the near future (based on the Scenario 4 projection above) as there was a series of above-average recruitments from 2015-2020 that continue to mature. This increase is already borne out in the estimated age 3+ biomass (Figure \@ref(fig:biofreccompare)) and observed index (Figure \@ref(fig:survey)), both of which show a general increase since 2015. *Since we have no increased concerns we set the concern level to 1.*
 
 ### Environmental/Ecosystem considerations
 
 **UPDATE FOR 2024**
-
 
 *Environmental processes*: Following two years of physical oceanographic perturbations, the eastern Bering Sea experienced a return to near-normal climatic conditions in 2020. Summer bottom temperatures and spatial extent of the cold pool were average based on the ROMS hindcast model and observations from the 2020 Dyson cruise. However, summer sea surface temperatures through August were above average in the southern and northern Bering Sea, similar to those observed in 2019 (Siddon, 2020). 
 
