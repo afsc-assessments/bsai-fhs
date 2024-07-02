@@ -33,7 +33,7 @@ A standard set of projections is required for each stock managed under Tier 3 of
 
 +   *Scenario 1*:  In all future years, $F$ is set equal to max$F_{ABC}$ (Rationale:  Historically, TAC has been constrained by ABC, so this scenario provides a likely upper limit on future TACs.)
 
-+   *Scenario 2*:  In `r year+1` and `r year+2`, $F$ is set equal to a constant fraction of max $F_{ABC}$, where this fraction is equal to the ratio of the realized catches in `r paste0(range(year-3, year-1), collapse='-')` to the ABC (which is generally the same as the TAC) recommended in the assessment for each of those years. For the remainder of the future years, maximum permissible ABC is used. (Rationale:  Using recent catch to ABC ratios will yield more realistic projections for the POP fishery, which rarely realizes its full TAC or ABC). The exact calculation of these values is shown [below](#authorsF).
++   *Scenario 2*: The exact calculation of these values is shown [below](#authorsF).
 
 +   *Scenario 3*:  In all future years, $F$ is set equal to 50% of max $F_{ABC}$. (Rationale:  This scenario provides a lower bound on $F_{ABC}$ that still allows future harvest rates to be adjusted downward when stocks fall below reference levels.)
 
