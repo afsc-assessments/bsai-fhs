@@ -40,10 +40,10 @@ The survey catchability parameter was set to 1.0. The natural
 mortality rates were set to 0.2 for both sexes, and $\sigma_r$ was equal
 to 0.5, consistent with previous assessments. The maturity ogive for
 flathead sole followed an age-based logistic curve where age at 50%
-maturity was 9.7 and age at 95% maturity was 12.8. The ageing error
+maturity was 9.7 and age at 95% maturity was 12.8 (Figure \@ref(fig:selex)). The ageing error
 matrix was taken directly from the Stock Synthesis model used in
-assessments prior to 2004 [@Spencer2004]. A length–weight
-relationship of the form $W = aL^b$ was fit to survey data from
+assessments prior to 2004 [@Spencer2004]. The same length–weight
+relationship used in 2020, of the form $W = aL^b$ was estimated by fitting to survey data from
 1982-2016 for males and females combined, with parameter estimates a =
 0.00298 and b = 3.327 (weight in g, length in cm).
 
@@ -60,12 +60,11 @@ estimated. A 1:1 sex ratio is assumed. The age-0 recruitment was fixed to equal 
 Sex-specific growth parameters ($L_{amax=21+}$, $L_{amin=3}$, $k$, CV of length-at-age 3, CV of length-at-age 21+) were estimated inside the assessment model.
 
 ### Selectivity and fishing mortality
-Survey selectivity parameters were estimated using age-based, sex-specific, asymptotic curves that were time-invariant and are listed
-in the table below. The double-normal curve was used to easily allow previous and future explorations of alternative survey selectivity
-forms. Here the double-normal curve is constrained to mimic a logistic shape because there was no evidence for dome-shaped survey selectivity.
+Survey selectivity parameters were estimated using age-based, sex-specific, asymptotic curves that were time-invariant. The double-normal curve was used to easily allow previous and future explorations of alternative survey selectivity
+forms, but as in 2020 was constrained to mimic a logistic shape because there was no evidence for dome-shaped survey selectivity.
 
 Fishery selectivity parameters for logistic, length-based, sex-specific curves were estimated (the parameters for each curve were the length at 50% selectivity to the fishery and slope of the selectivity curve).
-Separate fishery selectivity curves were estimated for 2 distinct time
+Separate fishery selectivity curves were estimated for two distinct time
 periods (1964-1987 and 1988-present).
 
 Finally, annual fishing mortality rates were estimated (`r paste0(mod18.2c_2024$startyr,'-',mod18.2c_2024$endyr)`).
