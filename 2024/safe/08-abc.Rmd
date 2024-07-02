@@ -122,7 +122,7 @@ There is no ESP for this stock complex, but we note that the fishery has consist
  
 ### Risk Table Summary and ABC recommendation
 
-*Since we rated all four considerations at level 1, we do not believe a reduction from maxABC is warranted.*
+*Since we rated all four considerations at level 1, we do not believe a reduction from $max_{ABC}$ is warranted.*
 
 ## Status Determination
 
@@ -133,13 +133,13 @@ The official catch estimate for the most recent complete year (`r year-1`) is `r
 
 #### Overfished (Harvest Scenario 6) 
 
-The minimum stock size threshold (MSST) for BSAI FHS is given by the $B_{35\%}$ which is `r prettyNum(b35_25,big.mark=",")` in `r year`. The estimated stock spawning biomass in `r year` is more than double the MSST of `r prettyNum(ssb_25,big.mark=",")`. *The stock is not overfished*.
+The minimum stock size threshold (MSST) for BSAI FHS is given by $B_{35\%}$ which is `r prettyNum(round(b35_25),big.mark=",")` in `r year`. The estimated stock spawning biomass in `r year` is more than double the MSST at `r prettyNum(ssb_25,big.mark=",")`. *The stock is not overfished*.
 
 #### Approaching Overfished (Harvest Scenario 7)
-The mean estimated stock spawning biomass in `r year+13` under Harvest Scenario 7 is greater than $B_{35\%}$ (Tables \@ref(tab:projectionsSsb)). *The stock is not approaching an overfished state*.
+The mean estimated stock spawning biomass in `r year+13` under Harvest Scenario 7 is greater than $B_{35\%}$ (Table \@ref(tab:projectionsSsb)). *The stock is not approaching an overfished state*.
 
  
-The F that would have produced a catch for `r year-1` equal to the `r year-1` OFL for `r year-1` (`r prettyNum(ofl_23_23, big.mark = ',')`) was `r f_best`.
+The $F$ using `r model_name` that would have produced a catch for `r year-1` equal to the OFL specified in `r year-1` for `r year-1` (`r prettyNum(ofl_23_23, big.mark = ',')`) was `r f_best`.
 
 
 
