@@ -2,7 +2,7 @@
 
 > Operational Update: The Ecosystem Considerations for BSAI FHS are unchanged. The reader is referred to the last full assessment [@Monnahan2020] for the entirety of this section, which has been summarized below.  
 
-In general, a determination of ecosystem considerations for POP is hampered by the lack of biological and habitat information.
+In general, a determination of ecosystem considerations for BSAI FHS is hampered by the lack of biological and habitat information.
 
 ## Ecosystem Effects on the Stock
 
