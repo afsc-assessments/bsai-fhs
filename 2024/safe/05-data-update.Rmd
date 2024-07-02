@@ -61,5 +61,5 @@ Catches as used in the model are shown in Table \@ref(tab:commcatch); discards a
 
 ## Survey
 
-Survey biomass estimates and associated sampling variability (annual CVs) are shown in Table \@ref(tab:survobs). Survey length compositional data are shown in Tables \@ref(tab:survlengthcompstF) and \@ref(tab:survlengthcompstM). Survey conditional age-at-length data is prohibitively large to present in this document; readers may access these data electronically [here](https://github.com/afsc-assessments/bsai-fhs/blob/bafa7658d31e0b99fe11d626a58e1c01807c69ee/2024/mgmt/18.2c_2024/2020_BSAI_FHS.dat#L277).
+Survey biomass estimates and associated sampling variability (annual CVs) are shown in Table \@ref(tab:survobs). Survey length compositional data are shown in Tables \@ref(tab:survlengthcompsF) and \@ref(tab:survlengthcompsM). Survey conditional age-at-length data is prohibitively large to present in this document; readers may access these data electronically [here](https://github.com/afsc-assessments/bsai-fhs/blob/bafa7658d31e0b99fe11d626a58e1c01807c69ee/2024/mgmt/18.2c_2024/2020_BSAI_FHS.dat#L277).
  
