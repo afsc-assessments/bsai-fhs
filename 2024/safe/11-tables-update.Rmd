@@ -2,7 +2,7 @@
 
 # Tables
 
-```{r commcatch}
+```{r catches}
 catch <- read.csv(here::here(year,'safe','static_tables','catch_abc_tac_ofl_mgmt.csv'))
 catch$Year<-as.character(catch$Year)
 flextable::regulartable(catch) %>%
@@ -88,7 +88,7 @@ flextable::regulartable(mod18.2c_2024$agedbase %>%
                             names_glue = "{Yr} ({effN})",
                             values_from = Obs)) %>%
   flextable::set_caption("Fishery age frequency data for male BSAI FHS in last ten years used in the model. Input sample sizes are in parentheses.") %>%
-  flextable::colformat_double(j = 2:17,digits = 4) %>%
+  # flextable::colformat_double(j = 2:17,digits = 4) %>%
   flextable::compose(i = 21, j = 1, flextable::as_paragraph('21+')) %>%
   flextable::font(fontname = "Times New Roman", part = "all") %>%
   flextable::fontsize(size = 11, part = "all")
