@@ -145,7 +145,7 @@ production_biomass_subarea <-
                                  biomass_strata = production_biomass_stratum_ai)  
 
 production_biomass_subarea_ai <- subset(x = production_biomass_subarea,
-                                        subset = AREA_ID == 99904, ## 99900 == EBS Standard + NW region, AREA_ID == 99901 for EBS Standard Region
+                                        subset = AREA_ID == 99904, ## AI
                                         select = c(YEAR, BIOMASS_MT, BIOMASS_VAR)) %>%
   mutate(SURVEY = 'AI')
 
@@ -158,7 +158,7 @@ message('saved ai survey biomass data to raw/')
 
 #### survey comps download ----
 production_data <- gapindex::get_data(
-  year_set = 1982:2023,
+  year_set = 1982:2024,
   survey_set = "EBS",
   spp_codes = 10130,
   pull_lengths = TRUE, 
