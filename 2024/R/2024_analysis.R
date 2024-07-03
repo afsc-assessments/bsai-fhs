@@ -98,7 +98,7 @@ stop("update the ss .dat file with the newly pulled data and past the Predicted 
 ## Make sure to copy the current year catch into SS!!!!!!!!!!!!!!! when you do the final run!!!!!!!!!!!!!!!!!!!!
 ## make sure to run "hess_step" to minimize the gradient. Might need a "-" before.
 ## ss
-## -hess_step
+## ss -hess_step
 
  
 # run retrospective ----
