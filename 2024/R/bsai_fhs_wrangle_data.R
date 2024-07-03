@@ -354,10 +354,6 @@ srvlen0 <- survlen %>%
   tidyr::pivot_wider(names_from = LENGTH_BIN, values_from = freq, id_cols = c(YEAR, SEX), values_fill = 0) %>%
   mutate(SEX = ifelse(SEX == 'males',2,1)) %>%
   merge(., nsamp_len, by = 'YEAR')
-
-
-
-
 srvlen_save <- srvlen0 %>% 
   filter(SEX == 1) %>% 
   merge(., srvlen0 %>% 
