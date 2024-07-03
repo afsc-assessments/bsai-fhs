@@ -3,7 +3,7 @@
 #Foreign copyrights may apply. See copyright.txt for more information.
 #_user_support_available_at:NMFS.Stock.Synthesis@noaa.gov
 #_user_info_available_at:https://vlab.ncep.noaa.gov/group/stock-synthesis
-2020_BSAI_FHS.dat # same model as 2018 but updated data through 2020 
+2024_BSAI_FHS.dat # same model as 2020 but updated data through 2024
 BSAI_FHS.ctl
 0 # 0=use init values in control file; 1=use ss.par
 0 # run display detail (0,1,2)
