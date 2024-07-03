@@ -285,9 +285,9 @@ nsamp_age <- aggregate(HAULJOIN ~ YEAR,
 write.csv(nsamp_age, file = here::here(year, 'data','raw','nsamp_age.csv'), row.names = FALSE)
  
 
-## The length bins
-lbins <- c(seq(from = 6, to = 40, by = 2),seq(from = 43, to = 58, by = 3))
-
+## The length bins need to match the population length bins
+# lbins <- c(seq(from = 6, to = 40, by = 2),seq(from = 43, to = 58, by = 3))
+lbins <- seq(6,58,2)
 caal00 <-   production_data$specimen %>%
   ## filter out bering flounder and unsexed
   filter(!is.na(AGE) & !is.na(LENGTH) & SEX != 3 & AGE > 0 & SPECIES_CODE == 10130 ) %>%
