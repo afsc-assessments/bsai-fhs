@@ -92,7 +92,7 @@ message('reformatted and saved fishery length comp data to output/')
 ### Initial download ----
 #### survey biomass download, ebs ----
 production_data_forbio <- gapindex::get_data(
-  year_set = 1982:2023,
+  year_set = 1982:2024,
   survey_set = "EBS",
   spp_codes = data.frame(GROUP = 10129, SPECIES_CODE = 10130:10140),
   pull_lengths = FALSE,
@@ -125,7 +125,7 @@ message('saved ebs survey biomass data to raw/')
 
 #### survey biomass download, ai ----
 production_data_forbio_ai <- gapindex::get_data(
-  year_set = 1982:2023,
+  year_set = 1982:2024,
   survey_set = "AI", 
   spp_codes = 10130, ## FHS only from AI (you can query the complex but nothing is returned)
   pull_lengths = FALSE,
