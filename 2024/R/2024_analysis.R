@@ -225,8 +225,13 @@ proj_scenario0 %>%
 model <- '18.2c_2024'
 mod_path <- here::here(year,'mgmt',model)
 mod18.2c_2024 <- r4ss::SS_output(mod_path, verbose = FALSE)
+
+## get average recruitment after 1976; this is in a table caption 
+with(subset(mod18.2c_2024$timeseries, Yr > 1976 & Yr < 2025), mean(Recruit_0)) 
+
 #* save NAA as electronic file ----
 write.csv(mod18.2c_2024$natage, file = here::here(mod_path,'natage.csv'), row.names = FALSE)
+
 #* re-create SS-plots ----
 ##  ensure this folder gets named "plots/" or lookup won't work
 
