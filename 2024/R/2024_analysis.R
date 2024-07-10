@@ -276,10 +276,13 @@ dev.off()
 rec_table1 <-
   read.table(here::here(year,'model_runs','03b_projection','percentdb.out')) %>%
   as.data.frame(stringsAsFactors=FALSE) %>%
-  transmute(scenario=as.numeric(V2), year=as.numeric(V3), metric=V4,
+  transmute(scenario=as.numeric(V2), 
+            year=as.numeric(V3), 
+            metric=V4,
             value=as.numeric(V5)) %>%
   filter(year %in% (this_year:(this_year+2)) & scenario==1 
-         &  metric %in% c('SSBMean','SSBFofl', 'SSBFabc', 'SSBF100', 'Fofl', 'Fabc', 'F_Mean')
+         &  metric %in% c('SSBMean','SSBFofl', 'SSBFabc',
+                          'SSBF100', 'Fofl', 'Fabc', 'F_Mean')
   ) %>%
   arrange(year, metric) %>%
   tidyr::pivot_wider(names_from=year, values_from=value)
@@ -289,7 +292,7 @@ f35 <- as.numeric(subset(rec_table1, metric == 'Fofl')[,'2025'] )
 b100 <- as.numeric(subset(rec_table1, metric == 'SSBF100')[,'2025']) ## in mt
 
 pp_dat <- mod18.2c_2024$timeseries %>% 
-  dplyr::select(Yr, SpawnBio, Fy = `F:_1`) %>%
+  dplyr::select(Yr, SpawnBio, Fy = F1) %>%
   filter(Yr > 1977  ) %>%
   mutate(SB_B35 = SpawnBio/(b35), F_F35 = Fy/f35, type = 'aa') %>%
   arrange(., Yr)
@@ -311,23 +314,28 @@ pp_dat <- bind_rows(pp_dat, c('Yr' = 2026,
                             "F_F35"= as.numeric(subset(rec_table1, metric == 'F_Mean')[,'2026']/f35),
                             'type'= 'aa')) 
 
-ggplot(data = pp_dat, aes(x = as.numeric(SB_B35), y = as.numeric(F_F35))) +
+ggplot(data = pp_dat, aes(x = as.numeric(SB_B35), 
+                          y = as.numeric(F_F35),color = Yr)) +
   geom_hline(yintercept = 1, col = 'grey88') +  geom_vline(xintercept = 1, col = 'grey88') +
-  geom_segment(data = NULL, aes(x =0.4/0.35,  y = 1,xend =3.5, yend = 1), color = 'red') + ## OFL plateau
+  geom_segment(data = NULL, aes(x =0.4/0.35,  y = 1,xend =1.5, yend = 1), color = 'red') + ## OFL plateau
   geom_segment(data = NULL, aes(x =0.05,  y = 0,xend =0.4/0.35, yend = 1), color = 'red') + ## OFL ramp
-  geom_segment(data = NULL, aes(x = 0.4/0.35,  y = 0.8,xend =3.5, yend = 0.8), color = 'red', linetype = 'dotted') + ## ABC  plateau
+  geom_segment(data = NULL, aes(x = 0.4/0.35,  y = 0.8,xend =1.5, yend = 0.8), color = 'red', linetype = 'dotted') + ## ABC  plateau
   geom_segment(data = NULL, aes(x = 0.05,  y = 0,xend =0.4/0.35, yend = 0.8), color = 'red', linetype = 'dotted') + ## ABC  ramp
-  geom_path(color = 'grey44', lwd = 0.75, aes(group = type)) +
-  geom_point(data = subset(pp_dat, Yr == 1978), color = 'black', shape=5) +
-  geom_point(data = subset(pp_dat, Yr == 2024), color = 'black', shape=16) +
-  geom_point(data = subset(pp_dat, Yr > 2024), color = 'seagreen4') +
+  geom_path(color = 'grey80', lwd = 0.75, aes(group = type)) +
+  geom_point(data = subset(pp_dat, Yr %in% 1979:2024),  shape=16) +
+  
+  geom_point(data = subset(pp_dat, Yr == 1978), color = '#b5e48c', shape=5) +
+  geom_point(data = subset(pp_dat, Yr == 2024), color = 'blue', shape=16) +
+  geom_point(data = subset(pp_dat, Yr > 2024), color = '#ffc300') +
   
   ## year labels for high F years
   geom_text(data = subset(pp_dat, Yr %in% c(1978,1990,2008, 2024:2026)),
             vjust = c(-1,-1,-1,2,2,2),
-            size = 2, aes(label = substr(Yr,3,4))) +
-  scale_x_continuous(limits = c(0,3.5)) +
+            size = 2, aes(label = substr(Yr,3,4)), color = "#184e77") +
+  scale_color_manual(values = colorRampPalette(c("#b5e48c","#184e77"))(49))+
+  scale_x_continuous(limits = c(0,1.5)) +
   scale_y_continuous(limits = c(0,1.5)) +
+  theme(legend.position = 'none')+
   labs(x = expression('Spawning Biomass/B'[35]*"%"),y = expression('F/F'[35]*"%"))
 
 ggsave(last_plot(),
