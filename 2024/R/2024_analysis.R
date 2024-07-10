@@ -262,7 +262,7 @@ ggsave(last_plot(), file = here::here(mod_path,'plots','compare',
  
 ##make the custom selex plots if needed
 png(here::here(mod_path,"plots","growth_selex_maturity.png"), 
-    8, height =5, unit = 'in', res = 420) 
+    width = 6, height =8, unit = 'in', res = 420) 
 layout.matrix <- matrix(c(1,1,2,3,4,5), nrow = 3, ncol = 2, byrow = TRUE)
 
 layout(mat = layout.matrix)
