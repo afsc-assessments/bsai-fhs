@@ -240,15 +240,34 @@ SSplotComparisons(SSsummarize(biglist = list(mod18.2c_2020,mod18.2c_2024)),
                   col = c('grey22','blue'),
                   png = TRUE,
                   plotdir = here::here(mod_path,'plots','compare'))
+## need to manually make total biomass comparison plot
+mod18.2c_2020$timeseries %>%
+  select(Yr, Bio_smry) %>%
+  mutate(mod = '2020 Model') %>%
+  rbind(., mod18.2c_2024$timeseries %>%
+          select(Yr, Bio_smry) %>%
+          mutate(mod = '2024 Model')) %>%
+  ggplot(., aes(x = Yr, y = Bio_smry/1000, color = mod)) +
+  geom_line(lwd = 0.75) +
+  theme(legend.position = c(0.85,0.9))+
+  scale_y_continuous(limits = c(0,800))+
+  scale_color_manual(values = c('grey22','blue')) +
+  labs(x = 'year', y = 'Total 3+ Biomass', color = '')
 
+ggsave(last_plot(), file = here::here(mod_path,'plots','compare',
+                                      'compare18_totalbiomass.png'),
+       width = 5, height = 4, dpi = 520, units = 'in')
 # misc figures ----
-#* selectivity and maturity composite ----
+#* growth, selectivity and maturity composite ----
  
-## first make the custom selex plots if needed
-png(here::here(mod_path,"plots","selex_maturity.png"), 
+##make the custom selex plots if needed
+png(here::here(mod_path,"plots","growth_selex_maturity.png"), 
     8, height =5, unit = 'in', res = 420) 
+layout.matrix <- matrix(c(1,1,2,3,4,5), nrow = 3, ncol = 2, byrow = TRUE)
 
-par(mfrow=c(2,2), mar = c(0,0,1,1))
+layout(mat = layout.matrix)
+SSplotBiology(mod18.2c_2024, subplots = 1)
+par(mar = c(0,0,1,1))
 SSplotSelex(mod18.2c_2024, fleets  = 1,
             subplots = 3) 
  
@@ -267,10 +286,10 @@ filepaths <- list.files(here::here(mod_path, "plots","compare"),
                         pattern = 'compare', full.names = TRUE)
 
 ## wrangle the three into a new image
-png(here::here(mod_path,"plots","timeseries_compare.png"), width = 12, height =8, unit = 'in', res = 420) 
-rl = lapply(filepaths[c(12,18,2)], png::readPNG)
+png(here::here(mod_path,"plots","compare","timeseries_compare.png"), width = 12, height =8, unit = 'in', res = 420) 
+rl = lapply(filepaths[c(12,13,15,19)], png::readPNG)
 gl = lapply(rl, grid::rasterGrob) 
-gridExtra::grid.arrange(grobs=gl,ncol = 1) 
+gridExtra::grid.arrange(grobs=gl,ncol = 2) 
 dev.off()
 #* phase-plane plot ----
 ## take all reference values from Proj, noting that refs to "ofl" correspond to "b35" therein

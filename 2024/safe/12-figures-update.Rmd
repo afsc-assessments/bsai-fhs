@@ -58,7 +58,7 @@ knitr::include_graphics(here::here(mod_path,"plots", "compare12_recdevs_uncertai
  
 
 ```{r selex, fig.cap="Estimated length- or age-based selectivity curves, and female maturity-at-age for BSAI FHS.", eval = TRUE}
-knitr::include_graphics(c(here::here(mod_path, "plots", "selex_maturity.png")))
+knitr::include_graphics(c(here::here(mod_path, "plots", "growth_selex_maturity.png")))
 ```
 
 
