@@ -238,7 +238,8 @@ mod18.2c_2020 <- r4ss::SS_output(here::here(year,'mgmt','18.2c_2020'), verbose =
 SSplotComparisons(SSsummarize(biglist = list(mod18.2c_2020,mod18.2c_2024)),
                   legendlabels = c('2020 Model', '2024 Model'),
                   col = c('grey22','blue'),
-                  png = TRUE, plotdir = here::here(mod_path,'plots','compare'))
+                  png = TRUE,
+                  plotdir = here::here(mod_path,'plots','compare'))
 
 # misc figures ----
 #* selectivity and maturity composite ----
@@ -257,14 +258,16 @@ SSplotSelex(mod18.2c_2024, fleets  = 2,
 SSplotBiology(mod18.2c_2024, subplots = 6)
 graphics.off()
  
-#* biofreccompare.png ----
-## comparison of spbio, recruitment, f traj 
+#* timeseries_compare.png ----
+## Time series with associated uncertainty confidence bounds of: 
+## total biomass,  SB/ spawning output, stock depletion, and fishing mortality; 
+## show previously accepted model
 ## list all comparison plots made above
-filepaths <- list.files(here::here(mod_path, "plots"), 
+filepaths <- list.files(here::here(mod_path, "plots","compare"), 
                         pattern = 'compare', full.names = TRUE)
 
 ## wrangle the three into a new image
-png(here::here(mod_path,"plots","bio_f_rec.png"), width = 12, height =8, unit = 'in', res = 420) 
+png(here::here(mod_path,"plots","timeseries_compare.png"), width = 12, height =8, unit = 'in', res = 420) 
 rl = lapply(filepaths[c(12,18,2)], png::readPNG)
 gl = lapply(rl, grid::rasterGrob) 
 gridExtra::grid.arrange(grobs=gl,ncol = 1) 
