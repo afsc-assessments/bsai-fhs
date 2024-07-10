@@ -230,7 +230,7 @@ timeseries <- mod18.2c_2024$derived_quants  %>%
 
 flextable::regulartable(timeseries %>%
                           select(Year, SSB, TotBio, Bratio, 'F', Recruitment)) %>%
-  flextable::set_caption("Estimated time series of female spawning biomass, total biomass,  fully-selected fishing mortality rate, age 0 Recruitment, for BSAI FHS. Values shown are the median and 95% confidence intervals (parentheses); these are not available for total biomass.") %>%
+  flextable::set_caption("Estimated time series of female spawning biomass, total biomass,  fully-selected fishing mortality rate, age 0 Recruitment, for BSAI FHS. Values shown are the median and 95% confidence intervals (parentheses); these are not available for total biomass. The average number of recruits from 1977-present is 1.02 million.") %>%
   flextable::set_header_labels(values = c('Year',
                                           'Spawning Biomss (kt)',
                                           'Total (3+) Biomass (kt)',
