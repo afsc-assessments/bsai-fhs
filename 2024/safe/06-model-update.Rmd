@@ -31,21 +31,26 @@ full revision to the modeling framework is anticipated in the next cycle
 A total of `r nrow(mod18.2c_2024$parameters)` parameters were estimated inside the assessment model, `r mod18.2c_2024$parameters %>% filter(grepl('Recr', mod18.2c_2024$parameters$Label)) %>% nrow()` of which were annual recruitment deviations. A description of the treatment of all model parameters (fixed and estimated), their maximum likelihood estimates, and uncertainty intervals are provided in Table \@ref(tab:parposteriorst).
 
 ## Parameters Estimated Outside the Assessment Model {#parest}
-
 The survey catchability, time- and age-invariant natural mortality for
 females and males, variability of recruitment ($\sigma_r$), the
 parameters of the maturity ogive, the ageing error matrix, and the
-weight-length relationship were estimated outside the assessment model.
-The survey catchability parameter was set to 1.0. The natural
-mortality rates were set to 0.2 for both sexes, and $\sigma_r$ was equal
-to 0.5, consistent with previous assessments. The maturity ogive for
-flathead sole followed an age-based logistic curve where age at 50%
-maturity was 9.7 and age at 95% maturity was 12.8 (Figure \@ref(fig:selex)). The ageing error
-matrix was taken directly from the Stock Synthesis model used in
-assessments prior to 2004 [@Spencer2004]. The same length–weight
-relationship used in 2020, of the form $W = aL^b$ was estimated by fitting to survey data from
-1982-2016 for males and females combined, with parameter estimates a =
-0.00298 and b = 3.327 (weight in g, length in cm).
+weight-length relationship were estimated outside the assessment model.  
+
+### Survey Catchability
+The survey catchability parameter was set to 1.0. 
+
+### Natural Mortality
+The natural mortality rates were set to 0.2 for both sexes, and $\sigma_r$ was equal to 0.5, consistent with previous assessments.
+
+### Maturity Ogive
+The maturity ogive for flathead sole followed an age-based logistic curve where age at 50% maturity was 9.7 and age at 95% maturity was 12.8 (Figure \@ref(fig:selex)). 
+
+### Ageing error matrix
+The ageing error matrix was taken directly from the Stock Synthesis model used in
+assessments prior to 2004 [@Spencer2004].
+
+### Length-Weight Relationship
+The same length–weight relationship used in 2020, of the form $W = aL^b$ was estimated by fitting to survey data from 1982-2016 for males and females combined, with parameter estimates a = 0.00298 and b = 3.327 (weight in g, length in cm).
 
 ## Parameters Estimated Inside the Assessment Model
 
