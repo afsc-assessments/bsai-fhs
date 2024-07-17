@@ -1,0 +1,176 @@
+---
+title: "Bering Sea Flathead Sole"
+subtitle: "2024 November Plan Team"
+format: 
+  revealjs:  
+    logo: noaa-logo.png
+    css: logo.css
+    theme: [simple]
+    auto-animate-easing: ease-in-out
+    footer: "Maia Sosa Kapur  | Lee Cronin-Fine"
+    self-contained: false
+    slide-number: true
+    df-print: paged
+knitr:
+  opts_chunk: 
+    fig-format: png
+---
+
+```{r setup_environment}
+#| include: false
+library(flextable)
+library(here)
+library(dplyr)
+year = 2024
+```
+
+------------------------------------------------------------------------
+
+## Stock Overview
+
+::: columns
+::: {.column width="40%"}
+BSAI Flathead Sole *(Hippoglossoides elassodon)* -Bering flounder complex
+:::
+
+::: {.column width="60%"}
+|         |                                                                  |
+|-------------------------------|-----------------------------------------|
+| Tier    | 3a                                                               |
+| Area    | Bering Sea                                                       |
+| Status  | Not overfished/no overfishing                                    |
+:::
+:::
+
+::: fragment
+-   No changes to model structure 
+-   Update data from 2020 (Monnahan et. al.)
+:::
+  
+# Data Summary
+
+------------------------------------------------------------------------
+
+## Data Summary Table  
+
+```{r}
+data.frame(Source = c(rep("NMFS Aleutian Islands Groundfish Trawl Survey", 1),
+                      rep("NMFS Bering Sea Shelf Groundfish Survey (standard survey area only; excludes survey strata 70, 81, 82, 90, 140, 150, and 160)", 3),
+                      rep("U.S. trawl fisheries",3),
+                      "Foreign trawl fisheries in the BSAI"),
+           Data = c("Survey biomass (linear regression used to combine BS shelf survey estimates with AI survey estimates for a single survey biomass index)",
+                    "Survey biomass (linear regression used to combine BS shelf survey estimates with AI survey estimates for a single survey biomass index)                        ",
+                    "Conditional age-at-length composition", 
+                    "Marginal length composition",
+                    "Catch (pelagic and non-pelagic trawl in the Bering Sea and Aleutian Islands; a very small amount of catch is taken with hook and line and is included in the total catch biomass)",
+                    "Marginal age composition (Bering Sea only; non-pelagic trawl only)",
+                    "Marginal length composition (Bering Sea only; non-pelagic trawl only)",
+                    "Catch (Bering Sea and Aleutian Islands; trawl)"),
+           Species = c("Flathead only; no Bering flounder were caught in the Aleutian Islands",
+                       "Flathead sole and Bering flounder combined",
+                       "Flathead sole only", 
+                       "Flathead sole only",
+                       "Flathead sole and Bering flounder combined",
+                       "Flathead sole only",
+                       "Flathead sole only",
+                       "Flathead sole and Bering flounder combined"),
+           Years = c("1983, 1986, 1991-2000 (triennial), 2002-2006 (biennial), 2010-2022 (biennial)",
+                     "1982-2019, 2021-2024",
+                     "1982, 1985, 1992-1995, 1999-2019, 2021-2023", 
+                    "1982-2019, 2021-2023",
+                    "1963-2024 (final year is estimated)",
+                    "2000, 2001, 2004-2007, 2009-2021",
+                    "1977-1999, 2002-2003, 2008, 2020-2023",
+                    "1964-1987"))  %>% 
+  flextable::flextable() %>% 
+  flextable::width(j = ~ Source, width = 2) %>%
+  flextable::width(j = ~ Species, width = 2) %>%
+  flextable::width(j = ~ Data, width = 2) %>%
+  flextable::width(j = ~ Years, width = 2) %>%
+  flextable::merge_v(j = 1) %>% 
+  flextable::font(fontname = "Arial", part = "all") %>% 
+  flextable::fontsize(size = 8) %>% 
+  flextable::theme_vanilla() %>% 
+  flextable::fix_border_issues() 
+
+```
+ 
+------------------------------------------------------------------------
+
+## Catches
+```{r, echo = FALSE}
+knitr::include_graphics(here::here('docs',year,'model_plots','catch2 landings stacked.png'))
+```
+
+
+------------------------------------------------------------------------
+
+## Fishery Length Comps
+
+------------------------------------------------------------------------
+
+## Fishery Age Comps
+
+------------------------------------------------------------------------
+
+## Survey Biomass
+
+------------------------------------------------------------------------
+
+## Survey CAAL
+
+------------------------------------------------------------------------
+
+# Model Summary & Results 
+
+------------------------------------------------------------------------
+
+## Fishery Length Comps Fits
+
+------------------------------------------------------------------------
+
+## Fishery Age Comps Fits
+
+------------------------------------------------------------------------
+
+## Survey Biomass Fits
+
+------------------------------------------------------------------------
+
+## Survey CAAL Fits
+
+------------------------------------------------------------------------
+
+## Parameters
+
+------------------------------------------------------------------------
+
+## Bio/Selex Curves
+
+------------------------------------------------------------------------
+
+## Time Series: SSB & Total Biomass
+------------------------------------------------------------------------
+
+## Time Series: Recruitment
+
+------------------------------------------------------------------------
+
+## Time Series: Fishing Mortality
+------------------------------------------------------------------------
+
+## Phase-Plane
+------------------------------------------------------------------------
+
+## Risk Table
+------------------------------------------------------------------------
+
+## Projections
+
+------------------------------------------------------------------------
+
+## Harvest Recommendation
+
+
+
+
