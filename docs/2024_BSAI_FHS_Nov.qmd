@@ -97,9 +97,9 @@ data.frame(Source = c(rep("NMFS Aleutian Islands Groundfish Trawl Survey", 1),
  
 ------------------------------------------------------------------------
 
-## Catches
+## Catches - low attainment
 ```{r, echo = FALSE}
-knitr::include_graphics(here::here('docs',year,'model_plots','catch2 landings stacked.png'))
+knitr::include_graphics(here::here('docs',year,'model_plots','catch_abc_tac_ofl_mgmt.png'))
 ```
 
 
