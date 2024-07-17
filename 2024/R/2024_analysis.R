@@ -305,16 +305,17 @@ catchabc <- read.csv(here::here(year,'safe','static_tables',
   reshape2::melt(id = 'Year') %>%
   mutate(value = as.numeric(gsub(',','',value)))
 
-catchabc$variable <- factor(catchabc$variable, levels = rev(levels(factor(catchabc$variable))))
+catchabc$variable <- factor(catchabc$variable, 
+                            levels = c('Total','OFL','ABC','TAC'))
 
-ggplot(catchabc, aes(x= Year, color = variable, fill = variable,y = value)) +
+ggplot(catchabc, aes(x= Year, color = variable, fill = variable,y = value/1000)) +
   geom_bar(data=subset(catchabc, variable =='Total'),stat = 'identity',
            position = 'stack') +
   geom_line(data=subset(catchabc, variable !='Total')) +
-  scale_color_manual(values = rev(c('black','grey22','grey44','white')))+
+  scale_color_manual(values = c('white','black','grey50','seagreen4'))+
   scale_fill_manual(values = rep('blue',4))+
   scale_x_continuous(limits = c(1995,year))+
-  labs(x = 'Year', y = 'Value (t)', color = '',fill = '') +
+  labs(x = 'Year', y = 'Value (1000 t)', color = '',fill = '') +
   theme(legend.position = 'top')
 
 ggsave(last_plot(),
