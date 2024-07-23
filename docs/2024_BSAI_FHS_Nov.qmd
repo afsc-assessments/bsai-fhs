@@ -22,6 +22,7 @@ library(flextable)
 library(here)
 library(dplyr)
 year = 2024
+model <- '18.2c_2024';mod_path <- here::here(year,'mgmt',model)
 ```
 
 ------------------------------------------------------------------------
@@ -105,19 +106,37 @@ knitr::include_graphics(here::here('docs',year,'model_plots','catch_abc_tac_ofl_
 
 ------------------------------------------------------------------------
 
-## Fishery Length Comps
+## Fishery Length Comps (recent years)
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lendat_flt1mkt0_page2.png"))
+```
+ 
 
 ------------------------------------------------------------------------
 
 ## Fishery Age Comps
 
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_agedat_flt1mkt0.png"))
+```
+
 ------------------------------------------------------------------------
 
 ## Survey Biomass
 
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"index1_cpuedata_Survey.png"))
+```
+
 ------------------------------------------------------------------------
 
-## Survey CAAL
+## Survey CAAL (recent years)
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALdat_bubflt2mkt0_page4.png"))
+```
 
 ------------------------------------------------------------------------
 
@@ -125,20 +144,50 @@ knitr::include_graphics(here::here('docs',year,'model_plots','catch_abc_tac_ofl_
 
 ------------------------------------------------------------------------
 
-## Fishery Length Comps Fits
+## Fishery Length Comps Fits (recent years)
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit_flt1mkt0_page2.png"))
+```
 
 ------------------------------------------------------------------------
 
 ## Fishery Age Comps Fits
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_agefit_flt1mkt0.png"))
+```
 
 ------------------------------------------------------------------------
 
 ## Survey Biomass Fits
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"index2_cpuefit_Survey.png"))
+```
 
 ------------------------------------------------------------------------
 
-## Survey CAAL Fits
+## Survey CAAL Fits (recent years)
 
+::: rows
+
+::: {.row height="40%"}
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALfit_Andre_plotsflt2mkt0_page7.png"))
+```
+
+:::
+
+::: {.row height="20%"}
+
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALfit_Andre_plotsflt2mkt0_page8.png"))
+```
+
+:::
+
+:::
 ------------------------------------------------------------------------
 
 ## Parameters
