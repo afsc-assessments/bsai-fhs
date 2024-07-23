@@ -297,6 +297,10 @@ gl = lapply(rl, grid::rasterGrob)
 gridExtra::grid.arrange(grobs=gl,ncol = 2) 
 dev.off()
 
+#* survey map ---- 
+# library(akgfmaps)
+# SEBS <- akgfmaps::get_base_layers(select.region = "bs.south", set.crs = "auto")
+
 #* catch vs abc ----
 ## (uses table made in section below)
 catchabc <- read.csv(here::here(year,'safe','static_tables',
