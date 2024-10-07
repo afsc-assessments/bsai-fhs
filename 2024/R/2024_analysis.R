@@ -267,6 +267,12 @@ ggsave(last_plot(), file = here::here(mod_path,'plots','compare',
                                       'compare18_totalbiomass.png'),
        width = 5, height = 4, dpi = 520, units = 'in')
 
+## copy into docs/ for presentation
+
+file.copy(from = list.files(here::here(mod_path,'plots'), full.names = TRUE),
+          to = here::here('docs','2024','model_plots'),
+          overwrite = TRUE)
+
 # misc figures ----
 #* growth, selectivity and maturity composite ----
  
@@ -330,6 +336,7 @@ ggplot(catchabc, aes(x= Year, color = variable, fill = variable,y = value/1000))
 ggsave(last_plot(),
        file = here::here('docs',year,'model_plots','catch_abc_tac_ofl_mgmt.png'),
        width = 6, height =4 ,unit = 'in', dpi = 520)
+
 
 #* phase-plane plot ----
 ## take all reference values from Proj, noting that refs to "ofl" correspond to "b35" therein
@@ -454,6 +461,7 @@ abc1$Total[abc1$Year==year] <- pcatch[2]
 
 write.csv(abc1,here::here(year,'safe','static_tables','catch_abc_tac_ofl_mgmt.csv'),
           row.names = FALSE)
+
 
 ## Figures for Director's Briefing Nov 2024 ----
 
