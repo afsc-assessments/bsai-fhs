@@ -58,8 +58,6 @@ Projected catches, spawning biomass, and fishing mortality rates corresponding t
  
 ## Risk Table and ABC recommendation {#risktable}
 
-**CONFIRM THAT WE DO NOT NEED TO INCLUDE THE RISK TABLE DEFINITIONS AND EXAMPLE TEXT**
-
 The risk table scoring for BSAI FHS has not changed since 2020.
 
 ```{r}
