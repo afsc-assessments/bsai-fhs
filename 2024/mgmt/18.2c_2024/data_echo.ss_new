@@ -5,7 +5,7 @@
 #_User_info_available_at:https://vlab.noaa.gov/group/stock-synthesis
 #_Source_code_at:_https://github.com/nmfs-stock-synthesis/stock-synthesis
 
-#_Start_time: Wed Sep  4 12:21:57 2024
+#_Start_time: Mon Oct  7 10:52:42 2024
 #_echo_input_data
 #C data file created using the SS_writedat function in the R package r4ss
 #C should work with SS version: 
@@ -102,7 +102,7 @@
 2021 1 1 10260 0.01
 2022 1 1 14690 0.01
 2023 1 1 8988 0.01
-2024 1 1 10049 0.01
+2024 1 1 11125 0.01
 -9999 0 0 0 0
 #
 #_CPUE_and_surveyabundance_and_index_observations
