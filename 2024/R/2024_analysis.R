@@ -248,6 +248,7 @@ SSplotComparisons(SSsummarize(biglist = list(mod18.2c_2020,mod18.2c_2024)),
                   col = c('grey22','blue'),
                   png = TRUE,
                   plotdir = here::here(mod_path,'plots','compare'))
+
 ## need to manually make total biomass comparison plot
 mod18.2c_2020$timeseries %>%
   select(Yr, Bio_smry) %>%
@@ -265,6 +266,7 @@ mod18.2c_2020$timeseries %>%
 ggsave(last_plot(), file = here::here(mod_path,'plots','compare',
                                       'compare18_totalbiomass.png'),
        width = 5, height = 4, dpi = 520, units = 'in')
+
 # misc figures ----
 #* growth, selectivity and maturity composite ----
  
@@ -352,7 +354,7 @@ f35 <- as.numeric(subset(rec_table1, metric == 'Fofl')[,'2025'] )
 b100 <- as.numeric(subset(rec_table1, metric == 'SSBF100')[,'2025']) ## in mt
 
 pp_dat <- mod18.2c_2024$timeseries %>% 
-  dplyr::select(Yr, SpawnBio, Fy = F1) %>%
+  dplyr::select(Yr, SpawnBio, Fy = `F:_1`) %>%
   filter(Yr > 1977  ) %>%
   mutate(SB_B35 = SpawnBio/(b35), F_F35 = Fy/f35, type = 'aa') %>%
   arrange(., Yr)
@@ -391,7 +393,9 @@ ggplot(data = pp_dat, aes(x = as.numeric(SB_B35),
   ## year labels for high F years
   geom_text(data = subset(pp_dat, Yr %in% c(1978,1990,2008, 2024:2026)),
             vjust = c(-1,-1,-1,2,2,2),
-            size = 2, aes(label = substr(Yr,3,4)), color = "#184e77") +
+            size = 2,
+            aes(label = Yr), 
+            color = "#184e77") +
   scale_color_manual(values = colorRampPalette(c("#b5e48c","#184e77"))(49))+
   scale_x_continuous(limits = c(0,1.5)) +
   scale_y_continuous(limits = c(0,1.5)) +
