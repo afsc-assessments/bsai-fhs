@@ -9,8 +9,10 @@
 # devtools::install_github("afsc-gap-products/gapindex")
 # devtools::install_github("BenWilliams-NOAA/afscassess", force = TRUE)
 # devtools::install_github('r4ss/r4ss')
+# devtools::install_github("afsc-assessments/afscISS")
 
 library(gapindex)
+library(afscISS)
 library(afscdata)
 library(afscassess)
 library(r4ss)
