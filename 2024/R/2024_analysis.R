@@ -406,45 +406,7 @@ ggsave(last_plot(),
        file =here::here(year,'mgmt', model, "plots", 'phase_plane.png'),
        width = 5, height = 5, dpi = 400)
 
-AAA
-
 ## projection stuff 
-
-pdt <- data.frame(read.table(here::here(year,'mgmt',curr_mdl_fldr,'proj',"goa_pop_out","bigfile.out"), header=TRUE))
-pdt.long <- tidyr::pivot_longer(pdt, cols=c(-Alternative, -Spp, -Yr), names_to='metric') %>%
-  mutate(Alternative=factor(Alternative)) %>% group_by(Yr, Alternative, metric) %>%
-  dplyr::summarize(med=median(value), lwr=quantile(value, .1), upr=quantile(value, .9), .groups='drop')
-g <- ggplot(pdt.long, aes(Yr,  med, ymin=lwr, ymax=upr, fill=Alternative, color=Alternative)) +
-  facet_wrap('metric', scales='free_y') + ylim(0,NA) +
-  geom_ribbon(alpha=.4) + theme_bw() +
-  labs(x='Year', y='Estimated 80% CI')
-
-## SB vs Year custom plot for ppt
-png(filename=here::here(year,'mgmt', curr_mdl_fldr, "figs", 
-                              "proj_sb.png"), 
-    width = 6, height = 4, units = 'in', type ="cairo", res = 200)
-pdt.long %>%
-  filter(metric == 'SSB' & Alternative %in% c(1,4)) %>%
-  ggplot(., aes(x = Yr, y = med, color = Alternative)) +
-  theme(legend.position = 'none') +
-  geom_point() +
-  geom_ribbon(aes(ymin = lwr, ymax = upr, fill = Alternative), color =NA, alpha = 0.2) +
-  scale_y_continuous(limits = c(100,260)) +
-   scale_x_continuous(limits = c(2023,2035), labels = seq(2023,2035,2),
-                     breaks =  seq(2023,2035,2)) +
-  scale_color_manual(values = c('dodgerblue','grey44')) +
-  scale_fill_manual(values = c('dodgerblue','grey44')) +
-  geom_hline(yintercept = 137.447, linetype = 'dotted') + ## b40
-  geom_hline(yintercept = 120.266) + ## b35
-  geom_text(x = 2030, y = 200, label = 'Alt. 4 (avg F)', 
-  color = 'grey44', size = 2) + 
-  geom_text(x = 2030, y = 160, label = 'Alt. 1 (maxABC)', 
-  color = 'dodgerblue', size = 2) + 
-  geom_text(x = 2024, y = 140, label = 'SB40', size = 2) + 
-  geom_text(x = 2024, y = 115, label = 'SB35', size = 2) + 
-  labs(y = 'SSB (1000 t)', x = 'Projection Year')
-
-dev.off()
 
 
 # create tables ----
