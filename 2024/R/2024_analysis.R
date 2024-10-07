@@ -229,6 +229,7 @@ mod_path <- here::here(year,'mgmt',model)
 mod18.2c_2024 <- r4ss::SS_output(mod_path, verbose = FALSE)
 
 ## get average recruitment after 1976; this is in a table caption 
+## (open safe/11-tables-update.Rmd and look for label timeseriest)
 with(subset(mod18.2c_2024$timeseries, Yr > 1976 & Yr < 2025), mean(Recruit_0)) 
 
 #* save NAA as electronic file ----
