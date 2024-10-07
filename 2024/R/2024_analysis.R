@@ -267,11 +267,6 @@ ggsave(last_plot(), file = here::here(mod_path,'plots','compare',
                                       'compare18_totalbiomass.png'),
        width = 5, height = 4, dpi = 520, units = 'in')
 
-#* copy into docs/ for presentation ----
-
-file.copy(from = list.files(here::here(mod_path,'plots'), full.names = TRUE),
-          to = here::here('docs','2024','model_plots'),
-          overwrite = TRUE)
 
 # misc figures ----
 #* growth, selectivity and maturity composite ----
@@ -337,6 +332,15 @@ ggsave(last_plot(),
        file = here::here('docs',year,'model_plots','catch_abc_tac_ofl_mgmt.png'),
        width = 6, height =4 ,unit = 'in', dpi = 520)
 
+#* copy into docs/ for presentation ----
+
+file.copy(from = list.files(here::here(mod_path,'plots'), full.names = TRUE),
+          to = here::here('docs','2024','model_plots'),
+          overwrite = TRUE)
+
+file.copy(from = list.files(here::here(mod_path,'plots','compare'), full.names = TRUE),
+          to = here::here('docs','2024','model_plots'),
+          overwrite = TRUE)
 
 #* phase-plane plot ----
 ## take all reference values from Proj, noting that refs to "ofl" correspond to "b35" therein
