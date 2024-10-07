@@ -455,65 +455,6 @@ abc1$Total[abc1$Year==year] <- pcatch[2]
 write.csv(abc1,here::here(year,'safe','static_tables','catch_abc_tac_ofl_mgmt.csv'),
           row.names = FALSE)
 
-## NAA as a separate file
-mrep <- readLines(here::here(year, 'mgmt',model,paste0(modname,'.rep')))
-naa0 <- mrep[grep('Numbers',mrep):(grep('Numbers',mrep)+length(1961:2023))] 
-df1 <- strsplit(naa0[-1], " ")
-df1 <- do.call(rbind, df1)
-df1 <- df1[,-2]
-df1 <- as.data.frame(df1)
-names(df1) <- c('Year',paste0('age_',2:29))
-write.csv(df1,file =  here::here(year, 'mgmt',model,'processed','naa.csv'),row.names = FALSE)
-
-
-
-x_full = data.frame()
-for (i in 2:length(naa0) ) {
-  x<-data.frame(naa0[[i]])
-  writeLines(x[[i]],"test.csv")
-  data<-read.csv("test.csv", header=F, sep=" ")
-  df<-data[,colSums(is.na(data)) == 0]
-  print(df)
-}
-
-## parameter summaries
-allpars <- read.csv(here::here(year, 'mgmt',model,'processed','mcmc.csv')) %>%
-  reshape2::melt() %>%
-  dplyr::group_by(variable) %>%
-  summarise_at(vars(value),
-               list(
-                 Q1=~quantile(., probs = 0.25),
-                 median=median, 
-                 Q3=~quantile(., probs = 0.75))) 
-
-other_pars <- filter(allpars, !grepl('dev',variable)) %>%
-  mutate(Parameter = c('Avg. log Annual Recruitment',
-                       'Age at 50% Selectivity, Timeblock 2',
-                       'Delta Selectivity, Timeblock 2',
-                       'Age at 50% Selectivity, Timeblock 3',
-                       'Delta Selectivity, Timeblock 3',
-                       'Age at 50% Selectivity, Timeblock 4',
-                       'Delta Selectivity, Timeblock 4',
-                       'Age at 50% Selectivity, Survey',
-                       'Delta Selectivity, Survey',
-                       'Avg. log fishing mortality',
-                       'Age at 50% maturity',
-                       'Delta Maturity',
-                       'log catchability (survey)',
-                       'log natural mortality',
-                       'F50%',
-                       'F40%',
-                       'F35%'
-                       )) %>%
-  select(Parameter, everything())
-f_rec_devs <- filter(allpars, grepl('dev',variable)) %>% 
-  mutate(year = c(1961:2023,1935:2023)) %>%
-  select(variable, year, Q1,median,Q3)
-
-write.csv(f_rec_devs,here::here(year, 'mgmt', curr_mdl_fldr,'processed','parameter_summary_devs.csv'),row.names = FALSE)
-write.csv(other_pars,here::here(year, 'mgmt', curr_mdl_fldr,'processed','parameter_summary.csv'),row.names = FALSE)
-
-
 ## Figures for Director's Briefing Nov 2024 ----
 
 ### survey data
