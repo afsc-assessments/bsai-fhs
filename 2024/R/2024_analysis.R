@@ -92,7 +92,7 @@ catch_to_add <- weekly_catches %>%
   summarize(catch=sum(catch), .groups='drop') %>%
   pull(catch) %>% mean
 message("Predicted ", this_year, " catch= ", round(catch_this_year+ catch_to_add,0)) ##9272
-stop("update the ss .dat file with the newly pulled data and past the Predicted catch into ss .dat file as well.")
+stop("update the ss .dat file with the newly pulled data and paste the Predicted catch into ss .dat file as well.")
 
 
 # run Stock Synthesis ----
