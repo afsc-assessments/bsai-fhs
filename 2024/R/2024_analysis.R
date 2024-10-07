@@ -267,7 +267,7 @@ ggsave(last_plot(), file = here::here(mod_path,'plots','compare',
                                       'compare18_totalbiomass.png'),
        width = 5, height = 4, dpi = 520, units = 'in')
 
-## copy into docs/ for presentation
+#* copy into docs/ for presentation ----
 
 file.copy(from = list.files(here::here(mod_path,'plots'), full.names = TRUE),
           to = here::here('docs','2024','model_plots'),
