@@ -5,7 +5,7 @@
 #_User_info_available_at:https://vlab.noaa.gov/group/stock-synthesis
 #_Source_code_at:_https://github.com/nmfs-stock-synthesis/stock-synthesis
 
-#_Start_time: Wed Jul  3 12:22:52 2024
+#_Start_time: Wed Sep  4 12:21:57 2024
 #_echo_input_data
 #C data file created using the SS_writedat function in the R package r4ss
 #C should work with SS version: 
@@ -114,47 +114,48 @@
 1 1 0 0 # Fishery
 2 1 0 0 # Survey
 #_yr month fleet obs stderr
-1982 7 2 194495 0.0873 #_ Survey
-1983 7 2 271475 0.09921 #_ Survey
-1984 7 2 289521 0.08125 #_ Survey
-1985 7 2 269266 0.07133 #_ Survey
-1986 7 2 362169 0.08629 #_ Survey
-1987 7 2 399227 0.09227 #_ Survey
-1988 7 2 569809 0.08506 #_ Survey
-1989 7 2 528394 0.08208 #_ Survey
-1990 7 2 601749 0.0878 #_ Survey
+1982 7 2 197759 0.08596 #_ Survey
+1983 7 2 277331 0.09726 #_ Survey
+1984 7 2 291972 0.08061 #_ Survey
+1985 7 2 271890 0.0707 #_ Survey
+1986 7 2 364713 0.08576 #_ Survey
+1987 7 2 400742 0.09194 #_ Survey
+1988 7 2 569867 0.08506 #_ Survey
+1989 7 2 528806 0.08202 #_ Survey
+1990 7 2 601534 0.08784 #_ Survey
 1991 7 2 552288 0.07603 #_ Survey
-1992 7 2 626811 0.10292 #_ Survey
-1993 7 2 617258 0.07034 #_ Survey
+1992 7 2 626382 0.10299 #_ Survey
+1993 7 2 616911 0.07039 #_ Survey
 1994 7 2 699446 0.06877 #_ Survey
-1995 7 2 603875 0.08684 #_ Survey
-1996 7 2 626314 0.089 #_ Survey
+1995 7 2 603642 0.08688 #_ Survey
+1996 7 2 625889 0.08906 #_ Survey
 1997 7 2 794426 0.20753 #_ Survey
-1998 7 2 693723 0.19998 #_ Survey
-1999 7 2 407164 0.0865 #_ Survey
+1998 7 2 692722 0.20026 #_ Survey
+1999 7 2 408611 0.08621 #_ Survey
 2000 7 2 401106 0.08573 #_ Survey
-2001 7 2 522844 0.10258 #_ Survey
+2001 7 2 523303 0.1025 #_ Survey
 2002 7 2 562073 0.17351 #_ Survey
-2003 7 2 522935 0.10274 #_ Survey
+2003 7 2 523393 0.10266 #_ Survey
 2004 7 2 624805 0.08355 #_ Survey
-2005 7 2 622249 0.08421 #_ Survey
+2005 7 2 621858 0.08427 #_ Survey
 2006 7 2 643731 0.09191 #_ Survey
-2007 7 2 571280 0.09028 #_ Survey
-2008 7 2 553591 0.13947 #_ Survey
-2009 7 2 425216 0.11554 #_ Survey
+2007 7 2 571325 0.09028 #_ Survey
+2008 7 2 553787 0.13942 #_ Survey
+2009 7 2 426509 0.1152 #_ Survey
 2010 7 2 506197 0.14483 #_ Survey
-2011 7 2 593351 0.18176 #_ Survey
+2011 7 2 593207 0.1818 #_ Survey
 2012 7 2 386892 0.11363 #_ Survey
-2013 7 2 498784 0.16794 #_ Survey
+2013 7 2 499449 0.16772 #_ Survey
 2014 7 2 532889 0.13339 #_ Survey
-2015 7 2 399247 0.11012 #_ Survey
+2015 7 2 400761 0.10972 #_ Survey
 2016 7 2 452785 0.06954 #_ Survey
-2017 7 2 549293 0.0777 #_ Survey
+2017 7 2 549526 0.07767 #_ Survey
 2018 7 2 494579 0.07558 #_ Survey
-2019 7 2 604109 0.1407 #_ Survey
-2021 7 2 670091 0.11308 #_ Survey
+2019 7 2 603874 0.14075 #_ Survey
+2021 7 2 669293 0.11322 #_ Survey
 2022 7 2 710804 0.18103 #_ Survey
-2023 7 2 604522 0.16031 #_ Survey
+2023 7 2 604283 0.16037 #_ Survey
+2024 7 2 730523 0.12775 #_ Survey
 -9999 1 1 1 1 # terminator for survey observations 
 #
 0 #_N_fleets_with_discard
