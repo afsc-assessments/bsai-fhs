@@ -37,7 +37,7 @@ ages = rec_age:plus_age
 lengths = c(seq(6,40,2),seq(43,58,3))
 TAC = c(25000, 25000, 35500) # 2021, 2022, 2023
 species = "FSOL"
-curr_mdl_fldr = "18.2c_2024-lcf2"
+curr_mdl_fldr = "18.2c_2024"
 prev_mdl_fldr = "18.2c_2020" 
 
 # query data ----
