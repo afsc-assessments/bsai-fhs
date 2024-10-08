@@ -1,9 +1,7 @@
-## exploration of new ISS values
-## this uses the afscISS package https://afsc-assessments.github.io/afscISS/articles/get_output.html
-## According to the Vignette these values could replace what is served by gapindex
-## given this is a potentailly large change from the original input going to examine carefully before deciding
-## what do do; likely will either not use or wholesale replace (i.e. I won't only update the sample sizes)
+## exploration of new ISS values using surveyISS package
+## I am not using afscISS as we need custom bin widths
 # devtools::install_github("BenWilliams-NOAA/surveyISS")
+
 library(surveyISS)
 library(dplyr)
 ## NOTES
@@ -15,11 +13,11 @@ library(dplyr)
 ## ages are 1:21; lengths are in weird bins unclear if we can back them out
 
 data_lbins <- c(seq(6,40,2),seq(43,58,3))
-caal_lbins <- seq(6,58,2)
+caal_lbins <- seq(6,58,2) 
 amax <- 21
 lmax <- 58
 
-## download data  
+## download data   ----
 data <- surveyISS::query_data(survey = 98, ## bs shelf only
                               region = 'ebs',  
                               species = 10130) ## fhs only
@@ -27,8 +25,7 @@ data <- surveyISS::query_data(survey = 98, ## bs shelf only
 
 save(data, file = here::here(year, 'data','output','ebs','surveyISS_data.Rdata'))
 
-## get marginal comps @ bins saved in data/output/ebs
-## saves to here(); I moved them to data/output
+#* ISS ----
 surveyISS::srvy_iss(iters = 10, 
                     bin = data_lbins,  
                     lfreq_data = data$lfreq,
@@ -41,32 +38,8 @@ surveyISS::srvy_iss(iters = 10,
                     al_var = TRUE, 
                     al_var_ann = TRUE, 
                     age_err = TRUE,
-                    region = 'ebs', save= 'marginal_length' )
+                    region = 'ebs', save= 'marginal' )
 
-
-marginal_comps <- surveyISS::srvy_comps(
-  lfreq_data = data$lfreq,
-  specimen_data = data$specimen, 
-  cpue_data = data$cpue, 
-  strata_data = data$strata, 
-  r_t = surveyISS::read_test,
-  yrs = NULL,
-  bin = data_lbins, ## length databins
-  boot_hauls = TRUE, 
-  boot_lengths = TRUE, 
-  boot_ages = TRUE, 
-  al_var = TRUE, 
-  al_var_ann = TRUE, 
-  age_err = TRUE, 
-  plus_len = NULL,
-  plus_age = NULL,
-  by_strata = FALSE,
-  global = FALSE
-)
-
-
- 
-#get caals @ bins 
 surveyISS::srvy_iss_caal(iters = 10,
                          bin = caal_lbins, ## distinct bins for caal data
                          plus_age = amax,
@@ -80,8 +53,34 @@ surveyISS::srvy_iss_caal(iters = 10,
                          region = 'ebs', 
                          save = 'caal')
 
-caal_iss <- read.csv(here::here(year,'data','output','ebs','caal_iss_caal.csv'))
- 
+#* observed comps ----
+marl00 <- surveyISS::srvy_comps(
+  lfreq_data = data$lfreq,
+  specimen_data = data$specimen, 
+  cpue_data = data$cpue, 
+  strata_data = data$strata, 
+  r_t = surveyISS::read_test,
+  yrs = NULL,
+  bin = data_lbins, ## length databins
+  boot_hauls = TRUE, 
+  boot_lengths = TRUE, 
+  boot_ages = TRUE, 
+  al_var = TRUE, 
+  al_var_ann = TRUE, 
+  age_err = TRUE, 
+  plus_len = lmax,
+  plus_age = amax,
+  by_strata = FALSE,
+  global = FALSE
+)  
+
+write.csv(marl00$age, 
+          file = here::here(year, 'data','output','ebs','marginal_age_surveyISS_raw.csv'),
+          row.names = FALSE)
+
+write.csv(marl00$length, 
+          file = here::here(year, 'data','output','ebs','marginal_length_surveyISS_raw.csv'),
+          row.names = FALSE)
 
 caal00 <- surveyISS::srvy_comps_caal(
   specimen_data = data$specimen, 
@@ -97,11 +96,27 @@ caal00 <- surveyISS::srvy_comps_caal(
   plus_age = amax) %>% 
   as.data.frame() %>%
   select(-caal.species_code) 
-
 names(caal00) <- gsub('caal.','',names(caal00))
 
+
+write.csv(caal00, file = here::here(year, 'data','output','ebs','caal_surveyISS_raw.csv'),
+          row.names = FALSE)
+
+
 ## wrangle data ----
+#* marginal lcomps ----
+lcomp_iss <- read.csv(here::here(year,'data','output','ebs','marginal_length'))
+
+
+
+
 #* format sex, drop years, munge into SS3 format
+
+caal_iss <- read.csv(here::here(year,'data','output','ebs','caal_iss_caal.csv'))
+
+
+
+
 
 
 caal_iss_merge <- caal_iss %>%
