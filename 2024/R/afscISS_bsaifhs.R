@@ -74,11 +74,18 @@ marl00 <- surveyISS::srvy_comps(
   global = FALSE
 )  
 
-write.csv(marl00$age, 
+marage00 <-marl00$age%>%
+  mutate(totN = sum(agepop), .by = c(year,sex)) %>%
+  mutate(freq = agepop/totN)
+marlen00 <- marl00$length %>%
+  mutate(totN = sum(abund), .by = c(year,sex)) %>%
+  mutate(freq = abund/totN)
+
+write.csv(marage00, 
           file = here::here(year, 'data','output','ebs','marginal_age_surveyISS_raw.csv'),
           row.names = FALSE)
 
-write.csv(marl00$length, 
+write.csv(marlen00, 
           file = here::here(year, 'data','output','ebs','marginal_length_surveyISS_raw.csv'),
           row.names = FALSE)
 
@@ -104,11 +111,34 @@ write.csv(caal00, file = here::here(year, 'data','output','ebs','caal_surveyISS_
 
 
 ## wrangle data ----
+
 #* marginal lcomps ----
-lcomp_iss <- read.csv(here::here(year,'data','output','ebs','marginal_length'))
+lcomp_iss <- read.csv(here::here(year,'data','output','ebs','marginal_iss_ln.csv'))
+marlen00 <- read.csv(here::here(year,'data','output','ebs','marginal_length_surveyISS_raw.csv'))
 
+lcomp_iss %>%
+  filter(sex != 0) %>% 
+  filter(!is.na(iss)) %>%
+  select(year, sex, iss) %>%
+  merge(.,marlen00, by = c('year','sex')) %>%
 
+arrange(length) %>%
+  tidyr::pivot_wider(names_from=length, 
+                     values_from=caal,
+                     # names_prefix='a', 
+                     values_fill=0) %>%
+  arrange(year, sex, length   )
 
+bind_cols(caal0,caal0[,-(1:4)]) %>%
+  mutate(Seas = 7, Fleet = 2, sex = ifelse(sex == 'males',2,1),
+         Part = 0, Ageerr = 1) %>%  
+  select(Yr = year, Seas, Fleet, sex, Part, Ageerr, Lbin_lo = length,
+         Lbin_hi = length , Nsamp=iss,everything()) %>%
+  write.csv(., file = here::here(year,'data','output','srv_caal_ss3-surveyISS.csv'), 
+            row.names = FALSE)
+#* marginal acomps (ghosted) ----
+
+#* caals ----
 
 #* format sex, drop years, munge into SS3 format
 
