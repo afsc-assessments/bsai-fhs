@@ -14,6 +14,11 @@ library(dplyr)
 ## caals are entered as sex specific with dummy values
 ## ages are 1:21; lengths are in weird bins unclear if we can back them out
 
+data_lbins <- c(seq(6,40,2),seq(43,58,3))
+caal_lbins <- seq(6,58,2)
+amax <- 21
+lmax <- 58
+
 ## download data  
 data <- surveyISS::query_data(survey = 98, ## bs shelf only
                               region = 'ebs',  
@@ -25,7 +30,7 @@ save(data, file = here::here(year, 'data','output','ebs','surveyISS_data.Rdata')
 ## get marginal comps @ bins saved in data/output/ebs
 ## saves to here(); I moved them to data/output
 surveyISS::srvy_iss(iters = 10, 
-                    bin = c(seq(6,40,2),seq(43,58,3)), ## length databins
+                    bin = data_lbins,  
                     lfreq_data = data$lfreq,
                     specimen_data = data$specimen, 
                     cpue_data = data$cpue, 
@@ -46,7 +51,7 @@ marginal_comps <- surveyISS::srvy_comps(
   strata_data = data$strata, 
   r_t = surveyISS::read_test,
   yrs = NULL,
-  bin = unique(mod18.2c_2024$lendbase$Bin), ## length databins
+  bin = data_lbins, ## length databins
   boot_hauls = TRUE, 
   boot_lengths = TRUE, 
   boot_ages = TRUE, 
@@ -63,8 +68,8 @@ marginal_comps <- surveyISS::srvy_comps(
  
 #get caals @ bins 
 surveyISS::srvy_iss_caal(iters = 10,
-                         bin = sort(unique(mod18.2c_2024$condbase$Lbin_hi)), ## distinct bins for caal data
-                         plus_age = max(mod18.2c_2024$agebins),
+                         bin = caal_lbins, ## distinct bins for caal data
+                         plus_age = amax,
                          specimen_data = data$specimen, 
                          cpue_data = data$cpue,  
                          boot_hauls = TRUE, 
@@ -82,14 +87,14 @@ caal00 <- surveyISS::srvy_comps_caal(
   specimen_data = data$specimen, 
   cpue_data = data$cpue, 
   r_t = surveyISS::read_test,
-  bin = sort(unique(mod18.2c_2024$condbase$Lbin_hi)), ## length databins
+  bin = caal_lbins, ## length databins
   boot_hauls = TRUE,  
   boot_ages = TRUE, 
   al_var = TRUE, 
   al_var_ann = TRUE, 
   age_err = TRUE, 
-  plus_len = max(mod18.2c_2024$condbase$Lbin_hi),
-  plus_age = max(mod18.2c_2024$agebins)) %>% 
+  plus_len = lmax,
+  plus_age = amax) %>% 
   as.data.frame() %>%
   select(-caal.species_code) 
 
