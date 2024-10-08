@@ -116,20 +116,35 @@ write.csv(caal00, file = here::here(year, 'data','output','ebs','caal_surveyISS_
 lcomp_iss <- read.csv(here::here(year,'data','output','ebs','marginal_iss_ln.csv'))
 marlen00 <- read.csv(here::here(year,'data','output','ebs','marginal_length_surveyISS_raw.csv'))
 
-lcomp_iss %>%
+## to avoid confusion with SS3 syntax
+marlen00$sex <- ifelse(marlen00$sex==1,'males','females') 
+lcomp_iss$sex <- ifelse(lcomp_iss$sex==1,'males','females')
+
+lcomp0 <- lcomp_iss %>%
   filter(sex != 0) %>% 
   filter(!is.na(iss)) %>%
   select(year, sex, iss) %>%
   merge(.,marlen00, by = c('year','sex')) %>%
-
-arrange(length) %>%
+  select(-species_code, -abund, -totN) %>%
+  # distinct() %>%
+  arrange(length) %>% ## ensure column order is correct
   tidyr::pivot_wider(names_from=length, 
-                     values_from=caal,
-                     # names_prefix='a', 
+                     values_from=freq, 
                      values_fill=0) %>%
-  arrange(year, sex, length   )
+  arrange(year, sex ) %>%
+  mutate(SEX = ifelse(SEX == 'males',2,1)) ## overwrite SS3 syntax
 
-bind_cols(caal0,caal0[,-(1:4)]) %>%
+filter(SEX == 1) %>% 
+  merge(., srvlen0 %>% 
+          filter(SEX == 2) %>% 
+          select(-SEX, -HAULJOIN), 
+        by = c('YEAR'), all.y = FALSE) %>%
+  mutate(Seas = 7, FltSvy = 2, Gender = 3, Part = 0,) %>%
+  select(Yr = YEAR, Seas, FltSvy, Gender, Part, Nsamp=HAULJOIN, everything(),
+         -SEX) %>%
+  arrange(Yr) #%>%
+
+bind_cols(lcomp0,lcomp0[,-(1:4)]) %>%
   mutate(Seas = 7, Fleet = 2, sex = ifelse(sex == 'males',2,1),
          Part = 0, Ageerr = 1) %>%  
   select(Yr = year, Seas, Fleet, sex, Part, Ageerr, Lbin_lo = length,
