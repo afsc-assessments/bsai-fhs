@@ -1,10 +1,12 @@
+## 2024 October
 ## exploration of new ISS values using surveyISS package
 ## I am not using afscISS as we need custom bin widths
-# devtools::install_github("BenWilliams-NOAA/surveyISS")
 
+# devtools::install_github("BenWilliams-NOAA/surveyISS")
 library(surveyISS)
 library(dplyr)
 library(ggplot2)
+
 ## NOTES
 ## Comps are FHS only and BS  only (AI is only used for biomass) (10130)
 ## Will only have data thru 2023 for caal and marginal lengths
@@ -54,66 +56,6 @@ surveyISS::srvy_iss_caal(iters = 10,
                          region = 'ebs', 
                          save = 'conditional')
 
-#* observed comps ----
-marl00 <- surveyISS::srvy_comps(
-  lfreq_data = data$lfreq,
-  specimen_data = data$specimen, 
-  cpue_data = data$cpue, 
-  strata_data = data$strata, 
-  r_t = surveyISS::read_test,
-  yrs = NULL,
-  bin = data_lbins, ## length databins
-  boot_hauls = TRUE, 
-  boot_lengths = TRUE, 
-  boot_ages = TRUE, 
-  al_var = TRUE, 
-  al_var_ann = TRUE, 
-  age_err = TRUE, 
-  plus_len = lmax,
-  plus_age = amax,
-  by_strata = FALSE,
-  global = FALSE
-)  
-
-
-## calculate frequencies
-marage00 <-marl00$age%>%
-  filter(sex %in% c(1,2)) %>%
-  mutate(totN = sum(agepop), .by = c(year,sex)) %>%
-  mutate(freq = agepop/totN)
-
-marlen00 <- marl00$length %>%
-  filter(sex %in% c(1,2)) %>%
-  mutate(totN = sum(abund), .by = c(year,sex)) %>%
-  mutate(freq = abund/totN)
-
-write.csv(marage00, 
-          file = here::here(year, 'data','output','ebs','marginal_age_surveyISS_raw.csv'),
-          row.names = FALSE)
-
-write.csv(marlen00, 
-          file = here::here(year, 'data','output','ebs','marginal_length_surveyISS_raw.csv'),
-          row.names = FALSE)
-
-caal00 <- surveyISS::srvy_comps_caal(
-  specimen_data = data$specimen, 
-  cpue_data = data$cpue, 
-  r_t = surveyISS::read_test,
-  bin = caal_lbins, ## length databins
-  boot_hauls = TRUE,  
-  boot_ages = TRUE, 
-  al_var = TRUE, 
-  al_var_ann = TRUE, 
-  age_err = TRUE, 
-  plus_len = lmax,
-  plus_age = amax) %>% 
-  as.data.frame() %>%
-  select(-caal.species_code) 
-
-names(caal00) <- gsub('caal.','',names(caal00))
-
-write.csv(caal00, file = here::here(year, 'data','output','ebs','caal_surveyISS_raw.csv'),
-          row.names = FALSE)
 
 
 
@@ -227,3 +169,66 @@ lcomp_iss %>%
   ggplot(., aes(x = year, y = nsamp, color = src)) +
   geom_line() +
   labs(title = 'marginal length composition input sample sizes')
+
+
+# deprecated ----
+#* observed comps ----
+marl00 <- surveyISS::srvy_comps(
+  lfreq_data = data$lfreq,
+  specimen_data = data$specimen, 
+  cpue_data = data$cpue, 
+  strata_data = data$strata, 
+  r_t = surveyISS::read_test,
+  yrs = NULL,
+  bin = data_lbins, ## length databins
+  boot_hauls = TRUE, 
+  boot_lengths = TRUE, 
+  boot_ages = TRUE, 
+  al_var = TRUE, 
+  al_var_ann = TRUE, 
+  age_err = TRUE, 
+  plus_len = lmax,
+  plus_age = amax,
+  by_strata = FALSE,
+  global = FALSE
+)  
+
+
+## calculate frequencies
+marage00 <-marl00$age%>%
+  filter(sex %in% c(1,2)) %>%
+  mutate(totN = sum(agepop), .by = c(year,sex)) %>%
+  mutate(freq = agepop/totN)
+
+marlen00 <- marl00$length %>%
+  filter(sex %in% c(1,2)) %>%
+  mutate(totN = sum(abund), .by = c(year,sex)) %>%
+  mutate(freq = abund/totN)
+
+write.csv(marage00, 
+          file = here::here(year, 'data','output','ebs','marginal_age_surveyISS_raw.csv'),
+          row.names = FALSE)
+
+write.csv(marlen00, 
+          file = here::here(year, 'data','output','ebs','marginal_length_surveyISS_raw.csv'),
+          row.names = FALSE)
+
+caal00 <- surveyISS::srvy_comps_caal(
+  specimen_data = data$specimen, 
+  cpue_data = data$cpue, 
+  r_t = surveyISS::read_test,
+  bin = caal_lbins, ## length databins
+  boot_hauls = TRUE,  
+  boot_ages = TRUE, 
+  al_var = TRUE, 
+  al_var_ann = TRUE, 
+  age_err = TRUE, 
+  plus_len = lmax,
+  plus_age = amax) %>% 
+  as.data.frame() %>%
+  select(-caal.species_code) 
+
+names(caal00) <- gsub('caal.','',names(caal00))
+
+write.csv(caal00, file = here::here(year, 'data','output','ebs','caal_surveyISS_raw.csv'),
+          row.names = FALSE)
