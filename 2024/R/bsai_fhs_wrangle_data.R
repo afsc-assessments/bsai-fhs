@@ -377,7 +377,8 @@ survlen %>% filter(SEX == 'males' & YEAR == 1984 & LENGTH_BIN ==8)
 (srvlen0 %>% filter(SEX==2 & YEAR == 1984))[,'8'] ## bin 8 males
 (srvlen_save %>% filter(Yr == 1984))[,c('8.x','8.y')]
 
-write.csv(srvlen_save, file = here::here(year,'data','output','srv_len_ss3-gapindex.csv'), 
+write.csv(srvlen_save, 
+          file = here::here(year,'data','output','srv_len_ss3-gapindex.csv'), 
             row.names = FALSE)
 
 
