@@ -6,7 +6,7 @@
 library(surveyISS)
 library(dplyr)
 library(ggplot2)
-
+require(patchwork)
 ## NOTES
 ## Comps are FHS only and BS  only (AI is only used for biomass) (10130)
 ## Will only have data thru 2023 for caal and marginal lengths
@@ -61,47 +61,114 @@ surveyISS::srvy_iss_caal(iters = 10,
 
 
 ## wrangle data ----
+#* read in gapindex ss3 files ----
+list.files(here::here(year,'data','output'), pattern = '*-gapindex', full.names = T) %>%
+  lapply(., FUN = function(x){assign(substr(basename(x),1,11), 
+                                     read.csv(x), 
+                                     .GlobalEnv)})
 
-#* marginal lcomps ----
+
 lcomp_iss <- read.csv(here::here(year,'data','output','ebs','marginal_iss_ln.csv')) %>%
   filter(sex %in% c(1,2)) %>%
   select(year, sex = sex_desc, iss) %>%
   summarize(nsamp = sum(iss), .by = c(year))
-marlen00 <- read.csv(here::here(year,'data','output','ebs','marginal_length_surveyISS_raw.csv'))
 
-## to avoid confusion with SS3 syntax
-marlen00$sex <- ifelse(marlen00$sex==1,'male','female') 
+acomp_iss <- read.csv(here::here(year,'data','output','ebs','marginal_iss_ag.csv')) %>%
+  filter(sex %in% c(1,2)) %>%
+  select(year, sex = sex_desc, iss) %>%
+  summarize(nsamp = sum(iss), .by = c(year))
 
-lcomp0 <-  
-  marlen00 %>%
-  select(-species_code,-abund,-totN) %>%
-  arrange(length) %>% ## ensure column order is correct
-  tidyr::pivot_wider(names_from=length, 
-                     values_from=freq, 
-                     id_cols = c(year,sex),
-                     values_fill=0) %>%
-  arrange(year, sex ) %>%
-  merge(., lcomp_iss, by = c('year')) %>%
-  mutate(sex = ifelse(sex == 'male',2,1))## overwrite SS3 syntax
+caal_iss <- read.csv(here::here(year,'data','output','ebs','conditional_iss_caal.csv')) %>%
+  filter(sex %in% c(1,2)) %>%
+  mutate(sex = ifelse(sex == 1, 'male','female')) %>%
+  mutate(sex = ifelse(sex == 'female',1,2)) %>%
+  select(year, length, sex, iss) ## get it back to ss3 syntax
 
-srvlen_save<-lcomp0 %>%
-  filter(sex == 1) %>% 
-  merge(., lcomp0 %>% 
-          filter(sex == 2) %>% 
-          select(-sex,-nsamp), 
-        by = c('year'), all.y = FALSE) %>%
-  mutate(Seas = 7, FltSvy = 2, Gender = 3, Part = 0,) %>%
-  select(Yr = year, Seas, FltSvy, Gender, Part, nsamp, everything(),
-         -sex) %>%
-  arrange(Yr)  
 
-write.csv(srvlen_save, 
-          file = here::here(year,'data','output','srv_len_ss3-surveyISS.csv'), 
+## viz compare sample sizes ----
+p1 <- lcomp_iss %>% 
+  mutate(src = 'surveyISS') %>%
+  bind_rows(mod18.2c_2024$lendbase %>% 
+              filter(Fleet == 2) %>%
+              mutate(src = 'gapindex (current method)') %>%
+              select(year=Yr, nsamp = Nsamp_in    , src),.) %>%
+  ggplot(., aes(x = year, y = nsamp, color = src)) +
+  geom_line() +
+  theme(legend.position = 'none')+
+  labs(title = 'marginal lengths')
+
+
+p2 <- acomp_iss %>% 
+  mutate(src = 'surveyISS') %>% 
+  bind_rows(mod18.2c_2024$ghostagedbase %>% 
+              filter(Fleet == 2) %>%
+              mutate(src = 'gapindex (current method)') %>%
+              select(year=Yr, nsamp = Nsamp_in    , src),.) %>%
+  ggplot(., aes(x = year, y = nsamp, color = src)) +
+  geom_line() +
+  labs(title = 'marginal ages (ghosted)', color = '')
+
+
+p3 <- caal_iss %>% 
+  mutate(src = 'surveyISS') %>%
+  select(year, nsamp = iss,length, sex, src) %>%
+  bind_rows(mod18.2c_2024$condbase %>% 
+              filter(Fleet == 2) %>%
+              mutate(src = 'gapindex (current method)') %>%
+              select(year=Yr, nsamp = Nsamp_in, 
+                     length = Lbin_lo,sex  , src) %>%
+              distinct(),.) %>%
+  ggplot(., aes(x = year, y = length, 
+                size = nsamp, color = src)) +
+  geom_point(alpha = 0.2) +
+  facet_wrap(~src) +
+  labs(title = 'CAAL',
+       color = '',
+       y = 'length bin (cm)')
+
+
+
+(p1  | p2 )/p3
+
+ggsave(last_plot(),
+       file = here::here(year,'figs','comp_iss_compare.png'))
+
+## overwrite NSAMP with ISS values and save ----
+srv_len_ss3$Nsamp <- lcomp_iss$nsamp
+srv_age_ss3$Nsamp <- acomp_iss$nsamp
+srv_caal_ss1 <- merge(srv_caal_ss, caal_iss,
+                      by.x = c('Yr','Sex','Lbin_lo'), 
+                      by.y = c('year','sex', 'length'),all.x = TRUE)  %>%
+  select(Yr, Seas, Fleet , Sex, Part, Ageerr, Lbin_lo , 
+         Lbin_hi , iss, everything(),-Nsamp)  
+
+write.csv(srv_len_ss3, file = here::here(year,'data','output','srv_len_ss3-surveyISS.csv'),
           row.names = FALSE)
 
+write.csv(srv_age_ss3, file = here::here(year,'data','output','srv_age_ss3-surveyISS-ghost.csv'),
+          row.names = FALSE)
 
-#* marginal acomps (ghosted) ----
+write.csv(srv_caal_ss1, 
+          file = here::here(year,'data','output','srv_caal_ss3-surveyISS.csv'),
+          row.names = FALSE)
 
+ 
+
+
+
+
+lcomp_iss %>% 
+  mutate(src = 'surveyISS') %>%
+  bind_rows(mod18.2c_2024$lendbase %>% 
+              filter(Fleet == 2) %>%
+              mutate(src = 'gapindex') %>%
+              select(year=Yr, nsamp = Nsamp_in    , src),.) %>%
+  ggplot(., aes(x = year, y = nsamp, color = src)) +
+  geom_line() +
+  labs(title = 'marginal length composition input sample sizes')
+
+
+# deprecated ----
 #* caals ----
 
 #* format sex, drop years, munge into SS3 format
@@ -145,33 +212,40 @@ bind_cols(caal0,caal0[,-(1:4)]) %>%
          Lbin_hi = length , Nsamp=iss,everything()) %>%
   write.csv(., file = here::here(year,'data','output','srv_caal_ss3-surveyISS.csv'), 
             row.names = FALSE)
+#* marginal lcomps ----
 
+marlen00 <- read.csv(here::here(year,'data','output','ebs','marginal_length_surveyISS_raw.csv'))
 
-## viz compare sample sizes ----
-lcomp_iss %>% 
-  mutate(src = 'surveyISS') %>%
-  bind_rows(mod18.2c_2024$lendbase %>% 
-              filter(Fleet == 2) %>%
-              mutate(src = 'gapindex') %>%
-              select(year=Yr, nsamp = Nsamp_in    , src),.) %>%
-  ggplot(., aes(x = year, y = nsamp, color = src)) +
-  geom_line() +
-  labs(title = 'marginal length composition input sample sizes')
+## to avoid confusion with SS3 syntax
+marlen00$sex <- ifelse(marlen00$sex==1,'male','female') 
 
+lcomp0 <-  
+  marlen00 %>%
+  select(-species_code,-abund,-totN) %>%
+  arrange(length) %>% ## ensure column order is correct
+  tidyr::pivot_wider(names_from=length, 
+                     values_from=freq, 
+                     id_cols = c(year,sex),
+                     values_fill=0) %>%
+  arrange(year, sex ) %>%
+  merge(., lcomp_iss, by = c('year')) %>%
+  mutate(sex = ifelse(sex == 'male',2,1))## overwrite SS3 syntax
 
+srvlen_save<-lcomp0 %>%
+  filter(sex == 1) %>% 
+  merge(., lcomp0 %>% 
+          filter(sex == 2) %>% 
+          select(-sex,-nsamp), 
+        by = c('year'), all.y = FALSE) %>%
+  mutate(Seas = 7, FltSvy = 2, Gender = 3, Part = 0,) %>%
+  select(Yr = year, Seas, FltSvy, Gender, Part, nsamp, everything(),
+         -sex) %>%
+  arrange(Yr)  
 
-lcomp_iss %>% 
-  mutate(src = 'surveyISS') %>%
-  bind_rows(mod18.2c_2024$lendbase %>% 
-              filter(Fleet == 2) %>%
-              mutate(src = 'gapindex') %>%
-              select(year=Yr, nsamp = Nsamp_in    , src),.) %>%
-  ggplot(., aes(x = year, y = nsamp, color = src)) +
-  geom_line() +
-  labs(title = 'marginal length composition input sample sizes')
+write.csv(srvlen_save, 
+          file = here::here(year,'data','output','srv_len_ss3-surveyISS.csv'), 
+          row.names = FALSE)
 
-
-# deprecated ----
 #* observed comps ----
 marl00 <- surveyISS::srvy_comps(
   lfreq_data = data$lfreq,
