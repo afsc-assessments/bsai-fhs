@@ -29,7 +29,7 @@ save(data,
      file = here::here(year, 'data','output','ebs','surveyISS_data.Rdata'))
 
 #* ISS ----
-surveyISS::srvy_iss(iters = 10, 
+surveyISS::srvy_iss(iters = 500, 
                     bin = data_lbins,  
                     lfreq_data = data$lfreq,
                     specimen_data = data$specimen, 
@@ -43,7 +43,7 @@ surveyISS::srvy_iss(iters = 10,
                     age_err = TRUE,
                     region = 'ebs', save= 'marginal' )
 
-surveyISS::srvy_iss_caal(iters = 10,
+surveyISS::srvy_iss_caal(iters = 500,
                          bin = caal_lbins, ## distinct bins for caal data
                          plus_age = amax,
                          specimen_data = data$specimen, 
@@ -84,6 +84,7 @@ caal_iss <- read.csv(here::here(year,'data','output','ebs','conditional_iss_caal
   mutate(sex = ifelse(sex == 'female',1,2)) %>%
   select(year, length, sex, iss) ## get it back to ss3 syntax
 
+caal_iss[is.na(caal_iss$iss),]
 
 ## viz compare sample sizes ----
 p1 <- lcomp_iss %>% 
@@ -134,11 +135,12 @@ ggsave(last_plot(),
        file = here::here(year,'figs','comp_iss_compare.png'))
 
 ## overwrite NSAMP with ISS values and save ----
+caal_iss$iss[is.na(caal_iss$iss)] <- 1
 srv_len_ss3$Nsamp <- lcomp_iss$nsamp
 srv_age_ss3$Nsamp <- acomp_iss$nsamp
 srv_caal_ss1 <- merge(srv_caal_ss, caal_iss,
                       by.x = c('Yr','Sex','Lbin_lo'), 
-                      by.y = c('year','sex', 'length'),all.x = TRUE)  %>%
+                      by.y = c('year','sex', 'length'), all.x = TRUE)  %>%
   select(Yr, Seas, Fleet , Sex, Part, Ageerr, Lbin_lo , 
          Lbin_hi , iss, everything(),-Nsamp)  
 
