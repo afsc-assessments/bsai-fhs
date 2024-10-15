@@ -814,35 +814,70 @@ We explored using the `surveyISS` r package to generate updated input sample siz
 Here's how the old values (pink) compare with what comes out of the package (blue). The general reason why the blue values are higher is that there is generally more samples in general than the proxy value used previously (number of hauls), and less variability across hauls than there is across ages and years. This finding (increased ISS with the new package) has been found for other flatfish as well. The values for the CAAL data are much more similar to the nominal sample sizes.
 
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
-knitr::include_graphics(here::here('docs','2024','02_data-bridging','comp_iss_compare.png'))
+knitr::include_graphics(here::here('docs','2024','02_surveyiss_bridging','comp_iss_compare.png'))
 ```
-We then bridged in the new sample sizes into model 18.2c (2024) and re-tuned the Francis weights. There are some minor differences between the 'base' 18.2c (2024) model shown here and the figures above because as of this writing (Oct 2024) the base has been updated with 2024 survey data, survey length comps, and a better estimate of 2024 catch.
 
-```{r}
+We then bridged in the new sample sizes into model 18.2c (2024) and re-tuned the Francis weights. A detailed exploration of this exercise, with additional figures, is available [here](http://localhost:6511/#comparison-with-updated-surveyiss-sample-sizes). There are some minor differences between the 'base' 18.2c (2024) model shown here and the figures above because as of this writing (Oct 2024) the base has been updated with 2024 survey data, survey length comps, and a better estimate of 2024 catch.
+
+The new surveyISS values, particularly the length comps, changed the model trajectory considerably. However, this change was eliminated by a re-tuning of the Francis weights, which greatly reduced the weight assigned to the survey lengths (0.35 to 0.06) and increased the CAAL weight by nearly twofold (0.27 to 0.48). This didn't result in major changes to the recruitment trajectory, data fits or parameter estimates.
+
+```{r include = FALSE}
 ## Tuning procedures: only did this once
-mod03_00 <- SS_output(here::here(year, 'model_runs','02_bridging','03.00_18.4c_2024-lengthSurveyISS'))
-mod03_01 <- SS_output(here::here(year, 'model_runs','02_bridging','03.01_18.4c_2024-caalSurveyISS'))
-mod03_02 <- SS_output(here::here(year, 'model_runs','02_bridging','03.02_18.4c_2024-allSurveyISS'))
+# mod03_00 <- SS_output(here::here(year, 'model_runs','02_bridging','03.00_18.4c_2024-lengthSurveyISS'))
+# mod03_01 <- SS_output(here::here(year, 'model_runs','02_bridging','03.01_18.4c_2024-caalSurveyISS'))
+# mod03_02 <- SS_output(here::here(year, 'model_runs','02_bridging','03.02_18.4c_2024-allSurveyISS'))
 ## copy in mod03_02, set weights to 1 and run for Francis prep
-mod03_02x <- SS_output(here::here(year, 'model_runs','02_bridging','03.03_18.4c_2024-allSurveyISS-francis'))
+# mod03_02x <- SS_output(here::here(year, 'model_runs','02_bridging','03.03_18.4c_2024-allSurveyISS-francis'))
 
 ## do three rounds of Francis tuning on this model, then copy in the suggested tunings
-r4ss::tune_comps(replist = mod02_08x, option = 'Francis',
-                 digits = 6, niters_tuning = 3, exe = 'ss',
-                 write = TRUE, dir = here::here(year, 'model_runs','02_bridging','03.03_18.4c_2024-allSurveyISS-francis'))
-rm(mod03_02x)
+# r4ss::tune_comps(replist = mod03_02x, option = 'Francis',
+#                  digits = 6, niters_tuning = 3, exe = 'ss',
+#                  write = TRUE, dir = here::here(year, 'model_runs','02_bridging','03.03_18.4c_2024-allSurveyISS-francis'))
+# rm(mod03_02x)
+# mod03_03 <- SS_output(here::here(year, 'model_runs','02_bridging','03.03_18.4c_2024-allSurveyISS-francis'))
+
+# ss_compare <- SSsummarize(list(mod18.2c_2024,
+#                                mod03_00,
+#                                mod03_01,
+#                                mod03_02,
+#                                mod03_03))
+
+# SSplotComparisons(ss_compare, 
+#                   print = T, 
+#                   plotdir = here('docs',year,'02_surveyiss_bridging'), legendlabels = c('Model 18.2c (2024)',  "surveyISS length only",  "surveyISS CAAL only",  "surveyISS length and CAAL",  "surveyISS length and CAAL + francis weights"), col = colvec)
+
 ```
 
 ::: panel-tabset
 ## Updated Francis Weights
+
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 data.frame(Fleet = rep(c('Fishery','Survey'),2),
       Type = c('Length','Length','Age','CAAL'),
-     '18.2c (2024) old ISS' = c(0.079732,0.359831,0.086647,0.272054),
-      '18.2c (2024) surveyISS' = c(0,0,0,0))
+     Base_Value = c(0.079732,0.359831,0.086647,0.272054),
+    Survey_ISS_value = c(0.079018,0.062439, 0.085811,0.481957))
 ```
+## Spawning Biomass
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare2_spawnbio_uncertainty.png'))
+```
+## Biomass Ratio
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare4_Bratio_uncertainty.png'))
+```
+
+## Fishing Mortality
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare8_Fvalue_uncertainty.png'))
+```
+
+## Survey Fits
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
+knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare13_indices.png'))
+```
+
 ## Recruitment
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
-knitr::include_graphics(here::here('docs','2024','02_data-bridging','compare10_recruits_uncertainty.png'))
+knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare10_recruits_uncertainty.png'))
 ```
 :::
