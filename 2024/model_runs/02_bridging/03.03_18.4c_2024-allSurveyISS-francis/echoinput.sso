@@ -806,18 +806,18 @@ Recalc_flag_for_age_selex_recalc_by_year
 2 Survey  1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
 0 TG_custom (need to read even if no tag data ); tag_data?: 0 N_Fleet: 1
  read var_adjust list until -9999
- 4 1 0.079511
- 4 2 0.065563
- 5 1 0.085396
- 5 2 0.488064
+ 4 1 0.079018
+ 4 2 0.062439
+ 5 1 0.085811
+ 5 2 0.481957
  -9999 0 0
  number of variance adjustment records = 4
  Var_adjustments as read 
  0 0
  0 0
  0 0
- 0.079511 0.065563
- 0.085396 0.488064
+ 0.079018 0.062439
+ 0.085811 0.481957
  1 1
  1 1
 10 max_lambda_phase 
@@ -1936,12 +1936,10 @@ yr 2024, seas: 1, fleet:2
  finished time series 
 Finished time_series
 Finished survey obj_fun  0 145.849
-Finished lencomp obj_fun  178.997 330.866
-Finished agecomp obj_fun  67.945 1619.17
+Finished lencomp obj_fun  177.887 315.1
+Finished agecomp obj_fun  68.2752 1598.91
  initequ_catch -log(L)  0.000153127 0
  catch -log(L)  7.45256e-14 0
 Finished recruitdev obj_fun -28.3608 40.916 0.5
- OK with obj_func 2314.47
+ OK with obj_func 2277.67
 Wrote first version of output files (before hessian, benchmark, and forecast)
-Start benchmark and forecast, if requested
-Finished benchmark, forecast, and sdreporting
