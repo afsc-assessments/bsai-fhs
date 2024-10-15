@@ -196,29 +196,56 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALfit_An
 
 ## Bio/Selex Curves
 
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"growth_selex_maturity.png"))
+```
+
 ------------------------------------------------------------------------
 
 ## Time Series: SSB & Total Biomass
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"compare1_spawnbio.png"))
+knitr::include_graphics(here::here('docs',year,'model_plots',"compare18_totalbiomass.png"))
+```
+
 ------------------------------------------------------------------------
 
 ## Time Series: Recruitment
 
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"compare10_recruits_uncertainty.png"))
+```
+
 ------------------------------------------------------------------------
 
 ## Time Series: Fishing Mortality
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"compare8_Fvalue_uncertainty.png"))
+```
+
 ------------------------------------------------------------------------
 
 ## Phase-Plane
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"phase_plane.png"))
+```
+
+
 ------------------------------------------------------------------------
 
 ## Risk Table
+
+No change in scoring from 2020.
+Level 1 for all categories.
+
 ------------------------------------------------------------------------
-
-## Projections
-
-------------------------------------------------------------------------
-
-## Harvest Recommendation
+ 
+## Projections & Harvest Recommendation
+Uses the updated `spm.tpl`
+PASTE IN SCREENSHOT OF SAFE TABLE HERE
 
 
 

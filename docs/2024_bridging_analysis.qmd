@@ -821,7 +821,7 @@ We then bridged in the new sample sizes into model 18.2c (2024) and re-tuned the
 
 The new surveyISS values, particularly the length comps, changed the model trajectory considerably. However, this change was eliminated by a re-tuning of the Francis weights, which greatly reduced the weight assigned to the survey lengths (0.35 to 0.06) and increased the CAAL weight by nearly twofold (0.27 to 0.48). This didn't result in major changes to the recruitment trajectory, data fits or parameter estimates.
 
-```{r include = FALSE}
+```{r include = FALSE, echo = FALSE}
 ## Tuning procedures: only did this once
 # mod03_00 <- SS_output(here::here(year, 'model_runs','02_bridging','03.00_18.4c_2024-lengthSurveyISS'))
 # mod03_01 <- SS_output(here::here(year, 'model_runs','02_bridging','03.01_18.4c_2024-caalSurveyISS'))

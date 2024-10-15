@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -954,33 +920,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="2024/02_surveyISS_bridging/comp_iss_compare.png" class="img-fluid" width="1044"></p>
 </div>
 </div>
-<p>We then bridged in the new sample sizes into model 18.2c (2024) and re-tuned the Francis weights. There are some minor differences between the ‘base’ 18.2c (2024) model shown here and the figures above because as of this writing (Oct 2024) the base has been updated with 2024 survey data, survey length comps, and a better estimate of 2024 catch.</p>
+<p>We then bridged in the new sample sizes into model 18.2c (2024) and re-tuned the Francis weights. A detailed exploration of this exercise, with additional figures, is available <a href="http://localhost:6511/#comparison-with-updated-surveyiss-sample-sizes">here</a>. There are some minor differences between the ‘base’ 18.2c (2024) model shown here and the figures above because as of this writing (Oct 2024) the base has been updated with 2024 survey data, survey length comps, and a better estimate of 2024 catch.</p>
 <p>The new surveyISS values, particularly the length comps, changed the model trajectory considerably. However, this change was eliminated by a re-tuning of the Francis weights, which greatly reduced the weight assigned to the survey lengths (0.35 to 0.06) and increased the CAAL weight by nearly twofold (0.27 to 0.48). This didn’t result in major changes to the recruitment trajectory, data fits or parameter estimates.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Tuning procedures: only did this once</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># mod03_00 &lt;- SS_output(here::here(year, 'model_runs','02_bridging','03.00_18.4c_2024-lengthSurveyISS'))</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># mod03_01 &lt;- SS_output(here::here(year, 'model_runs','02_bridging','03.01_18.4c_2024-caalSurveyISS'))</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># mod03_02 &lt;- SS_output(here::here(year, 'model_runs','02_bridging','03.02_18.4c_2024-allSurveyISS'))</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="do">## copy in mod03_02, set weights to 1 and run for Francis prep</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># mod03_02x &lt;- SS_output(here::here(year, 'model_runs','02_bridging','03.03_18.4c_2024-allSurveyISS-francis'))</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="do">## do three rounds of Francis tuning on this model, then copy in the suggested tunings</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># r4ss::tune_comps(replist = mod03_02x, option = 'Francis',</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#                  digits = 6, niters_tuning = 3, exe = 'ss',</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#                  write = TRUE, dir = here::here(year, 'model_runs','02_bridging','03.03_18.4c_2024-allSurveyISS-francis'))</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># rm(mod03_02x)</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># mod03_03 &lt;- SS_output(here::here(year, 'model_runs','02_bridging','03.03_18.4c_2024-allSurveyISS-francis'))</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># ss_compare &lt;- SSsummarize(list(mod18.2c_2024,</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mod03_00,</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mod03_01,</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mod03_02,</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#                                mod03_03))</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co"># SSplotComparisons(ss_compare, </span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">#                   print = T, </span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">#                   plotdir = here('docs',year,'02_surveyiss_bridging'), legendlabels = c('Model 18.2c (2024)',  "surveyISS length only",  "surveyISS CAAL only",  "surveyISS length and CAAL",  "surveyISS length and CAAL + francis weights"), col = colvec)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true" href="">Updated Francis Weights</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false" href="">Spawning Biomass</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-3" role="tab" aria-controls="tabset-11-3" aria-selected="false" href="">Biomass Ratio</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-4" role="tab" aria-controls="tabset-11-4" aria-selected="false" href="">Fishing Mortality</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-5" role="tab" aria-controls="tabset-11-5" aria-selected="false" href="">Survey Fits</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-6" role="tab" aria-controls="tabset-11-6" aria-selected="false" href="">Recruitment</a></li></ul>
 <div class="tab-content">
