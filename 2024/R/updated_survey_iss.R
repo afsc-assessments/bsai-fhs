@@ -84,7 +84,7 @@ caal_iss <- read.csv(here::here(year,'data','output','ebs','conditional_iss_caal
   mutate(sex = ifelse(sex == 'female',1,2)) %>%
   select(year, length, sex, iss) ## get it back to ss3 syntax
 
-caal_iss[is.na(caal_iss$iss),]
+sum(is.na(caal_iss$iss)) == 0 ## with enough bootstraps shouldn't have NAs
 
 ## viz compare sample sizes ----
 p1 <- lcomp_iss %>% 
@@ -129,13 +129,13 @@ p3 <- caal_iss %>%
 
 
 
-(p1  | p2 )/p3
 
-ggsave(last_plot(),
+
+ggsave((p1  | p2 )/p3,
        file = here::here(year,'figs','comp_iss_compare.png'))
 
 ## overwrite NSAMP with ISS values and save ----
-caal_iss$iss[is.na(caal_iss$iss)] <- 1
+# caal_iss$iss[is.na(caal_iss$iss)] <- 1
 srv_len_ss3$Nsamp <- lcomp_iss$nsamp
 srv_age_ss3$Nsamp <- acomp_iss$nsamp
 srv_caal_ss1 <- merge(srv_caal_ss, caal_iss,
@@ -143,6 +143,44 @@ srv_caal_ss1 <- merge(srv_caal_ss, caal_iss,
                       by.y = c('year','sex', 'length'), all.x = TRUE)  %>%
   select(Yr, Seas, Fleet , Sex, Part, Ageerr, Lbin_lo , 
          Lbin_hi , iss, everything(),-Nsamp)  
+
+## still getting some missing values upon merge; Pete recommended using recent averages
+ 
+bins_yrs_with_nas <- srv_caal_ss1 %>%
+  filter(is.na(iss)) %>%
+  distinct(Lbin_hi, Yr, Sex)
+
+
+for(i in 1:nrow(bins_yrs_with_nas)){
+  ## grab non NAs that meet this combo within recent years
+  nearby_combos <- srv_caal_ss1 %>% 
+    filter(!is.na(iss) & 
+             Sex == bins_yrs_with_nas[i,'Sex'] &
+             Yr %in% (bins_yrs_with_nas[i,'Yr']-5):(bins_yrs_with_nas[i,'Yr']+5) &
+             Lbin_hi == bins_yrs_with_nas[i,'Lbin_hi'])
+  if(is.na(mean(nearby_combos$iss))){ 
+    ## if none present relax critera to neaby bins
+    nearby_combos <- srv_caal_ss1 %>% 
+      filter(!is.na(iss) & 
+               # Sex == bins_yrs_with_nas[i,'Sex'] &
+               Yr %in% (bins_yrs_with_nas[i,'Yr']-5):(bins_yrs_with_nas[i,'Yr']+5) &
+               Lbin_hi %in% (bins_yrs_with_nas[i,'Lbin_hi']-4):(bins_yrs_with_nas[i,'Lbin_hi']+4))
+    
+  }
+  bins_yrs_with_nas$estimated_iss[i] <- mean(nearby_combos$iss)
+}
+
+sum(is.na(bins_yrs_with_nas$estimated_iss)) == 0
+
+
+for(i in 1:nrow(bins_yrs_with_nas)){
+  cat(i)
+  srv_caal_ss1$iss[srv_caal_ss1$Yr == bins_yrs_with_nas[i,'Yr'] &
+                     srv_caal_ss1$Sex == bins_yrs_with_nas[i,'Sex'] &
+                     srv_caal_ss1$Lbin_hi == bins_yrs_with_nas[i,'Lbin_hi'] ] <- bins_yrs_with_nas[i,'estimated_iss']
+  
+}
+sum(is.na(srv_caal_ss1$iss)) == 0
 
 write.csv(srv_len_ss3, file = here::here(year,'data','output','srv_len_ss3-surveyISS.csv'),
           row.names = FALSE)
@@ -157,6 +195,8 @@ write.csv(srv_caal_ss1,
  
 
 
+# deprecated ----
+
 
 
 lcomp_iss %>% 
@@ -170,7 +210,6 @@ lcomp_iss %>%
   labs(title = 'marginal length composition input sample sizes')
 
 
-# deprecated ----
 #* caals ----
 
 #* format sex, drop years, munge into SS3 format
