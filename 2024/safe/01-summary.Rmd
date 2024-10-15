@@ -6,11 +6,13 @@
 
 -    bottom trawl survey biomass for years 2021-2024;
 
--   conditional age-at-length data from the bottom trawl survey for years 2021 and 2022;
+-   conditional age-at-length data from the bottom trawl survey for years 2021 through 2023;
 
 -   marginal fishery age compositions from 2020 and 2021;
 
 -   and marginal fishery length compositions from 2020-2023.
+
+-   updates to the input sample sizes for survey compositional data to values obtained from the `surveyISS` package (previously, the number of hauls or the nominal sample size [number of otolihts] were used for marginal lengths and coniditional age-at-length data, respectively).
 
 The Age and Growth program was not able to provide marginal fishery age compositions for more recent years due to staffing shortages.
 
