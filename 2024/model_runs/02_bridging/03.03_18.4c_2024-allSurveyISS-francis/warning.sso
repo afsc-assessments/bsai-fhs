@@ -1,0 +1,4 @@
+Note 1 Information: Std_yrmax=-1 in starter, so no variance output for forecast quantities after endyr+1 
+Warning 1 : poor convergence in Fmsy, final dy/dy2= -0.250137
+Warning 2 : Fmsy.mey is close to max allowed; check for convergence 
+Warning 3 : Final gradient: 0.00466764 is larger than final_conv: 0.0001
