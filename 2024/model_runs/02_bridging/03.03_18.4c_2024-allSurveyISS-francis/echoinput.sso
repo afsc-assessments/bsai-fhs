@@ -1943,3 +1943,19 @@ Finished agecomp obj_fun  68.2752 1598.91
 Finished recruitdev obj_fun -28.3608 40.916 0.5
  OK with obj_func 2277.67
 Wrote first version of output files (before hessian, benchmark, and forecast)
+Start benchmark and forecast, if requested
+Finished benchmark, forecast, and sdreporting
+Iterations: 624
+ finished COVAR.SSO
+Finished forecast
+Writing wtatage.ss_new
+Finished StdDev quantities
+Finished posteriors
+Finished SS_summary.sso
+Finished final writing of report.sso
+Begin writing data_echo.ss_new file
+Write starter.ss_new file 
+Write forecast.ss_new file 
+Note 2 Information: A revised protocol for the Fcast_yr specification is available and recommended.
+Write control.ss_new file 
+Begin final output calculations and warnings
