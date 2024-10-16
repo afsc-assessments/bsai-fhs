@@ -20,14 +20,8 @@ library(dplyr)
 library(here)
 library(purrr)
 library(ggplot2)
+library(afscOSA)
 theme_set(afscassess::theme_report())
-
-## This worked for MK in VSCode:
-# options(buildtools.check = function(action) TRUE )
-# devtools::install_github("afsc-assessments/rema") ## did not update other pckgs
-# pak::pkg_install("afsc-assessments/rema")
-library(rema)
-
 
 # globals ----
 year <- this_year <-  2024
@@ -419,6 +413,40 @@ ggplot(data = pp_dat, aes(x = as.numeric(SB_B35),
 ggsave(last_plot(),
        file =here::here(year,'mgmt', model, "plots", 'phase_plane.png'),
        width = 5, height = 5, dpi = 400)
+
+#* OSA residuals ----
+## need to create arrays from SS3 outputs
+for(flt in 1:2){
+  for(sex in 1:2){
+    run_osa_temp <- mod18.2c_2024$lendbase %>%
+      filter(Fleet == flt, Sex == sex) %>% 
+      select(obs = Obs, exp = Exp,N =  effN,  index = Bin, years = Yr )  
+    obs_use <- tidyr::pivot_wider(run_osa_temp %>% select(years, obs, index),
+                                  names_from = index, values_from = obs,
+                                  id_cols = years) %>%  select(-years)
+    exp_use <- tidyr::pivot_wider(run_osa_temp %>% select(years, exp, index),
+                                  names_from = index, values_from = exp,
+                                  id_cols = years) %>% select(-years)
+    
+    N_use <- run_osa_temp %>% select(years, N) %>% distinct() %>% select(-years) %>% t()
+    
+    osa_res <- run_osa(obs_use, 
+                       exp_use,
+                       N_use,
+                       fleet = c('fishery','survey')[flt], 
+                       index = 1:24, ## actual index not ages
+                       years = unique(run_osa_temp$years), 
+                       paste0('length_',c('females','males')[sex]))
+    
+    ## save them in two places
+    plot_osa(list(osa_res),
+             outpath = here::here(year,'figs'))
+    plot_osa(list(osa_res),
+             outpath = here::here('docs',year,'model_plots'))
+    
+    
+  }
+}
 
 ## projection stuff 
 
