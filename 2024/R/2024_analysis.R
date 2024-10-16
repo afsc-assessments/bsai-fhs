@@ -230,7 +230,10 @@ mod18.2c_2024 <- r4ss::SS_output(mod_path, verbose = FALSE)
 
 ## get average recruitment after 1976; this is in a table caption 
 ## (open safe/11-tables-update.Rmd and look for label timeseriest)
-with(subset(mod18.2c_2024$timeseries, Yr > 1976 & Yr < 2025), mean(Recruit_0)) 
+meanrec_77 <- with(subset(mod18.2c_2024$timeseries, Yr > 1976 & Yr < 2025), mean(Recruit_0)) 
+meanrec_all <- with(mod18.2c_2024$timeseries, mean(Recruit_0)) 
+
+abs(meanrec_77-meanrec_all)/meanrec_all
 
 #* save NAA as electronic file ----
 write.csv(mod18.2c_2024$natage, file = here::here(mod_path,'natage.csv'), row.names = FALSE)
