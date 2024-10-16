@@ -159,10 +159,9 @@ for(i in 1:nrow(bins_yrs_with_nas)){
              Yr %in% (bins_yrs_with_nas[i,'Yr']-5):(bins_yrs_with_nas[i,'Yr']+5) &
              Lbin_hi == bins_yrs_with_nas[i,'Lbin_hi'])
   if(is.na(mean(nearby_combos$iss))){ 
-    ## if none present relax critera to neaby bins
+    ## if none present relax sex critera & use nearby bins
     nearby_combos <- srv_caal_ss1 %>% 
-      filter(!is.na(iss) & 
-               # Sex == bins_yrs_with_nas[i,'Sex'] &
+      filter(!is.na(iss) &  
                Yr %in% (bins_yrs_with_nas[i,'Yr']-5):(bins_yrs_with_nas[i,'Yr']+5) &
                Lbin_hi %in% (bins_yrs_with_nas[i,'Lbin_hi']-4):(bins_yrs_with_nas[i,'Lbin_hi']+4))
     
