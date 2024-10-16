@@ -52,9 +52,13 @@ BSAI Flathead Sole *(Hippoglossoides elassodon)* -Bering flounder complex
   
 # Data Summary
 
+::: fragment
+Will show data & fits concurrently
+:::
+
 ------------------------------------------------------------------------
 
-## Data Summary Table  
+## Data Overview
 
 ```{r}
 knitr::include_graphics(here::here('docs',year,'model_plots','data_plot2.png'))
@@ -63,6 +67,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots','data_plot2.png'))
 ------------------------------------------------------------------------
 
 ## Catches - low attainment
+
 ```{r, echo = FALSE}
 knitr::include_graphics(here::here('docs',year,'model_plots','catch_abc_tac_ofl_mgmt.png'))
 ```
@@ -70,7 +75,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots','catch_abc_tac_ofl_
 
 ------------------------------------------------------------------------
 
-## Fishery Length Comps (recent years)
+## Fishery Length Comps (recent years) {visibility="hidden"}
 
 ```{r, echo = FALSE} 
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lendat_flt1mkt0_page2.png"))
@@ -79,7 +84,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lendat_flt1mk
 
 ------------------------------------------------------------------------
 
-## Fishery Age Comps
+## Fishery Age Comps  {visibility="hidden"}
 
 ```{r, echo = FALSE} 
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_agedat_flt1mkt0.png"))
@@ -87,7 +92,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_agedat_flt1mk
 
 ------------------------------------------------------------------------
 
-## Survey Biomass
+## Survey Biomass  {visibility="hidden"}
 
 
 ```{r, echo = FALSE} 
@@ -96,15 +101,15 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"index1_cpuedata_Su
 
 ------------------------------------------------------------------------
 
-## Survey CAAL (recent years)
+## Survey CAAL (recent years)  {visibility="hidden"}
 
 ```{r, echo = FALSE} 
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALdat_bubflt2mkt0_page4.png"))
 ```
 
-------------------------------------------------------------------------
-
+ 
 # Model Summary & Results 
+
 -----------------------------------------------------------------
 
 ## Fishery Age Comps 
@@ -115,6 +120,22 @@ these are not perfect; not weighted highly in model and didn't update ISS
 
 ```{r, echo = FALSE} 
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_agefit_flt1mkt0.png"))
+```
+
+------------------------------------------------------------------------
+
+## Fishery Length Comps (early years)
+
+::: {.notes}
+these are not perfect; not weighted highly in model and didn't update ISS
+
+large pearson residual in 1983 might be a data artifact
+
+misfits in 20-30cm range largely driven pre 1983
+:::
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit_flt1mkt0_page1.png"))
 ```
 
 ------------------------------------------------------------------------
@@ -133,7 +154,7 @@ misfits in 20-30cm range largely driven pre 1983
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit_flt1mkt0_page2.png"))
 ```
 
--------
+
 ------------------------------------------------------------------------
  
 ## Length Comp Residuals: Pearson
@@ -155,13 +176,14 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length
 ```
 
 
-## Survey Biomass Fits
+## Survey Biomass 
 ```{r, echo = FALSE} 
 knitr::include_graphics(here::here('docs',year,'model_plots',"index2_cpuefit_Survey.png"))
 ```
+
 ------------------------------------------------------------------------
 
-## Survey Length Comp Fits
+## Survey Length Comp 
 
 ::: {.notes}
 misfit 20-30 cm; seen this since 2012
