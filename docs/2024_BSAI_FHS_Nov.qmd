@@ -245,10 +245,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALfit_An
 :::
 
 :::
-------------------------------------------------------------------------
-
-## Parameters
-
+ 
 ------------------------------------------------------------------------
 
 ## Bio/Selex Curves
