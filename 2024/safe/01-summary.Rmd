@@ -8,13 +8,11 @@
 
 -   conditional age-at-length data from the bottom trawl survey for years 2021 through 2023;
 
--   marginal fishery age compositions from 2020 and 2021;
+-   marginal fishery age compositions from 2020 and 2021. The Age and Growth program was not able to provide marginal fishery age compositions for more recent years due to staffing shortages;
 
--   and marginal fishery length compositions from 2020-2023.
+-   marginal fishery length compositions from 2020-2023; and
 
--   updates to the input sample sizes for survey compositional data to values obtained from the `surveyISS` package (previously, the number of hauls or the nominal sample size [number of otolihts] were used for marginal lengths and coniditional age-at-length data, respectively).
-
-The Age and Growth program was not able to provide marginal fishery age compositions for more recent years due to staffing shortages.
+-   updates to the input sample sizes for survey compositional data to values obtained from the `surveyISS` package (previously, the number of hauls or the nominal sample size [number of otoliths] were used for marginal lengths and coniditional age-at-length data, respectively).
 
 *Changes in the assessment methodology*: The assessment methodology is the same as the most recent full assessment conducted in 2020 [@Monnahan2020].
 
@@ -22,7 +20,7 @@ The Age and Growth program was not able to provide marginal fishery age composit
 
 ## Summary of Results
 
-For the `r year+1` fishery, we recommend the maximum allowable ABC of `r prettyNum(abc_25,big.mark=',')` t. This ABC is a `r round(100*(abc_25-abc_23)/abc_23,1)`% increase from the ABC recommended by last year's model for `r year+1` of `r abc_23p` t. The increase is attributed to several years of elevated survey biomass, and that the projection model routine has been updated to use recruitment values from 1977-present to be consistent with programmatic approaches; these are on average higher than the full time series (1964-present), which was previously used.
+For the `r year+1` fishery, we recommend the maximum allowable ABC of `r prettyNum(abc_25,big.mark=',')` t. This ABC is a `r round(100*(abc_25-abc_23)/abc_23,1)`% increase from the ABC recommended by last year's model for `r year+1` of `r abc_23p` t. The increase is attributed to several years of elevated survey biomass, and that the projection model routine has been updated to use recruitment values from 1977-present to be consistent with programmatic approaches; these recruitment estimates are on average about 14% higher than the full time series (1964-present), which was previously used.
 
 ```{r, child= "01a-main_table.Rmd", eval = T}
 
