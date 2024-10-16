@@ -360,12 +360,13 @@ b35 <- as.numeric(subset(rec_table1, metric == 'SSBFofl')[,'2025']) ## in mt
 f35 <- as.numeric(subset(rec_table1, metric == 'Fofl')[,'2025'] )
 b100 <- as.numeric(subset(rec_table1, metric == 'SSBF100')[,'2025']) ## in mt
 
-pp_dat <- mod18.2c_2024$timeseries %>% 
-  dplyr::select(Yr, SpawnBio, Fy = `F:_1`) %>%
+pp_dat0 <- mod18.2c_2024$timeseries %>% 
+  dplyr::select(Yr, SpawnBio, Fy = `F:_1`, catch = `obs_cat:_1`, totbio = Bio_smry) %>%
   filter(Yr > 1977  ) %>%
   mutate(SB_B35 = SpawnBio/(b35), F_F35 = Fy/f35, type = 'aa') %>%
   arrange(., Yr)
 
+pp_dat <- pp_dat0 %>% select(-catch,-totbio)
 ## fill in yr, spawnbio, fy, b/b35, f/f35, type for proj years
 ## note that SS3 auto-populates yr 2025 but we want to overwrite it with proj outputs.
 
@@ -383,6 +384,9 @@ pp_dat <- bind_rows(pp_dat, c('Yr' = 2026,
                             "F_F35"= as.numeric(subset(rec_table1, metric == 'F_Mean')[,'2026']/f35),
                             'type'= 'aa')) 
 
+
+
+## make phase plane plot
 ggplot(data = pp_dat, aes(x = as.numeric(SB_B35), 
                           y = as.numeric(F_F35),color = Yr)) +
   geom_hline(yintercept = 1, col = 'grey88') +  geom_vline(xintercept = 1, col = 'grey88') +
@@ -411,6 +415,46 @@ ggplot(data = pp_dat, aes(x = as.numeric(SB_B35),
 
 ggsave(last_plot(),
        file =here::here(year,'mgmt', model, "plots", 'phase_plane.png'),
+       width = 5, height = 5, dpi = 400)
+
+
+
+#* catch/sb plot ----
+ggplot(data = pp_dat0, aes(x = as.numeric(SpawnBio), 
+                           y = as.numeric(catch),color = Yr)) +
+  geom_path( lwd = 0.75, aes(group = type)) +
+  geom_point(data = subset(pp_dat0, Yr %in% 1979:2024),  shape=16) +
+  geom_point(data = subset(pp_dat0, Yr == 1978), color = '#b5e48c', shape=5) +
+  geom_point(data = subset(pp_dat0, Yr == 2024), color = 'blue', shape=16) + 
+  ## year labels for high F years
+  geom_text(data = subset(pp_dat0, Yr %in% c(1978,1990,2008, 2024)),
+            vjust = c(-1,-1,-1,2),
+            size = 2,
+            aes(label = Yr),
+            color = "#184e77") +
+  scale_colour_gradientn(colours = colorRampPalette(c("#b5e48c","#184e77"))(49))+ 
+  theme(legend.position = 'none')+
+  labs(x = 'Spawning Biomass (t)', y = 'Observed Catch (t)')
+
+ggsave(last_plot(),
+       file =here::here(year,"figs", 'catch_vs_spawnbio.png'),
+       width = 5, height = 5, dpi = 400)
+ggsave(last_plot(),
+       file =here::here(year,'mgmt', model, "plots", 'catch_vs_spawnbio.png'),
+       width = 5, height = 5, dpi = 400)
+
+#*  catch/totbio timeseries plot ----
+ggplot(data = pp_dat0, aes(x = Yr, 
+                           y = catch/totbio)) +
+  geom_line( lwd = 0.75, aes(group = type), color = "#184e77") +  
+  theme(legend.position = 'none')+
+  labs(x = 'Year', y = 'Observed Catch (t)/Total Biomass (t)')
+
+ggsave(last_plot(),
+       file =here::here(year,"figs", 'catch_over_totbio_timeseries.png'),
+       width = 5, height = 5, dpi = 400)
+ggsave(last_plot(),
+       file =here::here(year,'mgmt', model, "plots", 'catch_over_totbio_timeseries.png'),
        width = 5, height = 5, dpi = 400)
 
 #* OSA residuals ----
@@ -479,7 +523,7 @@ for(flt in 1:2){
                        exp_use,
                        N_use,
                        fleet = c('fishery','survey')[flt], 
-                       index = length(mod18.2c_2024$lbins), ## actual index not ages
+                       index = 1:length(mod18.2c_2024$lbins), ## actual index not ages
                        years = unique(run_osa_temp$years), 
                        name_use)
     
