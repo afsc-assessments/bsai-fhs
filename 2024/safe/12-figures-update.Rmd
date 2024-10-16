@@ -12,30 +12,49 @@ knitr::include_graphics(here::here(mod_path,"plots", "data_plot2.png"))
 knitr::include_graphics(here::here(mod_path,"plots", "catch2 landings stacked.png"))
 ```
 
- 
-
 ```{r survey, fig.cap="BS/AI Combined Trawl Survey observed biomass estimates with 95% sampling error confidence intervals for BSAI FHS (black points and vertical bars). Model expectations are shown in blue.", eval = TRUE, out.width = "95%", out.height="80%"}
 knitr::include_graphics(here::here(mod_path,"plots", "index2_cpuefit_Survey.png"))
 ```
  
-
 ```{r fishagecomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery age compositions for BSAI FHS, aggregated through time.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "comp_agefit__aggregated_across_time.png"))
 ```
 
-```{r fishagecompsResid, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery age compositions for BSAI FHS, aggregated through time.", eval = TRUE}
+```{r fishagecompsResidPearson, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery age compositions for BSAI FHS, aggregated through time.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "comp_agefit_residsflt1mkt0.png"))
+```
+
+```{r agecompsResidOSAFishFem, fig.cap="One-Step-Ahead residuals and diagnostics for female fishery age composition data.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "osa_fishery_age_females_diagnostics.png"))
+```
+
+```{r agecompsResidOSAFishMal, fig.cap="One-Step-Ahead residuals and diagnostics for male fishery age composition data.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "osa_fishery_age_males_diagnostics.png"))
 ```
 
 ```{r lengthcomps, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery and survey length (cm) compositions for BSAI FHS, aggregated through time. Note that many years of the Fishery length composition data are not included in the joint likelihood (in lieu of age compositions).", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "comp_lenfit__aggregated_across_time.png"))
 ```
 
-```{r lengthcompsResid, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery age compositions for BSAI FHS, aggregated through time.", eval = TRUE}
+```{r lengthcompsResidPearson, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery age compositions for BSAI FHS, aggregated through time.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "comp_lenfit__multi-fleet_comparison.png"))
 ```
 
- 
+```{r lengthcompsResidOSAFishFem, fig.cap="One-Step-Ahead residuals and diagnostics for female fishery length composition data.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "osa_fishery_length_females_diagnostics.png"))
+```
+
+```{r lengthcompsResidOSAFishMal, fig.cap="One-Step-Ahead residuals and diagnostics for male fishery length composition data.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "osa_fishery_length_males_diagnostics.png"))
+```
+
+```{r lengthcompsResidOSASurvFem, fig.cap="One-Step-Ahead residuals and diagnostics for female survey length composition data.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "osa_survey_length_females_diagnostics.png"))
+```
+
+```{r lengthcompsResidOSASurvMal, fig.cap="One-Step-Ahead residuals and diagnostics for male survey length composition data.", eval = TRUE}
+knitr::include_graphics(here::here(mod_path,"plots", "osa_survey_length_males_diagnostics.png"))
+```
  
 (ref:caalcap) Observed and expected mean age-at-length for both females and males with 90% intervals about observed age-at-length (left panels) and observed and expected standard deviation in age-at-length (right panels) for `r model_name` for years
 
