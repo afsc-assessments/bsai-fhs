@@ -47,9 +47,13 @@ The model achieved convergence as defined by an invertible Hessian matrix and a 
 ### Parameter Estimates and Parameter Uncertainty
 
 Table \@ref(tab:parposteriorst) shows the maximum likelihood estimate (MLE) of key parameters in `r model_name` with corresponding 95% credible intervals given by the asymptotic uncertainty. Time series of deviation parameters (fishing mortality rates $F$ and recruitment deviations from `r paste0(mod18.2c_2024$startyr,'-',mod18.2c_2024$endyr)` are shown in Figures \@ref(fig:biofreccompare) and \@ref(fig:recdevs), respectively.
-
-
-
+ 
 ### Comparison to Previous Model
 
-A comparison of key derived quantities from the base model and the most recent full assessment is shown in Figure \@ref(fig:biofreccompare). Parameter estimates and likelihood values have remained similar to `r old_model_name`.
+A comparison of key derived quantities from the base model and the most recent full assessment is shown in Figure \@ref(fig:biofreccompare). Parameter estimates, fits to the data and likelihood values have remained similar to `r old_model_name`. 
+
+As has been observed in BSAI FHS models since 2012 (Monnahan et al. 2020, McGilliard et al. 2016, McGilliard et al. 2014, and Stockhausen et al. 2012), the survey length composition data is frequently overfit in the 20-30 cm range. Several hypotheses have been explored through additional model runs about why this residual pattern occurred (McGilliard et al. 2018) by testing more flexible selectivity patterns, a four-parameter growth curve, more complexity in CV in length at age, alternative and data weighting schemes, yet none of these tests improved the residual pattern nor fit to the data. One last, untested hypothesis is that the data do not fully characterize the variability in length at age for this stock. In other words, the distribution of lengths for the fish with otoliths collected does not match the length distribution of all fish sampled. This hypothesis was not explored here but could be in future assessments.
+
+Similarly, overall fits to fishery age and length composition data were reasonable, but not perfect  Figures \@ref(fig:fishagecomps) through \@ref(fig:lengthcompsResid).
+The yearly distributions of ages varied from year to year, suggesting that perhaps a larger sample of ages from the fishery each year would improve our knowledge of the distribution of ages caught by the fishery. One very large Pearson residual occurred in fits to fishery length-composition data in 1983 (Figure \@ref(fig:lengthcompsResid)), which might be driven by a plus-group observation so large as to be a data entry error. The aggregate fits to the fishery length compsotion data suggest that the fishery caught more 45-60cm males than were expected (Figure \@ref(fig:fishagecomps)), but this is mostly driven by misfits before 1989; we would not expect the fits to this data source to be as good given the low Francis weight applied to these data in the joint likelihood.
+ 
