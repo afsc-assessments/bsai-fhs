@@ -32,8 +32,8 @@ lengths = c(seq(6,40,2),seq(43,58,3))
 TAC = c(25000, 25000, 35500) # 2021, 2022, 2023
 species = "FSOL"
 curr_mdl_fldr = "18.2c_2024"
-prev_mdl_fldr = "18.2c_2020" 
-
+prev_mdl_fldr = "18.2c_2020"  
+mod_path <- here::here(year,'mgmt',curr_mdl_fldr)
 # query data ----
 ## you must be on the VPN (West) for this to work, and it takes about 5 minutes
 ## this automates the AI interpolation for the biomass survey and outputs in in SS format
@@ -218,8 +218,7 @@ proj_scenario0 %>%
 
 
 # process results ----
-model <- '18.2c_2024'
-mod_path <- here::here(year,'mgmt',model)
+
 mod18.2c_2024 <- r4ss::SS_output(mod_path, verbose = FALSE)
 
 ## get average recruitment after 1976; this is in a table caption 
@@ -416,11 +415,20 @@ ggsave(last_plot(),
 
 #* OSA residuals ----
 ## need to create arrays from SS3 outputs
-for(flt in 1:2){
-  for(sex in 1:2){
-    run_osa_temp <- mod18.2c_2024$lendbase %>%
-      filter(Fleet == flt, Sex == sex) %>% 
+
+
+#** OSA for age comps (both fleets & sexes) ----
+for(flt in 1:1){
+  for(sx in 1:2){
+    name_use <- paste0( c('fishery','survey')[flt],
+                        '_age_',
+                        c('females','males')[sx]
+    )
+    
+    run_osa_temp <- mod18.2c_2024$agedbase %>%
+      filter(Fleet == flt & Sex == sx) %>% 
       select(obs = Obs, exp = Exp,N =  effN,  index = Bin, years = Yr )  
+    
     obs_use <- tidyr::pivot_wider(run_osa_temp %>% select(years, obs, index),
                                   names_from = index, values_from = obs,
                                   id_cols = years) %>%  select(-years)
@@ -434,17 +442,52 @@ for(flt in 1:2){
                        exp_use,
                        N_use,
                        fleet = c('fishery','survey')[flt], 
-                       index = 1:24, ## actual index not ages
+                       index = 1:21, ## actual index not ages
                        years = unique(run_osa_temp$years), 
-                       paste0('length_',c('females','males')[sex]))
+                       name_use)
     
     ## save them in two places
     plot_osa(list(osa_res),
-             outpath = here::here(year,'figs'))
+             outpath = here::here(mod_path,"plots"))
     plot_osa(list(osa_res),
              outpath = here::here('docs',year,'model_plots'))
+  }
+}
+
+#** OSA for length comps (both fleets & sexes) ----
+for(flt in 1:2){
+  for(sx in 1:2){
+    name_use <- paste0( c('fishery','survey')[flt],
+                        '_length_',
+                        c('females','males')[sx]
+                      )
     
+    run_osa_temp <- mod18.2c_2024$lendbase %>%
+      filter(Fleet == flt & Sex == sx) %>% 
+      select(obs = Obs, exp = Exp,N =  effN,  index = Bin, years = Yr )  
     
+    obs_use <- tidyr::pivot_wider(run_osa_temp %>% select(years, obs, index),
+                                  names_from = index, values_from = obs,
+                                  id_cols = years) %>%  select(-years)
+    exp_use <- tidyr::pivot_wider(run_osa_temp %>% select(years, exp, index),
+                                  names_from = index, values_from = exp,
+                                  id_cols = years) %>% select(-years)
+    
+    N_use <- run_osa_temp %>% select(years, N) %>% distinct() %>% select(-years) %>% t()
+    
+    osa_res <- run_osa(obs_use, 
+                       exp_use,
+                       N_use,
+                       fleet = c('fishery','survey')[flt], 
+                       index = length(mod18.2c_2024$lbins), ## actual index not ages
+                       years = unique(run_osa_temp$years), 
+                       name_use)
+    
+    ## save them in two places
+    plot_osa(list(osa_res),
+             outpath = here::here(mod_path,"plots"))
+    plot_osa(list(osa_res),
+             outpath = here::here('docs',year,'model_plots'))
   }
 }
 
