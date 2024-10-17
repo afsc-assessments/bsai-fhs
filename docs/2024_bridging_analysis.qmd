@@ -826,7 +826,7 @@ The new surveyISS values, particularly the length comps, changed the model traje
 # mod03_00 <- SS_output(here::here(year, 'model_runs','02_bridging','03.00_18.4c_2024-lengthSurveyISS'))
 # mod03_01 <- SS_output(here::here(year, 'model_runs','02_bridging','03.01_18.4c_2024-caalSurveyISS'))
 # mod03_02 <- SS_output(here::here(year, 'model_runs','02_bridging','03.02_18.4c_2024-allSurveyISS'))
-## copy in mod03_02, set weights to 1 and run for Francis prep
+# # copy in mod03_02, set weights to 1 and run for Francis prep
 # mod03_02x <- SS_output(here::here(year, 'model_runs','02_bridging','03.03_18.4c_2024-allSurveyISS-francis'))
 
 ## do three rounds of Francis tuning on this model, then copy in the suggested tunings
@@ -842,9 +842,9 @@ The new surveyISS values, particularly the length comps, changed the model traje
 #                                mod03_02,
 #                                mod03_03))
 
-# SSplotComparisons(ss_compare, 
-#                   print = T, 
-#                   plotdir = here('docs',year,'02_surveyiss_bridging'), legendlabels = c('Model 18.2c (2024)',  "surveyISS length only",  "surveyISS CAAL only",  "surveyISS length and CAAL",  "surveyISS length and CAAL + francis weights"), col = colvec)
+SSplotComparisons(ss_compare,
+                  print = T,
+                  plotdir = here('docs',year,'02_surveyiss_bridging'), legendlabels = c('Model 18.2c (2024)',  "surveyISS length only",  "surveyISS CAAL only",  "surveyISS length and CAAL",  "surveyISS length and CAAL + francis weights"), col = c('gold','grey20','grey40','grey60','blue'))
 
 ```
 
@@ -857,10 +857,12 @@ data.frame(Fleet = rep(c('Fishery','Survey'),2),
      Base_Value = c(0.079732,0.359831,0.086647,0.272054),
     Survey_ISS_value = c(0.079018,0.062439, 0.085811,0.481957))
 ```
+
 ## Spawning Biomass
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare2_spawnbio_uncertainty.png'))
 ```
+
 ## Biomass Ratio
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
 knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare4_Bratio_uncertainty.png'))
