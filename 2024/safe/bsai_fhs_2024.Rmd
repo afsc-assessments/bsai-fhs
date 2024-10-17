@@ -168,12 +168,7 @@ afscassess::best_f(data = data.frame(age = ages,
 
 ```{r, child="10-gaps.Rmd", eval = T}
 ```
-
-\pagebreak
-
-# Acknowledgements
-
-\pagebreak
+ 
 
 \allsectionsfont{\centering}
 # References
