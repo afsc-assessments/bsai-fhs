@@ -440,7 +440,7 @@ ggsave(last_plot(),
        file =here::here(year,"figs", 'catch_vs_spawnbio.png'),
        width = 5, height = 5, dpi = 400)
 ggsave(last_plot(),
-       file =here::here(year,'mgmt', model, "plots", 'catch_vs_spawnbio.png'),
+       file =here::here(mod_path, "plots", 'catch_vs_spawnbio.png'),
        width = 5, height = 5, dpi = 400)
 
 #*  catch/totbio timeseries plot ----
@@ -454,7 +454,7 @@ ggsave(last_plot(),
        file =here::here(year,"figs", 'catch_over_totbio_timeseries.png'),
        width = 5, height = 5, dpi = 400)
 ggsave(last_plot(),
-       file =here::here(year,'mgmt', model, "plots", 'catch_over_totbio_timeseries.png'),
+       file =here::here(mod_path, "plots", 'catch_over_totbio_timeseries.png'),
        width = 5, height = 5, dpi = 400)
 
 #* OSA residuals ----
