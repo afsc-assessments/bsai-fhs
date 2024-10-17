@@ -2,7 +2,7 @@
 title: "Bering Sea Flathead Sole"
 subtitle: "2024 November Plan Team"
 format: 
-  revealjs:  
+  revealjs:   
     logo: noaa-logo.png
     css: logo.css
     theme: [simple]
@@ -223,28 +223,23 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"osa_survey_length_
 
 ------------------------------------------------------------------------
 
-## Survey CAAL Fits (recent years)
+## Survey CAAL Fits (recent years) I
+::: {.notes}
+if we had stuck with the n_otoliths approach we would have overstated the sample size by a factor of ~2, hence the doubling of the francis weights
+:::
 
-::: rows
-
-::: {.row height="40%"}
-
-```{r, echo = FALSE} 
+```{r, echo = FALSE, out.height=  '600px',out.width = '600px'   } 
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALfit_Andre_plotsflt2mkt0_page7.png"))
 ```
 
-:::
+------------------------------------------------------------------------
 
-::: {.row height="20%"}
-
-
-```{r, echo = FALSE} 
+## Survey CAAL Fits (recent years) II 
+ 
+```{r, echo = FALSE, out.width = '750px'}  
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALfit_Andre_plotsflt2mkt0_page8.png"))
 ```
-
-:::
-
-:::
+ 
  
 ------------------------------------------------------------------------
 
@@ -258,9 +253,8 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"growth_selex_matur
 
 ## Time Series: SSB & Total Biomass
 
-```{r, echo = FALSE} 
-knitr::include_graphics(here::here('docs',year,'model_plots',"compare1_spawnbio.png"))
-knitr::include_graphics(here::here('docs',year,'model_plots',"compare18_totalbiomass.png"))
+```{r, echo = FALSE}  
+knitr::include_graphics(here::here('docs',year,'model_plots',"compare1_spawnbio.png")) 
 ```
 
 ------------------------------------------------------------------------
@@ -293,9 +287,45 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"phase_plane.png"))
 ------------------------------------------------------------------------
  
 ## Projections & Harvest Recommendation
-Uses the updated `spm.tpl` & recruitment 1977+
-PASTE IN SCREENSHOT OF SAFE TABLE HERE
+-   Uses the updated `spm.tpl` & recruitment 1977+
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"safe_table.png"))
+```
+
+ 
+# Questions
+
+# Extra Material
+## Updated Francis Weights
+```{r}
+flextable::flextable(data.frame(Fleet = rep(c('Fishery','Survey'),2),
+      Type = c('Length','Length','Age','CAAL'),
+     ISS_from_Nhauls = c(0.079732,0.359831,0.086647,0.272054),
+    ISS_from_Package = c(0.079018,0.062439, 0.085811,0.481957))) %>%
+  flextable::bold(., i = c(2,4), j = 4)
+```
 
 
+## Length Comp Residuals: OSA (Fishery, Females)
 
+::: {.notes}
+the glaring issue in 1983 goes away
+:::
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length_females_diagnostics.png"))
+```
+
+## Length Comp Residuals: OSA (Survey, Females)
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"osa_survey_length_females_diagnostics.png"))
+```
+
+## Length Comp Residuals: OSA (Survey, Males)
+ 
+```{r, echo = FALSE, out.width='300px', out.height='500px'} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"osa_survey_length_males_diagnostics.png"))
+```
 
