@@ -44,10 +44,10 @@ BSAI Flathead Sole *(Hippoglossoides elassodon)* -Bering flounder complex
 :::
 
 ::: fragment
--   No changes to model structure 
--   Update data from 2020 (Monnahan & Haehn)
--   Update survey comp input sample sizes via `surveyISS`
--   Update projections workflow
+-   **No** changes to model structure 
+-   **Update** data from 2020 (Monnahan & Haehn)
+-   **Update** survey comp input sample sizes via `surveyISS`
+-   **Update** projections workflow
 :::
   
 # Data Summary
@@ -60,6 +60,9 @@ Will show data & fits concurrently
 
 ## Data Overview
 
+::: {.notes}
+age & growth couldn't get to the backlog of fish ages, so we put the effort on the survey
+:::
 ```{r}
 knitr::include_graphics(here::here('docs',year,'model_plots','data_plot2.png'))
 ```
@@ -297,7 +300,11 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"safe_table.png"))
 # Questions
 
 # Extra Material
-## Updated Francis Weights
+
+------------------------------------------------------------------------
+ 
+::: panel-tabset
+## Francis Weights
 ```{r}
 flextable::flextable(data.frame(Fleet = rep(c('Fishery','Survey'),2),
       Type = c('Length','Length','Age','CAAL'),
@@ -306,7 +313,33 @@ flextable::flextable(data.frame(Fleet = rep(c('Fishery','Survey'),2),
   flextable::bold(., i = c(2,4), j = 4)
 ```
 
+## Spawning Biomass
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
+knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare2_spawnbio_uncertainty.png'))
+```
 
+## Biomass Ratio
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
+knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare4_Bratio_uncertainty.png'))
+```
+
+## Fishing Mortality
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
+knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare8_Fvalue_uncertainty.png'))
+```
+
+## Survey Fits
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
+knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare13_indices.png'))
+```
+
+## Recruitment
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
+knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare10_recruits_uncertainty.png'))
+```
+:::
+
+ 
 ## Length Comp Residuals: OSA (Fishery, Females)
 
 ::: {.notes}
