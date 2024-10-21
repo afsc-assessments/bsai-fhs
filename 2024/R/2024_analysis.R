@@ -240,8 +240,8 @@ SS_plots(mod18.2c_2024)
 ## will save these in the plots/ folder made above
 mod18.2c_2020 <- r4ss::SS_output(here::here(year,'mgmt','18.2c_2020'), verbose = FALSE)
 SSplotComparisons(SSsummarize(biglist = list(mod18.2c_2020,mod18.2c_2024)),
-                  legendlabels = c('2020 Model', '2024 Model'),
-                  col = c('grey22','blue'),
+                  legendlabels = c('18.2c (2020)', '18.2c (2024)'),
+                  col = c('grey40','blue'),
                   png = TRUE,
                   plotdir = here::here(mod_path,'plots','compare'))
 
