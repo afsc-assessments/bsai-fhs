@@ -1,3 +1,23 @@
 # Data Gaps and Research Priorities 
-> Operational Update: The reader is referred to the last full stock assessment [@Monnahan2020] for the entirety of the BSAI FHS Data Gaps and Research Priorities section.
+> Operational Update: The reader is referred to the last full stock assessment [@Monnahan2020] for the entirety of the BSAI FHS Data Gaps and Research Priorities section. The sole update to this section concerns the genetic distinction between Bering flounder and Flathead sole:
+
+A collection of flathead sole from the Aleutian Islands (n=24) was analyzed using low coverage whole genome sequencing along with collections of yellowfin sole (Limanda aspera) and Bering flounder (Hippoglossoides robustus) (Figure 1). Results confirmed that flathead sole is genetically distinct from Bering flounder, which is significant given that they are identical at cytochrome b (Kartavtsev et al. 2008). A principal components analysis (Figure 2) shows clear separation among flathead sole, Bering flounder, and yellowfin sole, and the differences are all relatively similar; no two species appear more similar than others. This is significant because previous analyses based on cytochrome b, morphometric, and protein data have suggested synonymization of Hippoglossoides robustus under H. elassodon. (Hardy et al. 2011). Further analysis is needed to examine whether there is genetic diversity among flathead sole from the Aleutian Islands vs. eastern Bering Sea. We recommend that a collection of flathead sole (n=25) from the eastern Bering Sea survey be sequenced in 2025.
+
+References 
+
+Hardy, S.M., Carr, C.M., Hardman, M., Steinke, D., Corstorphine, E. and Mah, C., 2011. Biodiversity and phylogeography of Arctic marine fauna: insights from molecular tools. Marine Biodiversity, 41, pp.195-210.
+
+Kartavtsev YP, Park TJ, Lee JS, Vinnikov KA, Ivankov VN, Sharina SN, Ponomarev AS (2008) Phylogenetic inferences introduced on cytochrome b gene sequence data for six flatfish species (Teleostei, Pleuronectidae) and species synonymy between representatives of genera Pseuopleuronectes and Hippoglossoides from Far Eastern seas. Russ J Genet 44:451–458
+
+ 
+ 
+```{r echo=FALSE, fig.cap = "Collection locations of Bering flounder (n=23) and flathead sole (n=24) sequenced using low coverage whole genome sequencing."}
+knitr::include_graphics(here::here(year,'figs','genetics_fig1.png'))
+```
+
+
+```{r echo=FALSE, fig.cap = ". Principal components analysis of yellowfin sole (YFS), Bering flounder, and flathead sole, first and second principal components axes. ."}
+knitr::include_graphics(here::here(year,'figs','genetics_fig2.png'))
+
+```
  
