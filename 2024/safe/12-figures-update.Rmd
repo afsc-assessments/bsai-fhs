@@ -3,7 +3,7 @@
 # Figures
 
 ```{r data, fig.cap="Data included in the update assessment, Model 18.2c (2024).", eval = TRUE}
-knitr::include_graphics(here::here(mod_path,"plots", "data_plot2.png"))
+knitr::include_graphics(here::here(mod_path,"plots", "data_plot.png"))
 ```
 
  
