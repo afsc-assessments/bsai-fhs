@@ -18,4 +18,5 @@ This is out of scope for the present assessment, but might be addressed for the 
 
 >*3. Consider separately modeling the pelagic trawl fishery with its own selectivity curve (Plan Team, November 2020)*
 
-This request does not seem sensible for this stock, as there is not a pelagic trawl fishery for BSAI Flathead sole. This comment will be removed from future SAFE reports.
+This is out of scope for the present assessment, but might be addressed for the next Full assessment (2028).
+The pelagic trawl fishery accounts for up to 30% of landings annually and data from that fleet are not included in fishery age nor length compositions.
