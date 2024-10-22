@@ -29,6 +29,15 @@ model <- '18.2c_2024';mod_path <- here::here(year,'mgmt',model)
 
 ## Stock Overview
 
+
+::: {.notes}
+2 sex SS3 model
+time blocked fish selex
+updating data included new iss & light proj changes
+did bridging externally; no changes to derived quants/fits post francis weighting
+:::
+
+
 ::: columns
 ::: {.column width="40%"}
 BSAI Flathead Sole *(Hippoglossoides elassodon)* -Bering flounder complex
@@ -112,6 +121,12 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALdat_bu
 
  
 # Model Summary & Results 
+
+-----------------------------------------------------------------
+
+## Model Summary
+2-sex SS3 model
+Timeblocked fishery selectivity (length)
 
 -----------------------------------------------------------------
 
@@ -296,6 +311,14 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"phase_plane.png"))
 knitr::include_graphics(here::here('docs',year,'model_plots',"safe_table.png"))
 ```
 
+-----------------------------------------------------------------
+
+# Data Gaps & Research Priorities 
+
+::: fragment
+-   Unchanged from 2020
+-   Genetic info: B. flounder *is* genetically distinct from FHS; genetic diversity across seascape unclear 
+:::
  
 # Questions
 
