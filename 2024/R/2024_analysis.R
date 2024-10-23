@@ -248,16 +248,20 @@ SSplotComparisons(SSsummarize(biglist = list(mod18.2c_2020,mod18.2c_2024)),
 ## need to manually make total biomass comparison plot
 mod18.2c_2020$timeseries %>%
   select(Yr, Bio_smry) %>%
-  mutate(mod = '2020 Model') %>%
+  mutate(mod = '18.2c (2020)') %>%
   rbind(., mod18.2c_2024$timeseries %>%
           select(Yr, Bio_smry) %>%
-          mutate(mod = '2024 Model')) %>%
+          mutate(mod = '18.2c (2024)')) %>%
   ggplot(., aes(x = Yr, y = Bio_smry/1000, color = mod)) +
   geom_line(lwd = 0.75) +
-  theme(legend.position = c(0.85,0.9))+
-  scale_y_continuous(limits = c(0,800))+
+  theme(legend.position = c(0.85,0.9),
+        legend.text  = element_text(size = 7),
+        axis.title = element_text(size = 7),
+        axis.text = element_text(size = 7))+
+  scale_y_continuous(limits = c(0,900), breaks = seq(0,800,100))+
+  scale_x_continuous(limits = c(1960,2025), breaks = c(seq(1970,2020,10),2025))+
   scale_color_manual(values = c('grey22','blue')) +
-  labs(x = 'year', y = 'Total 3+ Biomass', color = '')
+  labs(x = 'Year', y = 'Total 3+ Biomass (x1000 t)', color = '')
 
 ggsave(last_plot(), file = here::here(mod_path,'plots','compare',
                                       'compare18_totalbiomass.png'),
