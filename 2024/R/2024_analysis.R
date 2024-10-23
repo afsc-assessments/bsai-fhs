@@ -261,7 +261,7 @@ mod18.2c_2020$timeseries %>%
 
 ggsave(last_plot(), file = here::here(mod_path,'plots','compare',
                                       'compare18_totalbiomass.png'),
-       width = 5, height = 4, dpi = 520, units = 'in')
+       width = 5, height = 3, dpi = 520, units = 'in')
 
 
 # misc figures ----
