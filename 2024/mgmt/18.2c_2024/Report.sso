@@ -5,9 +5,9 @@
 #_User_info_available_at:https://vlab.noaa.gov/group/stock-synthesis
 #_Source_code_at:_https://github.com/nmfs-stock-synthesis/stock-synthesis
 
-StartTime: Tue Oct 15 11:43:08 2024
-EndTime: Tue Oct 15 11:45:43 2024
-This run took: 0 hours, 2 minutes, 35 seconds.
+StartTime: Wed Oct 23 10:46:34 2024
+EndTime: Wed Oct 23 10:48:36 2024
+This run took: 0 hours, 2 minutes, 2 seconds.
 Data_File: 2024_BSAI_FHS.dat
 Control_File: BSAI_FHS.ctl
 
