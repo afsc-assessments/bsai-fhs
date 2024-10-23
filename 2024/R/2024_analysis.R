@@ -486,7 +486,7 @@ for(flt in 1:1){
                        exp_use,
                        N_use,
                        fleet = c('fishery','survey')[flt], 
-                       index = 1:21, ## actual index not ages
+                       index = mod18.2c_2024$agebins, ## actual index not ages
                        years = unique(run_osa_temp$years), 
                        name_use)
     
@@ -523,7 +523,8 @@ for(flt in 1:2){
                        exp_use,
                        N_use,
                        fleet = c('fishery','survey')[flt], 
-                       index = 1:length(mod18.2c_2024$lbins), ## actual index not ages
+                       index =  mod18.2c_2024$lbins, ## actual index not ages
+                       # index = 1:length(mod18.2c_2024$lbins), ## actual index not ages
                        years = unique(run_osa_temp$years), 
                        name_use)
     
