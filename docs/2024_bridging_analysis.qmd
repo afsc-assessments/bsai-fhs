@@ -809,7 +809,7 @@ It appears that the recent upswing is actually not due to the survey biomass obs
 
 # Comparison with updated surveyISS sample sizes
 
-We explored using the `surveyISS` r package to generate updated input sample sizes for the *survey* compositional data (code [here](https://github.com/afsc-assessments/bsai-fhs/blob/main/2024/R/updated_survey_iss.R).
+We explored using the `surveyISS` r package to generate updated input sample sizes for the *survey* compositional data (code [here](https://github.com/afsc-assessments/bsai-fhs/blob/main/2024/R/updated_survey_iss.R)).
 
 Here's how the old values (pink) compare with what comes out of the package (blue). The general reason why the blue values are higher is that there is generally more samples in general than the proxy value used previously (number of hauls), and less variability across hauls than there is across ages and years. This finding (increased ISS with the new package) has been found for other flatfish as well. The values for the CAAL data are much more similar to the nominal sample sizes.
 
@@ -817,7 +817,7 @@ Here's how the old values (pink) compare with what comes out of the package (blu
 knitr::include_graphics(here::here('docs','2024','02_surveyiss_bridging','comp_iss_compare.png'))
 ```
 
-We then bridged in the new sample sizes into model 18.2c (2024) and re-tuned the Francis weights. A detailed exploration of this exercise, with additional figures, is available [here](http://localhost:6511/#comparison-with-updated-surveyiss-sample-sizes). There are some minor differences between the 'base' 18.2c (2024) model shown here and the figures above because as of this writing (Oct 2024) the base has been updated with 2024 survey data, survey length comps, and a better estimate of 2024 catch.
+We then bridged in the new sample sizes into model 18.2c (2024) and re-tuned the Francis weights. There are some minor differences between the 'base' 18.2c (2024) model shown below and the figures above because as of this writing (Oct 2024) the base has been updated with 2024 survey data, survey length comps, and a better estimate of 2024 catch.
 
 The new surveyISS values, particularly the length comps, changed the model trajectory considerably. However, this change was eliminated by a re-tuning of the Francis weights, which greatly reduced the weight assigned to the survey lengths (0.35 to 0.06) and increased the CAAL weight by nearly twofold (0.27 to 0.48). This didn't result in major changes to the recruitment trajectory, data fits or parameter estimates.
 
@@ -883,9 +883,13 @@ knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compar
 knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare10_recruits_uncertainty.png'))
 ```
 
+```{r,  include=F, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
+mod18.2c_2024_nhaul <- SS_output(here::here(year,'mgmt','18.2c_2024-nhauls'), verbose = FALSE, hidewarn = TRUE, warn = FALSE)
+```
+
 ## Likelihood comparison
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE}
-mod18.2c_2024_nhaul <- SS_output(here::here(year,'mgmt','18.2c_2024-nhauls'), verbose = FALSE)
+
 
   rbind(
 mod18.2c_2024_nhaul$likelihoods_used %>% mutate(src = 'nhauls',
