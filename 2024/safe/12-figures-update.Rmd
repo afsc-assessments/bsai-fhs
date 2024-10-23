@@ -95,10 +95,10 @@ knitr::include_graphics(c(here::here(mod_path, "plots", "growth_selex_maturity.p
 knitr::include_graphics(here::here(mod_path,"plots","phase_plane.png"))
 ```
 
-```{r spr, fig.cap="Catch versus spawning biomass, both in tons.", eval = TRUE}
+```{r catchvsspawnbio, fig.cap="Catch versus spawning biomass, both in tons.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots","catch_vs_spawnbio.png"))
 ```
 
-```{r spr, fig.cap="Time series of estimated catch divided by estimated total biomass.", eval = TRUE}
+```{r catchvstotbio, fig.cap="Time series of estimated catch divided by estimated total biomass.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots","catch_over_totbio_timeseries.png"))
 ```
