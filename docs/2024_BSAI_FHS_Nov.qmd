@@ -161,11 +161,12 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit_flt1mk
 ## Fishery Length Comps (recent years)
 
 ::: {.notes}
-these are not perfect; not weighted highly in model and didn't update ISS
-
-large pearson residual in 1983 might be a data artifact
-
-misfits in 20-30cm range largely driven pre 1983
+low sampling in 70s
+clean up with survey timeblock
+some over est in recent years
+have recdevs set to mean in 2020 which would be informing the 25-40 length bin
+also don't have age data and these are weighted really low
+aggregate fig shows ugly gap, this was present in previous models, structural not misspec
 :::
 
 ```{r, echo = FALSE} 
@@ -183,16 +184,36 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit__multi
 
 ------------------------------------------------------------------------
 
-## Length Comp Residuals: OSA (Fishery, Males)
+## Length Comp Residuals: OSA (Fishery)
 
 ::: {.notes}
 the glaring issue in 1983 goes away
 :::
 
-```{r, echo = FALSE} 
+
+:::: {.columns}
+
+::: {.column width="45%"}
+```{r, fig.show="hold", out.height="500px", out.width="350px"}
+knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length_females_diagnostics.png"))
+```
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="45%"}
+```{r, fig.show="hold", out.height="500px", out.width="350px"}
 knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length_males_diagnostics.png"))
 ```
+:::
 
+::::
+
+
+
+ 
 
 ## Survey Biomass 
 ```{r, echo = FALSE} 
@@ -224,20 +245,27 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit__multi
 
 ------------------------------------------------------------------------
 
-## Length Comp Residuals: OSA (Survey, Females)
- 
-```{r, echo = FALSE} 
+## Length Comp Residuals: OSA (Survey)
+
+:::: {.columns}
+
+::: {.column width="45%"}
+```{r, fig.show="hold", out.height="500px", out.width="350px"}
 knitr::include_graphics(here::here('docs',year,'model_plots',"osa_survey_length_females_diagnostics.png"))
 ```
+:::
 
-------------------------------------------------------------------------
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
 
-## Length Comp Residuals: OSA (Survey, Males)
- 
-```{r, echo = FALSE} 
+::: {.column width="45%"}
+```{r, fig.show="hold", out.height="500px", out.width="350px"}
 knitr::include_graphics(here::here('docs',year,'model_plots',"osa_survey_length_males_diagnostics.png"))
 ```
+:::
 
+::::
 
 ------------------------------------------------------------------------
 
@@ -361,27 +389,4 @@ knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compar
 knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare10_recruits_uncertainty.png'))
 ```
 :::
-
- 
-## Length Comp Residuals: OSA (Fishery, Females)
-
-::: {.notes}
-the glaring issue in 1983 goes away
-:::
-
-```{r, echo = FALSE} 
-knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length_females_diagnostics.png"))
-```
-
-## Length Comp Residuals: OSA (Survey, Females)
-
-```{r, echo = FALSE} 
-knitr::include_graphics(here::here('docs',year,'model_plots',"osa_survey_length_females_diagnostics.png"))
-```
-
-## Length Comp Residuals: OSA (Survey, Males)
- 
-```{r, echo = FALSE, out.width='300px', out.height='500px'} 
-knitr::include_graphics(here::here('docs',year,'model_plots',"osa_survey_length_males_diagnostics.png"))
-```
 
