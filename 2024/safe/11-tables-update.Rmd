@@ -26,7 +26,7 @@ flextable::regulartable(mod18.2c_2024$lendbase %>%
                             names_glue = "{Yr} ({effN})",
                             values_from = Obs)) %>%
   flextable::set_caption("Fishery length frequency data for female BSAI FHS since 2000 used in the model. Input sample sizes are in parentheses.") %>%
-  flextable::colformat_double(j = 2:7,digits = 4) %>%
+  flextable::colformat_double(j = 2:6,digits = 4) %>%
   flextable::compose(i = 24, j = 1, flextable::as_paragraph('58+')) %>%
   flextable::font(fontname = "Times New Roman", part = "all") %>%
   flextable::fontsize(size = 11, part = "all")
@@ -47,7 +47,7 @@ flextable::regulartable(mod18.2c_2024$lendbase %>%
                             names_glue = "{Yr} ({effN})",
                             values_from = Obs)) %>%
   flextable::set_caption("Fishery length frequency data for male BSAI FHS since 2000 used in the model. Input sample sizes are in parentheses.") %>%
-  flextable::colformat_double(j = 2:7,digits = 4) %>%
+  flextable::colformat_double(j = 2:6,digits = 4) %>%
   flextable::compose(i = 24, j = 1, flextable::as_paragraph('58+')) %>%
   flextable::font(fontname = "Times New Roman", part = "all") %>%
   flextable::fontsize(size = 11, part = "all")
