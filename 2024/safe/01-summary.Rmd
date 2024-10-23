@@ -10,7 +10,7 @@
 
 -   conditional age-at-length data from the bottom trawl survey for years 2021 through 2023;
 
--   marginal fishery length compositions from 2020-2023; and
+-   marginal fishery length compositions from 2020-2023 (though only 2022 and 2023 are included in the likelihood); and
 
 -   marginal fishery age compositions from 2020 and 2021. The Age and Growth program was not able to provide marginal fishery age compositions for more recent years due to staffing shortages;
 

@@ -50,7 +50,13 @@ data.frame(Source = c(rep("NMFS Aleutian Islands Groundfish Trawl Survey", 1),
   flextable::font(fontname = "Times", part = "all") %>% 
   flextable::fontsize(size = 10) %>% 
   flextable::theme_vanilla() %>% 
-  flextable::fix_border_issues() 
+  flextable::fix_border_issues()  %>%
+  flextable::footnote(
+  x = ., i = 6:7, j = 2,
+  ref_symbols = "*",
+  value = flextable::as_paragraph("To avoid double-counting data used to estimate parameters in the assessment model, the size composition data were excluded in the model optimization when the age composition data from the same year were available. Thus, only the flathead sole fishery size compositions for 1977-1999, 2002-2003, 2008, 2022 and 2023 were included.")
+)
+
 
 ```
 
