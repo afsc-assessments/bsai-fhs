@@ -125,8 +125,11 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALdat_bu
 -----------------------------------------------------------------
 
 ## Model Summary
-2-sex SS3 model
-Timeblocked fishery selectivity (length)
+
+-   2-sex SS3 model
+-   Timeblocked fishery selectivity @ 1987 (length based)
+-   *M*, *q* fixed
+-   Single fishing and survey fleet
 
 -----------------------------------------------------------------
 
@@ -403,6 +406,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"compare12_recdevs_
 :::
 
 :::: 
+
 ------------------------------------------------------------------------
 
 ## Time Series: Fishing Mortality
