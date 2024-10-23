@@ -141,42 +141,8 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_agefit_flt1mk
 ```
 
 ------------------------------------------------------------------------
-
-## Fishery Length Comps (early years)
-
-::: {.notes}
-these are not perfect; not weighted highly in model and didn't update ISS
-
-large pearson residual in 1983 might be a data artifact
-
-misfits in 20-30cm range largely driven pre 1983
-:::
-
-```{r, echo = FALSE} 
-knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit_flt1mkt0_page1.png"))
-```
-
-------------------------------------------------------------------------
-
-## Fishery Length Comps (recent years)
-
-::: {.notes}
-low sampling in 70s
-clean up with survey timeblock
-some over est in recent years
-have recdevs set to mean in 2020 which would be informing the 25-40 length bin
-also don't have age data and these are weighted really low
-aggregate fig shows ugly gap, this was present in previous models, structural not misspec
-:::
-
-```{r, echo = FALSE} 
-knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit_flt1mkt0_page2.png"))
-```
-
-
-------------------------------------------------------------------------
  
-## Length Comp Residuals: Pearson
+## Fishery Age Comp Residuals (Pearson)
 
 ```{r, echo = FALSE} 
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit__multi-fleet_comparison.png"))
@@ -184,7 +150,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit__multi
 
 ------------------------------------------------------------------------
 
-## Length Comp Residuals: OSA (Fishery)
+## Fishery Age Comp Residuals (OSA)
 
 ::: {.notes}
 the glaring issue in 1983 goes away
@@ -215,6 +181,81 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length
 
  
 
+------------------------------------------------------------------------
+
+## Fishery Length Comps 
+
+::: {.notes}
+these are not perfect; not weighted highly in model and didn't update ISS
+
+large pearson residual in 1983 might be a data artifact
+
+misfits in 20-30cm range largely driven pre 1983
+
+low sampling in 70s
+clean up with survey timeblock
+some over est in recent years
+have recdevs set to mean in 2020 which would be informing the 25-40 length bin
+also don't have age data and these are weighted really low
+aggregate fig shows ugly gap, this was present in previous models, structural not misspec
+:::
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r, fig.show="hold"}
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit_flt1mkt0_page1.png"))
+```
+:::
+
+
+::: {.column width="50%"}
+```{r, fig.show="hold"}
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit_flt1mkt0_page2.png"))
+```
+:::
+
+::::
+
+------------------------------------------------------------------------
+ 
+## Fishery Length Comp Residuals (Pearson)
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit__multi-fleet_comparison.png"))
+```
+
+------------------------------------------------------------------------
+
+## Fishery Length Comp Residuals (OSA)
+
+::: {.notes}
+the glaring issue in 1983 goes away
+:::
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r, fig.show="hold", out.height="500px", out.width="350px"}
+knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length_females_diagnostics.png"))
+```
+:::
+
+ 
+::: {.column width="50%"}
+```{r, fig.show="hold", out.height="500px", out.width="350px"}
+knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length_males_diagnostics.png"))
+```
+:::
+
+::::
+
+
+
+ 
+
 ## Survey Biomass 
 ```{r, echo = FALSE} 
 knitr::include_graphics(here::here('docs',year,'model_plots',"index2_cpuefit_Survey.png"))
@@ -222,7 +263,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"index2_cpuefit_Sur
 
 ------------------------------------------------------------------------
 
-## Survey Length Comp 
+## Survey Length Comps
 
 ::: {.notes}
 misfit 20-30 cm; seen this since 2012
@@ -231,13 +272,28 @@ previous authors tried flexible selectivity patterns, a four-parameter growth cu
 it's possible that we aren't sampling length-at-age well 
 :::
 
-```{r, echo = FALSE} 
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r, fig.show="hold"}
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit_flt2mkt0_page1.png"))
+```
+:::
+
+
+::: {.column width="50%"}
+```{r, fig.show="hold"}
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit_flt2mkt0_page2.png"))
 ```
+:::
+
+:::: 
 
 ------------------------------------------------------------------------
 
-## Length Comp Residuals: Pearson
+## Survey Length Comp Residuals (Pearson)
 
 ```{r, echo = FALSE} 
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit__multi-fleet_comparison.png"))
@@ -245,7 +301,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit__multi
 
 ------------------------------------------------------------------------
 
-## Length Comp Residuals: OSA (Survey)
+## Survey Length Comp Residuals (OSA)
 
 :::: {.columns}
 
@@ -269,23 +325,30 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"osa_survey_length_
 
 ------------------------------------------------------------------------
 
-## Survey CAAL Fits (recent years) I
+## Survey CAAL Fits (recent years)
 ::: {.notes}
 if we had stuck with the n_otoliths approach we would have overstated the sample size by a factor of ~2, hence the doubling of the francis weights
 :::
 
-```{r, echo = FALSE, out.height=  '600px',out.width = '600px'   } 
+
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r, fig.show="hold"}
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALfit_Andre_plotsflt2mkt0_page7.png"))
 ```
+:::
 
-------------------------------------------------------------------------
 
-## Survey CAAL Fits (recent years) II 
- 
-```{r, echo = FALSE, out.width = '750px'}  
+::: {.column width="50%"}
+```{r, fig.show="hold"}
 knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALfit_Andre_plotsflt2mkt0_page8.png"))
 ```
- 
+:::
+
+:::: 
  
 ------------------------------------------------------------------------
 
@@ -299,18 +362,47 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"growth_selex_matur
 
 ## Time Series: SSB & Total Biomass
 
-```{r, echo = FALSE}  
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r, fig.show="hold"}
 knitr::include_graphics(here::here('docs',year,'model_plots',"compare1_spawnbio.png")) 
 ```
+:::
+
+ 
+::: {.column width="50%"}
+```{r, fig.show="hold"}
+knitr::include_graphics(here::here('docs',year,'model_plots',"compare18_totalbiomass.png")) 
+```
+:::
+
+::::
+ 
+
+
 
 ------------------------------------------------------------------------
 
 ## Time Series: Recruitment
 
-```{r, echo = FALSE} 
-knitr::include_graphics(here::here('docs',year,'model_plots',"compare10_recruits_uncertainty.png"))
-```
+:::: {.columns}
 
+::: {.column width="50%"}
+```{r, fig.show="hold"}
+knitr::include_graphics(here::here('docs',year,'model_plots',"compare10_recruits_uncertainty.png")) 
+```
+:::
+
+ 
+::: {.column width="50%"}
+```{r, fig.show="hold"}
+knitr::include_graphics(here::here('docs',year,'model_plots',"compare12_recdevs_uncertainty.png"))
+```
+:::
+
+:::: 
 ------------------------------------------------------------------------
 
 ## Time Series: Fishing Mortality
