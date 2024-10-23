@@ -261,9 +261,11 @@ mod18.2c_2020$timeseries %>%
 
 ggsave(last_plot(), file = here::here(mod_path,'plots','compare',
                                       'compare18_totalbiomass.png'),
-       width = 5, height = 3, dpi = 520, units = 'in')
+       width = 4, height = 3, dpi = 520, units = 'in')
 
-
+ggsave(last_plot(), file = here::here('docs',year,'model_plots', 
+                                      'compare18_totalbiomass.png'),
+       width = 4, height = 3, dpi = 520, units = 'in')
 # misc figures ----
 #* growth, selectivity and maturity composite ----
  
