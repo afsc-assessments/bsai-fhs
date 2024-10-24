@@ -595,22 +595,42 @@ write.csv(abc1,here::here(year,'safe','static_tables','catch_abc_tac_ofl_mgmt.cs
 ## Figures for Director's Briefing Nov 2024 ----
 
 ### survey data
-# ggplot(data= NULL, aes(x = year)) +
-# geom_point(data=subset(dat, src == '2023 Assessment' &
-#  name == 'Observed' & year < 2023), aes(y = value), color = 'grey88') +
-#  geom_errorbar(data=subset(dat, src == '2023 Assessment' & year < 2023), width = 0, 
-# aes( ymin = lci, ymax = uci), color ='grey88') +
-# geom_point(data=subset(dat, src == '2023 Assessment' &
-#  name == 'Observed' & year == 2023), aes(y = value), size = 3, color = 'dodgerblue2') +
-# geom_errorbar(data=subset(dat, src == '2023 Assessment' & year == 2023), width = 0, 
-# aes( ymin = lci, ymax = uci), color ='dodgerblue2') +
-# 
-# labs(x = 'Year', y = 'Survey Biomass (t)', color = '') +
-# theme(legend.position = c(0.2,0.8)) +
-# theme_void()
-# 
-# ggsave(last_plot(),
-# height = 4, width = 6, unit = 'in',
-# file = here(here(year,'mgmt',curr_mdl_fldr,'figs','directorsbriefing_survyobs.png')))
+
+sdat <- mod18.2c_2024$cpue %>%
+  mutate(lci = Obs-Obs*SE, uci = Obs + Obs*SE) %>%
+  mutate(new = Yr >= 2020)
+
+ggplot(data = sdat, aes(x = Yr, color = new)) +
+  geom_point(  aes(y = Obs)) +
+  geom_errorbar(aes(ymin = lci, ymax = uci)) +
+  scale_color_manual(values = c('grey50','dodgerblue2'))+
+  # theme_void()+
+  labs(x = 'Year', y = 'Survey Biomass (t)', color = '') +
+  theme(legend.position = 'none')
 
 
+ggsave(last_plot(),
+       height = 4, width = 6, unit = 'in',
+       file = here::here(mod_path,'plots','directorsbriefing_survyobs.png'))
+
+
+## SSB timeseries
+
+sdat <- mod18.2c_2024$derived_quants %>%
+  filter(grepl('SSB_',Label)) %>%
+  mutate(Yr = as.numeric(substr(Label, 5,8)),
+    lci = Value -1.96*StdDev, uci = Value + 1.96*StdDev) %>%
+  filter(!is.na(Yr) & Yr < 2025) %>%
+  mutate(new = Yr >= 2020)
+
+ggplot(data = sdat, aes(x = Yr, color = new, fill = new)) +
+  geom_ribbon(aes(ymin = lci, ymax = uci),alpha = 0.2, color = NA) +
+  geom_point(  aes(y = Value)) +
+  scale_fill_manual(values = c('grey50','dodgerblue2'))+
+  scale_color_manual(values = c('grey50','dodgerblue2'))+
+  # theme_void()+
+  labs(x = 'Year', y = 'SSB (t)', color = '') +
+  theme(legend.position = 'none')
+ggsave(last_plot(),
+       height = 4, width = 6, unit = 'in',
+       file = here::here(mod_path,'plots','directorsbriefing_SSB.png'))
