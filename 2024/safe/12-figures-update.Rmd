@@ -78,11 +78,10 @@ knitr::include_graphics(here::here(mod_path, "plots", "comp_condAALfit_Andre_plo
 ```{r biofreccompare, fig.cap="Comparison of spawning biomass, fishing mortality rates, and recruitment for the 2024 Update model (blue) and 2020 Full model (grey). The shaded ribbon represents the 95% quantile. Uncertainty intervals not available for total biomass.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "compare","timeseries_compare.png"))
 ```
- 
 
 
 ```{r recdevs, fig.cap="Time series of recruitment deviations, from the 2024 base model (blue) and 2021 base model (grey), with 95% intervals.", eval = TRUE}
-knitr::include_graphics(here::here(mod_path,"plots", "compare12_recdevs_uncertainty.png"))
+knitr::include_graphics(here::here(mod_path,"plots","compare", "compare12_recdevs_uncertainty.png"))
 ```
  
 
