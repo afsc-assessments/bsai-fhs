@@ -149,14 +149,14 @@ There is no ESP for this stock complex, but we note that the fishery has consist
 
 > The status definitions under the MSFCMA have been truncated from this report. 
 
-#### Overfishing  
+### Overfishing  
 The official catch estimate for the most recent complete year (`r year-1`) is `r prettyNum(c0,big.mark=",")` t. This is less than the `r year-1` OFL of `r prettyNum(ofl_23_23,big.mark=",")` t. *The stock is not subject to overfishing.*
 
-#### Overfished (Harvest Scenario 6) 
+### Overfished (Harvest Scenario 6) 
 
 The minimum stock size threshold (MSST) for BSAI FHS is given by $B_{35\%}$ which is `r prettyNum(round(b35_25),big.mark=",")` in `r year`. The estimated stock spawning biomass in `r year` is more than double the MSST at `r prettyNum(ssb_25,big.mark=",")`. *The stock is not overfished*.
 
-#### Approaching Overfished (Harvest Scenario 7)
+### Approaching Overfished (Harvest Scenario 7)
 The mean estimated stock spawning biomass in `r year+13` under Harvest Scenario 7 is greater than $B_{35\%}$ (Table 9-\@ref(tab:projectionsSsb)). *The stock is not approaching an overfished state*.
 
  
