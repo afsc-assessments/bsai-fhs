@@ -10,7 +10,7 @@ The model used in this assessment is the same as the model accepted in 2020 (`r 
 
 -   **Spawning biomass** is the estimated weight of mature females, in t.
 
--   **Total biomass** is the estimated weight of all FHS ages 3 and greater, in t.
+-   **Total biomass** is the estimated weight of all fish ages 3 and greater, in t.
 
 -   **Recruitment** is measured as the number of age-zero individuals.
 
@@ -40,14 +40,6 @@ Flathead sole do not seem to exhibit a stock-recruitment relationship because la
 
 ## Model Evaluation
 
-### Residual Analysis and Convergence Criteria
-
-The model achieved convergence as defined by an invertible Hessian matrix and a low maximum gradient component (less than `1e-4`) which was achieved using the `hess_step` function in ADMB. Time-series plots of observed and predicted values (e.g. Figure \@ref(fig:survey)), and the time-series of recruitment deviations (Figure \@ref(fig:recdevs)) did not suggest unusual residual patterns, or different behavior than in previous assessments. The uncertainty around parameter estimates and related derived quantities were in line with previous models (Tables \@ref(tab:parposteriorst) and \@ref(tab:timeseriest)).
-
-### Parameter Estimates and Parameter Uncertainty
-
-Table \@ref(tab:parposteriorst) shows the maximum likelihood estimate (MLE) of key parameters in `r model_name` with corresponding 95% credible intervals given by the asymptotic uncertainty. Time series of deviation parameters (fishing mortality rates $F$ and recruitment deviations from `r paste0(mod18.2c_2024$startyr,'-',mod18.2c_2024$endyr)` are shown in Figures \@ref(fig:biofreccompare) and \@ref(fig:recdevs), respectively.
- 
 ### Comparison to Previous Model
 
 A comparison of key derived quantities from the base model and the most recent full assessment is shown in Figure \@ref(fig:biofreccompare). Parameter estimates, fits to the data and likelihood values have remained similar to `r old_model_name`. 
@@ -56,4 +48,14 @@ As has been observed in BSAI FHS models since 2012 (@Monnahan2020, @McGilliard_2
 
 Similarly, overall fits to fishery age and length composition data were reasonable, but not perfect Figures \@ref(fig:fishagecomps) through \@ref(fig:lengthcompsResidOSAFishMal).
 The yearly distributions of ages varied from year to year, suggesting that perhaps a larger sample of ages from the fishery each year would improve our knowledge of the distribution of ages caught by the fishery. One very large Pearson residual occurred in fits to male fishery length-composition data in 1983 (Figure \@ref(fig:lengthcompsResidPearson)), which might be driven by a plus-group observation so large as to be a data entry error, and disappears upon calculation of one-step-ahead residuals (Figure \@ref(fig:lengthcompsResidOSAFishMal)).  The aggregate fits to the fishery length composition data suggest that the fishery caught more 45-60cm males than were expected (Figure \@ref(fig:fishagecomps)), but this is mostly driven by misfits before 1989; we would not expect the fits to this data source to be as good given the low Francis weight applied to these data in the joint likelihood.
+
+### Residual Analysis and Convergence Criteria
+
+The model achieved convergence as defined by an invertible Hessian matrix and a low maximum gradient component (less than `1e-4`) which was achieved using the `hess_step` function in ADMB. Time-series plots of observed and predicted values (e.g. Figure \@ref(fig:survey)), and the time-series of recruitment deviations (Figure \@ref(fig:recdevs)) did not suggest unusual residual patterns, or different behavior than in previous assessments. The uncertainty around parameter estimates and related derived quantities were in line with previous models (Tables \@ref(tab:parposteriorst) and \@ref(tab:timeseriest)).
+
+### Parameter Estimates and Parameter Uncertainty
+
+Table \@ref(tab:parposteriorst) shows the maximum likelihood estimate (MLE) of key parameters in `r model_name` with corresponding 95% credible intervals given by the asymptotic uncertainty. Time series of deviation parameters (fishing mortality rates $F$ and recruitment deviations from `r paste0(mod18.2c_2024$startyr,'-',mod18.2c_2024$endyr)` are shown in Figures \@ref(fig:biofreccompare) and \@ref(fig:recdevs), respectively.
+ 
+
  
