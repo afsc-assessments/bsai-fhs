@@ -20,7 +20,7 @@ knitr::include_graphics(here::here(mod_path,"plots", "index2_cpuefit_Survey.png"
 knitr::include_graphics(here::here(mod_path,"plots", "comp_agefit__aggregated_across_time.png"))
 ```
 
-```{r fishagecompsResidPearson, fig.cap="Observed (grey polygons) and predicted (colored lines) fishery age compositions for BSAI FHS, aggregated through time.", eval = TRUE}
+```{r fishagecompsResidPearson, fig.cap="Pearson residuals for fishery and survey length compositions. Blue points are males, red points are females.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots", "comp_agefit_residsflt1mkt0.png"))
 ```
 
@@ -85,13 +85,22 @@ knitr::include_graphics(here::here(mod_path,"plots","compare", "compare12_recdev
 ```
  
 
-```{r selex, fig.cap="Estimated length- or age-based selectivity curves, and female maturity-at-age for BSAI FHS.", eval = TRUE}
+```{r selex, fig.cap="Estimated growth curves; time-varying, length-based fishery selectivity; age-based survey selectivity; and female maturity-at-age.", eval = TRUE}
 knitr::include_graphics(c(here::here(mod_path, "plots", "growth_selex_maturity.png")))
 ```
 
 
 ```{r spr, fig.cap="Time series of estimated fishing mortality versus estimated spawning stock biomass (phase-plane plot) for 1978-2026, including applicable OFL and maximum FABC definitions for the stock, including 2 years of projected values. Target levels correspond to B35% and F35% for author recommended model.", eval = TRUE}
 knitr::include_graphics(here::here(mod_path,"plots","phase_plane.png"))
+```
+
+
+```{r genetics1, echo=FALSE, fig.cap = "Collection locations of Bering flounder (n=23) and flathead sole (n=24) sequenced using low coverage whole genome sequencing."}
+knitr::include_graphics(here::here(year,'figs','genetics_fig1.png'))
+```
+
+```{r genetics2, echo=FALSE, fig.cap = ". Principal components analysis of yellowfin sole (YFS), Bering flounder, and flathead sole, first and second principal components axes. ."}
+knitr::include_graphics(here::here(year,'figs','genetics_fig2.png'))
 ```
 
 ```{r catchvsspawnbio, fig.cap="Catch versus spawning biomass, both in tons.", eval = TRUE}
