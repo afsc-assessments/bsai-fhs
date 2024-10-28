@@ -1,7 +1,11 @@
 \newpage
 
 # Auxiliary Files
-A script to reproduce the analyses presented in this assessment is available at https://github.com/afsc-assessments/bsai-fhs/blob/main/2024/R/2024_analysis.R. 
+A script to reproduce the analyses presented in this assessment is available [here](https://github.com/afsc-assessments/bsai-fhs/blob/main/2024/R/2024_analysis.R). 
 
+Survey conditional age-at-length data is prohibitively large to present in this document; readers may access these data electronically [here](https://github.com/afsc-assessments/bsai-fhs/blob/bafa7658d31e0b99fe11d626a58e1c01807c69ee/2024/mgmt/18.2c_2024/2020_BSAI_FHS.dat#L277)
 
- 
+A comma-separated electronic file containing the estimated numbers-at-age is available [here](https://github.com/afsc-assessments/bsai-fhs/blob/main/2024/mgmt/18.2c_2024/natage.csv).
+
+An document describing the bridging exercises (software, data, and input sample sizes) from 2020 to the present assessment is provided [here](https://afsc-assessments.github.io/bsai-fhs/2024_bridging_analysis.html).
+
