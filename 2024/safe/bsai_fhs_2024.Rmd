@@ -168,7 +168,10 @@ afscassess::best_f(data = data.frame(age = ages,
 
 ```{r, child="10-gaps.Rmd", eval = T}
 ```
- 
+
+# Acknowledgements
+
+The authors would like to acknowledge the data collection and processing efforts of the survey and age and growth groups, particularly Derek Chamberlain and his staff for providing recent age data ahead of schedule. We acknowledge Ingrid Spies for providing a write-up of the latest genetic analyses for this stock, and Elizabeth Siddon for her contribution to the Ecosystem component of the Risk table.
 
 \allsectionsfont{\centering}
 # References
