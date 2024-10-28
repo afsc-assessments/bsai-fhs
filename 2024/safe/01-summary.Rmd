@@ -2,7 +2,7 @@
 
 ## Summary of Changes in Assessment Inputs
 
-*Changes in the input data*: This assessment includes updated catch for `r year-1`, assumed catches of `r prettyNum(c1, big.mark = ',')` t for `r year`, `r prettyNum(c2, big.mark = ',')` t for `r year+1` and `r prettyNum(c3, big.mark = ',')` t for `r year+2` (Figure \@ref(fig:data)) and see [How Future Catch is Specified](#authorsF) for details). New input data otherwise include:
+*Changes in the input data*: This assessment includes updated catch for `r year-1`, assumed catches of `r prettyNum(c1, big.mark = ',')` t for `r year`, `r prettyNum(c2, big.mark = ',')` t for `r year+1` and `r prettyNum(c3, big.mark = ',')` t for `r year+2` (Figure 9-\@ref(fig:data)) and see [How Future Catch is Specified](#authorsF) for details). New input data otherwise include:
 
 -    bottom trawl survey biomass for years 2021-2024;
 

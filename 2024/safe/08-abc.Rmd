@@ -54,7 +54,7 @@ Two other scenarios are needed to satisfy the MSFCMA’s requirement to determin
 
 For Scenario 2 (*Author's F*); we use pre-specified catches to increase accuracy of short-term projections in fisheries where the catch is usually less than the ABC. We specify `r year` catches as the most current observed catches plus the typical (5-year average) landings through the present date through the end of the calendar year, and the catches for years `r year+1` and `r year+2` as the average catch from `r year-5` to `r year-1`, which is `r prettyNum(c2,big.mark=',')` t.
 
-Projected catches, spawning biomass, and fishing mortality rates corresponding to the alternative harvest scenarios over a 13-year period are shown in Tables \@ref(tab:projectionsCatches) through \@ref(tab:projectionsF).
+Projected catches, spawning biomass, and fishing mortality rates corresponding to the alternative harvest scenarios over a 13-year period are shown in Tables 9-\@ref(tab:projectionsCatches) through 9-\@ref(tab:projectionsF).
  
 ## Risk Table and ABC recommendation {#risktable}
 
@@ -93,7 +93,7 @@ Overall, the model fits all the data sets very well. Both the survey index, and 
 
 ### Population dynamics considerations
 
-The spawning stock biomass has been above target for the entire time period for which there are data. It is projected to increase into the near future (based on the Scenario 4 projection above) as there was a series of above-average recruitments from 2015-2020 that continue to mature. This increase is already borne out in the estimated age 3+ biomass (Figure \@ref(fig:biofreccompare)) and observed index (Figure \@ref(fig:survey)), both of which show a general increase since 2015. *Since we have no increased concerns we set the concern level to 1.*
+The spawning stock biomass has been above target for the entire time period for which there are data. It is projected to increase into the near future (based on the Scenario 4 projection above) as there was a series of above-average recruitments from 2015-2020 that continue to mature. This increase is already borne out in the estimated age 3+ biomass (Figure 9-\@ref(fig:biofreccompare)) and observed index (Figure 9-\@ref(fig:survey)), both of which show a general increase since 2015. *Since we have no increased concerns we set the concern level to 1.*
 
 ### Environmental/Ecosystem considerations
  
@@ -157,7 +157,7 @@ The official catch estimate for the most recent complete year (`r year-1`) is `r
 The minimum stock size threshold (MSST) for BSAI FHS is given by $B_{35\%}$ which is `r prettyNum(round(b35_25),big.mark=",")` in `r year`. The estimated stock spawning biomass in `r year` is more than double the MSST at `r prettyNum(ssb_25,big.mark=",")`. *The stock is not overfished*.
 
 #### Approaching Overfished (Harvest Scenario 7)
-The mean estimated stock spawning biomass in `r year+13` under Harvest Scenario 7 is greater than $B_{35\%}$ (Table \@ref(tab:projectionsSsb)). *The stock is not approaching an overfished state*.
+The mean estimated stock spawning biomass in `r year+13` under Harvest Scenario 7 is greater than $B_{35\%}$ (Table 9-\@ref(tab:projectionsSsb)). *The stock is not approaching an overfished state*.
 
  
 The $F$ using `r model_name` that would have produced a catch for `r year-1` equal to the OFL specified in `r year-1` for `r year-1` (`r prettyNum(ofl_23_23, big.mark = ',')`) was `r f_best`.
