@@ -2,19 +2,19 @@
 
 ## Summary of Changes in Assessment Inputs
 
-*Changes in the input data*: This assessment includes updated catch for `r year-1`, assumed catches of `r prettyNum(c1, big.mark = ',')` t for `r year`, `r prettyNum(c2, big.mark = ',')` t for `r year+1` and `r prettyNum(c3, big.mark = ',')` t for `r year+2` (Figure 9-\@ref(fig:data)) and see [How Future Catch is Specified](#authorsF) for details). New input data otherwise include:
+*Changes in the input data*: This assessment includes updated catch for `r year-1`, assumed catches of `r prettyNum(c1, big.mark = ',')` t for `r year`, `r prettyNum(c2, big.mark = ',')` t for `r year+1` and `r prettyNum(c3, big.mark = ',')` t for `r year+2` (Figure 9-\@ref(fig:data)). New input data otherwise include:
 
 -    bottom trawl survey biomass for years 2021-2024;
 
 -   survey length composition data for years 2021-2024;
 
--   conditional age-at-length data from the bottom trawl survey for years 2021 through 2023;
+-   conditional age-at-length data from the bottom trawl survey for years 2021-2023;
 
 -   marginal fishery length compositions from 2020-2023 (though only 2022 and 2023 are included in the likelihood); and
 
 -   marginal fishery age compositions from 2020 and 2021. The Age and Growth program was not able to provide marginal fishery age compositions for more recent years due to staffing shortages;
 
--   replacment of the input sample sizes for survey compositional data with values obtained from the `surveyISS` package version 1.0.0 (previously, the number of hauls or the nominal sample size [number of otoliths] were used for marginal lengths and coniditional age-at-length data, respectively).
+-   replacement of the input sample sizes for survey compositional data with values obtained from the `surveyISS` package version 1.0.0 (previously, the number of hauls or the nominal sample size [number of otoliths] were used for marginal lengths and coniditional age-at-length data, respectively).
 
 *Changes in the assessment methodology*: The assessment methodology is the same as the most recent full assessment conducted in 2020 [@Monnahan2020], with the small change that the projection model was updated to the latest version of `spm` and the recruitment time series passed to the projections now begins in 1977 for consistency with other assessment workflows. (Previously the entire time series from 1964 onwards was used).
 
