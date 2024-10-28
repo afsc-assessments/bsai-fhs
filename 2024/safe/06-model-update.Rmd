@@ -23,7 +23,7 @@ software change. After all data were added to the model, we updated the Francis 
 
 ## Description of Base Model
 
-> This model is an Operational Update. The
+> perational Update: The
 configuration matches the accepted model from 2020, with updated data. A
 full revision to the modeling framework is anticipated in the next cycle
 (2028). There are no alternative models presented here.
