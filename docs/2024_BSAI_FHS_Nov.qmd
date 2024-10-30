@@ -24,7 +24,7 @@ library(dplyr)
 year = 2024
 model <- '18.2c_2024';mod_path <- here::here(year,'mgmt',model)
 ```
-
+ 
 ------------------------------------------------------------------------
 
 ## Stock Overview
@@ -148,18 +148,13 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_agefit_flt1mk
 ## Fishery Age Comp Residuals (Pearson)
 
 ```{r, echo = FALSE} 
-knitr::include_graphics(here::here('docs',year,'model_plots',"comp_lenfit__multi-fleet_comparison.png"))
+knitr::include_graphics(here::here('docs',year,'model_plots',"comp_agefit__multi-fleet_comparison.png"))
 ```
 
 ------------------------------------------------------------------------
 
 ## Fishery Age Comp Residuals (OSA)
-
-::: {.notes}
-the glaring issue in 1983 goes away
-:::
-
-
+ 
 :::: {.columns}
 
 ::: {.column width="45%"}
@@ -188,19 +183,15 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length
 
 ## Fishery Length Comps 
 
-::: {.notes}
-these are not perfect; not weighted highly in model and didn't update ISS
-
-large pearson residual in 1983 might be a data artifact
-
+::: {.notes} 
 misfits in 20-30cm range largely driven pre 1983
 
-low sampling in 70s
-clean up with survey timeblock
-some over est in recent years
-have recdevs set to mean in 2020 which would be informing the 25-40 length bin
-also don't have age data and these are weighted really low
-aggregate fig shows ugly gap, this was present in previous models, structural not misspec
+-   low sampling in 70s
+-   clean up with selex timeblock
+-   some over est in recent years
+-   have recdevs set to mean in 2020 which would be informing the 25-40 length bin
+-   also don't have age data and these are weighted really low
+-   aggregate fig shows ugly gap, this was present in previous models, structural not misspec
 :::
 
 
@@ -269,10 +260,10 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"index2_cpuefit_Sur
 ## Survey Length Comps
 
 ::: {.notes}
-misfit 20-30 cm; seen this since 2012
-previous authors tried flexible selectivity patterns, a four-parameter growth curve, more complexity in CV in length at age, alternative and data weighting schemes
+-   misfit 20-30 cm; seen this since 2012
+-   previous authors tried flexible selectivity patterns, a four-parameter growth curve, more complexity in CV in length at age, alternative and data weighting schemes
 
-it's possible that we aren't sampling length-at-age well 
+-   it's possible that we aren't sampling length-at-age well 
 :::
 
 
@@ -429,7 +420,8 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"phase_plane.png"))
 ------------------------------------------------------------------------
  
 ## Projections & Harvest Recommendation
--   Uses the updated `spm.tpl` & recruitment 1977+
+-   Updated `spm.tpl` & recruitment 1977+
+-   4 years of elevated survey biomass
 
 ```{r, echo = FALSE} 
 knitr::include_graphics(here::here('docs',year,'model_plots',"safe_table.png"))
@@ -437,7 +429,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"safe_table.png"))
 
 -----------------------------------------------------------------
 
-# Data Gaps & Research Priorities 
+## Data Gaps & Research Priorities 
 
 ::: fragment
 -   Unchanged from 2020
@@ -451,6 +443,11 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"safe_table.png"))
 ------------------------------------------------------------------------
  
 ::: panel-tabset
+## Sample Sizes
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
+knitr::include_graphics(here::here('docs','2024','02_surveyiss_bridging','comp_iss_compare.png'))
+```
+
 ## Francis Weights
 ```{r}
 flextable::flextable(data.frame(Fleet = rep(c('Fishery','Survey'),2),
@@ -484,5 +481,7 @@ knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compar
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
 knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare10_recruits_uncertainty.png'))
 ```
-:::
 
+
+
+::: 

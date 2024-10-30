@@ -337,6 +337,20 @@
 </div>
 
 </section>
+<section class="slide level2">
+
+<div class="cell">
+<style type="text/css">
+.title {
+  font-size: 10px;
+  font-style: italic;
+  color: blue;
+  font-family: Arial;
+  font-variant: small-caps;
+}
+</style>
+</div>
+</section>
 <section id="stock-overview" class="slide level2">
 <h2>Stock Overview</h2>
 <aside class="notes">
@@ -453,22 +467,9 @@
 <section id="fishery-age-comp-residuals-pearson" class="slide level2">
 <h2>Fishery Age Comp Residuals (Pearson)</h2>
 
-<img data-src="2024/model_plots/comp_lenfit__multi-fleet_comparison.png" width="975" class="r-stretch"></section>
+<img data-src="2024/model_plots/comp_agefit__multi-fleet_comparison.png" width="975" class="r-stretch"></section>
 <section id="fishery-age-comp-residuals-osa" class="slide level2">
 <h2>Fishery Age Comp Residuals (OSA)</h2>
-<aside class="notes">
-<p>the glaring issue in 1983 goes away</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 <div class="columns">
 <div class="column" style="width:45%;">
 <div class="cell">
@@ -490,10 +491,15 @@
 <section id="fishery-length-comps" class="slide level2">
 <h2>Fishery Length Comps</h2>
 <aside class="notes">
-<p>these are not perfect; not weighted highly in model and didn’t update ISS</p>
-<p>large pearson residual in 1983 might be a data artifact</p>
 <p>misfits in 20-30cm range largely driven pre 1983</p>
-<p>low sampling in 70s clean up with survey timeblock some over est in recent years have recdevs set to mean in 2020 which would be informing the 25-40 length bin also don’t have age data and these are weighted really low aggregate fig shows ugly gap, this was present in previous models, structural not misspec</p>
+<ul>
+<li>low sampling in 70s</li>
+<li>clean up with selex timeblock</li>
+<li>some over est in recent years</li>
+<li>have recdevs set to mean in 2020 which would be informing the 25-40 length bin</li>
+<li>also don’t have age data and these are weighted really low</li>
+<li>aggregate fig shows ugly gap, this was present in previous models, structural not misspec</li>
+</ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -563,8 +569,11 @@
 <section id="survey-length-comps" class="slide level2">
 <h2>Survey Length Comps</h2>
 <aside class="notes">
-<p>misfit 20-30 cm; seen this since 2012 previous authors tried flexible selectivity patterns, a four-parameter growth curve, more complexity in CV in length at age, alternative and data weighting schemes</p>
-<p>it’s possible that we aren’t sampling length-at-age well</p>
+<ul>
+<li><p>misfit 20-30 cm; seen this since 2012</p></li>
+<li><p>previous authors tried flexible selectivity patterns, a four-parameter growth curve, more complexity in CV in length at age, alternative and data weighting schemes</p></li>
+<li><p>it’s possible that we aren’t sampling length-at-age well</p></li>
+</ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -698,23 +707,20 @@
 <section id="projections-harvest-recommendation" class="slide level2">
 <h2>Projections &amp; Harvest Recommendation</h2>
 <ul>
-<li>Uses the updated <code>spm.tpl</code> &amp; recruitment 1977+</li>
+<li>Updated <code>spm.tpl</code> &amp; recruitment 1977+</li>
+<li>4 years of elevated survey biomass</li>
 </ul>
 
 <img data-src="2024/model_plots/safe_table.PNG" width="444" class="r-stretch"></section>
-<section class="slide level2">
-
-</section></section>
-<section id="data-gaps-research-priorities" class="title-slide slide level1 center">
-<h1>Data Gaps &amp; Research Priorities</h1>
+<section id="data-gaps-research-priorities" class="slide level2">
+<h2>Data Gaps &amp; Research Priorities</h2>
 <div class="fragment">
 <ul>
 <li>Unchanged from 2020</li>
 <li>Genetic info: B. flounder <em>is</em> genetically distinct from FHS; genetic diversity across seascape unclear</li>
 </ul>
 </div>
-</section>
-
+</section></section>
 <section id="questions" class="title-slide slide level1 center">
 <h1>Questions</h1>
 
@@ -728,45 +734,52 @@
 <section class="slide level2">
 
 <div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Francis Weights</a></li><li><a href="#tabset-1-2">Spawning Biomass</a></li><li><a href="#tabset-1-3">Biomass Ratio</a></li><li><a href="#tabset-1-4">Fishing Mortality</a></li><li><a href="#tabset-1-5">Survey Fits</a></li><li><a href="#tabset-1-6">Recruitment</a></li></ul>
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Sample Sizes</a></li><li><a href="#tabset-1-2">Francis Weights</a></li><li><a href="#tabset-1-3">Spawning Biomass</a></li><li><a href="#tabset-1-4">Biomass Ratio</a></li><li><a href="#tabset-1-5">Fishing Mortality</a></li><li><a href="#tabset-1-6">Survey Fits</a></li><li><a href="#tabset-1-7">Recruitment</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1">
 <div class="cell">
 <div class="cell-output-display">
-
-<div class="tabwid"><style>.cl-db376df2{}.cl-db2e9952{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-db2e995c{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-db31c744{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-db31c74e{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-db31daae{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-db31dab8{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-db31dac2{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-db31dac3{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-db31dac4{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-db31dacc{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-db376df2"><thead><tr style="overflow-wrap:break-word;"><th class="cl-db31daae"><p class="cl-db31c744"><span class="cl-db2e9952">Fleet</span></p></th><th class="cl-db31daae"><p class="cl-db31c744"><span class="cl-db2e9952">Type</span></p></th><th class="cl-db31dab8"><p class="cl-db31c74e"><span class="cl-db2e9952">ISS_from_Nhauls</span></p></th><th class="cl-db31dab8"><p class="cl-db31c74e"><span class="cl-db2e9952">ISS_from_Package</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-db31dac2"><p class="cl-db31c744"><span class="cl-db2e9952">Fishery</span></p></td><td class="cl-db31dac2"><p class="cl-db31c744"><span class="cl-db2e9952">Length</span></p></td><td class="cl-db31dac3"><p class="cl-db31c74e"><span class="cl-db2e9952">0.079732</span></p></td><td class="cl-db31dac3"><p class="cl-db31c74e"><span class="cl-db2e9952">0.079018</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-db31dac2"><p class="cl-db31c744"><span class="cl-db2e9952">Survey</span></p></td><td class="cl-db31dac2"><p class="cl-db31c744"><span class="cl-db2e9952">Length</span></p></td><td class="cl-db31dac3"><p class="cl-db31c74e"><span class="cl-db2e9952">0.359831</span></p></td><td class="cl-db31dac3"><p class="cl-db31c74e"><span class="cl-db2e995c">0.062439</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-db31dac2"><p class="cl-db31c744"><span class="cl-db2e9952">Fishery</span></p></td><td class="cl-db31dac2"><p class="cl-db31c744"><span class="cl-db2e9952">Age</span></p></td><td class="cl-db31dac3"><p class="cl-db31c74e"><span class="cl-db2e9952">0.086647</span></p></td><td class="cl-db31dac3"><p class="cl-db31c74e"><span class="cl-db2e9952">0.085811</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-db31dac4"><p class="cl-db31c744"><span class="cl-db2e9952">Survey</span></p></td><td class="cl-db31dac4"><p class="cl-db31c744"><span class="cl-db2e9952">CAAL</span></p></td><td class="cl-db31dacc"><p class="cl-db31c74e"><span class="cl-db2e9952">0.272054</span></p></td><td class="cl-db31dacc"><p class="cl-db31c74e"><span class="cl-db2e995c">0.481957</span></p></td></tr></tbody></table></div>
+<p><img data-src="2024/02_surveyISS_bridging/comp_iss_compare.png" width="650" height="500"></p>
 </div>
 </div>
 </div>
 <div id="tabset-1-2">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="2024/02_surveyISS_bridging/compare2_spawnbio_uncertainty.png" width="650" height="500"></p>
+
+<div class="tabwid"><style>.cl-0c7fe732{}.cl-0c770df6{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-0c770e0a{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-0c7a4944{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-0c7a494e{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-0c7a5d62{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-0c7a5d6c{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-0c7a5d76{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-0c7a5d77{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-0c7a5d8a{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-0c7a5d8b{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-0c7fe732"><thead><tr style="overflow-wrap:break-word;"><th class="cl-0c7a5d62"><p class="cl-0c7a4944"><span class="cl-0c770df6">Fleet</span></p></th><th class="cl-0c7a5d62"><p class="cl-0c7a4944"><span class="cl-0c770df6">Type</span></p></th><th class="cl-0c7a5d6c"><p class="cl-0c7a494e"><span class="cl-0c770df6">ISS_from_Nhauls</span></p></th><th class="cl-0c7a5d6c"><p class="cl-0c7a494e"><span class="cl-0c770df6">ISS_from_Package</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-0c7a5d76"><p class="cl-0c7a4944"><span class="cl-0c770df6">Fishery</span></p></td><td class="cl-0c7a5d76"><p class="cl-0c7a4944"><span class="cl-0c770df6">Length</span></p></td><td class="cl-0c7a5d77"><p class="cl-0c7a494e"><span class="cl-0c770df6">0.079732</span></p></td><td class="cl-0c7a5d77"><p class="cl-0c7a494e"><span class="cl-0c770df6">0.079018</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0c7a5d76"><p class="cl-0c7a4944"><span class="cl-0c770df6">Survey</span></p></td><td class="cl-0c7a5d76"><p class="cl-0c7a4944"><span class="cl-0c770df6">Length</span></p></td><td class="cl-0c7a5d77"><p class="cl-0c7a494e"><span class="cl-0c770df6">0.359831</span></p></td><td class="cl-0c7a5d77"><p class="cl-0c7a494e"><span class="cl-0c770e0a">0.062439</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0c7a5d76"><p class="cl-0c7a4944"><span class="cl-0c770df6">Fishery</span></p></td><td class="cl-0c7a5d76"><p class="cl-0c7a4944"><span class="cl-0c770df6">Age</span></p></td><td class="cl-0c7a5d77"><p class="cl-0c7a494e"><span class="cl-0c770df6">0.086647</span></p></td><td class="cl-0c7a5d77"><p class="cl-0c7a494e"><span class="cl-0c770df6">0.085811</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0c7a5d8a"><p class="cl-0c7a4944"><span class="cl-0c770df6">Survey</span></p></td><td class="cl-0c7a5d8a"><p class="cl-0c7a4944"><span class="cl-0c770df6">CAAL</span></p></td><td class="cl-0c7a5d8b"><p class="cl-0c7a494e"><span class="cl-0c770df6">0.272054</span></p></td><td class="cl-0c7a5d8b"><p class="cl-0c7a494e"><span class="cl-0c770e0a">0.481957</span></p></td></tr></tbody></table></div>
 </div>
 </div>
 </div>
 <div id="tabset-1-3">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="2024/02_surveyISS_bridging/compare4_Bratio_uncertainty.png" width="650" height="500"></p>
+<p><img data-src="2024/02_surveyISS_bridging/compare2_spawnbio_uncertainty.png" width="650" height="500"></p>
 </div>
 </div>
 </div>
 <div id="tabset-1-4">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="2024/02_surveyISS_bridging/compare8_Fvalue_uncertainty.png" width="650" height="500"></p>
+<p><img data-src="2024/02_surveyISS_bridging/compare4_Bratio_uncertainty.png" width="650" height="500"></p>
 </div>
 </div>
 </div>
 <div id="tabset-1-5">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="2024/02_surveyISS_bridging/compare13_indices.png" width="650" height="500"></p>
+<p><img data-src="2024/02_surveyISS_bridging/compare8_Fvalue_uncertainty.png" width="650" height="500"></p>
 </div>
 </div>
 </div>
 <div id="tabset-1-6">
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="2024/02_surveyISS_bridging/compare13_indices.png" width="650" height="500"></p>
+</div>
+</div>
+</div>
+<div id="tabset-1-7">
 <div class="cell">
 <div class="cell-output-display">
 <p><img data-src="2024/02_surveyISS_bridging/compare10_recruits_uncertainty.png" width="650" height="500"></p>
