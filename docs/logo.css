@@ -10,3 +10,15 @@
   max-width: unset !important;
   max-height: unset !important;
 }
+
+.panel-tabset-tabby a { 
+  font-size: 15px;
+  font-style: italic;
+  color: navy;
+  font-family: Arial;
+  font-variant: small-caps;
+}
+
+.reveal h2 {
+  text-align: right;
+}
