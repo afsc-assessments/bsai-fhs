@@ -841,7 +841,7 @@ The new surveyISS values, particularly the length comps, changed the model traje
 #                                mod03_01,
 #                                mod03_02,
 #                                mod03_03))
-
+# 
 # SSplotComparisons(ss_compare,
 #                   print = T,
 #                   plotdir = here('docs',year,'02_surveyiss_bridging'), legendlabels = c('Model 18.2c (2024)',  "surveyISS length only",  "surveyISS CAAL only",  "surveyISS length and CAAL",  "surveyISS length and CAAL + francis weights"), col = c('gold','grey20','grey40','grey60','blue'))
