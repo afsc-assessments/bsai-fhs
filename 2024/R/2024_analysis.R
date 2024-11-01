@@ -194,7 +194,9 @@ rec_table <-rec_table[c(12,6,3,4,5,2,1,1,10,9,9),]
 write.csv(rec_table, 
           file = here::here(year,'model_runs','03b_projection',paste0(Sys.Date(),'-exec_summ.csv')), row.names=FALSE)
 
-
+file.copy(from = here::here(year,'model_runs','03b_projection',paste0(Sys.Date(),'-exec_summ.csv')),
+          to = here::here('docs',year,paste0(Sys.Date(),'-exec_summ.csv')))
+ 
 # render proj tables ----
 ## I'm still not sure whether these three tables ( 13-year projected: catches, spawning biomass, and fishing mortality rates corresponding to the alternative harvest scenarios
 ## ) will be required, but generating them here in case they are.

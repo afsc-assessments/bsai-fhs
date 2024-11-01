@@ -21,6 +21,7 @@ safe0[8:10,] <-  sapply(safe0[8:10,],  FUN = function(x) format(round(as.numeric
 safe0[c(3:7,11:13),] <- sapply(safe0[c(3:7,11:13),],  FUN = function(x) prettyNum(round(as.numeric(x)),big.mark=','))
 data[1:13,2:5] <- safe0
 safe::main_table(data, year, tier=3, c1, c2, c3)  %>% 
-  flextable::fontsize(size = 9, part = "all")
+  flextable::fontsize(size = 9, part = "all")%>%
+  flextable::line_spacing(space = 0, i = c(1:13,15:18))
   
 ```

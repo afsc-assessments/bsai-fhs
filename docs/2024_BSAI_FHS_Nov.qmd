@@ -424,7 +424,35 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"phase_plane.png"))
 -   4 years of elevated survey biomass
 
 ```{r, echo = FALSE} 
-knitr::include_graphics(here::here('docs',year,'model_plots',"safe_table.png"))
+library(dplyr)
+c1=11125
+c2=c3=11148
+## load template
+data <- safe::tier3 %>% data.frame()
+
+## copied these values from the recent harvest projection
+## and confirmed ABCs matched federal register
+safe_2023 <- read.csv(here::here(year,'safe','static_tables','safe_2023.csv'), header = FALSE) 
+
+## load base safe values, made using fAK_SCENARIOS.R
+safe0 <- read.csv(here::here(year,'model_runs','03b_projection', '2024-10-23-exec_summ.csv')) %>% 
+  # t()  %>% 
+  data.frame() %>%
+  bind_cols(safe_2023[4:14,],.) %>%
+  select(V1, everything(),-metric) %>% 
+  as.data.frame() %>%
+  rbind(data.frame(V1 = c('M', 'Tier'), V2 = c(0.2,'3a'),V3 = c(0.2,'3a'),X2025 = c(0.2,'3a'),X2026 = c(0.2,'3a')),.) %>%
+  select(-1)
+
+## round & clean up values
+safe0[8:10,] <-  sapply(safe0[8:10,],  FUN = function(x) format(round(as.numeric(x), 2), nsmall = 2))
+safe0[c(3:7,11:13),] <- sapply(safe0[c(3:7,11:13),],  FUN = function(x) prettyNum(round(as.numeric(x)),big.mark=','))
+data[1:13,2:5] <- safe0
+safe::main_table(data, year, tier=3, c1, c2, c3)  %>% 
+  flextable::fontsize(size = 9, part = "all")%>%
+  flextable::line_spacing(space = 0, i = c(1:13,15:18))
+  
+# knitr::include_graphics(here::here('docs',year,'model_plots',"safe_table.png"))
 ```
 
 -----------------------------------------------------------------
