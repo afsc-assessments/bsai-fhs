@@ -203,7 +203,7 @@ totbio <- mod18.2c_2024$timeseries %>%
 
 recruitment <- mod18.2c_2024$recruit %>%
   mutate(Label2 = 'Recruitment',
-         ddev = round(exp(dev),2),
+         ddev =   prettyNum(round(exp(dev)*pred_recr), big.mark = ',', digits = 3),
          lci= prettyNum(ifelse(pred_recr-exp(dev)*pred_recr<0,0, pred_recr-exp(dev)*pred_recr), big.mark = ',', digits = 3),
          uci = prettyNum(pred_recr+exp(dev)*pred_recr, big.mark = ',', digits = 3),
          MLE = prettyNum(pred_recr, big.mark = ',', digits = 3),
