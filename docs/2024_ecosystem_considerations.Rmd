@@ -62,3 +62,9 @@ Thoman, R. 2024b. Bering Sea Daily Ice Extent. In: Physical Environment Synthesi
 
 Thoman, R. 2024c. Sea Ice Thickness. In: Physical Environment Synthesis. In: Siddon, E. 2024. Ecosystem Status Report 2024: Eastern Bering Sea, Stock Assessment and Fishery Evaluation Report, North Pacific Fishery Management Council, 1007 West 3rd Ave., Suite 400, Anchorage, Alaska 99501.
 
+
+```{r, echo = FALSE, include = TRUE}
+knitr::include_graphics(here::here('docs','2024','ecosystem_fig1.png'))
+knitr::include_graphics(here::here('docs','2024','ecosystem_fig2.png'))
+```
+
