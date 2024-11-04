@@ -203,12 +203,13 @@ totbio <- mod18.2c_2024$timeseries %>%
 
 recruitment <- mod18.2c_2024$recruit %>%
   mutate(Label2 = 'Recruitment',
+         ddev = round(exp(dev),2),
          lci= prettyNum(ifelse(pred_recr-exp(dev)*pred_recr<0,0, pred_recr-exp(dev)*pred_recr), big.mark = ',', digits = 3),
          uci = prettyNum(pred_recr+exp(dev)*pred_recr, big.mark = ',', digits = 3),
          MLE = prettyNum(pred_recr, big.mark = ',', digits = 3),
          Interval0 = paste(lci,uci, sep = '-'),
          Interval = ifelse(Interval0== 'NA-NA','',Interval0),
-         value = paste0(MLE, " (", Interval,")")) %>%
+         value = paste0(MLE, " (", ddev,")")) %>%
   select(Year=Yr, Label=Label2, value)%>%
   tidyr::pivot_wider(id_cols = c(Year), names_from = Label, values_from = value)
 
@@ -216,12 +217,13 @@ timeseries <- mod18.2c_2024$derived_quants  %>%
   
   mutate(Label2 = stringr::str_extract(Label, "^[^_]*"),
          Year = stringr::str_extract(Label,  "(?<=\\_).*"),
+         sd = ifelse(StdDev>10,round(StdDev), round(StdDev,2)),
          lci= prettyNum(Value-1.96*StdDev , big.mark = ',', digits = 3),
          uci = prettyNum(Value+1.96*StdDev , big.mark = ',', digits = 3),
          MLE = prettyNum(Value, big.mark = ',', digits = 3),
          Interval0 = paste(lci,uci, sep = '-'),
          Interval = ifelse(Interval0== 'NA-NA','',Interval0),
-         value = paste0(MLE, " (", Interval,")")) %>%
+         value = paste0(MLE, " (", sd,")")) %>%
   select(Year, Label=Label2, value) %>%
   filter(Label %in% c('SSB','Bratio','F')) %>%
   tidyr::pivot_wider(id_cols = c(Year), names_from = Label, values_from = value) %>%
@@ -230,7 +232,7 @@ timeseries <- mod18.2c_2024$derived_quants  %>%
 
 flextable::regulartable(timeseries %>%
                           select(Year, SSB, TotBio, Bratio, 'F', Recruitment)) %>%
-  flextable::set_caption("Estimated time series of female spawning biomass, total biomass,  fully-selected fishing mortality rate, age 0 Recruitment, for BSAI FHS. Values shown are the median and 95% confidence intervals (parentheses); these are not available for total biomass. The average number of recruits from 1977-present is 1.03 million.") %>%
+  flextable::set_caption("Estimated time series of female spawning biomass, total biomass,  fully-selected fishing mortality rate, age 0 Recruitment, for BSAI FHS. Values shown are the median and standard deviation in parentheses; these are not available for total biomass. The average number of recruits from 1977-present is 1.03 million.") %>%
   flextable::set_header_labels(values = c('Year',
                                           'Spawning Biomss (kt)',
                                           'Total (3+) Biomass (kt)',
