@@ -9,4 +9,4 @@ A comma-separated electronic file containing the estimated numbers-at-age is ava
 
 A document describing the bridging exercises (software, data, and input sample sizes) from 2020 to the present assessment is provided [here](https://afsc-assessments.github.io/bsai-fhs/2024_bridging_analysis.html).
 
-A document describing the ecosystem considerations for 2024 is provided [here](https://afsc-assessments.github.io/bsai-fhs/2024_bridging_analysis.html).
+A document describing the ecosystem considerations for 2024 is provided [here](https://afsc-assessments.github.io/bsai-fhs/2024_ecosystem_considerations.html).
