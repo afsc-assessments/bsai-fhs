@@ -451,8 +451,6 @@ data[1:13,2:5] <- safe0
 safe::main_table(data, year, tier=3, c1, c2, c3)  %>% 
   flextable::fontsize(size = 9, part = "all")%>%
   flextable::line_spacing(space = 0, i = c(1:13,15:18))
-  
-# knitr::include_graphics(here::here('docs',year,'model_plots',"safe_table.png"))
 ```
 
 -----------------------------------------------------------------
