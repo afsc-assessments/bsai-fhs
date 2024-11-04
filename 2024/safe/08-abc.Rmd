@@ -121,21 +121,6 @@ Competition: Trends in potential competitors indicate competition for prey resou
 
 *Together, the most recent data available suggest an ecosystem risk Level 1 – Normal: “No apparent ecosystem concerns related to biological status (e.g., environment, prey, competition, predation), or minor concerns with uncertain impacts on the stock.”*
  
-#### Ecosystem Risk Table References
-
-Andrews, A., E. Yasumiishi, A. Spear, J. Murphy, and A. Dimond. 2024. Catch Estimates of Age-0 Walleye Pollock from Surface Trawl Surveys, 2003–2024. In: Siddon, E. 2024. Ecosystem Status Report 2024: Eastern Bering Sea, Stock Assessment and Fishery Evaluation Report, North Pacific Fishery Management Council, 1007 West 3rd Ave., Suite 400, Anchorage, Alaska 99501.
-
-Callahan, M., and E. Lemagie. 2024. Bering Sea SST anomalies. In: Physical Environment Synthesis. In: Siddon, E. 2024. Ecosystem Status Report 2024: Eastern Bering Sea, Stock Assessment and Fishery Evaluation Report, North Pacific Fishery Management Council, 1007 West 3rd Ave., Suite 400, Anchorage, Alaska 99501.
-
-Callahan, M., K. Kearney, and E. Lemagie. 2024. Bering Sea SST and Bottom Temperature Trends. In: Physical Environment Synthesis. In: Siddon, E. 2024. Ecosystem Status Report 2024: Eastern Bering Sea, Stock Assessment and Fishery Evaluation Report, North Pacific Fishery Management Council, 1007 West 3rd Ave., Suite 400, Anchorage, Alaska 99501.
-
-Garcia, S., K. Howard, and B. Gray. 2024. Alaska Department of Fish & Game Nearshore Survey. In: Siddon, E. 2024. Ecosystem Status Report 2024: Eastern Bering Sea, Stock Assessment and Fishery Evaluation Report, North Pacific Fishery Management Council, 1007 West 3rd Ave., Suite 400, Anchorage, Alaska 99501.
-
-Hennon, T. 2024. Winds at the Shelf Break. In: Physical Environment Synthesis. In: Siddon, E. 2024. Ecosystem Status Report 2024: Eastern Bering Sea, Stock Assessment and Fishery Evaluation Report, North Pacific Fishery Management Council, 1007 West 3rd Ave., Suite 400, Anchorage, Alaska 99501.
-
-Kearney, K. 2024. Cold Pool Extent - ROMS. In: Physical Environment Synthesis. In: Siddon, E. 2024. Ecosystem Status Report 2024: Eastern Bering Sea, Stock Assessment and Fishery 
-
-
 ### Fishery performance
 
 There is no ESP for this stock complex, but we note that the fishery has consistently caught only a small fraction of the ABC (averaging less than 20% over the last five years). We did not examine CPUE trends nor spatial patterns of fishing. There are no changes in the duration of fishing openings. *Altogether, we see no cause for concern and give this consideration a level 1 as well.* 
