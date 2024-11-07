@@ -100,8 +100,51 @@ stop("paste the Predicted catch into ss .dat file, and ensure spm.dat uses the s
 # run retrospective ----
 ## NOT DOING THIS FOR AN UPDATE
 
+
 # run profiles ----
 ## NOT DOING THIS FOR AN UPDATE
+## but did it for back pocket purposes
+dir_prof <- file.path(mod_path, "profile")
+
+copy_SS_inputs(
+  dir.old = mod_path,
+  dir.new = dir_prof,
+  create.dir = TRUE,
+  overwrite = TRUE,
+  copy_par = TRUE,
+  verbose = TRUE
+)
+starter <- SS_readstarter(file.path(dir_prof, "starter.ss"))
+# change control file name in the starter file
+starter[["ctlfile"]] <- "control_modified.ss"
+# make sure the prior likelihood is calculated
+# for non-estimated quantities
+starter[["prior_like"]] <- 1
+# write modified starter file
+SS_writestarter(starter, dir = dir_prof, overwrite = TRUE)
+
+R0_vec <- seq(12,15,0.25)
+Nprofile <- length(R0_vec)
+r4ss::profile(dir_prof,   
+              exe = 'ss',
+              # oldctlfile = "control.ss_new",
+              newctlfile = "control_modified.ss",
+              string = 'R0',
+              profilevec = R0_vec)
+
+# read the output files (with names like Report1.sso, Report2.sso, etc.)
+profilemodels <- SSgetoutput(dirvec = dir_prof, keyvec = 1:Nprofile)
+# summarize output
+profilesummary <- SSsummarize(profilemodels)
+ 
+# plot profile using summary created above
+results <- SSplotProfile(profilesummary, # summary object
+                         profile.string = "R0", # substring of profile parameter
+                         profile.label = "Log Unfished Recruitment (R0)"
+) # axis label
+
+# make timeseries plots comparing models in profile
+SSplotComparisons(profilesummary, legendlabels = paste("h =", R0_vec))
 
 # run projections ----
 ## takes less than one minute; only run this if model and/or projected catches change 
