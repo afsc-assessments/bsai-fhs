@@ -139,12 +139,14 @@ profilesummary <- SSsummarize(profilemodels)
  
 # plot profile using summary created above
 results <- SSplotProfile(profilesummary, # summary object
+                         add_cutoff = TRUE,
+                         ymax = 50,
                          profile.string = "R0", # substring of profile parameter
                          profile.label = "Log Unfished Recruitment (R0)"
 ) # axis label
 
-# make timeseries plots comparing models in profile
-SSplotComparisons(profilesummary, legendlabels = paste("h =", R0_vec))
+PinerPlot(profilesummary, ymax = 50, add_cutoff = TRUE)
+ 
 
 # run projections ----
 ## takes less than one minute; only run this if model and/or projected catches change 

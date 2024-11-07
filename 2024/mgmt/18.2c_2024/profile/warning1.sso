@@ -1,0 +1,8 @@
+Note 1 Information: Std_yrmax=-1 in starter, so no variance output for forecast quantities after endyr+1 
+Warning 1 : 1st iteration warning: catch logL > 50% total logL; check configuration; suggest start with larger R0
+Warning 2 : poor convergence in Fmsy, final dy/dy2= -0.172192
+Warning 3 : Fmsy.mey is close to max allowed; check for convergence 
+Warning 4 : Final gradient: 0.0168178 is larger than final_conv: 0.0001
+Note 2 Information: A revised protocol for the Fcast_yr specification is available and recommended.
+Note 3 Information:  N parameters that are on or within 1% of min-max bound: 1; check results, variance may be suspect
+ 4 warnings  and 3 notes 

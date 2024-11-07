@@ -1,0 +1,59 @@
+###
+console output
+2024-11-07 15:34:18.678449
+###
+ 
+ reading from starter.ss
+ reading from data file
+Data read successful 999
+
+ reading forecast file 
+ reading from control file
+End of control file successful! 999
+Begin setting up parameters ...  end of parameter section 
+Evaluating biology calculations once ... done
+Starting optimization of 'ss' in phase 1 of 3 at Thu Nov  7 15:32:58 2024
+phase= 1 | nvar=  9 | iter=  0 | nll=4.78e+03 | mag=3.33e+04 | par[  7]=init_F[1]
+phase= 1 | nvar=  9 | iter= 18 | nll=4.24e+03 | mag=1.28e+00 | par[  7]=init_F[1]
+phase= 2 | nvar= 79 | iter=  0 | nll=4.24e+03 | mag=3.30e+03 | par[ 74]=selparm[6]
+phase= 2 | nvar= 79 | iter= 20 | nll=3.25e+03 | mag=2.57e+03 | par[ 20]=recdev_early[10]
+phase= 2 | nvar= 79 | iter= 40 | nll=3.19e+03 | mag=4.61e+03 | par[ 69]=init_F[1]
+phase= 2 | nvar= 79 | iter= 60 | nll=2.99e+03 | mag=8.47e+03 | par[ 69]=init_F[1]
+Exiting without success due to excessive function evaluations (maxfn=100) | mag=5041.24
+phase= 2 | nvar= 79 | iter= 73 | nll=2.89e+03 | mag=5.04e+03 | par[ 69]=init_F[1]
+phase= 3 | nvar= 81 | iter=  0 | nll=2.89e+03 | mag=5.04e+03 | par[ 69]=init_F[1]
+phase= 3 | nvar= 81 | iter= 20 | nll=2.79e+03 | mag=7.60e+03 | par[ 69]=init_F[1]
+phase= 3 | nvar= 81 | iter= 40 | nll=2.79e+03 | mag=8.09e+03 | par[ 69]=init_F[1]
+phase= 3 | nvar= 81 | iter= 60 | nll=2.75e+03 | mag=2.68e+03 | par[ 69]=init_F[1]
+phase= 3 | nvar= 81 | iter= 80 | nll=2.74e+03 | mag=2.21e+02 | par[ 77]=selparm[13]
+phase= 3 | nvar= 81 | iter=100 | nll=2.74e+03 | mag=2.10e-03 | par[ 77]=selparm[13]
+phase= 3 | nvar= 81 | iter=101 | nll=2.74e+03 | mag=2.10e-03 | par[ 77]=selparm[13]
+Optimization completed after 20 s with final statistics:
+  nll=2742.849128 | mag=2.10059e-03 | par[ 77]=selparm[13]
+
+Warning: the following parameters had issues
+  init_F[1] is within 1% of lower bound: 0 < 0.00702714 < 1
+  selparm[8] is within 0.1% of upper bound: -4 < 4 < 4
+
+Wrote first version of output files (before hessian, benchmark, and forecast)
+Calculating Hessian (81 variables): 20%, 40%, 60%, 80%, 100% done (21 s) 
+Differentiating 8 derived quantities: 1, 2, 3, 4, 5, 6, 7, 8 done (36 s) 
+Inverting Hessian (81 variables): 20%, 40%, 60%, 80%, 100% done (0.007 s) 
+Starting standard error calculations... 
+ Warning: Non-positive variance of sdreport variables: 146, 147, 205, 206, 207, 208, 209, 396, 399
+ done (0.51 s) 
+Iterations: 624
+Finished forecast
+Writing wtatage.ss_new
+mceval counter: 0
+Finished posteriors
+ finished appending to cumreport.sso 
+Finished final writing of report.sso
+Begin writing *.ss_new output files ... Finished writing *.ss_new output files
+
+ N parameters that are on or within 1% of min-max bound: 2
+
+!!  Run has completed  !! 
+!!  See warning.sso for 3 warnings  and 3 notes 
+
+Finished running model 'ss' after 1 m 20 s.

@@ -136,7 +136,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALdat_bu
 ## Fishery Age Comps 
 
 ::: {.notes}
-these are not perfect; not weighted highly in model and didn't update ISS
+these are not perfect; not weighted highly in model 0.08 and didn't update ISS
 :::
 
 ```{r, echo = FALSE} 
@@ -159,7 +159,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_agefit__multi
 
 ::: {.column width="45%"}
 ```{r, fig.show="hold", out.height="500px", out.width="350px"}
-knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length_females_diagnostics.png"))
+knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_age_females_diagnostics.png"))
 ```
 :::
 
@@ -169,7 +169,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length
 
 ::: {.column width="45%"}
 ```{r, fig.show="hold", out.height="500px", out.width="350px"}
-knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length_males_diagnostics.png"))
+knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_age_males_diagnostics.png"))
 ```
 :::
 
@@ -251,9 +251,33 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length
  
 
 ## Survey Biomass 
-```{r, echo = FALSE} 
+
+
+::: {.notes}
+-   elevated since 2019
+-   sd also elevated; this occurs in both BS and AI
+-   not exactly sure; some spottiness but nothing with clear availability
+:::
+
+ 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r, fig.show="hold", out.height="300px", out.width="500px"}
 knitr::include_graphics(here::here('docs',year,'model_plots',"index2_cpuefit_Survey.png"))
+
 ```
+:::
+
+ 
+::: {.column width="50%"}
+```{r, fig.show="hold", out.height="500px", out.width="450px"}
+knitr::include_graphics(here::here('docs',year,"bsai_obs.png"))
+```
+:::
+
+::::
 
 ------------------------------------------------------------------------
 
@@ -264,6 +288,11 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"index2_cpuefit_Sur
 -   previous authors tried flexible selectivity patterns, a four-parameter growth curve, more complexity in CV in length at age, alternative and data weighting schemes
 
 -   it's possible that we aren't sampling length-at-age well 
+
+-   another thought is conflict with indices (different signals) OR perhaps recruitment
+
+-   when i updated ISS and retuned, downweighted the most to 6%, still able to fit fairly well
+
 :::
 
 
@@ -321,7 +350,9 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"osa_survey_length_
 
 ## Survey CAAL Fits (recent years)
 ::: {.notes}
-if we had stuck with the n_otoliths approach we would have overstated the sample size by a factor of ~2, hence the doubling of the francis weights
+-   i/prev auth/prev PTs did not agonize about marg lengths is caals fit great
+
+-   if we had stuck with the n_otoliths approach we would have overstated the sample size by a factor of ~2, hence the doubling of the francis weights
 :::
 
 
@@ -346,14 +377,6 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"comp_condAALfit_An
  
 ------------------------------------------------------------------------
 
-## Bio/Selex Curves
-
-```{r, echo = FALSE} 
-knitr::include_graphics(here::here('docs',year,'model_plots',"growth_selex_maturity.png"))
-```
-
-------------------------------------------------------------------------
-
 ## Time Series: SSB & Total Biomass
 
 
@@ -361,7 +384,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"growth_selex_matur
 
 ::: {.column width="50%"}
 ```{r, fig.show="hold"}
-knitr::include_graphics(here::here('docs',year,'model_plots',"compare1_spawnbio.png")) 
+knitr::include_graphics(here::here('docs',year,'model_plots',"compare2_spawnbio_uncertainty.png")) 
 ```
 :::
 
@@ -460,6 +483,7 @@ safe::main_table(data, year, tier=3, c1, c2, c3)  %>%
 ::: fragment
 -   Unchanged from 2020
 -   Genetic info: B. flounder *is* genetically distinct from FHS; genetic diversity across seascape unclear 
+-   Revisit data treatment, i.e. in survey
 :::
  
 # Questions
@@ -468,6 +492,14 @@ safe::main_table(data, year, tier=3, c1, c2, c3)  %>%
 
 ------------------------------------------------------------------------
  
+## Bio/Selex Curves
+
+```{r, echo = FALSE} 
+knitr::include_graphics(here::here('docs',year,'model_plots',"growth_selex_maturity.png"))
+```
+
+------------------------------------------------------------------------
+
 ::: panel-tabset
 ## Sample Sizes
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
@@ -511,3 +543,15 @@ knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compar
 
 
 ::: 
+------------------------------------------------------------------------
+ 
+## R0 Profile
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
+knitr::include_graphics(here::here('docs','2024','model_plots','r0_profile.png'))
+```
+
+```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
+knitr::include_graphics(here::here('docs','2024','model_plots','r0_profile_piner.png'))
+```
+
+C:/Users/maia.kapur/Work/assessments/bsai-fhs/2024/mgmt/18.2c_2024/plots/
