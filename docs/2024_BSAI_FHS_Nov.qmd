@@ -23,6 +23,7 @@ library(here)
 library(dplyr)
 year = 2024
 model <- '18.2c_2024';mod_path <- here::here(year,'mgmt',model)
+# renderthis::to_pdf("2024_bsai_fhs_nov.qmd")
 ```
  
 ------------------------------------------------------------------------
@@ -250,7 +251,7 @@ knitr::include_graphics(here::here('docs',year,'model_plots',"osa_fishery_length
 
  
 
-## Survey Biomass 
+## Survey Biomass - four years of increases
 
 
 ::: {.notes}
@@ -281,7 +282,7 @@ knitr::include_graphics(here::here('docs',year,"bsai_obs.png"))
 
 ------------------------------------------------------------------------
 
-## Survey Length Comps
+## Survey Length Comps - haven't ever been perfect
 
 ::: {.notes}
 -   misfit 20-30 cm; seen this since 2012
@@ -540,15 +541,14 @@ knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compar
 knitr::include_graphics(here::here('docs','2024','02_surveyISS_bridging','compare10_recruits_uncertainty.png'))
 ```
 
-
-
 ::: 
+
 ------------------------------------------------------------------------
  
-## R0 Profile
-```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
-knitr::include_graphics(here::here('docs','2024','model_plots','r0_profile.png'))
-```
+<!-- ## R0 Profile -->
+<!-- ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'} -->
+<!-- knitr::include_graphics(here::here('docs','2024','model_plots','r0_profile.png')) -->
+<!-- ``` -->
 
 ```{r,  include=T, eval = TRUE, echo = FALSE, warning = FALSE, message =FALSE, out.height='500px', out.width = '650px'}
 knitr::include_graphics(here::here('docs','2024','model_plots','r0_profile_piner.png'))
